@@ -131,7 +131,6 @@ class WalletSettings extends Component {
         try {
           console.log('check account')
           Utils.checkAccount(this.web3, this.props.STPupdateAccounts);
-          //console.log(this.props.account)
         } catch (err) {
           console.error('error', err);
         }

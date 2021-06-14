@@ -24,8 +24,8 @@ export const getWeb3_ = new Promise((resolve, reject) => {
  //kovanWeb3 = new Web3(kovan)
  //mainWeb3 = new Web3(mainnet)
  //ropstenWeb3 = new Web3(ropsten)
-  // Wait for loading completion to avoid race conditions with web3 injection timing.
- //web3 = new Web3(new Web3.providers.HttpProvider(rinkeby))
+  // Wait for loading completion to avoid race conditions with web3 injection timing.  
+ web3 = new Web3(new Web3.providers.HttpProvider(rinkeby))
   results = {
     web3Instance: web3,
 // Web3Instance: rinkebyWeb3,
@@ -39,8 +39,8 @@ export const getWeb3_ = new Promise((resolve, reject) => {
 })
 
 export const getWeb3 = () => {
-  //const res = createAlchemyWeb3("https://eth-rinkeby.alchemyapi.io/v2/J1LeelYCWPBCv5auJWmbH4gNTWuYP1OI");
-  const res = createAlchemyWeb3(kovan);
+  const res = createAlchemyWeb3("https://eth-rinkeby.alchemyapi.io/v2/J1LeelYCWPBCv5auJWmbH4gNTWuYP1OI");
+  //const res = createAlchemyWeb3(kovan);
   return res
 }
 export const web3 = (networktype) => {

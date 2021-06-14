@@ -117,20 +117,12 @@ export async function checkNetwork(web3) {
   }
 }
 
-export const balHandler = async({address, networktype}) => {
-  let rinkebyEtherBal = await rinkebyConnect().eth.getBalance(address).then(bal => rinkebyConnect().utils.fromWei(bal, 'ether'))
-  let ropstenEtherBal = await ropstenConnect().eth.getBalance(address).then(bal => ropstenConnect().utils.fromWei(bal, 'ether'))
-  let kovanEtherBal = await kovanConnect().eth.getBalance(address).then(bal => kovanConnect().utils.fromWei(bal, 'ether'))
-  let mainEtherBal = await mainConnect().eth.getBalance(address).then(bal => mainConnect().utils.fromWei(bal, 'ether'))
-  
+export function signMessage(web3, msg, pkey) {
   try {
-    
-    return (networktype == "rinkeby") ? (rinkebyEtherBal)
-    : (networktype == "kovan") ? (kovanEtherBal)
-    : (networktype == "ropsten") ? (ropstenEtherBal)
-    : (mainEtherBal);
-    
+    return web3.eth.accounts.sign(msg, pkey).then(res => {
+      return res;
+    });
+  } catch (err) {
+    return "";
   }
-  catch(err){console.log(err)}
-
-  };
+}
