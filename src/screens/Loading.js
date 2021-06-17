@@ -7,9 +7,9 @@ import {reducer, actions} from '../services/State/Reducer';
 import { useSelector } from 'react-redux';
 import '../../global'
 import '../../shim'
-import Web3 from 'web3'
-import { ganachehost, rinkeby } from '../web3/constants'
-import { setAuthToken, getAuthToken, getWalletData } from '../services/DataManager';
+import { setAuthToken, getAuthToken, getWalletData, setWalletData } from '../services/DataManager';
+import * as Utils from '../web3/utils'
+import bip39 from 'react-native-bip39'
 
 
 
@@ -36,32 +36,60 @@ const Loading = ({navigation}) => {
       var refresh_token = "";
       //check wallet
       let walletInfo = await getWalletData();
-      if(walletInfo == null) {
-        alert('Wallet not created!');
-        return;
-      }
+      let Web3 = web3.web3Instance
+      var publicKey = ""
+      var privateKey = ""
+      var seedPhrase = ""
 
-      let registerResponse = await userRegister(walletInfo.publicKey);
-      console.log(JSON.stringify(registerResponse));
+      if(walletInfo == null || walletInfo.publicKey == "") {
+        //create new wallet
+        console.log("No Wallet exists. creating new wallet...");
+        const entropy = await Utils.getRandom(16);
+        const allWallets = await Web3.eth.accounts.wallet.create(1, entropy);
+
+        publicKey = allWallets[0].address?allWallets[0].address:""
+        privateKey = allWallets[0].privateKey?allWallets[0].privateKey:""
+
+        await bip39.generateMnemonic(128).then((phrase) => {
+          console.log('phrase:', phrase)
+          seedPhrase = phrase
+        }) 
+  
+        let arr = new Uint8Array(20);
+        crypto.getRandomValues(arr);
+  
+        let password = btoa(String.fromCharCode(...arr)).split('').filter(value => {
+            return !['+', '/' ,'='].includes(value);
+          }).slice(0,10).join('');
+          console.log('password:', password);
+
+        await setWalletData({
+          privateKey: privateKey, 
+          publicKey:publicKey,
+          seedPhrase: seedPhrase,
+          password: password
+        });
+      }else
+      {
+        privateKey = walletInfo.privateKey;
+        publicKey = walletInfo.publicKey;
+      }
+      console.log(privateKey, publicKey);
+      let registerResponse = await userRegister(publicKey);
       if (registerResponse && registerResponse.status == "success"){
         //first time register
         nounce = registerResponse.nonce;
       }else {
         //already registered
-        let nonceResponse = await getNounce(walletInfo.publicKey );
-        console.log(JSON.stringify(nonceResponse));
+        let nonceResponse = await getNounce(publicKey );
         nounce = nonceResponse.nonce; 
       }
 
-      //web3 initialization - currently redux weird implementation
-      //let web3 = new Web3(new Web3.providers.HttpProvider(rinkeby))
-
-      let Web3 = web3.web3Instance
-      let sign = Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), walletInfo.privateKey)
+      let sign = Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)
       if(sign && sign.signature) {
         signature = sign.signature;
 
-        let loginResponse = await userLogin(walletInfo.publicKey, signature);
+        let loginResponse = await userLogin(publicKey, signature);
 
         if (loginResponse && loginResponse.access_token && loginResponse.refresh_token) {
           if(loginResponse) {

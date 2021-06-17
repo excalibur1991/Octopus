@@ -88,17 +88,17 @@ class WalletSettings extends Component {
 
    const checkNetwork = setInterval(async() => {
         try {
-          this.setState({networktype: await rinkebyConnect().eth.net.getNetworkType()})
-          this.setState({networktype: await kovanConnect().eth.net.getNetworkType()})
-          this.setState({networktype: await ropstenConnect().eth.net.getNetworkType()})
+          //this.setState({networktype: await rinkebyConnect().eth.net.getNetworkType()})
+          //this.setState({networktype: await kovanConnect().eth.net.getNetworkType()})
+          //this.setState({networktype: await ropstenConnect().eth.net.getNetworkType()})
           this.setState({networktype: await mainConnect().eth.net.getNetworkType()})
          // this.rinkebynet =  await rinkebyConnect().eth.net.getNetworkType()
         //  this.kovannet = await kovanConnect().eth.net.getNetworkType()
         //  this.ropstennet = await ropstenConnect().eth.net.getNetworkType()
         //  this.mainnnet = await mainConnect().eth.net.getNetworkType()
-          this.rinkebyCheck = await rinkebyConnect().eth.net.isListening()
-          this.ropstenCheck =  await ropstenConnect().eth.net.isListening()
-          this.kovannetCheck = await kovanConnect().eth.net.isListening()
+          //this.rinkebyCheck = await rinkebyConnect().eth.net.isListening()
+          //this.ropstenCheck =  await ropstenConnect().eth.net.isListening()
+          //this.kovannetCheck = await kovanConnect().eth.net.isListening()
           this.mainnetCheck = await mainConnect().eth.net.isListening()
 
         } catch (error) {
@@ -129,7 +129,6 @@ class WalletSettings extends Component {
           }
         })
         try {
-          console.log('check account')
           Utils.checkAccount(this.web3, this.props.STPupdateAccounts);
         } catch (err) {
           console.error('error', err);
@@ -160,6 +159,30 @@ class WalletSettings extends Component {
              :allWallets[0].privateKey?allWallets[0].privateKey
              :""
     }
+
+  handleWalletDelete = async() => {
+    console.log("deleting wallet...");
+    this.setState({pword: ""});
+    this.setState({mnemonics: ""});
+    this.setState({publicKey: ""});
+    this.setState({privateKey: ""});
+    this.setState({ethTokenBal: ""})
+    this.setState({oceanERC20TokenBal: ""})
+    this.setState({phec0ERC20TokenBal: ""})
+
+    sKeys = {
+      password: "",
+      seedPhrase: "",
+      publicKey: "",
+      privateKey: "",
+      ethBal: this.state.ethTokenBal,
+      oceanBal: this.state.oceanERC20TokenBal,
+      phecorBal: this.state.phec0ERC20TokenBal
+    }
+    this.storeKeys = sKeys;
+
+    this.saveWallet();
+  }
 
 
   handleNewWallet = async() => {
@@ -211,50 +234,50 @@ class WalletSettings extends Component {
       const networkId = await (web3(this.state.networktype)).eth.net.getId()
       const daiTokenData = DaiToken.networks[5777]
 
-//ERC Balances...
- if ((this.state.isConnected && this.state.networktype == "rinkeby")) {
-    oceanrinkeby = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRinkebyContract);
-    phec0rinkeby = new (web3(this.state.networktype)).eth.Contract(erc20, phecor0RinkebyTokenContract);
-  
-
- //console.log('destination:', address.rinkeby.DTFactory)
- 
-     phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
-       let formatted = (new Web3(rinkeby)).utils.fromWei(balance )
-       console.log('formatted:', formatted)
-       let rounded = (Math.round((formatted) * 100)) / 100
-       this.setState({phec0ERC20TokenBal: rounded})
-        console.log({pheco0erc20balance: balance, formattedBalance: this.state.phec0ERC20TokenBal})
-  });
-        //console.log({oceanrinkeby: oceanrinkeby, erc20Token: erc20Token, ExchContract: ExchContract});
-      //  console.log({ tx: tx, encodeABI: encodedABI})
-        
-    oceanrinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
-        this.setState({oceanERC20TokenBal: (new Web3(rinkeby)).utils.fromWei(balance)})
-        console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
-    });
-    
- }
- 
- else if ((this.state.isConnected && this.state.networktype == "ropsten")) {
-  oceanropsten = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRopstenContract);
-  oceanropsten.methods.balanceOf(walletAddress).call((error, balance) => {
-      this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
-      console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
-     
-  });
- } else if ((this.state.isConnected && this.state.networktype == "kovan")) {
+    //ERC Balances...
+    if ((this.state.isConnected && this.state.networktype == "rinkeby")) {
+        oceanrinkeby = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRinkebyContract);
+        phec0rinkeby = new (web3(this.state.networktype)).eth.Contract(erc20, phecor0RinkebyTokenContract);
       
-  console.log("Kovan selected")
- } else {
-  oceanmainnet = new (web3(this.state.networktype)).eth.Contract(minABI, oceanMainnetContract);
-  oceanmainnet.methods.balanceOf(walletAddress).call((error, balance) => {
-    this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
-    console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});  
-  });
- }
 
-   console.log({networktype:this.state.networktype, Address: this.state.wallet[0].address })
+    //console.log('destination:', address.rinkeby.DTFactory)
+    
+        phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
+          let formatted = (new Web3(rinkeby)).utils.fromWei(balance )
+          console.log('formatted:', formatted)
+          let rounded = (Math.round((formatted) * 100)) / 100
+          this.setState({phec0ERC20TokenBal: rounded})
+            console.log({pheco0erc20balance: balance, formattedBalance: this.state.phec0ERC20TokenBal})
+      });
+            //console.log({oceanrinkeby: oceanrinkeby, erc20Token: erc20Token, ExchContract: ExchContract});
+          //  console.log({ tx: tx, encodeABI: encodedABI})
+            
+        oceanrinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
+            this.setState({oceanERC20TokenBal: (new Web3(rinkeby)).utils.fromWei(balance)})
+            console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
+        });
+        
+    }
+    
+    else if ((this.state.isConnected && this.state.networktype == "ropsten")) {
+      oceanropsten = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRopstenContract);
+      oceanropsten.methods.balanceOf(walletAddress).call((error, balance) => {
+          this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
+          console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
+        
+      });
+    } else if ((this.state.isConnected && this.state.networktype == "kovan")) {
+          
+      console.log("Kovan selected")
+    } else {
+      oceanmainnet = new (web3(this.state.networktype)).eth.Contract(minABI, oceanMainnetContract);
+      oceanmainnet.methods.balanceOf(walletAddress).call((error, balance) => {
+        this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
+        console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});  
+      });
+    }
+
+    console.log({networktype:this.state.networktype, Address: this.state.wallet[0].address })
     
     let sKeys = {}
     let storeKeys = {}
@@ -267,7 +290,8 @@ class WalletSettings extends Component {
     };
     
     try {
-      bip39.generateMnemonic(128).then((phrase) => {
+      
+      await bip39.generateMnemonic(128).then((phrase) => {
         console.log('phrase:', phrase)
         this.setState({mnemonics: phrase})
         //seedPhrase = phrase
@@ -283,7 +307,7 @@ class WalletSettings extends Component {
 
       this.setState({pword: password})  
       
-       sKeys = {
+      sKeys = {
         password: this.state.pword,
         seedPhrase: this.state.mnemonics,
         publicKey: this.state.publicKey,
@@ -291,7 +315,7 @@ class WalletSettings extends Component {
         ethBal: this.state.ethTokenBal,
         oceanBal: this.state.oceanERC20TokenBal,
         phecorBal: this.state.phec0ERC20TokenBal
-   }
+      }
        this.storeKeys = sKeys;
 
       this.saveWallet();
@@ -316,7 +340,9 @@ class WalletSettings extends Component {
     
   }
 
+  /* who wrote this part?
   handleNewWallet_ = async() => {
+    alert("handleNewWallet_");
     const entropy = await Utils.getRandom(16)
     try {
          while( this.state.isConnected) {
@@ -402,6 +428,7 @@ class WalletSettings extends Component {
     let polygonMainnetContract = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1"// Polygon Mainnet (previously Matic)
 
 };
+*/
 
   saveData = async () => {
     try {
@@ -411,22 +438,6 @@ class WalletSettings extends Component {
       alert('Failed to save the data to the storage')
     }
   }
-
-  readData = async () => {
-    try {
-      //checkNetwork();
-      //initWallet();
-      const userAge = await AsyncStorage.getItem(this.STORAGE_KEY)
-
-      if (userAge !== null) {
-        //setAge(userAge)
-        this.setState({age:userAge})
-      }
-    } catch (e) {
-      alert('Failed to fetch the data from storage')
-    }
-  } 
-  
 
   saveWallet = async () => {
     
@@ -446,7 +457,7 @@ class WalletSettings extends Component {
   readStoredWallet = async () => {
     try {
       const userInfo = JSON.parse(await AsyncStorage.getItem(this.STORAGE_KEY))
-//AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
+      //AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
 
       console.log({userInfo: userInfo, address:userInfo.publicKey, privateKey:userInfo.privateKey,
       seedphrase:userInfo.seedPhrase, password: userInfo.password, oceanBal: userInfo.oceanBal,
@@ -458,7 +469,7 @@ class WalletSettings extends Component {
         this.setState({wallet:userInfo})
         this.setState({publicKey: userInfo.publicKey})
         this.setState({privateKey: userInfo.privateKey})
-        this.setState({mnemonics: userInfo.seedphrase})
+        this.setState({mnemonics: userInfo.seedPhrase})
         this.setState({pword:userInfo.password})
         this.setState({oceanERC20TokenBal: userInfo.oceanBal})
         this.setState({ethTokenBal: userInfo.ethBal})
@@ -507,9 +518,6 @@ class WalletSettings extends Component {
               this.setState({networktype: itemValue })
             }>
             <Picker.Item label="mainnet" value="mainnet" />
-            <Picker.Item label="rinkeby" value="rinkeby" />
-            <Picker.Item label="kovan" value="kovan" />
-            <Picker.Item label="ropsten" value="ropsten" />       
           </Picker>
             <View style={{alignItems: 'center'}}>
           <Text >{this.state.isConnected?`Connected to ${this.state.networktype} node` :`Not Connected`}</Text>
@@ -551,7 +559,8 @@ class WalletSettings extends Component {
             <CButton text={this.state.pword}/>
           </View>
         </View>
-        <Button
+        </View>
+{/*         <Button
           color="#f2f2f2"
           title="More"
           buttonStyle={{
@@ -560,7 +569,8 @@ class WalletSettings extends Component {
             alignSelf: 'center',
           }}
           onPress={() => {
-            this.handleNewAccount();
+            //this.handleNewAccount
+            alert("What should be in here?");
           }}
           textStyle={{
             fontSize: 19,
@@ -577,7 +587,7 @@ class WalletSettings extends Component {
           width: '70%',
           alignSelf: 'center',
         }}
-        onPress={this.handleWalletRecovery}
+        onPress={this.handleWalletDelete}
         textStyle={{
           fontSize: 19,
           fontWeight: '600',
@@ -601,8 +611,9 @@ class WalletSettings extends Component {
             color: theme.APP_COLOR,
             fontFamily: 'Inter-Bold',
           }}
-        />
-        
+        /> 
+        */
+    }
      </ScrollView>
     )
   }
