@@ -107,7 +107,6 @@ class WalletSettings extends Component {
 
      if (this.rinkebyCheck == true || this.ropstenCheck == true || this.kovannetCheck == true || this.mainnetCheck == true ) {
       this.setState({ isConnected: true, })
-      //console.log("CONNECTED!")
      }
      //rinkebynet = await rinkebyConnect().eth.net.getNetworkType()
      //this.setState({ rinkebynet: await rinkebyConnect().eth.net.getNetworkType()})
@@ -119,9 +118,7 @@ class WalletSettings extends Component {
       if (this.props.web3 != null) {
         clearInterval(web3Returned);
         this.web3 = this.props.web3.web3Instance
-       // console.log("web3 result:", this.web3)
         Utils.checkNetwork(this.web3).then((res) => {
-          console.log("Network:", res)
          // this.networktype = res
             this.setState({ networktype : res });
           if ((res == 'local') || (res == 'rinkeby') || (res == 'kovan') || (res == 'ropsten') || (res == 'main')) {
@@ -151,9 +148,7 @@ class WalletSettings extends Component {
       try {
         
         allWallets = await (web3(this.state.networktype)).eth.accounts.wallet.create(1, entropy) 
-       //console.log({allWallets: allWallets[0]})
       } catch (error) {
-        console.log(error)
       }
       return allWallets[0].address?allWallets[0].address
              :allWallets[0].privateKey?allWallets[0].privateKey
@@ -161,7 +156,6 @@ class WalletSettings extends Component {
     }
 
   handleWalletDelete = async() => {
-    console.log("deleting wallet...");
     this.setState({pword: ""});
     this.setState({mnemonics: ""});
     this.setState({publicKey: ""});
@@ -192,7 +186,6 @@ class WalletSettings extends Component {
       let daiToken, daiTokenBalance = " "
       let phec0rinkeby = ""
       const entropy = await Utils.getRandom(16);
-      //console.log({DaiToken: DaiToken, DappToken: DappToken, minABI: minABI, TokenFarm: TokenFarm})
       let oceanRinkebyContract = "0x8967BCF84170c91B0d24D4302C2376283b0B3a07"; //rinkeby ocean
       let walletAddress = "0x5D363EC1EF55005C39c0e36C50b06242aeb3C3D4"; // wallet
       let oceanRopstenContract = "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9"; // ropsten ocean
@@ -221,14 +214,7 @@ class WalletSettings extends Component {
         this.state.isConnected?this.setState({privateKey: allWallets[0].privateKey}):this.setState({privateKey: " "})
         
         // saving..
-
-
-       console.log({allWallets: allWallets[0], allEthBal: allEthBal})
-       console.log({ethTokenBal: this.state.ethTokenBal, wallet: this.state.wallet,
-         publicKey:this.state.publicKey, privateKey: this.state.privateKey})
-
       } catch (error) {
-        console.log(error)
       }
       //DaiToken...
       const networkId = await (web3(this.state.networktype)).eth.net.getId()
@@ -240,21 +226,13 @@ class WalletSettings extends Component {
         phec0rinkeby = new (web3(this.state.networktype)).eth.Contract(erc20, phecor0RinkebyTokenContract);
       
 
-    //console.log('destination:', address.rinkeby.DTFactory)
-    
         phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
           let formatted = (new Web3(rinkeby)).utils.fromWei(balance )
-          console.log('formatted:', formatted)
           let rounded = (Math.round((formatted) * 100)) / 100
           this.setState({phec0ERC20TokenBal: rounded})
-            console.log({pheco0erc20balance: balance, formattedBalance: this.state.phec0ERC20TokenBal})
       });
-            //console.log({oceanrinkeby: oceanrinkeby, erc20Token: erc20Token, ExchContract: ExchContract});
-          //  console.log({ tx: tx, encodeABI: encodedABI})
-            
         oceanrinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
             this.setState({oceanERC20TokenBal: (new Web3(rinkeby)).utils.fromWei(balance)})
-            console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
         });
         
     }
@@ -263,36 +241,28 @@ class WalletSettings extends Component {
       oceanropsten = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRopstenContract);
       oceanropsten.methods.balanceOf(walletAddress).call((error, balance) => {
           this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
-          console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});
-        
       });
     } else if ((this.state.isConnected && this.state.networktype == "kovan")) {
           
-      console.log("Kovan selected")
     } else {
       oceanmainnet = new (web3(this.state.networktype)).eth.Contract(minABI, oceanMainnetContract);
       oceanmainnet.methods.balanceOf(walletAddress).call((error, balance) => {
         this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
-        console.log({oceanbalance: balance, formattedBalance: this.state.oceanERC20TokenBal});  
       });
     }
 
-    console.log({networktype:this.state.networktype, Address: this.state.wallet[0].address })
-    
     let sKeys = {}
     let storeKeys = {}
     let salt = "salt"
     let seedPhrase = ""
     let ks = {}
     const saveWallet = async (walletdump) => {
-      console.log('saving Wallet...')
       await AsyncStorage.setItem(localStorageKey, JSON.stringify(walletdump));
     };
     
     try {
       
       await bip39.generateMnemonic(128).then((phrase) => {
-        console.log('phrase:', phrase)
         this.setState({mnemonics: phrase})
         //seedPhrase = phrase
        // Utils.updateSeedPhrase(seedPhrase, this.props.STPupdateSeedPhrase)
@@ -327,7 +297,6 @@ class WalletSettings extends Component {
 
     lightwallet.keystore.createVault(opt, (err, data) => {
       if (err)
-      console.log("keystore:", data)
         console.warn(err)
       ks = data
       const walletdump = { ver: '1', ks: ks.serialize(), }
@@ -335,8 +304,8 @@ class WalletSettings extends Component {
     })
    */
     }
-
-    catch(err){console.log(err)}
+    catch(err){
+    }
     
   }
 
@@ -370,11 +339,7 @@ class WalletSettings extends Component {
     if(this.state.isConnected && this.state.networktype == "kovan") {
        //let web33 = await rinkebyConnect()
        (Utils.createAccFunc(this.web3, this.props.STPupdateAccounts)).then(res => {
-         console.log("res:", res)
         this.wallet = res
-        console.log("connected?:", this.state.isConnected)
-        console.log("networktype:", this.state.networktype)
-       // console.log("rinkebyConnect:", web33)
       });
 
     }
@@ -384,7 +349,6 @@ class WalletSettings extends Component {
     let ks = {}
 
     const saveWallet = async (walletdump) => {
-      console.log('saving Wallet...');
       await AsyncStorage.setItem(localStorageKey, JSON.stringify(walletdump));
     };
 
@@ -415,8 +379,9 @@ class WalletSettings extends Component {
         saveWallet(walletdump);
     })
     }
-    catch(err){console.log(err)}
-    console.log({seedphrase: seedPhrase ,ksvault: ks, cryptopass: this.password,  })
+    catch(err){
+    }
+    
    return this.wallet;
   }
 

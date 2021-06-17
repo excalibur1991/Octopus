@@ -43,7 +43,6 @@ const Loading = ({navigation}) => {
 
       if(walletInfo == null || walletInfo.publicKey == "") {
         //create new wallet
-        console.log("No Wallet exists. creating new wallet...");
         const entropy = await Utils.getRandom(16);
         const allWallets = await Web3.eth.accounts.wallet.create(1, entropy);
 
@@ -51,7 +50,6 @@ const Loading = ({navigation}) => {
         privateKey = allWallets[0].privateKey?allWallets[0].privateKey:""
 
         await bip39.generateMnemonic(128).then((phrase) => {
-          console.log('phrase:', phrase)
           seedPhrase = phrase
         }) 
   
@@ -61,7 +59,6 @@ const Loading = ({navigation}) => {
         let password = btoa(String.fromCharCode(...arr)).split('').filter(value => {
             return !['+', '/' ,'='].includes(value);
           }).slice(0,10).join('');
-          console.log('password:', password);
 
         await setWalletData({
           privateKey: privateKey, 
@@ -74,7 +71,6 @@ const Loading = ({navigation}) => {
         privateKey = walletInfo.privateKey;
         publicKey = walletInfo.publicKey;
       }
-      console.log(privateKey, publicKey);
       let registerResponse = await userRegister(publicKey);
       if (registerResponse && registerResponse.status == "success"){
         //first time register
@@ -103,7 +99,6 @@ const Loading = ({navigation}) => {
         }
       }
     }catch(err) {
-      console.log("err LoginProc", err);
     }
     return null;
   }
