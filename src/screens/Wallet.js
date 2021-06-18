@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import Button from '../components/Button';
 import CopyTextBox from '../components/CopyTextBox';
-import {theme} from '../services/Common/theme';
+import {styles} from '../styles/wallet';
 
 const Wallet = () => {
   const credentials = [
@@ -32,63 +32,18 @@ const Wallet = () => {
   ];
 
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: '2%',
-        paddingTop: '5%',
-        paddingHorizontal: '4%',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        backgroundColor: theme.COLORS.WHITE,
-      }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+    <View style={styles.container}>
+      <View style={styles.topContainer}>
         <View>
-          <Text
-            style={{
-              fontSize: 27,
-              fontWeight: '600',
-              lineHeight: 33,
-              color: theme.APP_COLOR,
-              fontFamily: 'Inter-Bold',
-            }}>
-            1.2 QUICRA-0
-          </Text>
-          <Text
-            style={{
-              color: '#8C98A9',
-              fontFamily: 'Inter-Bold',
-              fontSize: 20,
-              fontWeight: '600',
-            }}>
-            7.2 Ocean
-          </Text>
+          <Text style={styles.head1}>1.2 QUICRA-0</Text>
+          <Text style={styles.head2}>7.2 Ocean</Text>
         </View>
-        <View style={{alignItems: 'flex-end'}}>
-          <Text
-            style={{
-              color: theme.COLORS.BLACK,
-              fontSize: 16,
-              fontFamily: 'Inter-Regular',
-            }}>
-            24h Portfolio
-          </Text>
-          <Text
-            style={{
-              color: '#84c380',
-              fontSize: 20,
-              fontFamily: 'Inter-Bold',
-            }}>
-            (+15.53%)
-          </Text>
+        <View style={styles.alignEnd}>
+          <Text style={styles.head3}>24h Portfolio</Text>
+          <Text style={styles.head4}>(+15.53%)</Text>
         </View>
       </View>
-      <View style={{marginTop: '8%'}}>
+      <View style={styles.credentialsContainer}>
         {credentials.map((item, index) => (
           <CopyTextBox key={index} item={item} />
         ))}
@@ -96,18 +51,9 @@ const Wallet = () => {
       <Button
         color="#f2f2f2"
         title="Delete Wallet"
-        buttonStyle={{
-          borderRadius: 25,
-          width: '70%',
-          alignSelf: 'center',
-        }}
-        onPress={() => alert('Pressed')}
-        textStyle={{
-          fontSize: 19,
-          fontWeight: '600',
-          color: theme.APP_COLOR,
-          fontFamily: 'Inter-Bold',
-        }}
+        buttonStyle={styles.button}
+        onPress={() => {}}
+        textStyle={styles.buttonText}
       />
     </View>
   );

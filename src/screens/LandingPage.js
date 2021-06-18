@@ -2,22 +2,17 @@ import React from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {Text, View, StyleSheet, FlatList} from 'react-native';
+import {Text, View, FlatList} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import bip39 from 'react-native-bip39';
-import { hdPathString, localStorageKey } from '../web3/constants';
-import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
-import * as Utils from '../web3/utils';
-import {connect} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {styles} from '../styles/landingpage';
 
-const LandingPage = ({navigation})=> {
+const LandingPage = ({navigation}) => {
   const options = [
     {
-      icon: 'info',
-      title: 'Info',
-      screen: 'About',
-      Icon: MaterialIcon,
+      title: 'My Stats',
+      screen: 'MyStats',
+      icon: 'analytics-sharp',
+      Icon: IonIcon,
     },
     {
       title: 'Learn',
@@ -32,87 +27,41 @@ const LandingPage = ({navigation})=> {
       Icon: MaterialIcon,
     },
     {
+      icon: 'info',
+      title: 'Info',
+      screen: 'About',
+      Icon: MaterialIcon,
+    },
+    {
       title: 'Wallet',
       screen: 'Wallet',
       icon: 'account-balance-wallet',
       Icon: MaterialIcon,
     },
-    {
-      title: 'My Stats',
-      screen: 'MyStats',
-      icon: 'analytics-sharp',
-      Icon: IonIcon,
-    },
   ];
 
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: '20%',
-        paddingTop: '5%',
-        paddingHorizontal: '4%',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        backgroundColor: theme.COLORS.WHITE,
-      }}>
+    <View style={styles.container}>
       <Ripple
-        outerStyle={{
-          marginTop: '-25%',
-          borderRadius: 25,
-          elevation: 5,
-          shadowColor: '#000',
-          shadowOpacity: 0.3,
-          shadowRadius: 4.65,
-          shadowOffset: {width: 0, height: 4},
-          backgroundColor: '#F5F6FC',
-          marginVertical: 10,
-          marginHorizontal: '5%',
-        }}
-        innerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          paddingVertical: 20,
-          paddingHorizontal: 10,
-          marginVertical: '10%',
-        }}
+        outerStyle={styles.swipeAiOuter}
+        innerStyle={styles.swipeAiInner}
         onPress={() => navigation.navigate('SwipeAI')}>
-        <View
-          style={{
-            marginRight: '5%',
-
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+        <View style={styles.swipeAiIcon}>
           <MaterialIcon size={50} name="swipe" color={theme.APP_COLOR} />
         </View>
-        <Text style={styles.buttonText}>Work on images</Text>
+        <Text style={styles.buttonText}>Swipe AI</Text>
       </Ripple>
       <FlatList
-        style={{flex: 1, paddingTop: '3%'}}
-        contentContainerStyle={{paddingBottom: '5%'}}
+        style={styles.Container}
+        contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         data={options}
         renderItem={({item}) => (
           <Ripple
             onPress={() => navigation.navigate(item.screen)}
             key={item.id}
-            outerStyle={{
-              width: '45.9%',
-              shadowColor: '#000',
-              shadowOpacity: 0.3,
-              shadowRadius: 4.65,
-              shadowOffset: {width: 0, height: 4},
-              elevation: 5,
-              margin: '2%',
-              borderRadius: 25,
-              backgroundColor: '#F5F6FC',
-            }}
-            innerStyle={{
-              padding: '10%',
-              marginBottom: '28.5%',
-            }}>
+            outerStyle={styles.listItemOuter}
+            innerStyle={styles.listItemInner}>
             <item.Icon
               style={styles.icon}
               name={item.icon}
@@ -128,28 +77,4 @@ const LandingPage = ({navigation})=> {
   );
 };
 
-  export default LandingPage;
-
-
-const styles = StyleSheet.create({
-  itemTitle: {
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-    color: '#41474E',
-    fontWeight: '600',
-    marginTop: '9%',
-  },
-  icon: {
-    marginVertical: '5%',
-  },
-  buttonText: {
-    color: '#000',
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-    alignSelf: 'flex-end',
-  },
-  buttonImage: {
-    height: 100,
-    width: 100,
-  },
-});
+export default LandingPage;
