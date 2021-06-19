@@ -4,6 +4,12 @@ import Ripple from '../components/Ripple';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import GestureRecognizer from 'react-native-swipe-gestures';
+import {
+  getAllImages,
+  getImage,
+  getLabelImage,
+  storeUserResponse,
+} from '../services/API/APIManager';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {styles} from '../styles/swipeai';
 import {fetchImages, onSwipe} from '../functions/swipeai';

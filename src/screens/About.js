@@ -34,7 +34,9 @@ const About = () => {
           compute-to-data which we use to sell our collected dataset to buyers
           for algorithm training without the risk of our data being copied.
         </Text>
-        <Text style={styles.text}>For</Text>
+        <Text style={styles.text}>
+          For 
+        </Text>
       </ScrollView>
     </View>
   );

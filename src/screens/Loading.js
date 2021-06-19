@@ -10,6 +10,7 @@ import {LoginProc} from '../functions/loading';
 
 const Loading = ({navigation}) => {
   const web3 = useSelector((state) => state.web3);
+  const [{authInfo}, dispatch] = useStateValue();
 
   useEffect(() => {
     LoginProc(web3);
@@ -32,6 +33,8 @@ const Loading = ({navigation}) => {
       />
       <View style={styles.creatingWallet}>
         <Text style={styles.text}>Powered by:</Text>
+          Powered by:
+        </Text>
       </View>
       <Image
         style={styles.image}
