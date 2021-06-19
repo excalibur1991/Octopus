@@ -1,15 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {View, Image} from 'react-native';
 import Ripple from '../components/Ripple';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import {
-  getAllImages,
-  getImage,
-  getLabelImage,
-  storeUserResponse,
-} from '../services/API/APIManager';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {styles} from '../styles/swipeai';
 import {fetchImages, onSwipe} from '../functions/swipeai';
@@ -31,18 +24,13 @@ const SwipeAI = () => {
   const [mainImage, setMainImage] = useState(null);
   const [cutoutImage, setCutoutImage] = useState(null);
   const [, dispatch] = useStateValue();
-
   return (
     <View style={styles.container}>
       <Image
         resizeMode="stretch"
         style={styles.topImage}
         source={
-          mainImage
-            ? {
-                uri: mainImage,
-              }
-            : require('../assets/top_image.png')
+          mainImage ? {uri: mainImage} : require('../assets/top_image.png')
         }
       />
       <GestureRecognizer
@@ -76,9 +64,7 @@ const SwipeAI = () => {
           style={styles.bottomImage}
           source={
             mainImage
-              ? {
-                  uri: cutoutImage,
-                }
+              ? {uri: cutoutImage}
               : require('../assets/bottom_image.png')
           }
         />
@@ -88,7 +74,7 @@ const SwipeAI = () => {
           outerStyle={styles.miniLeftButton}
           innerStyle={styles.miniButtonInner}
           onPress={() => {}}>
-          <MaterialCommunityIcon name="reload" size={20} color="#dccd96" />
+          <MaterialCommunityIcon name="reload" size={20} color="#DCCD96" />{' '}
         </Ripple> */}
         <Ripple
           outerStyle={styles.largeLeftButton}
@@ -105,7 +91,7 @@ const SwipeAI = () => {
               setCutoutImage,
             )
           }>
-          <MaterialCommunityIcon name="close-thick" size={35} color="#cc1c26" />
+          <MaterialCommunityIcon name="close-thick" size={35} color="#CC1C26" />
         </Ripple>
         <Ripple
           outerStyle={styles.largeRightButton}
@@ -122,17 +108,16 @@ const SwipeAI = () => {
               setCutoutImage,
             )
           }>
-          <MaterialCommunityIcon name="check-bold" size={35} color="#76b772" />
+          <MaterialCommunityIcon name="check-bold" size={35} color="#76B772" />
         </Ripple>
         {/* <Ripple
           outerStyle={styles.miniRightButton}
           innerStyle={styles.miniButtonInner}
           onPress={() => next()}>
-          <MaterialIcon name="arrow-right-alt" size={20} color="#dccd96" />
+          <MaterialIcon name="arrow-right-alt" size={20} color="#DCCD96" />
         </Ripple> */}
       </View>
     </View>
   );
 };
-
 export default SwipeAI;
