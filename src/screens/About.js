@@ -1,7 +1,6 @@
 import React from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import {styles} from '../styles/about';
-
 const About = () => {
   return (
     <View style={styles.container}>
@@ -34,12 +33,9 @@ const About = () => {
           compute-to-data which we use to sell our collected dataset to buyers
           for algorithm training without the risk of our data being copied.
         </Text>
-        <Text style={styles.text}>
-          For 
-        </Text>
+        <Text style={styles.text}> For </Text>
       </ScrollView>
     </View>
   );
 };
-
 export default About;
