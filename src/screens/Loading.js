@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */ import React, {
+  useEffect,
+} from 'react';
 import {Text, Image, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -7,19 +8,13 @@ import '../../global';
 import '../../shim';
 import {styles} from '../styles/loading';
 import {LoginProc} from '../functions/loading';
-
 const Loading = ({navigation}) => {
   const web3 = useSelector((state) => state.web3);
-  const [{authInfo}, dispatch] = useStateValue();
-
   useEffect(() => {
     LoginProc(web3);
     setTimeout(() => {
       navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
-        }),
+        CommonActions.reset({index: 0, routes: [{name: 'Home'}]}),
       );
     }, 2000);
   }, []);
@@ -33,8 +28,6 @@ const Loading = ({navigation}) => {
       />
       <View style={styles.creatingWallet}>
         <Text style={styles.text}>Powered by:</Text>
-          Powered by:
-        </Text>
       </View>
       <Image
         style={styles.image}
@@ -44,5 +37,4 @@ const Loading = ({navigation}) => {
     </View>
   );
 };
-
 export default Loading;
