@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
-import {Text, Image, View, StyleSheet} from 'react-native';
-import {theme} from '../services/Common/theme';
+/* eslint-disable react-hooks/exhaustive-deps */ import React, {
+  useEffect,
+} from 'react';
+import {Text, Image, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useStateValue} from '../services/State/State';
 import {reducer, actions} from '../services/State/Reducer';
@@ -25,7 +26,6 @@ const Loading = ({navigation}) => {
   const web3 = useSelector(state=>state.web3);
   const [{authInfo}, dispatch] = useStateValue();
 
-  
 
   const LoginProc = async () => {
     try {
@@ -62,16 +62,16 @@ const Loading = ({navigation}) => {
           seedPhrase: seedPhrase,
           password: password
         });
-      }else
-      {
+      } else {
         privateKey = walletInfo.privateKey;
         publicKey = walletInfo.publicKey;
       }
+      
       let registerResponse = await userRegister(publicKey);
       if (registerResponse && registerResponse.status == "success"){
         //first time register
         nounce = registerResponse.nonce;
-      }else {
+      } else {
         //already registered
         let nonceResponse = await getNounce(publicKey);
         nounce = nonceResponse.nonce; 
@@ -99,8 +99,6 @@ const Loading = ({navigation}) => {
     return null;
   }
 
-  
-  
   useEffect(() => {
     LoginProc();
 

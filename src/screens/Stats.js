@@ -10,8 +10,8 @@ import {
   Dimensions,
   processColor,
 } from 'react-native';
+
 import Button from '../components/Button';
-import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
 import {getOverall} from '../services/API/APIManager';
 
@@ -30,7 +30,21 @@ var _arr_verifications = [];
 
 const Stats = () => {
   useEffect(() => {
-    fetchOverall();
+    fetchOverall(
+      dispatch,
+      setAnnotations,
+      setUploads,
+      setVerifications,
+      _arr_date,
+      _arr_uploads,
+      _arr_tag_annotations,
+      _arr_text_annotations,
+      _arr_verifications,
+      setUploadsQuicrra,
+      setAnnotationsQuicrra,
+      setVerificationsQuicrra,
+      setCumuQuicrra,
+    );
   }, []);
 
   const [annotations, setAnnotations] = useState(0);
@@ -364,8 +378,8 @@ const Stats = () => {
             <View style={styles.box}>
               <Image
                 resizeMode="stretch"
-                source={require('../assets/uploads.png')}
-                style={{height: 20, width: 30}}
+                source={UploadIcon}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Uploads</Text>
               <Text style={styles.itemValue}>{uploads}</Text>
@@ -380,7 +394,7 @@ const Stats = () => {
               <Image
                 resizeMode="stretch"
                 source={require('../assets/annotations.png')}
-                style={{height: 20, width: 30}}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Annotations</Text>
               <Text style={styles.itemValue}>{annotations}</Text>
@@ -395,7 +409,7 @@ const Stats = () => {
               <Image
                 resizeMode="stretch"
                 source={require('../assets/verifications.png')}
-                style={{height: 20, width: 30}}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Verifications</Text>
               <Text style={styles.itemValue}>{verifications}</Text>

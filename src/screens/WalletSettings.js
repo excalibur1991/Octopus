@@ -11,55 +11,36 @@ import bip39 from 'react-native-bip39'
 import { hdPathString, localStorageKey } from '../web3/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button';
-import {theme} from '../services/Common/theme';
 //import { Ocean, ConfigHelper } from '@oceanprotocol/lib'
-import {rinkebyConnect} from '../web3/getWeb3'
-import {ropstenConnect} from '../web3/getWeb3'
-import {kovanConnect} from '../web3/getWeb3'
-import {mainConnect} from '../web3/getWeb3'
-import {rinkeby} from '../web3/constants'
-import {ropsten} from '../web3/constants'
-import {kovan} from '../web3/constants'
-import {mainnet} from '../web3/constants'
-import {web3} from '../web3/getWeb3'
-import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import {Picker} from '@react-native-picker/picker';
-import { ethers } from "ethers";
-import Web3 from 'web3'
-import CopyTextBox from '../components/CopyTextBox';
-import Ripple from '../components/Ripple';
 import CButton from '../components/CButton';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import minABI from '../abis/minABI.json'
-import DaiToken from '../abis/DaiToken.json'
-import DappToken from '../abis/DappToken.json'
-import TokenFarm from '../abis/TokenFarm.json'
-import erc20 from '../abis/erc20.json'
-import exchange from '../abis/exchange.json'
-import factory from '../abis/factory.json'
-import address from '../abis/address.json'
+import {styles} from '../styles/walletsettings';
 //import { Ocean, Config, ConfigHelper, Logger } from '@oceanprotocol/lib'
-
- 
-
+import {
+  chkNetwork,
+  webThreeReturned,
+  handleNewWallet,
+  readStoredWallet,
+  handleNewAccount,
+} from '../functions/walletsettings';
 
 class WalletSettings extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isConnected: false,
       publicKey: '',
       privateKey: '',
       pword: '',
-      mnemonics:'',
+      mnemonics: '',
       newdialogVisible: false,
       restoredialogVisible: false,
       selectedLanguage: '',
       networktype: 'none',
-      wallet: " ",
-      ethTokenBal: " ",
-      oceanERC20TokenBal: " ",
-      phec0ERC20TokenBal: " ",
+      wallet: ' ',
+      ethTokenBal: ' ',
+      oceanERC20TokenBal: ' ',
+      phec0ERC20TokenBal: ' ',
       account: '0x0',
       daiToken: '',
       dappToken: {},
@@ -67,24 +48,21 @@ class WalletSettings extends Component {
       daiTokenBalance: '0',
       dappTokenBalance: '0',
       stakingBalance: '0',
-      age: ''
-
+      age: '',
     };
 
-   // const [age, setAge] = useState('')
+    // const [age, setAge] = useState('')
 
-
-    this.web3 = null
-    this.rinkebynet = 'none'
-    this.ropstennet = 'none'
-    this.kovannet = 'none'
-    this.mainnet = 'none'
-    this.rinkebyCheck = 'none'
-    this.ropstenCheck = 'none'
-    this.kovannetCheck = 'none'
-    this.mainnetCheck = 'none'
+    this.web3 = null;
+    this.rinkebynet = 'none';
+    this.ropstennet = 'none';
+    this.kovannet = 'none';
+    this.mainnet = 'none';
+    this.rinkebyCheck = 'none';
+    this.ropstenCheck = 'none';
+    this.kovannetCheck = 'none';
+    this.mainnetCheck = 'none';
     //this.wallet = ""
-       
 
    const checkNetwork = setInterval(async() => {
         try {
@@ -438,81 +416,97 @@ class WalletSettings extends Component {
     }
   }
 
-  clearStorage = async () => {
-    try {
-      await AsyncStorage.clear()
-      alert('Storage successfully cleared!')
-    } catch (e) {
-      alert('Failed to clear the async storage.')
-    }
-  }
-
-
-  onChangeText = (userAge) => {
-    //setAge(userAge)
-    this.setState({age:userAge})
-  }
-
- onSubmitEditing = () => {
-  if (!this.state.age) return
-
-    this.saveData(age)
-    // setAge('')
-      this.setState({age:" "})
-}
-
+  STORAGE_KEY = '@save_Keys';
+  STORAGE_KEY2 = '@save_Pwd';
+  STORAGE_KEY3 = '@save_Phrase';
 
   render() {
-    
     return (
-      <ScrollView  showsVerticalScrollIndicator={true}>
+      <ScrollView showsVerticalScrollIndicator={true}>
         <View>
           <Picker
             selectedValue={this.state.networktype}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue })
+              this.setState({networktype: itemValue})
             }>
             <Picker.Item label="mainnet" value="mainnet" />
           </Picker>
-            <View style={{alignItems: 'center'}}>
-          <Text >{this.state.isConnected?`Connected to ${this.state.networktype} node` :`Not Connected`}</Text>
-           </View>
+          <View style={styles.alignCenter}>
+            <Text>
+              {this.state.isConnected
+                ? `Connected to ${this.state.networktype} node`
+                : 'Not Connected'}
+            </Text>
+          </View>
         </View>
-       <View style={styles.container}>
-        <View style={styles.rows}>
-        <View>
-          <Text></Text>
-          <Text style={styles.quickra}>0 QUICRA-0 </Text>
-          <Text style={styles.ocean}> {this.state.ethTokenBal} ETH </Text>
-          <Text style={styles.ocean}> {this.state.oceanERC20TokenBal} OCEAN </Text>
-          <Text style={styles.ocean}> {this.state.phec0ERC20TokenBal} PHECOR-0 </Text>
-        </View>
-        <View style={{alignItems: 'flex-end'}}>
-          <Text style={styles.txtPortfolio}> 24h Portfolio</Text>
-          <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
-        </View>
-      </View>
-        <View >
-        <Text style={styles.bigTextView} >Public Key</Text>
-          <View style={styles.parent}>
-            <Text numberOfLines={1} style={{ marginTop: '4%', width:100}}> { this.state.publicKey} </Text>
-            <CButton text={this.state.publicKey}/>
+        <View style={styles.container}>
+          <View style={styles.rows}>
+            <View>
+              <Text />
+              <Text style={styles.quickra}>0 QUICRA-0 </Text>
+              <Text style={styles.ocean}> {this.state.ethTokenBal} ETH </Text>
+              <Text style={styles.ocean}>
+                {' '}
+                {this.state.oceanERC20TokenBal} OCEAN{' '}
+              </Text>
+              <Text style={styles.ocean}>
+                {' '}
+                {this.state.phec0ERC20TokenBal} PHECOR-0{' '}
+              </Text>
+            </View>
+            <View style={styles.alignEnd}>
+              <Text style={styles.txtPortfolio}> 24h Portfolio</Text>
+              <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
+            </View>
           </View>
-          <Text style={styles.bigTextView} >Mnemonic Phrase</Text>
-          <View style={styles.parent}>
-            <Text numberOfLines={1} style={{ marginTop: '4%', width:100}}> { this.state.mnemonics} </Text>
-            <CButton text={this.state.mnemonics}/>
+          <View>
+            <Text style={styles.bigTextView}>Public Key</Text>
+            <View style={styles.parent}>
+              <Text numberOfLines={1} style={styles.boxText}>
+                {' '}
+                {this.state.publicKey}{' '}
+              </Text>
+              <CButton text={this.state.publicKey} />
+            </View>
+            <Text style={styles.bigTextView}>Mnemonic Phrase</Text>
+            <View style={styles.parent}>
+              <Text numberOfLines={1} style={styles.boxText}>
+                {' '}
+                {this.state.mnemonics}{' '}
+              </Text>
+              <CButton text={this.state.mnemonics} />
+            </View>
+            <Text style={styles.bigTextView}>Private Key</Text>
+            <View style={styles.parent}>
+              <Text numberOfLines={1} style={styles.boxText}>
+                {' '}
+                {this.state.privateKey}{' '}
+              </Text>
+              <CButton text={this.state.privateKey} />
+            </View>
+            <Text style={styles.bigTextView}>Password</Text>
+            <View style={styles.parent}>
+              <Text numberOfLines={1} style={styles.boxText}>
+                {' '}
+                {this.state.pword}{' '}
+              </Text>
+              <CButton text={this.state.pword} />
+            </View>
           </View>
-          <Text style={styles.bigTextView} >Private Key</Text>
-          <View style={styles.parent}>
-            <Text numberOfLines={1} style={{ marginTop: '4%', width:100}}> { this.state.privateKey } </Text>
-            <CButton text={this.state.privateKey}/>
-          </View>
-          <Text style={styles.bigTextView} >Password</Text>
-          <View style={styles.parent}>
-            <Text numberOfLines={1} style={{ marginTop: '4%', width:100}}> { this.state.pword} </Text>
-            <CButton text={this.state.pword}/>
-          </View>
+          <Button
+            color="#f2f2f2"
+            title="More"
+            buttonStyle={styles.buttonStyle}
+            onPress={() => handleNewAccount(this)}
+            textStyle={styles.buttonText}
+          />
+          <Button
+            color="#f2f2f2"
+            title="Delete Wallet"
+            buttonStyle={styles.buttonStyle}
+            onPress={this.handleWalletRecovery}
+            textStyle={styles.buttonText}
+          />
         </View>
         </View>
 {/*         <Button
@@ -574,155 +568,19 @@ class WalletSettings extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   web3: state.web3,
   account: state.reducers.account,
   seedPhrase: state.reducers.seedPhrase,
-})
+});
 
 const mapDispatchToProps = (dispatch) => {
   // Action
   return {
     STPupdateAccounts: (account0) => dispatch(STPupdateAccounts(account0)),
-    STPupdateSeedPhrase: (seedPhrase) => dispatch(STPupdateSeedPhrase(seedPhrase)),
+    STPupdateSeedPhrase: (seedPhrase) =>
+      dispatch(STPupdateSeedPhrase(seedPhrase)),
   };
 };
 
-export default connect (
-  mapStateToProps,
-  mapDispatchToProps,
-) (WalletSettings)
-
-const styles = StyleSheet.create({
-  container_: {
-    flex: 2,
-    backgroundColor: '#9999',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  wrapperStyle :{
-    backgroundColor: '#00000000',
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1,
-  },
-  button1 :{
-    width: '100%',
-    backgroundColor: "#ffffff",
-    borderRadius: 2,
-    borderColor: "#ffffff",
-    borderWidth: 1,
-    shadowColor: "rgba(0,0,0,.12)",
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    justifyContent: 'space-between'
-  },
-  bigTextView: {
-    fontFamily: "Cochin",
-    fontSize: 15,
-    fontWeight: "bold",
-   // position:'relative',
-    //left:10,
-    //top:'-5%'
-  },
-  container: {
-    flex: 1,
-    marginTop: '2%',
-    paddingTop: '5%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
-  },
-  rows: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  quickra: {
-    fontSize: 27,
-    fontWeight: '600',
-    lineHeight: 33,
-    color: theme.APP_COLOR,
-    fontFamily: 'Inter-Bold',
-  },
-  ocean: {
-    color: '#8C98A9',
-    fontFamily: 'Inter-Bold',
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  txtPortfolio: {
-    color: theme.COLORS.BLACK,
-    fontSize: 16,
-    fontFamily: 'Inter-Regular',
-  },
-  txtOceanDelta: {
-    color: '#84c380',
-    fontSize: 20,
-    fontFamily: 'Inter-Bold',
-  },
-  containers: {
-    flex: 2,
-    backgroundColor: '#9999',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  wrapperStyle :{
-    backgroundColor: '#00000000',
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1,
-  },
-  button1 :{
-    width: '100%',
-    backgroundColor: "#ffffff",
-    borderRadius: 2,
-    borderColor: "#ffffff",
-    borderWidth: 1,
-    shadowColor: "rgba(0,0,0,.12)",
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    justifyContent: 'space-between'
-  },
-  MainContainer:
-  {
-    paddingTop: (Platform.OS === 'ios') ? 20 : 0,
-    flex: 1,
-    padding: 20,
-    paddingBottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textInputStyle: {
-    textAlign: 'center',
-    height: 41,
-    width: '82%',
-    borderWidth: 1,
-    borderColor: '#AA00FF',
-    borderRadius: 8,
-    marginBottom: 20
-  },
-  button: {
-    width: '92%',
-    paddingTop: 12,
-    paddingBottom: 12,
-    backgroundColor: '#AA00FF',
-    borderRadius: 5,
-    marginBottom: 20
-  },
-  TextStyle: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  Ccontainer: {
-    flex: 1,
-  },
-  parent: {
-    //flex: 1,
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: theme.APP_COLOR,
-    borderRadius: 8,
-    marginBottom: 20
-   // justifyContent: 'flex-start'
-  }
-})
+export default connect(mapStateToProps, mapDispatchToProps)(WalletSettings);

@@ -11,29 +11,24 @@ import {
   processColor,
 
 } from 'react-native';
+
 import Button from '../components/Button';
-import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
-import {
-  getUserStats
-} from '../services/API/APIManager';
-
-import {
-  calcUploadsCumu,
-  calcAnnoDescCumu,
-  calcAnnoTagCumu,
-  calcVeriCumu
-} from '../services/Common/CommonFunctions';
-
-var _arr_date = [];
-var _arr_uploads = [];
-var _arr_tag_annotations = [];
-var _arr_text_annotations = [];
-var _arr_verifications = [];
+import {styles} from '../styles/mystats';
+import {sumCumuData, updateChart, fetchOverall} from '../functions/mystats';
 
 const MyStats = () => {
   useEffect(() => {
-    fetchOverall(); 
+    fetchOverall(
+      dispatch,
+      setAnnotations,
+      setUploads,
+      setVerifications,
+      setUploadsQuicrra,
+      setAnnotationsQuicrra,
+      setVerificationsQuicrra,
+      setCumuQuicrra,
+    );
   }, []);
 
   const [annotations, setAnnotations] = useState(0);
@@ -48,6 +43,7 @@ const MyStats = () => {
   const [chartDate, setChartDate] = useState(['2020', '2021']); 
   const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']); 
   const [graphTitle, setGraphTitle] = useState('');
+
   const [curChartState, setCurChartState] = useState('uploads');
 
   const curYear = Number(
@@ -370,7 +366,7 @@ const MyStats = () => {
               <Image
                 resizeMode="stretch"
                 source={require('../assets/uploads.png')}
-                style={{height: 20, width: 30}}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Uploads</Text>
               <Text style={styles.itemValue}>{uploads}</Text>
@@ -385,7 +381,7 @@ const MyStats = () => {
               <Image
                 resizeMode="stretch"
                 source={require('../assets/annotations.png')}
-                style={{height: 20, width: 30}}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Annotations</Text>
               <Text style={styles.itemValue}>{annotations}</Text>
@@ -400,7 +396,7 @@ const MyStats = () => {
               <Image
                 resizeMode="stretch"
                 source={require('../assets/verifications.png')}
-                style={{height: 20, width: 30}}
+                style={styles.imageIcon}
               />
               <Text style={styles.itemTitle}>Verifications</Text>
               <Text style={styles.itemValue}>{verifications}</Text>
@@ -516,95 +512,3 @@ const MyStats = () => {
 };
 
 export default MyStats;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: '2%',
-    paddingTop: '6%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
-  },
-  topContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  bottomContainer: {
-    marginTop: '8%',
-  },
-  boxContainer: {
-    flex: 0.333,
-    margin: '1%',
-  },
-  graphContainer: {
-    marginBottom: '10%',
-    alignItems: 'center',
-  },
-  box: {
-    paddingTop: '20%',
-    borderRadius: 25,
-    paddingBottom: '25%',
-    alignItems: 'center',
-    backgroundColor: '#F5F6FC',
-  },
-  boxMini: {
-    marginTop: '10%',
-    borderRadius: 25,
-    alignItems: 'center',
-    paddingVertical: '3%',
-    backgroundColor: '#F5F6FC',
-  },
-  fullWidthBox: {
-    marginTop: '2%',
-    borderRadius: 25,
-    alignItems: 'center',
-    paddingVertical: '2%',
-    backgroundColor: '#F5F6FC',
-  },
-  itemTitle: {
-    fontSize: 10,
-    marginTop: '5%',
-    color: '#41474E',
-    fontWeight: '600',
-    fontFamily: 'Inter-Regular',
-  },
-  miniBoxValue: {
-    fontSize: 9,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
-  },
-  miniBoxFooter: {
-    fontSize: 6,
-    fontWeight: '300',
-    fontFamily: 'Inter-Regular',
-  },
-  fullWidthBoxValue: {
-    fontSize: 17,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
-  },
-  itemValue: {
-    fontSize: 17,
-    marginTop: '20%',
-    color: '#41474E',
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
-  },
-  graphTitle: {
-    fontSize: 11,
-    fontFamily: 'Inter-Bold',
-  },
-  graph: {
-    marginTop: '5%',
-  },
-  buttonContainer: {
-    marginBottom: '10%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonInnerContainer: {
-  },
-
-});
