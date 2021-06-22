@@ -1,7 +1,6 @@
 import React from 'react';
-import {theme} from '../services/Common/theme';
-import {ScrollView, Text, View, StyleSheet} from 'react-native';
-
+import {ScrollView, Text, View} from 'react-native';
+import {styles} from '../styles/about';
 const About = () => {
   return (
     <View style={styles.container}>
@@ -29,43 +28,14 @@ const About = () => {
           never realise our project.
         </Text>
         <Text style={styles.text}>
-          The main technological advantages that they created are datastokens which
-          we use as the economy and price discovery for our data. And compute-to-data which we use
-          to sell our collected dataset to buyers for algorithm training without
-          the risk of our data being copied.
+          The main technological advantages that they created are datastokens
+          which we use as the economy and price discovery for our data. And
+          compute-to-data which we use to sell our collected dataset to buyers
+          for algorithm training without the risk of our data being copied.
         </Text>
-        <Text style={styles.text}>
-          For 
-        </Text>
+        <Text style={styles.text}> For </Text>
       </ScrollView>
     </View>
   );
 };
-
 export default About;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: '2%',
-    paddingTop: '8%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
-  },
-  header: {
-    fontSize: 20,
-    color: '#6C6C6C',
-    fontWeight: '600',
-    fontFamily: 'Inter-Regular',
-  },
-  text: {
-    fontSize: 16,
-    marginTop: 5,
-    marginBottom: 10,
-    textAlign: 'justify',
-    color: theme.COLORS.BLACK,
-    fontFamily: 'Inter-Regular',
-  },
-});
