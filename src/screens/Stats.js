@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {theme} from '../services/Common/theme';
-import {LineChart} from 'react-native-chart-kit';
+import {LineChart} from 'react-native-charts-wrapper';
 import {
   Image,
   ScrollView,
@@ -8,19 +8,18 @@ import {
   StyleSheet,
   View,
   Dimensions,
+  processColor,
 } from 'react-native';
 import Button from '../components/Button';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
-import {
-  getOverall
-} from '../services/API/APIManager';
+import {getOverall} from '../services/API/APIManager';
 
 import {
   calcUploadsCumu,
   calcAnnoDescCumu,
   calcAnnoTagCumu,
-  calcVeriCumu
+  calcVeriCumu,
 } from '../services/Common/CommonFunctions';
 
 var _arr_date = [];
@@ -43,152 +42,236 @@ const Stats = () => {
   const [verificationsQuicrra, setVerificationsQuicrra] = useState(0);
   const [cumuQuicrra, setCumuQuicrra] = useState(0);
 
-  const [graphTitle, setGraphTitle] = useState("UPLOAD");
+  const [chartDate, setChartDate] = useState(['2020', '2021']); 
+  const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']); 
+  const [graphTitle, setGraphTitle] = useState('');
   const [curChartState, setCurChartState] = useState('uploads');
 
-  const curYear = Number(new Date().toISOString().replace(/T.*/, '').split('-')[0]);
+  const curYear = Number(
+    new Date().toISOString().replace(/T.*/, '').split('-')[0],
+  );
 
- const [curChartdata, setCurChartdata] = useState({
-    labels: [(curYear-1).toString(), curYear.toString()],
-    datasets: [
+  const initialChartData = {
+    dataSets: [
       {
-        strokeWidth: 1,
-        withDots: false,
-        data: [0]
+        values: [],
+        label: 'Uploads',
+        config: {
+					lineWidth: 1,
+					drawFilled: true,
+					fillAlpha: 35,
+					color: processColor('#28a745'),
+					mode: 'LINEAR',
+					drawValues: false,
+					axisDependency: 'RIGHT',
+					fillColor: processColor('#28a745'),
+					circleRadius: 1,
+					circleColor: processColor('#28a745'),
+					highlightLineWidth: 1,
+					highlightColor: processColor('#28a745'),
+					drawCircleHole: false,
+				},
+      },
+      {
+       values: [],
+        label: 'Annotations',
+        config: {
+					lineWidth: 1,
+					drawFilled: true,
+					fillAlpha: 35,
+					color: processColor('#dc3545'),
+					mode: 'LINEAR',
+					drawValues: false,
+					axisDependency: 'RIGHT',
+					circleRadius: 1,
+					circleColor: processColor('#dc3545'),
+          fillColor: processColor('#dc3545'),
+					highlightLineWidth: 1,
+					highlightColor: processColor('#dc3545'),
+					drawCircleHole: false,
+				},
+      },
+      {
+        values: [
+        ],
+        label: 'Verifications',
+         config: {
+					lineWidth: 1,
+					drawFilled: true,
+					fillAlpha: 35,
+					color: processColor('#170000'),
+					mode: 'LINEAR',
+					drawValues: false,
+					axisDependency: 'RIGHT',
+					circleRadius: 1,
+					circleColor: processColor('#dc3545'),
+          fillColor: processColor('#170000'),
+					highlightLineWidth: 1,
+					highlightColor: processColor('#dc3545'),
+					drawCircleHole: false,
+				},
       },
     ],
-  });
+  };
 
-  const [curCumuChartdata, setCurCumuChartdata] = useState({
-    labels: [(curYear-1).toString(), curYear.toString()],
-    datasets: [
+  const initialCumuChartData = {
+    dataSets: [
       {
-        strokeWidth: 1,
-        withDots: false,
-        data: [0]
-      },
+        values: [],
+        label: 'Earnings',
+        config: {
+					lineWidth: 1,
+					drawFilled: true,
+					fillAlpha: 35,
+					color: processColor('#28a745'),
+					mode: 'LINEAR',
+					drawValues: false,
+					axisDependency: 'RIGHT',
+					fillColor: processColor('#28a745'),
+					circleRadius: 1,
+					circleColor: processColor('#28a745'),
+					highlightLineWidth: 1,
+					highlightColor: processColor('#28a745'),
+					drawCircleHole: false,
+				},
+      }
     ],
-  });
+  };
+
+  const [curChartdata_new, setCurChartdataNew] = useState({});
+  const [curCumuChartdata, setCurCumuChartdata] = useState({});
 
   //authToken
   const [, dispatch] = useStateValue();
 
-  
   //Get uploads/annotations/verification cumulative points per date
-  const sumCumuData = (response)=> {
+  const sumCumuData = (response) => {
     var curCumuValue = 0;
     let _chartDataX = [];
     let _chartDataY = [];
     //calc uploads per day cumu
-    response.result.dates.map((value, index)=>{
+    response.result.dates.map((value, index) => {
       let upload = response.result.uploads[index];
       let tag_annotation = response.result.tag_annotations[index];
       let text_annotation = response.result.text_annotations[index];
       let verifcation = response.result.verifications[index];
-      curCumuValue += calcUploadsCumu(upload) + calcVeriCumu(verifcation) + calcAnnoTagCumu(tag_annotation) + calcAnnoDescCumu(text_annotation);
-      _chartDataY.push(curCumuValue);
-      _chartDataX.push(value.split("-")[2] || "");
+      curCumuValue +=
+        calcUploadsCumu(upload) +
+        calcVeriCumu(verifcation) +
+        calcAnnoTagCumu(tag_annotation) +
+        calcAnnoDescCumu(text_annotation);
+      _chartDataY.push({x:index, y:curCumuValue}); 
+      _chartDataX.push(value.split('-')[2] || '');
     });
 
-    //remove duplicate date
-    _chartDataX.push((Number(_chartDataX[_chartDataX.length - 1]) + 1).toString());
-    let xData = [];
-    _chartDataX.map((value, index)=>{
-      if(index == 0){
-        xData.push(value);
-      } else if(index == _chartDataX.length - 1){
-        xData.push(value);
-      }else{
-        if(_chartDataX.indexOf(value) === index) {
-          xData.push(value);
-        }else{
-          xData.push("");
+    _chartDataX.map((value, index) => {
+      if (index == 0) {
+      } else if (index == _chartDataX.length - 1) {
+      } else {
+        if (_chartDataX.indexOf(value) === index) {
+        } else {
+          _chartDataX[index] = '';
         }
       }
     });
-    
+
     //chart dataset
-    const chartDataClone = {...curCumuChartdata};
-    chartDataClone.datasets[0].data = _chartDataY;
-    chartDataClone.labels = xData;
+    const chartDataClone = {...initialCumuChartData};
+    chartDataClone.dataSets[0].values = [..._chartDataY];
     setCurCumuChartdata(chartDataClone);
-  }
+    setCumuChartDate(_chartDataX);
 
-  // uploads | annotation | verifcation chart
-  const updateChart = (chartType)=>{
+  };
 
-    let _chartDataX = [];
-    let _chartDataY = [];
-    _arr_date.map((value)=>{
-      _chartDataX.push(value.split("-")[2]);
-    });
+  const getChartData = (chartType) => {
+    //let _chartDataX = [];
+    //let _chartDataY = [];
+    let _chartData = [];
     var curValue = 0;
 
     if (chartType == 'uploads') {
-      _charDataY = [..._arr_uploads];
       curValue = 0;
-      _arr_uploads.map((value, index)=>{
+      _arr_uploads.map((value, index) => {
         curValue += value;
-        _chartDataY.push(curValue);
+        _chartData.push({x:index, y:curValue});
       });
-      setGraphTitle("UPLOAD");
-    } else if (chartType == "annotations") {
+      //setGraphTitle('UPLOAD');
+    } else if (chartType == 'annotations') {
       curValue = 0;
-      _arr_tag_annotations.map((value, index)=>{
-        curValue += value;
-        _chartDataY.push(curValue);
+      _arr_tag_annotations.map((value, index) => {
+        curValue += value + _arr_text_annotations[index];
+        _chartData.push({x:index, y:curValue});
       });
 
+      //setGraphTitle('ANNOTATION');
+    } else if (chartType == 'verifications') {
       curValue = 0;
-      _arr_text_annotations.map((value, index)=>{
+      _arr_verifications.map((value, index) => {
         curValue += value;
-        _chartDataY[index] = curValue;
+        _chartData.push({x:index, y:curValue});
       });
-      setGraphTitle("ANNOTATION");
-    } else if (chartType == "verifications") {
-      curValue = 0;
-      _arr_verifications.map((value, index)=>{
-        curValue += value;
-        _chartDataY[index] = curValue;
-      });
-      setGraphTitle("VERIFICATION");
+      //setGraphTitle('VERIFICATION');
     }
-    _chartDataX.push((Number(_chartDataX[_chartDataX.length - 1]) + 1).toString());
-    let xData = [];
-    _chartDataX.map((value, index)=>{
-      if(index == 0){
-        xData.push(value);
-      } else if(index == _chartDataX.length - 1){
-        xData.push(value);
-      }else{
-        if(_chartDataX.indexOf(value) === index) {
-          xData.push(value);
-        }else{
-          xData.push("");
+
+    return _chartData;
+  };
+
+  // uploads | annotation | verifcation chart
+  const updateChart_ = (chartType) => {
+    let uploadChart = getChartData('uploads');
+    let annotationChart = getChartData('annotations');
+    let verficationChart = getChartData('verifications');
+
+    let _chartDate = [];
+    _arr_date.map((value)=>{
+      _chartDate.push(value.split('-')[2]);
+    });
+
+
+    _chartDate.map((value, index) => {
+      if (index == 0) {
+      } else if (index == _chartDate.length - 1) {
+      } else {
+        if (_chartDate.indexOf(value) === index) {
+        } else {
+          _chartDate[index] = '';
         }
       }
     });
 
-    //chart dataset
-    const chartDataClone = {...curChartdata};
-    chartDataClone.datasets[0].data = _chartDataY.length == 0 ? [0]: _chartDataY;
-    chartDataClone.labels = xData;
-    setCurChartdata(chartDataClone);
-    setCurChartState(chartType);
+    try{
+        //chart dataset
+      let chartDataClone = {...initialChartData};
+      chartDataClone.dataSets[0].values = [...uploadChart];
+      chartDataClone.dataSets[1].values = [...annotationChart];
+      chartDataClone.dataSets[2].values = [...verficationChart];
+
+      setCurChartdataNew(chartDataClone);
+      setCurChartState(chartType);
+      setChartDate(_chartDate);
+    }
+    catch(err){
+    }
+
 
   };
 
   const fetchOverall = async () => {
     try {
       dispatch({
-        type: actions.SET_OVERALL
+        type: actions.SET_OVERALL,
       });
       const date = new Date();
 
-      const end = date.toISOString().replace(/T.*/, '').split('-').reverse().join('-');
+      const end = date
+        .toISOString()
+        .replace(/T.*/, '')
+        .split('-')
+        .reverse()
+        .join('-');
       date.setFullYear(date.getFullYear() - 1);
       //const start = date.toISOString().replace(/T.*/, '').split('-').reverse().join('-');
-      const start = "14-05-2021";
+      const start = '14-05-2021';
       const response = await getOverall(start, end);
       if (response && response.result) {
         let sum_anno_description = 0;
@@ -203,15 +286,25 @@ const Stats = () => {
         _arr_date = [...response.result.dates];
 
         //retrieve total sumup
-        sum_anno_tags += response.result.tag_annotations.reduce((total, item) => total + Number(item), 0);
-        sum_anno_description += response.result.text_annotations.reduce((total, item) => total + Number(item), 0);
+        sum_anno_tags += response.result.tag_annotations.reduce(
+          (total, item) => total + Number(item),
+          0,
+        );
+        sum_anno_description += response.result.text_annotations.reduce(
+          (total, item) => total + Number(item),
+          0,
+        );
         sum_anno = sum_anno_tags + sum_anno_description;
         let sum_upload = 0;
-        sum_upload += response.result.uploads.reduce((total, item) => total + Number(item), 0);
+        sum_upload += response.result.uploads.reduce(
+          (total, item) => total + Number(item),
+          0,
+        );
         let sum_verification = 0;
-        sum_verification += response.result.verifications.reduce((total, item) => total + Number(item), 0);
-
-
+        sum_verification += response.result.verifications.reduce(
+          (total, item) => total + Number(item),
+          0,
+        );
         //collect chart data
         _arr_uploads = [...response.result.uploads];
         _arr_verifications = [...response.result.verifications];
@@ -223,7 +316,9 @@ const Stats = () => {
         setVerifications(sum_verification);
 
         let upload_rra = calcUploadsCumu(sum_upload);
-        let anno_rra = calcAnnoDescCumu(sum_anno_description) + calcAnnoTagCumu(sum_anno_tags);
+        let anno_rra =
+          calcAnnoDescCumu(sum_anno_description) +
+          calcAnnoTagCumu(sum_anno_tags);
         let veri_rra = calcVeriCumu(sum_verification);
 
         setUploadsQuicrra(Number(upload_rra.toFixed(8)));
@@ -231,11 +326,10 @@ const Stats = () => {
         setVerificationsQuicrra(Number(veri_rra.toFixed(8)));
         setCumuQuicrra(Number((upload_rra + anno_rra + veri_rra).toFixed(8)));
 
-        updateChart('uploads');
+        updateChart_('uploads');
         sumCumuData(response);
       }
     } catch (error) {
-
       dispatch({
         type: actions.SET_ALERT_SETTINGS,
         alertSettings: {
@@ -252,10 +346,15 @@ const Stats = () => {
       dispatch({
         type: actions.SET_OVERALL,
         start_date: '01-01-2018',
-        end_date: new Date().toISOString().replace(/T.*/, '').split('-').reverse().join('-')
+        end_date: new Date()
+          .toISOString()
+          .replace(/T.*/, '')
+          .split('-')
+          .reverse()
+          .join('-'),
       });
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -315,103 +414,94 @@ const Stats = () => {
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>CUMULATIVE {graphTitle} COUNT</Text>
             <LineChart
-              fromZero
-              transparent
-              height={200}
-              yAxisSuffix=""
-              style={styles.graph}
-              withVerticalLines={false}
-              width={Dimensions.get('window').width}
-              data={curChartdata}
-              chartConfig={{
-                decimalPlaces: 0,
-                fillShadowGradientOpacity: 1,
-                fillShadowGradient: '#a5c4f8',
-                //formatYLabel: (value) => Math.round(value / 1000),
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style={styles.chart}
+              data={curChartdata_new}
+              chartDescription={{text: ''}}
+              legend={{}}
+              marker={{
+                enabled: true,
+                backgroundTint: processColor('teal'),
+                markerColor: processColor('#F0C0FF8C'),
+                textColor: processColor('white'),
               }}
+              xAxis={{
+                granularityEnabled: true,
+                granularity: 1,
+                position: 'BOTTOM',
+                valueFormatter: chartDate,
+                drawGridLines:false
+              }}
+              yAxis={{
+                 left:{axisMinimum:0},
+                 right: {enabled: false},
+                 drawGridLines: false,
+                }}
+              drawGridBackground={false}
+              borderColor={processColor('#F0C0FF8C')}
+              borderWidth={1}
+              drawBorders={true}
+              autoScaleMinMaxEnabled={true}
+              touchEnabled={true}
+              dragEnabled={true}
+              scaleEnabled={true}
+              scaleXEnabled={true}
+              scaleYEnabled={false}
+              pinchZoom={true}
+              doubleTapToZoomEnabled={true}
+              highlightPerTapEnabled={true}
+              highlightPerDragEnabled={false}
+              width={350}
+              height={300}
+              dragDecelerationEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
+              keepPositionOnRotation={false}
             />
-          </View>
-          <View style={styles.buttonContainer}>
-            {(curChartState != "uploads") &&
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title="UPLOADS"
-                  buttonStyle={{
-                    borderRadius: 25,
-                    width: '70%',
-                    alignSelf: 'center',
-                  }}
-                  onPress={()=> updateChart('uploads')}
-                  textStyle={{
-                    color: '#41474E',
-                    fontSize: 11,
-                    fontWeight: '600',
-                    fontFamily: 'Inter-Bold',
-                  }}
-                />
-              </View>
-            }
-            {(curChartState != "annotations") &&
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                    color="#F5F6FC"
-                    title="ANNOTATIONS"
-                    buttonStyle={{
-                      borderRadius: 25,
-                      width: '70%',
-                      alignSelf: 'center',
-                    }}
-                    onPress={()=> updateChart('annotations')}
-                    textStyle={{
-                      color: '#41474E',
-                      fontSize: 11,
-                      fontWeight: '600',
-                      fontFamily: 'Inter-Bold',
-                    }}
-                  />
-              </View>
-            }
-            {(curChartState != "verifications") &&
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                    title="VERIFICATIONS"
-                    buttonStyle={{
-                      borderRadius: 25,
-                      width: '70%',
-                      alignSelf: 'center',
-                    }}
-                    onPress={()=> updateChart('verifications')}
-                    textStyle={{
-                      color: '#41474E',
-                      fontSize: 11,
-                      fontWeight: '600',
-                      fontFamily: 'Inter-Bold',
-                    }}
-                  />
-              </View>
-            }
           </View>
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>CUMULATIVE EARNINGS</Text>
             <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
             <LineChart
-              fromZero
-              transparent
-              height={200}
-              yAxisSuffix=""
-              style={styles.graph}
-              withVerticalLines={false}
-              width={Dimensions.get('window').width}
+              style={styles.chart}
               data={curCumuChartdata}
-              chartConfig={{
-                decimalPlaces: 0,
-                fillShadowGradientOpacity: 1,
-                fillShadowGradient: '#a5c4f8',
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              chartDescription={{text: ''}}
+              legend={{}}
+              marker={{
+                enabled: true,
+                backgroundTint: processColor('teal'),
+                markerColor: processColor('#F0C0FF8C'),
+                textColor: processColor('white'),
               }}
+              xAxis={{
+                granularityEnabled: true,
+                granularity: 1,
+                position: 'BOTTOM',
+                valueFormatter: CumuChartDate,
+                drawGridLines:false
+              }}
+              yAxis={{
+                 left:{axisMinimum:0},
+                 right: {enabled: false},
+                 drawGridLines: false,
+                }}
+              drawGridBackground={false}
+              borderColor={processColor('#F0C0FF8C')}
+              borderWidth={1}
+              drawBorders={true}
+              autoScaleMinMaxEnabled={true}
+              touchEnabled={true}
+              dragEnabled={true}
+              scaleEnabled={false}
+              scaleXEnabled={true}
+              scaleYEnabled={false}
+              pinchZoom={true}
+              doubleTapToZoomEnabled={true}
+              highlightPerTapEnabled={true}
+              highlightPerDragEnabled={false}
+              width={350}
+              height={300}
+              dragDecelerationEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
+              keepPositionOnRotation={false}
             />
           </View>
         </View>
@@ -509,7 +599,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  buttonInnerContainer: {
-  },
-
+  buttonInnerContainer: {},
 });

@@ -5,13 +5,13 @@ import {CommonActions} from '@react-navigation/native';
 import {useStateValue} from '../services/State/State';
 import {reducer, actions} from '../services/State/Reducer';
 import { useSelector } from 'react-redux';
-import '../../global'
-import '../../shim'
+import '../../global';
+import '../../shim';
 import { setAuthToken, getAuthToken, getWalletData, setWalletData } from '../services/DataManager';
-import * as Utils from '../web3/utils'
-import bip39 from 'react-native-bip39'
-
-
+import * as Utils from '../web3/utils';
+import bip39 from 'react-native-bip39';
+//import HDWalletProvider from '@truffle/hdwallet-provider';
+import {ethers} from 'ethers';
 
 import {
   userLogin,
@@ -43,16 +43,12 @@ const Loading = ({navigation}) => {
 
       if(walletInfo == null || walletInfo.publicKey == "") {
         //create new wallet
-        const entropy = await Utils.getRandom(16);
-        const allWallets = await Web3.eth.accounts.wallet.create(1, entropy);
 
-        publicKey = allWallets[0].address?allWallets[0].address:""
-        privateKey = allWallets[0].privateKey?allWallets[0].privateKey:""
+        const wallet = ethers.Wallet.createRandom();
+        const privateKey = wallet.privateKey;
+        const publicKey = wallet.address;
+        const seedPhrase = wallet.mnemonic.phrase;
 
-        await bip39.generateMnemonic(128).then((phrase) => {
-          seedPhrase = phrase
-        }) 
-  
         let arr = new Uint8Array(20);
         crypto.getRandomValues(arr);
   
@@ -77,7 +73,7 @@ const Loading = ({navigation}) => {
         nounce = registerResponse.nonce;
       }else {
         //already registered
-        let nonceResponse = await getNounce(publicKey );
+        let nonceResponse = await getNounce(publicKey);
         nounce = nonceResponse.nonce; 
       }
 

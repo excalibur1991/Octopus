@@ -6,7 +6,7 @@ import {connect} from "react-redux"
 import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
 import * as Utils from '../web3/utils'
 import Dialog from "react-native-dialog"
-import lightwallet from 'eth-lightwallet'
+//import lightwallet from 'eth-lightwallet'
 import bip39 from 'react-native-bip39'
 import { hdPathString, localStorageKey } from '../web3/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -102,7 +102,6 @@ class WalletSettings extends Component {
           this.mainnetCheck = await mainConnect().eth.net.isListening()
 
         } catch (error) {
-          console.error('error:', error);
         }
 
      if (this.rinkebyCheck == true || this.ropstenCheck == true || this.kovannetCheck == true || this.mainnetCheck == true ) {
@@ -407,8 +406,6 @@ class WalletSettings extends Component {
   saveWallet = async () => {
     
     try {
-      console.log('Saving Data...', this.storeKeys)
-
       await AsyncStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.storeKeys))
      // await AsyncStorage.multiSet(multiSet)
 
@@ -424,12 +421,7 @@ class WalletSettings extends Component {
       const userInfo = JSON.parse(await AsyncStorage.getItem(this.STORAGE_KEY))
       //AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
 
-      console.log({userInfo: userInfo, address:userInfo.publicKey, privateKey:userInfo.privateKey,
-      seedphrase:userInfo.seedPhrase, password: userInfo.password, oceanBal: userInfo.oceanBal,
-     ethBal:userInfo.ethBal, phecorBal: userInfo.phecorBal})
-
       if (userInfo !== null) {
-        console.log('retrieving saved data...');
         //setAge(userAge)
         this.setState({wallet:userInfo})
         this.setState({publicKey: userInfo.publicKey})
@@ -440,8 +432,6 @@ class WalletSettings extends Component {
         this.setState({ethTokenBal: userInfo.ethBal})
         this.setState({phec0ERC20TokenBal: userInfo.phecorBal})
 
-        console.log({restoredWallet: this.state.wallet, publicKey: this.state.publicKey, 
-          privateKey: this.state.privateKey})
       }
     } catch (e) {
       alert('Failed to fetch the data from storage')
