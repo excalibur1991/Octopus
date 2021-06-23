@@ -95,6 +95,15 @@ export const getAuthToken = async () => {
   }
 };
 
+export const walletKeys = {
+  password: "",
+  seedPhrase: "",
+  publicKey: "",
+  privateKey: "",
+  ethBal: "",
+  oceanBal: "",
+  phecorBal: ""
+}
 
 export const setWalletData = async(walletData) => {
   try {
