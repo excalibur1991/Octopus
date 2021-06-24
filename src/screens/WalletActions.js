@@ -23,6 +23,7 @@ const WalletActions = (props) => {
   const [blocknum, setBlocknum] = useState(null);
 
   const walletParams = props.route.params;
+  console.log('Wallet Params:', walletParams);
 
   useEffect(() => {
     const init = async () => {
