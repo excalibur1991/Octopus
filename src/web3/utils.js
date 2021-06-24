@@ -16,11 +16,13 @@ const getAccFunc = async(web3, STPupdateAccounts) => {
     let myAccounts
     let accountsRet = await web3.eth.getAccounts()
     if (accountsRet.length == 0) {
+      console.log('empty account')
      // myAccounts = '0x0'
     }
     else {
       myAccounts = accountsRet[0]
     }
+    console.log(myAccounts)
     STPupdateAccounts(myAccounts)
   } catch (err) {
     console.warn(err)
@@ -31,8 +33,10 @@ export const createAccFunc = async(web3, STPupdateAccounts) => {
   let myAccounts
   try {
     const entropy = await getRandom(16)
+    console.log(entropy)
     if (web3.eth.accounts) {
       myAccounts = web3.eth.accounts.create(entropy);
+      console.log("myAccounts:", myAccounts)
       STPupdateAccounts(myAccounts.address)
     }
   } catch (err) {
@@ -65,6 +69,7 @@ export function createAccount(web3, STPupdateAccounts) {
 
 export function updateSeedPhrase(seed, STPupdateSeedPhrase) {
   try {
+    console.log(seed)
     STPupdateSeedPhrase(seed)
 
   } catch (err) {
@@ -76,6 +81,7 @@ export function updateSeedPhrase(seed, STPupdateSeedPhrase) {
 
 export function updateAccts(myAccounts, STPupdateAccounts) {
   try {
+    console.log(myAccounts)
     STPupdateAccounts(myAccounts)
 
   } catch (err) {
@@ -90,6 +96,7 @@ export async function checkNetwork(web3) {
     return web3.eth
       .getBlock(0)
       .then(block => {
+        console.log("web3 block:", block)
         switch (block.hash) {
           case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
             return 'mainnet';
