@@ -1,8 +1,15 @@
 //import '../../shim.js'
-import React, {Component} from 'react';
-import {Text, View, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-import {STPupdateAccounts, STPupdateSeedPhrase} from '../actions/actions.js';
+import React, {Component} from 'react'
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
+import Clipboard from '@react-native-community/clipboard';
+import {connect} from "react-redux"
+import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
+import * as Utils from '../web3/utils'
+import Dialog from "react-native-dialog"
+//import lightwallet from 'eth-lightwallet'
+import bip39 from 'react-native-bip39'
+import { hdPathString, localStorageKey } from '../web3/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button';
 //import { Ocean, ConfigHelper } from '@oceanprotocol/lib'
 import {Picker} from '@react-native-picker/picker';
@@ -57,17 +64,356 @@ class WalletSettings extends Component {
     this.mainnetCheck = 'none';
     //this.wallet = ""
 
-    const checkNetwork = setInterval(() => {
-      chkNetwork(this, checkNetwork);
-    }, 1000);
+   const checkNetwork = setInterval(async() => {
+        try {
+          //this.setState({networktype: await rinkebyConnect().eth.net.getNetworkType()})
+          //this.setState({networktype: await kovanConnect().eth.net.getNetworkType()})
+          //this.setState({networktype: await ropstenConnect().eth.net.getNetworkType()})
+          this.setState({networktype: await mainConnect().eth.net.getNetworkType()})
+         // this.rinkebynet =  await rinkebyConnect().eth.net.getNetworkType()
+        //  this.kovannet = await kovanConnect().eth.net.getNetworkType()
+        //  this.ropstennet = await ropstenConnect().eth.net.getNetworkType()
+        //  this.mainnnet = await mainConnect().eth.net.getNetworkType()
+          //this.rinkebyCheck = await rinkebyConnect().eth.net.isListening()
+          //this.ropstenCheck =  await ropstenConnect().eth.net.isListening()
+          //this.kovannetCheck = await kovanConnect().eth.net.isListening()
+          this.mainnetCheck = await mainConnect().eth.net.isListening()
 
-    const web3Returned = setInterval(() => {
-      webThreeReturned(this, web3Returned);
-    }, 1000);
+        } catch (error) {
+        }
+
+     if (this.rinkebyCheck == true || this.ropstenCheck == true || this.kovannetCheck == true || this.mainnetCheck == true ) {
+      this.setState({ isConnected: true, })
+     }
+     //rinkebynet = await rinkebyConnect().eth.net.getNetworkType()
+     //this.setState({ rinkebynet: await rinkebyConnect().eth.net.getNetworkType()})
+     clearInterval(checkNetwork);
+
+    },1000)
+
+    const web3Returned = setInterval(async() => {
+      if (this.props.web3 != null) {
+        clearInterval(web3Returned);
+        this.web3 = this.props.web3.web3Instance
+        Utils.checkNetwork(this.web3).then((res) => {
+         // this.networktype = res
+            this.setState({ networktype : res });
+          if ((res == 'local') || (res == 'rinkeby') || (res == 'kovan') || (res == 'ropsten') || (res == 'main')) {
+            this.setState({ isConnected: true, })
+          }
+        })
+        try {
+          Utils.checkAccount(this.web3, this.props.STPupdateAccounts);
+        } catch (err) {
+          console.error('error', err);
+        }
+      }
+    },1000)
   }
 
   componentDidMount() {
-    readStoredWallet(this);
+    this.readStoredWallet()
+  }
+
+  STORAGE_KEY = '@save_Keys'
+  STORAGE_KEY2 = '@save_Pwd'
+  STORAGE_KEY3 = '@save_Phrase'
+
+  createNewAccts = async() => {
+      let allWallets = []
+      const entropy = await Utils.getRandom(16);
+      try {
+        
+        allWallets = await (web3(this.state.networktype)).eth.accounts.wallet.create(1, entropy) 
+      } catch (error) {
+      }
+      return allWallets[0].address?allWallets[0].address
+             :allWallets[0].privateKey?allWallets[0].privateKey
+             :""
+    }
+
+  handleWalletDelete = async() => {
+    this.setState({pword: ""});
+    this.setState({mnemonics: ""});
+    this.setState({publicKey: ""});
+    this.setState({privateKey: ""});
+    this.setState({ethTokenBal: ""})
+    this.setState({oceanERC20TokenBal: ""})
+    this.setState({phec0ERC20TokenBal: ""})
+
+    sKeys = {
+      password: "",
+      seedPhrase: "",
+      publicKey: "",
+      privateKey: "",
+      ethBal: this.state.ethTokenBal,
+      oceanBal: this.state.oceanERC20TokenBal,
+      phecorBal: this.state.phec0ERC20TokenBal
+    }
+    this.storeKeys = sKeys;
+
+    this.saveWallet();
+  }
+
+
+  handleNewWallet = async() => {
+      let allWallets = []
+      let allEthBal = " "
+      let oceanrinkeby, oceanropsten, oceanmainnet = ""
+      let daiToken, daiTokenBalance = " "
+      let phec0rinkeby = ""
+      const entropy = await Utils.getRandom(16);
+      let oceanRinkebyContract = "0x8967BCF84170c91B0d24D4302C2376283b0B3a07"; //rinkeby ocean
+      let walletAddress = "0x5D363EC1EF55005C39c0e36C50b06242aeb3C3D4"; // wallet
+      let oceanRopstenContract = "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9"; // ropsten ocean
+      let oceanMainnetContract = "0x967da4048cD07aB37855c090aAF366e4ce1b9F48"; // ocean mainnet
+      let polygonMainnetContract = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1"// Polygon Mainnet (previously Matic)
+      let DaiMainnetContract = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+      let DaiKovanContract = "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa";
+      let mDaiRinkebyContract = "0x6f5390A8CD02d83B23C5f1d594bFFB9050Eb4Ca3";
+      let erc20RinkebyContract = "0xCC4d8eCFa6a5c1a84853EC5c0c08Cc54Cb177a6A";
+      let erc20LiqExchContract = "0x416F1Ac032D1eEE743b18296aB958743B1E61E81"
+      let erc20WalletAddress = "0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c"
+      let uniswapExchangeContract = "0xf5d915570bc477f9b8d6c0e980aa81757a3aac36"
+      let quicra0LiqPoolContract = "0xAAB9EaBa1AA2653c1Dda9846334700b9F5e14E44"
+      let quicra0TokenContract = "0x7Bce67697eD2858d0683c631DdE7Af823b7eea38"
+      let phecor0RinkebyTokenContract = "0xe793a47892854260b42449291953dadbddb4226d"
+
+
+      try {
+        
+        allWallets = await (web3(this.state.networktype)).eth.accounts.wallet.create(1, entropy) 
+        allEthBal = await (web3(this.state.networktype)).eth.getBalance(allWallets[0].address).then(bal => 
+          (web3(this.state.networktype)).utils.fromWei(bal, 'ether'))
+        this.state.isConnected?this.setState({ ethTokenBal: allEthBal }):this.setState({ethTokenBal: " "})
+        this.state.isConnected?this.setState({ wallet: allWallets }):this.setState({wallet: "" })
+        this.state.isConnected?this.setState({publicKey: allWallets[0].address}): this.setState({publicKey: ''})
+        this.state.isConnected?this.setState({privateKey: allWallets[0].privateKey}):this.setState({privateKey: " "})
+        
+        // saving..
+      } catch (error) {
+      }
+      //DaiToken...
+      const networkId = await (web3(this.state.networktype)).eth.net.getId()
+      const daiTokenData = DaiToken.networks[5777]
+
+    //ERC Balances...
+    if ((this.state.isConnected && this.state.networktype == "rinkeby")) {
+        oceanrinkeby = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRinkebyContract);
+        phec0rinkeby = new (web3(this.state.networktype)).eth.Contract(erc20, phecor0RinkebyTokenContract);
+      
+
+        phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
+          let formatted = (new Web3(rinkeby)).utils.fromWei(balance )
+          let rounded = (Math.round((formatted) * 100)) / 100
+          this.setState({phec0ERC20TokenBal: rounded})
+      });
+        oceanrinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
+            this.setState({oceanERC20TokenBal: (new Web3(rinkeby)).utils.fromWei(balance)})
+        });
+        
+    }
+    
+    else if ((this.state.isConnected && this.state.networktype == "ropsten")) {
+      oceanropsten = new (web3(this.state.networktype)).eth.Contract(minABI, oceanRopstenContract);
+      oceanropsten.methods.balanceOf(walletAddress).call((error, balance) => {
+          this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
+      });
+    } else if ((this.state.isConnected && this.state.networktype == "kovan")) {
+          
+    } else {
+      oceanmainnet = new (web3(this.state.networktype)).eth.Contract(minABI, oceanMainnetContract);
+      oceanmainnet.methods.balanceOf(walletAddress).call((error, balance) => {
+        this.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
+      });
+    }
+
+    let sKeys = {}
+    let storeKeys = {}
+    let salt = "salt"
+    let seedPhrase = ""
+    let ks = {}
+    const saveWallet = async (walletdump) => {
+      await AsyncStorage.setItem(localStorageKey, JSON.stringify(walletdump));
+    };
+    
+    try {
+      
+      await bip39.generateMnemonic(128).then((phrase) => {
+        this.setState({mnemonics: phrase})
+        //seedPhrase = phrase
+       // Utils.updateSeedPhrase(seedPhrase, this.props.STPupdateSeedPhrase)
+      })  
+
+      let arr = new Uint8Array(20);
+      crypto.getRandomValues(arr);
+
+      let password = btoa(String.fromCharCode(...arr)).split('').filter(value => {
+          return !['+', '/' ,'='].includes(value);
+        }).slice(0,10).join('');
+
+      this.setState({pword: password})  
+      
+      sKeys = {
+        password: this.state.pword,
+        seedPhrase: this.state.mnemonics,
+        publicKey: this.state.publicKey,
+        privateKey: this.state.privateKey,
+        ethBal: this.state.ethTokenBal,
+        oceanBal: this.state.oceanERC20TokenBal,
+        phecorBal: this.state.phec0ERC20TokenBal
+      }
+       this.storeKeys = sKeys;
+
+      this.saveWallet();
+
+     // this.password = password;
+      //this.seedPhrase = seedPhrase;
+      /**
+      const opt = { password, seedPhrase, hdPathString, salt };
+
+    lightwallet.keystore.createVault(opt, (err, data) => {
+      if (err)
+        console.warn(err)
+      ks = data
+      const walletdump = { ver: '1', ks: ks.serialize(), }
+      saveWallet(walletdump)
+    })
+   */
+    }
+    catch(err){
+    }
+    
+  }
+
+  /* who wrote this part?
+  handleNewWallet_ = async() => {
+    alert("handleNewWallet_");
+    const entropy = await Utils.getRandom(16)
+    try {
+         while( this.state.isConnected) {
+          switch (this.state.networktype) {
+            case 'mainnet':
+              return mainConnect().eth.accounts.create(entropy).then(res => {this.wallet = res});
+            case 'rinkeby':
+              return rinkebyConnect().eth.accounts.create(entropy).then(res => {this.wallet = res});
+            case 'ropsten':
+              return ropstenConnect().eth.accounts.create(entropy).then(res => {this.wallet = res});
+            case 'kovan':
+              return kovanConnect().eth.accounts.create(entropy).then(res => {this.wallet = res});
+            default:
+              return 'local';
+           }
+          }
+  
+    } catch (err) {
+      console.warn('No connection!');
+      return "none";
+    }
+  }
+  
+  handleNewAccount_ = async() => {
+    if(this.state.isConnected && this.state.networktype == "kovan") {
+       //let web33 = await rinkebyConnect()
+       (Utils.createAccFunc(this.web3, this.props.STPupdateAccounts)).then(res => {
+        this.wallet = res
+      });
+
+    }
+
+    let salt = "salt"
+    let seedPhrase = ""
+    let ks = {}
+
+    const saveWallet = async (walletdump) => {
+      await AsyncStorage.setItem(localStorageKey, JSON.stringify(walletdump));
+    };
+
+    try {
+      bip39.generateMnemonic(128).then((mnemonic) => {
+        seedPhrase = mnemonic;
+        Utils.updateSeedPhrase(seedPhrase, this.props.STPupdateSeedPhrase);
+      });
+
+      let arr = new Uint8Array(20);
+      crypto.getRandomValues(arr);
+      let password = btoa(String.fromCharCode(...arr))
+        .split('')
+        .filter((value) => {
+          return !['+', '/', '='].includes(value);
+        })
+        .slice(0, 10)
+        .join('');
+
+      this.password = password;
+      const opt = {password, seedPhrase, hdPathString, salt};
+
+    lightwallet.keystore.createVault(opt, (err, data) => {
+      if (err)
+        {console.warn(err)}
+      ks = data;
+        const walletdump = {ver: '1', ks: ks.serialize()};
+        saveWallet(walletdump);
+    })
+    }
+    catch(err){
+    }
+    
+   return this.wallet;
+  }
+
+  checkERC20Bal = async() => {
+    let oceanRinkebyContract = "0x8967BCF84170c91B0d24D4302C2376283b0B3a07"; //rinkeby ocean
+    let walletAddress = "0x5D363EC1EF55005C39c0e36C50b06242aeb3C3D4"; // wallet
+    let oceanRopstenContract = "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9"; // ropsten ocean
+    let oceanMainnetContract = "0x967da4048cD07aB37855c090aAF366e4ce1b9F48"; // ocean mainnet
+    let polygonMainnetContract = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1"// Polygon Mainnet (previously Matic)
+
+};
+*/
+
+  saveData = async () => {
+    try {
+      await AsyncStorage.setItem(this.STORAGE_KEY, this.state.age)
+      alert('Data successfully saved')
+    } catch (e) {
+      alert('Failed to save the data to the storage')
+    }
+  }
+
+  saveWallet = async () => {
+    
+    try {
+      await AsyncStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.storeKeys))
+     // await AsyncStorage.multiSet(multiSet)
+
+      alert('Data successfully saved')
+
+    } catch (e) {
+      alert('Failed to save the data to the storage')
+    }
+  }
+
+  readStoredWallet = async () => {
+    try {
+      const userInfo = JSON.parse(await AsyncStorage.getItem(this.STORAGE_KEY))
+      //AsyncStorage.getItem('name').then((value) => this.setState({ 'name': value }))
+
+      if (userInfo !== null) {
+        //setAge(userAge)
+        this.setState({wallet:userInfo})
+        this.setState({publicKey: userInfo.publicKey})
+        this.setState({privateKey: userInfo.privateKey})
+        this.setState({mnemonics: userInfo.seedPhrase})
+        this.setState({pword:userInfo.password})
+        this.setState({oceanERC20TokenBal: userInfo.oceanBal})
+        this.setState({ethTokenBal: userInfo.ethBal})
+        this.setState({phec0ERC20TokenBal: userInfo.phecorBal})
+
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
   }
 
   STORAGE_KEY = '@save_Keys';
@@ -84,9 +430,6 @@ class WalletSettings extends Component {
               this.setState({networktype: itemValue})
             }>
             <Picker.Item label="mainnet" value="mainnet" />
-            <Picker.Item label="rinkeby" value="rinkeby" />
-            <Picker.Item label="kovan" value="kovan" />
-            <Picker.Item label="ropsten" value="ropsten" />
           </Picker>
           <View style={styles.alignCenter}>
             <Text>
@@ -165,15 +508,62 @@ class WalletSettings extends Component {
             textStyle={styles.buttonText}
           />
         </View>
-        <Button
+{/*         <Button
+          color="#f2f2f2"
+          title="More"
+          buttonStyle={{
+            borderRadius: 25,
+            width: '70%',
+            alignSelf: 'center',
+          }}
+          onPress={() => {
+            //this.handleNewAccount
+            alert("What should be in here?");
+          }}
+          textStyle={{
+            fontSize: 19,
+            fontWeight: '600',
+            color: theme.APP_COLOR,
+            fontFamily: 'Inter-Bold',
+          }}
+        />
+      <Button
+          color="#f2f2f2"
+        title="Delete Wallet"
+        buttonStyle={{
+          borderRadius: 25,
+          width: '70%',
+          alignSelf: 'center',
+        }}
+        onPress={this.handleWalletDelete}
+        textStyle={{
+          fontSize: 19,
+          fontWeight: '600',
+          color: "#FF1493",
+          fontFamily: 'Inter-Bold',
+        }}
+      />
+      </View>
+       <Button
           color="#f2f2f2"
           title="New Wallet"
-          buttonStyle={styles.buttonStyle}
-          onPress={() => handleNewWallet(this)}
-          textStyle={styles.buttonText}
-        />
-      </ScrollView>
-    );
+          buttonStyle={{
+            borderRadius: 25,
+            width: '70%',
+            alignSelf: 'center',
+          }}
+          onPress={this.handleNewWallet}
+          textStyle={{
+            fontSize: 19,
+            fontWeight: '600',
+            color: theme.APP_COLOR,
+            fontFamily: 'Inter-Bold',
+          }}
+        /> 
+        */
+    }
+     </ScrollView>
+    )
   }
 }
 
