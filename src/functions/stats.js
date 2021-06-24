@@ -6,6 +6,7 @@ import {
   calcAnnoTagCumu,
   calcVeriCumu,
 } from '../services/Common/CommonFunctions';
+import i18n from '../languages/i18n';
 
 //Get uploads/annotations/verification cumulative points per date
 export const sumCumuData = (
@@ -84,7 +85,7 @@ export const updateChart = (
       curValue += value;
       _chartDataY.push(curValue);
     });
-    setGraphTitle('UPLOAD');
+    setGraphTitle(i18n.t('stats.upload'));
   } else if (chartType == 'annotations') {
     curValue = 0;
     _arr_tag_annotations.map((value, index) => {
@@ -97,14 +98,14 @@ export const updateChart = (
       curValue += value;
       _chartDataY[index] = curValue;
     });
-    setGraphTitle('ANNOTATION');
+    setGraphTitle(i18n.t('stats.annotation'));
   } else if (chartType == 'verifications') {
     curValue = 0;
     _arr_verifications.map((value, index) => {
       curValue += value;
       _chartDataY[index] = curValue;
     });
-    setGraphTitle('VERIFICATION');
+    setGraphTitle(i18n.t('stats.verification'));
   }
   _chartDataX.push(
     (Number(_chartDataX[_chartDataX.length - 1]) + 1).toString(),
@@ -225,9 +226,8 @@ export const fetchOverall = async (
       alertSettings: {
         show: true,
         type: 'error',
-        title: 'Error Occured',
-        message:
-          'This Operation Could Not Be Completed. Please Try Again Later.',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
         confirmText: 'Ok',
       },

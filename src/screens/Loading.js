@@ -8,7 +8,9 @@ import '../../global';
 import '../../shim';
 import {styles} from '../styles/loading';
 import {LoginProc} from '../functions/loading';
-const Loading = ({navigation}) => {
+import {withTranslation} from 'react-i18next';
+
+const Loading = ({navigation, t}) => {
   const web3 = useSelector((state) => state.web3);
   useEffect(() => {
     LoginProc(web3);
@@ -27,7 +29,7 @@ const Loading = ({navigation}) => {
         source={require('../assets/icon.png')}
       />
       <View style={styles.creatingWallet}>
-        <Text style={styles.text}>Powered by:</Text>
+        <Text style={styles.text}>{t('loading.poweredBy')}</Text>
       </View>
       <Image
         style={styles.image}
@@ -37,4 +39,5 @@ const Loading = ({navigation}) => {
     </View>
   );
 };
-export default Loading;
+
+export default withTranslation()(Loading);

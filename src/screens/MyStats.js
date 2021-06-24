@@ -6,8 +6,9 @@ import Button from '../components/Button';
 import {useStateValue} from '../services/State/State';
 import {styles} from '../styles/mystats';
 import {sumCumuData, updateChart, fetchOverall} from '../functions/mystats';
+import {withTranslation} from 'react-i18next';
 
-const MyStats = () => {
+const MyStats = ({t}) => {
   useEffect(() => {
     fetchOverall(
       dispatch,
@@ -30,7 +31,7 @@ const MyStats = () => {
   const [verificationsQuicrra, setVerificationsQuicrra] = useState(0);
   const [cumuQuicrra, setCumuQuicrra] = useState(0);
 
-  const [graphTitle, setGraphTitle] = useState('UPLOAD');
+  const [graphTitle, setGraphTitle] = useState(t('myStats.upload'));
   const [curChartState, setCurChartState] = useState('uploads');
 
   const curYear = Number(
@@ -73,12 +74,12 @@ const MyStats = () => {
                 source={require('../assets/uploads.png')}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>Uploads</Text>
+              <Text style={styles.itemTitle}>{t('myStats.uploads')}</Text>
               <Text style={styles.itemValue}>{uploads}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{uploadsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -88,12 +89,12 @@ const MyStats = () => {
                 source={require('../assets/annotations.png')}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>Annotations</Text>
+              <Text style={styles.itemTitle}>{t('myStats.annotations')}</Text>
               <Text style={styles.itemValue}>{annotations}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{annotationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -103,22 +104,24 @@ const MyStats = () => {
                 source={require('../assets/verifications.png')}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>Verifications</Text>
+              <Text style={styles.itemTitle}>{t('myStats.verifications')}</Text>
               <Text style={styles.itemValue}>{verifications}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{verificationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
             </View>
           </View>
         </View>
         <View style={styles.fullWidthBox}>
           <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
-          <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
+          <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>CUMULATIVE {graphTitle} COUNT</Text>
+            <Text style={styles.graphTitle}>
+              {t('myStats.cumulative')} {graphTitle} {t('myStats.count')}
+            </Text>
             <LineChart
               fromZero
               transparent
@@ -141,7 +144,7 @@ const MyStats = () => {
               <View style={styles.buttonInnerContainer}>
                 <Button
                   color="#F5F6FC"
-                  title="UPLOADS"
+                  title={t('myStats.uploads').toUpperCase()}
                   buttonStyle={styles.button}
                   onPress={() =>
                     updateChart(
@@ -160,7 +163,7 @@ const MyStats = () => {
               <View style={styles.buttonInnerContainer}>
                 <Button
                   color="#F5F6FC"
-                  title="ANNOTATIONS"
+                  title={t('myStats.annotations').toUpperCase()}
                   buttonStyle={styles.button}
                   onPress={() =>
                     updateChart(
@@ -179,7 +182,7 @@ const MyStats = () => {
               <View style={styles.buttonInnerContainer}>
                 <Button
                   color="#F5F6FC"
-                  title="VERIFICATIONS"
+                  title={t('myStats.verifications').toUpperCase()}
                   buttonStyle={styles.button}
                   onPress={() =>
                     updateChart(
@@ -196,8 +199,10 @@ const MyStats = () => {
             )}
           </View>
           <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>CUMULATIVE EARNINGS</Text>
-            <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
+            <Text style={styles.graphTitle}>
+              {t('myStats.cumulativeEarnings')}
+            </Text>
+            <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
             <LineChart
               fromZero
               transparent
@@ -221,4 +226,4 @@ const MyStats = () => {
   );
 };
 
-export default MyStats;
+export default withTranslation()(MyStats);

@@ -5,6 +5,7 @@ import {hdPathString, localStorageKey} from '../web3/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {rinkebyConnect} from '../web3/getWeb3';
 import {ropstenConnect} from '../web3/getWeb3';
+import {Alert} from 'react-native';
 import {kovanConnect} from '../web3/getWeb3';
 import {mainConnect} from '../web3/getWeb3';
 import {rinkeby} from '../web3/constants';
@@ -14,6 +15,7 @@ import Web3 from 'web3';
 import minABI from '../abis/minABI.json';
 import DaiToken from '../abis/DaiToken.json';
 import erc20 from '../abis/erc20.json';
+import i18n from '../languages/i18n';
 
 export const chkNetwork = async (context, checkNetwork) => {
   try {
@@ -419,9 +421,12 @@ export const checkERC20Bal = async () => {
 export const saveData = async (context) => {
   try {
     await AsyncStorage.setItem(context.STORAGE_KEY, context.state.age);
-    alert('Data successfully saved');
+    Alert.alert(
+      i18n.t('messages.alert'),
+      i18n.t('messages.dataSuccessfullySaved'),
+    );
   } catch (e) {
-    alert('Failed to save the data to the storage');
+    Alert.alert(i18n.t('messages.alert'), i18n.t('messages.failedToSaveData'));
   }
 };
 
@@ -436,7 +441,7 @@ export const readData = async (context) => {
       context.setState({age: userAge});
     }
   } catch (e) {
-    alert('Failed to fetch the data from storage');
+    Alert.alert(i18n.t('messages.alert'), i18n.t('messages.failedToFetchData'));
   }
 };
 
@@ -449,10 +454,12 @@ export const saveWallet = async (context) => {
       JSON.stringify(context.storeKeys),
     );
     // await AsyncStorage.multiSet(multiSet)
-
-    alert('Data successfully saved');
+    Alert.alert(
+      i18n.t('messages.alert'),
+      i18n.t('messages.dataSuccessfullySaved'),
+    );
   } catch (e) {
-    alert('Failed to save the data to the storage');
+    Alert.alert(i18n.t('messages.alert'), i18n.t('messages.failedToSaveData'));
   }
 };
 
@@ -493,16 +500,22 @@ export const readStoredWallet = async (context) => {
       });
     }
   } catch (e) {
-    alert('Failed to fetch the data from storage');
+    Alert.alert(i18n.t('messages.alert'), i18n.t('messages.failedToFetchData'));
   }
 };
 
 export const clearStorage = async () => {
   try {
     await AsyncStorage.clear();
-    alert('Storage successfully cleared!');
+    Alert.alert(
+      i18n.t('messages.alert'),
+      i18n.t('messages.storageSuccessfullyCleared'),
+    );
   } catch (e) {
-    alert('Failed to clear the async storage.');
+    Alert.alert(
+      i18n.t('messages.alert'),
+      i18n.t('messages.failedToClearAsyncStorage'),
+    );
   }
 };
 

@@ -1,7 +1,9 @@
 import '../../global';
 import '../../shim';
+import {Alert} from 'react-native';
 import {setAuthToken, getWalletData} from '../services/DataManager';
 import {userLogin, userRegister, getNounce} from '../services/API/APIManager';
+import i18n from '../languages/i18n';
 
 export const LoginProc = async (web3) => {
   try {
@@ -13,7 +15,10 @@ export const LoginProc = async (web3) => {
     //check wallet
     let walletInfo = await getWalletData();
     if (walletInfo == null) {
-      alert('Wallet not created!');
+      Alert.alert(
+        i18n.t('messages.alert'),
+        i18n.t('messages.walletNotCreated'),
+      );
       return;
     }
 
