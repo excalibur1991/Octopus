@@ -18,6 +18,7 @@ import Wallet from './screens/Wallet';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
 import walletEntry from '../walletEntry'
+import Staking from './screens/Staking'
 import MyStats from './screens/MyStats';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
@@ -196,7 +197,7 @@ const WalletStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Wallet"
-      component={walletEntry}
+      component={Staking}
       options={({navigation}) => {
         return Header(
           {
