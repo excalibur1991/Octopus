@@ -2,13 +2,18 @@
 # Octopus branch for rebranding by VisioTherapy
 
 This branch is for the rebranding of the mobile app for VisioTherapy.
+
 The code is structured to have the screens in this folder:
 https://github.com/DataUnion-app/Octopus/tree/visiotherapy_rebranding/src/screens
+
 The styles of the individual elements in the screens are stored here:
 https://github.com/DataUnion-app/Octopus/tree/visiotherapy_rebranding/src/styles
+
 This has to be used for the rebranding. The functionality in the background will be updated by DataUnion.
+
 Check out the Figma of DataUnion here:
 https://www.figma.com/file/T184XeTswfkjX41WPZ0kNt/SWIPE.AI?node-id=0%3A1
+
 At the moment the upload and verification screens are still in the work.
 
 ## Available Scripts
