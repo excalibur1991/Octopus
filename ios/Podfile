@@ -5,6 +5,8 @@ platform :ios, '10.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'DataUnion' do
+  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
+  
   config = use_native_modules!
 
   use_react_native!(
