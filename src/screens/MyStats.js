@@ -131,8 +131,8 @@ const MyStats = () => {
               legend={{}}
               marker={{
                 enabled: true,
-                backgroundTint: processColor('teal'),
-                markerColor: processColor('#F0C0FF8C'),
+                backgroundTint: processColor('black'),
+                markerColor: processColor('#80cccccc'),
                 textColor: processColor('white'),
                     }}
                     xAxis={{
@@ -149,7 +149,7 @@ const MyStats = () => {
                       }}
               drawGridBackground={false}
               borderColor={processColor('#F0C0FF8C')}
-              borderWidth={1}
+              borderWidth={0}
               drawBorders={true}
               autoScaleMinMaxEnabled={true}
               touchEnabled={true}
@@ -178,8 +178,8 @@ const MyStats = () => {
               legend={{}}
               marker={{
                 enabled: true,
-                backgroundTint: processColor('teal'),
-                markerColor: processColor('#F0C0FF8C'),
+                backgroundTint: processColor('black'),
+                markerColor: processColor('#80cccccc'),
                 textColor: processColor('white'),
               }}
               xAxis={{
@@ -196,7 +196,7 @@ const MyStats = () => {
                 }}
               drawGridBackground={false}
               borderColor={processColor('#F0C0FF8C')}
-              borderWidth={1}
+              borderWidth={0}
               drawBorders={true}
               autoScaleMinMaxEnabled={true}
               touchEnabled={true}

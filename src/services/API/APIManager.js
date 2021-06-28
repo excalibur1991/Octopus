@@ -3,7 +3,7 @@ import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
   try {
-    const response = await getData(s.taxonomy.getImages);
+    const response = await getUserData(s.taxonomy.getImages);
     console.log("response?", response)
     return response;
   } catch (err) {

@@ -13,4 +13,5 @@ export const initialState = {
   showVideoCallModal: true,
   appointmentBooked: false,
   newMessage: null,
+  isTOCApproved: false
 };

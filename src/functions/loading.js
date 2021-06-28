@@ -35,7 +35,6 @@ export const LoginProc = async (web3) => {
       let password = btoa(String.fromCharCode(...arr)).split('').filter(value => {
           return !['+', '/' ,'='].includes(value);
         }).slice(0,10).join('');
-
       await setWalletData({
         privateKey: privateKey, 
         publicKey:publicKey,

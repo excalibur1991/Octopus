@@ -7,13 +7,9 @@ const getEndpointUrl = ep => `${s.baseUrl}${ep}`;
 export const getData = async relativeUrl => {
   try {
     setLastActivity();
-    const authToken = await getAuthToken();
     const url = getEndpointUrl(relativeUrl);
     const config = {
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${authToken.access_token}`,
-      },
     };
     const response = await fetch(url, config);
     const result = await response.json();
@@ -83,19 +79,11 @@ export const postData = async (
   isFormData = false,
 ) => {
   setLastActivity();
-  const authToken = await getAuthToken();
-  const refreshToken = await postUserData(s.auth.refreshToken, authToken.refresh_token);
-  await setAuthToken({
-    refresh_token: authToken.refresh_token,
-    access_token: refreshToken.access_token
-  });
   const url = getEndpointUrl(relativeUrl);
   const config = {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-       `Bearer ${refreshToken.access_token}`,
     },
   };
   if (data) {
