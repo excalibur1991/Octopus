@@ -12,6 +12,7 @@ import Joinswap from '../components/Joinswap'
 import JoinswapExternAmountIn from '../components/JoinswapExternAmountIn'
 import * as StakesUtil from '../components/AddDTLiquidity'
 import {contracts, web3} from '../web3/utils'
+import {OceanPool}  from '../components/OceanPool'
 
 const Staking = () => {
   const credentials = [
@@ -24,7 +25,19 @@ const Staking = () => {
     
   ];
 
-  const StakeDT = () =>{
+  const UnStakeDT = async() => {
+    try{
+      const ocean = new OceanPool()
+      console.log('Instance:', await ocean.removeDTLiquidity(contracts.walletAddress,contracts.newPool2,
+        '20','0.5'))
+        
+    }
+    catch(error) {
+      
+    }
+  }
+
+  const StakeDT = async() =>{
 
     try {
       //StakesUtil.AddDTLiquidity(contracts.walletAddress, contracts.oceanRinkeby, web3.utils.toHex(1e18))
@@ -39,10 +52,24 @@ const Staking = () => {
     //  web3.utils.toBN(40), web3.utils.toBN(5))
 
      //AddDTLiquidity(contracts.walletAddress, contracts.oceanRinkeby, web3.utils.toHex(1e18))
-    Joinswap(contracts.walletAddress, contracts.oceanRinkeby,contracts.phecorRinkeby,
-      '50000000000000000000' , '0')
+   // Joinswap(contracts.walletAddress, contracts.oceanRinkeby,contracts.phecorRinkeby,
+    //  '50000000000000000000' , '0')
     // ApproveLiquidity(contracts.walletAddress,contracts.oceanRinkeby,contracts.phecorRinkeby,web3.utils.toHex(1e18))
-    
+  
+    /**
+     * //invalid pool addresses:
+     * 1. contracts.phecorRinkeby: 0xe793...
+     * 2. contracts.quicraLiqPool: 0xAAB9...
+     * 3. contracts.oceanRinkeby: 0x8967...
+     * 
+     * //valid pool addresses
+     * 1. 0xAa5226ACc808112E84249eD625cEB96b45AFD2Ac (pool contract created by newBPool() function)
+     * 2: 0xc1d3b57309a066fae7aa170e94c501a4793d01ffe503c437e4a712d719c3483a
+     */
+    const ocean = new OceanPool()
+    console.log('Instance:', await ocean.addDTLiquidity(
+      contracts.walletAddress,contracts.newPool2,'50')
+    )
     } catch (error) {
       
     }
@@ -78,6 +105,22 @@ const Staking = () => {
         alignSelf: 'center',
       }}
       onPress={() => StakeDT()}
+      textStyle={{
+        fontSize: 19,
+        fontWeight: '600',
+        color: theme.APP_COLOR,
+        fontFamily: 'Inter-Bold',
+      }}
+    />
+        <Button
+        color="#f2f2f2"
+      title="UnStake"
+      buttonStyle={{
+        borderRadius: 25,
+        width: '70%',
+        alignSelf: 'center',
+      }}
+      onPress={() => UnStakeDT()}
       textStyle={{
         fontSize: 19,
         fontWeight: '600',

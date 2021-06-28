@@ -16,8 +16,8 @@ import ApproveLiquidity from '../components/ApproveLiquidity'
 
 async function Joinswap (
   account,
-  poolAddress, //pool address
-  tokenIn, // token address
+  poolAddress, //pool address; contracts.oceanRinkeby,
+  tokenIn, // token address; contracts.phecorRinkeby 
   tokenAmountIn, //
   minPoolAmountOut // 0
   ) {
@@ -63,7 +63,7 @@ async function Joinswap (
         console.log({approvalHash: approval.transactionHash})
 
         //join the pool if it's approved
-        const tx = contractInstance.methods.joinswapExternAmountIn(tokenIn,web3.utils.toWei(tokenAmountIn),web3.utils.toWei(minPoolAmountOut))
+        const tx = contractInstance.methods.joinswapExternAmountIn(poolAddress,web3.utils.toWei(tokenAmountIn),web3.utils.toWei(minPoolAmountOut))
         const encodedABI = tx.encodeABI(); 
         
         let rawTransaction = {

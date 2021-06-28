@@ -12,8 +12,8 @@ import {PRIVATE_KEY, INFURA_KEY} from '../../env'
 
 async function ApproveLiquidity(
     account, 
-    tokenAddress,
-    spender,
+    tokenAddress, // //pool address; contracts.oceanRinkeby
+    spender,  // token address; contracts.phecorRinkeby 
     amount,
     force = false // if true, will overwrite any previous allowence. Else, will check if allowance is enough and will not send a transaction if it's not needed
     ) {
