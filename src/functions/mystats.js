@@ -8,94 +8,7 @@ import {
   calcAnnoTagCumu,
   calcVeriCumu,
 } from '../services/Common/CommonFunctions';
-
-const initialChartData = {
-  dataSets: [
-    {
-      values: [],
-      label: 'Uploads',
-      config: {
-        lineWidth: 1,
-        drawFilled: true,
-        fillAlpha: 35,
-        color: processColor('#28a745'),
-        mode: 'LINEAR',
-        drawValues: false,
-        axisDependency: 'RIGHT',
-        fillColor: processColor('#28a745'),
-        circleRadius: 1,
-        circleColor: processColor('#28a745'),
-        highlightLineWidth: 1,
-        highlightColor: processColor('#28a745'),
-        drawCircleHole: false,
-      },
-    },
-    {
-     values: [],
-      label: 'Annotations',
-      config: {
-        lineWidth: 1,
-        drawFilled: true,
-        fillAlpha: 35,
-        color: processColor('#dc3545'),
-        mode: 'LINEAR',
-        drawValues: false,
-        axisDependency: 'RIGHT',
-        circleRadius: 1,
-        circleColor: processColor('#dc3545'),
-        fillColor: processColor('#dc3545'),
-        highlightLineWidth: 1,
-        highlightColor: processColor('#dc3545'),
-        drawCircleHole: false,
-      },
-    },
-    {
-      values: [
-      ],
-      label: 'Verifications',
-       config: {
-        lineWidth: 1,
-        drawFilled: true,
-        fillAlpha: 35,
-        color: processColor('#170000'),
-        mode: 'LINEAR',
-        drawValues: false,
-        axisDependency: 'RIGHT',
-        circleRadius: 1,
-        circleColor: processColor('#dc3545'),
-        fillColor: processColor('#170000'),
-        highlightLineWidth: 1,
-        highlightColor: processColor('#dc3545'),
-        drawCircleHole: false,
-      },
-    },
-  ],
-};
-
-const initialCumuChartData = {
-  dataSets: [
-    {
-      values: [],
-      label: 'Earnings',
-      config: {
-        lineWidth: 1,
-        drawFilled: true,
-        fillAlpha: 35,
-        color: processColor('#28a745'),
-        mode: 'LINEAR',
-        drawValues: false,
-        axisDependency: 'RIGHT',
-        fillColor: processColor('#28a745'),
-        circleRadius: 1,
-        circleColor: processColor('#28a745'),
-        highlightLineWidth: 1,
-        highlightColor: processColor('#28a745'),
-        drawCircleHole: false,
-      },
-    }
-  ],
-};
-
+import update from 'immutability-helper';
 
 //Get uploads/annotations/verification cumulative points per date
 const sumCumuData = (  
@@ -137,11 +50,39 @@ const sumCumuData = (
     }
   });
 
-  //chart dataset
-  const chartDataClone = {...initialCumuChartData};
-  chartDataClone.dataSets[0].values = [..._chartDataY];
-  setCurCumuChartdata(chartDataClone);
-  setCumuChartDate(_chartDataX);
+//chart dataset
+let chartDataClone = {};
+const arr = update(chartDataClone, {
+  $set: {
+    dataSets: [
+      {
+        values: _chartDataY,
+        label: 'Earnings',
+        config: {
+          lineWidth: 1,
+          drawFilled: true,
+          fillAlpha: 35,
+          color: processColor('#28a745'),
+          mode: 'LINEAR',
+          drawValues: false,
+          axisDependency: 'RIGHT',
+          fillColor: processColor('#28a745'),
+          circleRadius: 1,
+          circleColor: processColor('#28a745'),
+          highlightLineWidth: 1,
+          highlightColor: processColor('#28a745'),
+          drawCircleHole: false,
+        },
+      }
+    ],
+  }
+  
+});
+
+
+//  chartDataClone.dataSets[0].values = [..._chartDataY];
+setCurCumuChartdata(arr);
+setCumuChartDate(_chartDataX);
 
 };
 
@@ -241,13 +182,75 @@ const updateChart = (
   });
 
   try{
-      //chart dataset
-    let chartDataClone = {...initialChartData};
-    chartDataClone.dataSets[0].values = [...uploadChart];
-    chartDataClone.dataSets[1].values = [...annotationChart];
-    chartDataClone.dataSets[2].values = [...verficationChart];
+    //chart dataset
+    let chartDataClone = {};
+    const arr = update(chartDataClone, {
+      $set:{
+        dataSets: [
+          {
+            values:uploadChart,
+            label: 'Uploads',
+            config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#28a745'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              fillColor: processColor('#28a745'),
+              circleRadius: 1,
+              circleColor: processColor('#28a745'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#28a745'),
+              drawCircleHole: false,
+            },
+          },
+          {
+            values: annotationChart,
+            label: 'Annotations',
+            config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#dc3545'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              circleRadius: 1,
+              circleColor: processColor('#dc3545'),
+              fillColor: processColor('#dc3545'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#dc3545'),
+              drawCircleHole: false,
+            },
+          },
+          {
+            values: verficationChart,
+            label: 'Verifications',
+              config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#170000'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              circleRadius: 1,
+              circleColor: processColor('#dc3545'),
+              fillColor: processColor('#170000'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#dc3545'),
+              drawCircleHole: false,
+            },
+          },
+        ]
+      
+      }
 
-    setCurChartdataNew(chartDataClone);
+
+    });
+    setCurChartdataNew(arr);
     setCurChartState(chartType);
     setChartDate(_chartDate);
   }

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   boxText: {
     marginTop: '4%',
-    width: 100,
+    width: 250,
   },
   container_: {
     flex: 2,
@@ -140,7 +140,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.APP_COLOR,
     borderRadius: 8,
-    marginBottom: 20
+    marginBottom: 20,
+    width: 300
    // justifyContent: 'flex-start'
   }
 });

@@ -78,7 +78,7 @@ class WalletSettings extends Component {
     
     return (
       <ScrollView  showsVerticalScrollIndicator={true}>
-        <View>
+        <View style={{display: 'none'}}>
           <Picker
             selectedValue={this.state.networktype}
             onValueChange={(itemValue, itemIndex) =>
@@ -95,7 +95,7 @@ class WalletSettings extends Component {
           </View>
         </View>
         <View style={styles.container}>
-          <View style={styles.rows}>
+          <View style={[styles.rows, {display: 'none'}]}>
             <View>
               <Text />
               <Text style={styles.quickra}>0 QUICRA-0 </Text>
@@ -114,7 +114,7 @@ class WalletSettings extends Component {
               <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
             </View>
           </View>
-          <View >
+          <View>
             <Text style={styles.bigTextView} >Public Key</Text>
             <View style={styles.parent}>
               <Text numberOfLines={1} style={styles.boxText}>

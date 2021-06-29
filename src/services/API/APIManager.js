@@ -1,4 +1,4 @@
-import {getData, getFile, postData, getUserData} from './CoreAPICalls';
+import {getData, getFile, postData, getUserData, postUserData} from './CoreAPICalls';
 import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
@@ -7,6 +7,7 @@ export const getAllImages = async () => {
     console.log("response?", response)
     return response;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };
@@ -53,7 +54,7 @@ export const getLabelImage = async label => {
 
 export const storeUserResponse = async data => {
   try {
-    const response = await postData(s.taxonomy.storeUserResponse, data);
+    const response = await postUserData(s.taxonomy.storeUserResponse, data);
     return response;
   } catch (err) {
     return null;
