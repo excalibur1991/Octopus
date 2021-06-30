@@ -5,13 +5,44 @@ platform :ios, '10.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'DataUnion' do
-  config = use_native_modules!
-
   use_react_native!(
-    :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
+  pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
+
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNOS', :path => '../node_modules/react-native-os'
+
+  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
+  pod 'TcpSockets', :path => '../node_modules/react-native-tcp'
+
+  pod 'react-native-udp', :path => '../node_modules/react-native-udp'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'RNCClipboard', :path => '../node_modules/@react-native-community/clipboard'
+
+  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
   target 'DataUnionTests' do
     inherit! :complete

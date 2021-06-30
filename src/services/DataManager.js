@@ -5,7 +5,7 @@ const KEYS = {
   USER_INFO: 'USER_INFO',
   LAST_ACTIVITY: 'LAST_ACTIVITY',
   AUTH_TOKEN: 'AUTH_TOKEN',
-  WALLET_KEY: '@save_Keys'
+  WALLET_KEY: '@save_Keys',
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -32,11 +32,11 @@ export const setPrivacyAndTermsAccepted = async () => {
   try {
     await AsyncStorage.setItem(
       KEYS.ACCEPTED_PRIVACY_AND_TERMS,
-      JSON.stringify(true),
+      '1'
     );
     return true;
   } catch (err) {
-    return null;
+    return false;
   }
 };
 
@@ -45,12 +45,12 @@ export const isPrivacyAndTermsAccepted = async () => {
     const response = await AsyncStorage.getItem(
       KEYS.ACCEPTED_PRIVACY_AND_TERMS,
     );
-    if (response && JSON.parse(response)) {
+    if (response && response == '1') {
       return true;
     }
-    return null;
+    return false;
   } catch (err) {
-    return null;
+    return false;
   }
 };
 
@@ -95,6 +95,15 @@ export const getAuthToken = async () => {
   }
 };
 
+export const walletKeys = {
+  password: "",
+  seedPhrase: "",
+  publicKey: "",
+  privateKey: "",
+  ethBal: "",
+  oceanBal: "",
+  phecorBal: ""
+}
 
 export const setWalletData = async(walletData) => {
   try {
@@ -115,4 +124,3 @@ export const getWalletData = async () => {
     return null;
   }
 };
-

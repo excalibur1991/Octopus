@@ -1,20 +1,26 @@
-//import '../../shim.js'
-import React, {Component} from 'react';
-import {Text, View, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-import {STPupdateAccounts, STPupdateSeedPhrase} from '../actions/actions.js';
+2//import '../../shim.js'
+import React, {Component} from 'react'
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
+import Clipboard from '@react-native-community/clipboard';
+import {connect} from "react-redux"
+import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
+import * as Utils from '../web3/utils'
+import Dialog from "react-native-dialog"
+//import lightwallet from 'eth-lightwallet'
+import bip39 from 'react-native-bip39'
+import { hdPathString, localStorageKey } from '../web3/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button';
-//import { Ocean, ConfigHelper } from '@oceanprotocol/lib'
 import {Picker} from '@react-native-picker/picker';
 import CButton from '../components/CButton';
 import {styles} from '../styles/walletsettings';
-//import { Ocean, Config, ConfigHelper, Logger } from '@oceanprotocol/lib'
 import {
   chkNetwork,
   webThreeReturned,
   handleNewWallet,
   readStoredWallet,
   handleNewAccount,
+  handleWalletDelete
 } from '../functions/walletsettings';
 import {withTranslation} from 'react-i18next';
 
@@ -26,7 +32,7 @@ class WalletSettings extends Component {
       publicKey: '',
       privateKey: '',
       pword: '',
-      mnemonics: '',
+      mnemonics:'',
       newdialogVisible: false,
       restoredialogVisible: false,
       selectedLanguage: '',
@@ -45,6 +51,7 @@ class WalletSettings extends Component {
       age: '',
     };
 
+
     // const [age, setAge] = useState('')
 
     this.web3 = null;
@@ -57,33 +64,24 @@ class WalletSettings extends Component {
     this.kovannetCheck = 'none';
     this.mainnetCheck = 'none';
     //this.wallet = ""
-
-    const checkNetwork = setInterval(() => {
-      chkNetwork(this, checkNetwork);
-    }, 1000);
-
-    const web3Returned = setInterval(() => {
-      webThreeReturned(this, web3Returned);
-    }, 1000);
   }
 
   componentDidMount() {
-    readStoredWallet(this);
+    chkNetwork(this);
+    webThreeReturned(this);
+    readStoredWallet(this)
   }
 
-  STORAGE_KEY = '@save_Keys';
-  STORAGE_KEY2 = '@save_Pwd';
-  STORAGE_KEY3 = '@save_Phrase';
 
   render() {
     const {t} = this.props;
     return (
-      <ScrollView showsVerticalScrollIndicator={true}>
-        <View>
+      <ScrollView  showsVerticalScrollIndicator={true}>
+        <View style={{display: 'none'}}>
           <Picker
             selectedValue={this.state.networktype}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue})
+              this.setState({networktype: itemValue })
             }>
             <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
             <Picker.Item label={t('walletSettings.rinkeby')} value="rinkeby" />
@@ -101,7 +99,7 @@ class WalletSettings extends Component {
           </View>
         </View>
         <View style={styles.container}>
-          <View style={styles.rows}>
+          <View style={[styles.rows, {display: 'none'}]}>
             <View>
               <Text />
               <Text style={styles.quickra}>0 {t('walletSettings.quicra')}</Text>
@@ -130,7 +128,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.publicKey}
               </Text>
-              <CButton text={this.state.publicKey} />
+              <CButton text={this.state.publicKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.mnemonicPhrase')}
@@ -139,7 +137,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.mnemonics}
               </Text>
-              <CButton text={this.state.mnemonics} />
+              <CButton text={this.state.mnemonics}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.privateKey')}
@@ -148,7 +146,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.privateKey}
               </Text>
-              <CButton text={this.state.privateKey} />
+              <CButton text={this.state.privateKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.password')}
@@ -157,7 +155,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.pword}
               </Text>
-              <CButton text={this.state.pword} />
+              <CButton text={this.state.pword}/>
             </View>
           </View>
           <Button
@@ -183,22 +181,21 @@ class WalletSettings extends Component {
           textStyle={styles.buttonText}
         />
       </ScrollView>
-    );
+    )
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   web3: state.web3,
   account: state.reducers.account,
   seedPhrase: state.reducers.seedPhrase,
-});
+})
 
 const mapDispatchToProps = (dispatch) => {
   // Action
   return {
     STPupdateAccounts: (account0) => dispatch(STPupdateAccounts(account0)),
-    STPupdateSeedPhrase: (seedPhrase) =>
-      dispatch(STPupdateSeedPhrase(seedPhrase)),
+    STPupdateSeedPhrase: (seedPhrase) => dispatch(STPupdateSeedPhrase(seedPhrase)),
   };
 };
 

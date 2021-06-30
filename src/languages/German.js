@@ -2,6 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: 'Unterstützt von:',
+      creatingWallet: 'Brieftasche erstellen...'
     },
     landing: {
       info: 'Die Info',
@@ -38,6 +39,7 @@ export default {
       cumulative: 'KUMULATIV',
       count: 'ANZAHL',
       cumulativeEarnings: 'KUMULATIVES ERGEBNIS',
+      noChartDataAvailable: 'Keine Diagrammdaten verfügbar.'
     },
     stats: {
       upload: 'HOCHLADEN',
@@ -50,6 +52,7 @@ export default {
       cumulative: 'KUMULATIV',
       count: 'ANZAHL',
       cumulativeEarnings: 'KUMULATIVES ERGEBNIS',
+      noChartDataAvailable: 'Keine Diagrammdaten verfügbar.'
     },
     wallet: {
       memoricPhrase: 'Merksatz',

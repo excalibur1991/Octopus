@@ -1,4 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {
+  StyleSheet,
+  processColor,
+} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -92,6 +95,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  buttonInnerContainer: {},
   button: {
     borderRadius: 25,
     width: '70%',
@@ -103,5 +107,4 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Inter-Bold',
   },
-  buttonInnerContainer: {},
 });

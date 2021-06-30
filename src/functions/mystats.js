@@ -1,4 +1,6 @@
+import {  processColor } from 'react-native'
 import {actions} from '../services/State/Reducer';
+
 import {getUserStats} from '../services/API/APIManager';
 import {
   calcUploadsCumu,
@@ -13,13 +15,19 @@ var _arr_uploads = [];
 var _arr_tag_annotations = [];
 var _arr_text_annotations = [];
 var _arr_verifications = [];
+import update from 'immutability-helper';
 
 //Get uploads/annotations/verification cumulative points per date
-export const sumCumuData = (
+const sumCumuData = (  
   response,
-  curCumuChartdata,
   setCurCumuChartdata,
-) => {
+  setCumuChartDate,
+  _arr_date,
+  _arr_uploads,
+  _arr_tag_annotations,
+  _arr_text_annotations,
+  _arr_verifications
+  ) => {
   var curCumuValue = 0;
   let _chartDataX = [];
   let _chartDataY = [];
@@ -34,48 +42,138 @@ export const sumCumuData = (
       calcVeriCumu(verifcation) +
       calcAnnoTagCumu(tag_annotation) +
       calcAnnoDescCumu(text_annotation);
-    _chartDataY.push(curCumuValue);
+    _chartDataY.push({x:index, y:curCumuValue, marker: `${value}\r\nEarnings:${curCumuValue.toFixed(4)}`}); 
     _chartDataX.push(value.split('-')[2] || '');
   });
 
-  //remove duplicate date
-  _chartDataX.push(
-    (Number(_chartDataX[_chartDataX.length - 1]) + 1).toString(),
-  );
-  let xData = [];
   _chartDataX.map((value, index) => {
     if (index == 0) {
-      xData.push(value);
     } else if (index == _chartDataX.length - 1) {
-      xData.push(value);
     } else {
       if (_chartDataX.indexOf(value) === index) {
-        xData.push(value);
       } else {
-        xData.push('');
+        _chartDataX[index] = '';
       }
     }
   });
 
-  //chart dataset
-  const chartDataClone = {...curCumuChartdata};
-  chartDataClone.datasets[0].data = _chartDataY;
-  chartDataClone.labels = xData;
-  setCurCumuChartdata(chartDataClone);
+//chart dataset
+let chartDataClone = {};
+const arr = update(chartDataClone, {
+  $set: {
+    dataSets: [
+      {
+        values: _chartDataY,
+        label: 'Earnings',
+        config: {
+          lineWidth: 1,
+          drawFilled: true,
+          fillAlpha: 35,
+          color: processColor('#28a745'),
+          mode: 'LINEAR',
+          drawValues: false,
+          axisDependency: 'RIGHT',
+          fillColor: processColor('#28a745'),
+          circleRadius: 1,
+          circleColor: processColor('#28a745'),
+          highlightLineWidth: 1,
+          highlightColor: processColor('#28a745'),
+          drawCircleHole: false,
+        },
+      }
+    ],
+  }
+  
+});
+
+
+//  chartDataClone.dataSets[0].values = [..._chartDataY];
+setCurCumuChartdata(arr);
+setCumuChartDate(_chartDataX);
+
+};
+
+const getChartData = (
+  chartType,
+  _arr_date,
+  _arr_uploads,
+  _arr_tag_annotations,
+  _arr_text_annotations,
+  _arr_verifications
+  ) => {
+  //let _chartDataX = [];
+    //let _chartDataY = [];
+    let _chartData = [];
+    var curValue = 0;
+
+    if (chartType == 'uploads') {
+      curValue = 0;
+      _arr_uploads.map((value, index) => {
+        curValue += value;
+        _chartData.push({x:index, y:curValue, marker: `${_arr_date[index]}\r\nUploads:${curValue}`});
+      });
+      //setGraphTitle('UPLOAD');
+    } else if (chartType == 'annotations') {
+      curValue = 0;
+      _arr_tag_annotations.map((value, index) => {
+        curValue += value + _arr_text_annotations[index];
+        _chartData.push({x:index, y:curValue, marker:`${_arr_date[index]}\r\nAnnotations:${curValue}`});
+      });
+
+      //setGraphTitle('ANNOTATION');
+    } else if (chartType == 'verifications') {
+      curValue = 0;
+      _arr_verifications.map((value, index) => {
+        curValue += value;
+        _chartData.push({x:index, y:curValue, marker:`${_arr_date[index]}\r\nVerifications:${curValue}`});
+      });
+      //setGraphTitle('VERIFICATION');
+    }
+
+    return _chartData;
 };
 
 // uploads | annotation | verifcation chart
-export const updateChart = (
+const updateChart = (
   chartType,
-  setGraphTitle,
-  curChartdata,
-  setCurChartdata,
+  setCurChartdataNew,
   setCurChartState,
-) => {
-  let _chartDataX = [];
-  let _chartDataY = [];
-  _arr_date.map((value) => {
-    _chartDataX.push(value.split('-')[2]);
+  _arr_date,
+  _arr_uploads,
+  _arr_tag_annotations,
+  _arr_text_annotations,
+  _arr_verifications,
+  setChartDate
+  ) => {
+
+  let uploadChart = getChartData(
+    'uploads',
+    _arr_date,
+    _arr_uploads,
+    _arr_tag_annotations,
+    _arr_text_annotations,
+    _arr_verifications
+);
+  let annotationChart = getChartData(
+    'annotations',  
+    _arr_date,
+    _arr_uploads,
+    _arr_tag_annotations,
+    _arr_text_annotations,
+    _arr_verifications
+);
+  let verficationChart = getChartData(
+    'verifications',
+    _arr_date,
+    _arr_uploads,
+    _arr_tag_annotations,
+    _arr_text_annotations,
+    _arr_verifications
+);
+
+  let _chartDate = [];
+  _arr_date.map((value)=>{
+    _chartDate.push(value.split('-')[2]);
   });
   var curValue = 0;
 
@@ -114,24 +212,92 @@ export const updateChart = (
   let xData = [];
   _chartDataX.map((value, index) => {
     if (index == 0) {
-      xData.push(value);
-    } else if (index == _chartDataX.length - 1) {
-      xData.push(value);
+    } else if (index == _chartDate.length - 1) {
     } else {
-      if (_chartDataX.indexOf(value) === index) {
-        xData.push(value);
+      if (_chartDate.indexOf(value) === index) {
       } else {
-        xData.push('');
+        _chartDate[index] = '';
       }
     }
   });
 
-  //chart dataset
-  const chartDataClone = {...curChartdata};
-  chartDataClone.datasets[0].data = _chartDataY.length == 0 ? [0] : _chartDataY;
-  chartDataClone.labels = xData;
-  setCurChartdata(chartDataClone);
-  setCurChartState(chartType);
+  try{
+    //chart dataset
+    let chartDataClone = {};
+    const arr = update(chartDataClone, {
+      $set:{
+        dataSets: [
+          {
+            values:uploadChart,
+            label: 'Uploads',
+            config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#28a745'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              fillColor: processColor('#28a745'),
+              circleRadius: 1,
+              circleColor: processColor('#28a745'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#28a745'),
+              drawCircleHole: false,
+            },
+          },
+          {
+            values: annotationChart,
+            label: 'Annotations',
+            config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#dc3545'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              circleRadius: 1,
+              circleColor: processColor('#dc3545'),
+              fillColor: processColor('#dc3545'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#dc3545'),
+              drawCircleHole: false,
+            },
+          },
+          {
+            values: verficationChart,
+            label: 'Verifications',
+              config: {
+              lineWidth: 1,
+              drawFilled: true,
+              fillAlpha: 35,
+              color: processColor('#170000'),
+              mode: 'LINEAR',
+              drawValues: false,
+              axisDependency: 'RIGHT',
+              circleRadius: 1,
+              circleColor: processColor('#dc3545'),
+              fillColor: processColor('#170000'),
+              highlightLineWidth: 1,
+              highlightColor: processColor('#dc3545'),
+              drawCircleHole: false,
+            },
+          },
+        ]
+      
+      }
+
+
+    });
+    setCurChartdataNew(arr);
+    setCurChartState(chartType);
+    setChartDate(_chartDate);
+  }
+  catch(err){
+  }
+
+
 };
 
 export const fetchOverall = async (
@@ -139,12 +305,22 @@ export const fetchOverall = async (
   setAnnotations,
   setUploads,
   setVerifications,
+  _arr_date,
+  _arr_uploads,
+  _arr_tag_annotations,
+  _arr_text_annotations,
+  _arr_verifications,
   setUploadsQuicrra,
   setAnnotationsQuicrra,
   setVerificationsQuicrra,
   setCumuQuicrra,
+  setChartDate,
+  setCumuChartDate,
+  setCurChartState,
+  setCurChartdataNew,
+  setCurCumuChartdata
 ) => {
-  try {
+    try {
     dispatch({
       type: actions.SET_OVERALL,
     });
@@ -192,7 +368,6 @@ export const fetchOverall = async (
         (total, item) => total + Number(item),
         0,
       );
-
       //collect chart data
       _arr_uploads = [...response.result.uploads];
       _arr_verifications = [...response.result.verifications];
@@ -205,7 +380,8 @@ export const fetchOverall = async (
 
       let upload_rra = calcUploadsCumu(sum_upload);
       let anno_rra =
-        calcAnnoDescCumu(sum_anno_description) + calcAnnoTagCumu(sum_anno_tags);
+        calcAnnoDescCumu(sum_anno_description) +
+        calcAnnoTagCumu(sum_anno_tags);
       let veri_rra = calcVeriCumu(sum_verification);
 
       setUploadsQuicrra(Number(upload_rra.toFixed(8)));
@@ -213,10 +389,30 @@ export const fetchOverall = async (
       setVerificationsQuicrra(Number(veri_rra.toFixed(8)));
       setCumuQuicrra(Number((upload_rra + anno_rra + veri_rra).toFixed(8)));
 
-      updateChart('uploads');
-      sumCumuData(response);
+      updateChart(
+        'uploads',
+        setCurChartdataNew,
+        setCurChartState,
+        _arr_date,
+        _arr_uploads,
+        _arr_tag_annotations,
+        _arr_text_annotations,
+        _arr_verifications,
+        setChartDate
+        );
+      sumCumuData(
+        response,
+        setCurCumuChartdata,
+        setCumuChartDate,
+        _arr_date,
+        _arr_uploads,
+        _arr_tag_annotations,
+        _arr_text_annotations,
+        _arr_verifications
+        );
     }
   } catch (error) {
+    console.log(error);
     dispatch({
       type: actions.SET_ALERT_SETTINGS,
       alertSettings: {

@@ -1,14 +1,27 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {LineChart} from 'react-native-chart-kit';
-import {Image, ScrollView, Text, View, Dimensions} from 'react-native';
+import {LineChart} from 'react-native-charts-wrapper';
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  Dimensions,
+  processColor,
+} from 'react-native';
+
 import Button from '../components/Button';
 import {useStateValue} from '../services/State/State';
 import {styles} from '../styles/stats';
+
 const UploadIcon = require('../assets/uploads.png');
 import {updateChart, fetchOverall} from '../functions/stats';
 import {withTranslation} from 'react-i18next';
+
+var _arr_date = [];
+var _arr_uploads = [];
+var _arr_tag_annotations = [];
+var _arr_text_annotations = [];
+var _arr_verifications = [];
 
 const Stats = ({t}) => {
   useEffect(() => {
@@ -26,6 +39,11 @@ const Stats = ({t}) => {
       setAnnotationsQuicrra,
       setVerificationsQuicrra,
       setCumuQuicrra,
+      setChartDate,
+      setCumuChartDate,
+      setCurChartState,
+      setCurChartdataNew,
+      setCurCumuChartdata
     );
   }, []);
 
@@ -39,42 +57,16 @@ const Stats = ({t}) => {
   const [cumuQuicrra, setCumuQuicrra] = useState(0);
 
   const [graphTitle, setGraphTitle] = useState(t('stats.upload'));
+  const [chartDate, setChartDate] = useState(['2020', '2021']); 
+  const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']); 
   const [curChartState, setCurChartState] = useState('uploads');
 
-  const curYear = Number(
-    new Date().toISOString().replace(/T.*/, '').split('-')[0],
-  );
-
-  const [curChartdata, setCurChartdata] = useState({
-    labels: [(curYear - 1).toString(), curYear.toString()],
-    datasets: [
-      {
-        strokeWidth: 1,
-        withDots: false,
-        data: [0],
-      },
-    ],
-  });
-
-  const [curCumuChartdata, setCurCumuChartdata] = useState({
-    labels: [(curYear - 1).toString(), curYear.toString()],
-    datasets: [
-      {
-        strokeWidth: 1,
-        withDots: false,
-        data: [0],
-      },
-    ],
-  });
+  const [curChartdata_new, setCurChartdataNew] = useState({});
+  const [curCumuChartdata, setCurCumuChartdata] = useState({});
 
   //authToken
   const [, dispatch] = useStateValue();
 
-  var _arr_date = [];
-  var _arr_uploads = [];
-  var _arr_tag_annotations = [];
-  var _arr_text_annotations = [];
-  var _arr_verifications = [];
 
   return (
     <View style={styles.container}>
@@ -136,21 +128,48 @@ const Stats = ({t}) => {
               {t('stats.cumulative')} {graphTitle} {t('stats.count')}
             </Text>
             <LineChart
-              fromZero
-              transparent
-              height={200}
-              yAxisSuffix=""
-              style={styles.graph}
-              withVerticalLines={false}
-              width={Dimensions.get('window').width}
-              data={curChartdata}
-              chartConfig={{
-                decimalPlaces: 0,
-                fillShadowGradientOpacity: 1,
-                fillShadowGradient: '#a5c4f8',
-                //formatYLabel: (value) => Math.round(value / 1000),
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style={styles.chart}
+              data={curChartdata_new}
+              chartDescription={{text: ''}}
+              legend={{}}
+              marker={{
+                enabled: true,
+                backgroundTint: processColor('black'),
+                markerColor: processColor('#80cccccc'),
+                textColor: processColor('white'),
               }}
+              xAxis={{
+                granularityEnabled: true,
+                granularity: 1,
+                position: 'BOTTOM',
+                valueFormatter: chartDate,
+                drawGridLines:false
+              }}
+              yAxis={{
+                 left:{axisMinimum:0},
+                 right: {enabled: false},
+                 drawGridLines: false,
+                }}
+              drawGridBackground={false}
+              borderColor={processColor('#F0C0FF8C')}
+              borderWidth={0}
+              drawBorders={true}
+              autoScaleMinMaxEnabled={true}
+              touchEnabled={true}
+              dragEnabled={true}
+              scaleEnabled={true}
+              scaleXEnabled={true}
+              scaleYEnabled={false}
+              pinchZoom={true}
+              doubleTapToZoomEnabled={true}
+              highlightPerTapEnabled={true}
+              highlightPerDragEnabled={false}
+              width={350}
+              height={300}
+              dragDecelerationEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
+              keepPositionOnRotation={false}
+              noDataText={t('stats.noChartDataAvailable')}
             />
           </View>
           <View style={styles.buttonContainer}>
@@ -233,20 +252,48 @@ const Stats = ({t}) => {
             </Text>
             <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
             <LineChart
-              fromZero
-              transparent
-              height={200}
-              yAxisSuffix=""
-              style={styles.graph}
-              withVerticalLines={false}
-              width={Dimensions.get('window').width}
+              style={styles.chart}
               data={curCumuChartdata}
-              chartConfig={{
-                decimalPlaces: 0,
-                fillShadowGradientOpacity: 1,
-                fillShadowGradient: '#a5c4f8',
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              chartDescription={{text: ''}}
+              legend={{}}
+              marker={{
+                enabled: true,
+                backgroundTint: processColor('black'),
+                markerColor: processColor('#80cccccc'),
+                textColor: processColor('white'),
               }}
+              xAxis={{
+                granularityEnabled: true,
+                granularity: 1,
+                position: 'BOTTOM',
+                valueFormatter: CumuChartDate,
+                drawGridLines:false
+              }}
+              yAxis={{
+                 left:{axisMinimum:0},
+                 right: {enabled: false},
+                 drawGridLines: false,
+                }}
+              drawGridBackground={false}
+              borderColor={processColor('#F0C0FF8C')}
+              borderWidth={0}
+              drawBorders={true}
+              autoScaleMinMaxEnabled={true}
+              touchEnabled={true}
+              dragEnabled={true}
+              scaleEnabled={false}
+              scaleXEnabled={true}
+              scaleYEnabled={false}
+              pinchZoom={true}
+              doubleTapToZoomEnabled={true}
+              highlightPerTapEnabled={true}
+              highlightPerDragEnabled={false}
+              width={350}
+              height={300}
+              dragDecelerationEnabled={true}
+              dragDecelerationFrictionCoef={0.99}
+              keepPositionOnRotation={false}
+              noDataText={t('stats.noChartDataAvailable')}
             />
           </View>
         </View>

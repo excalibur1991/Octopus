@@ -4,19 +4,20 @@
  *
  * @format
  */
-const extraNodeModules = require('node-libs-browser');
+ const extraNodeModules = require('node-libs-browser');
 
-module.exports = {
-  resolver: {
-    extraNodeModules,
-    sourceExts: ['js', 'json', 'ts', 'tsx']
-  },	
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
-  },
-};
+ module.exports = {
+   resolver: {
+     extraNodeModules,
+     sourceExts: ['js', 'json', 'ts', 'tsx']
+   },	
+   transformer: {
+     getTransformOptions: async () => ({
+       transform: {
+         experimentalImportSupport: false,
+         inlineRequires: false,
+       },
+     }),
+   },
+ };
+ 

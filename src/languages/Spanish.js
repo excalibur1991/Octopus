@@ -2,6 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: 'Energizado por:',
+      creatingWallet: 'Creando billetera ...'
     },
     landing: {
       info: 'Información',
@@ -38,6 +39,7 @@ export default {
       cumulative: 'ACUMULATIVA',
       count: 'CONTAR',
       cumulativeEarnings: 'GANANCIAS ACUMULATIVAS',
+      noChartDataAvailable: 'No hay datos gráficos disponibles.'
     },
     stats: {
       upload: 'SUBIR',
@@ -50,6 +52,7 @@ export default {
       cumulative: 'ACUMULATIVA',
       count: 'CONTAR',
       cumulativeEarnings: 'GANANCIAS ACUMULATIVAS',
+      noChartDataAvailable: 'No hay datos gráficos disponibles.'
     },
     wallet: {
       memoricPhrase: 'Frase mnemotécnica',

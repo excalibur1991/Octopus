@@ -2,6 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: '搭載：',
+      creatingWallet: 'ウォレットを作成しています...'
     },
     landing: {
       info: '情報',
@@ -38,6 +39,7 @@ export default {
       cumulative: '累積的な',
       count: 'カウント',
       cumulativeEarnings: '累積収益',
+      noChartDataAvailable: '利用可能なチャートデータはありません。'
     },
     stats: {
       upload: 'アップロード',
@@ -50,6 +52,7 @@ export default {
       cumulative: '累積的な',
       count: 'カウント',
       cumulativeEarnings: '累積収益',
+      noChartDataAvailable: '利用可能なチャートデータはありません。'
     },
     wallet: {
       memoricPhrase: 'ニーモニックフレーズ',

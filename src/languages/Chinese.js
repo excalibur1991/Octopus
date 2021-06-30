@@ -2,6 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: '供电：',
+      creatingWallet: '正在创建钱包...'
     },
     landing: {
       info: '信息',
@@ -38,6 +39,7 @@ export default {
       cumulative: '累计',
       count: '数数',
       cumulativeEarnings: '累积收益',
+      noChartDataAvailable: '没有可用的图表数据。'
     },
     stats: {
       upload: '上传',
@@ -50,6 +52,7 @@ export default {
       cumulative: '累计',
       count: '数数',
       cumulativeEarnings: '累积收益',
+      noChartDataAvailable: '没有可用的图表数据。'
     },
     wallet: {
       memoricPhrase: '助记词',

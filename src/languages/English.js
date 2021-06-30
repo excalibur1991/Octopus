@@ -2,6 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: 'Powered by:',
+      creatingWallet: 'Creating wallet...'
     },
     landing: {
       info: 'Info',
@@ -38,6 +39,7 @@ export default {
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
       cumulativeEarnings: 'CUMULATIVE EARNINGS',
+      noChartDataAvailable: 'No chart data available.'
     },
     stats: {
       upload: 'UPLOAD',
@@ -50,6 +52,7 @@ export default {
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
       cumulativeEarnings: 'CUMULATIVE EARNINGS',
+      noChartDataAvailable: 'No chart data available.'
     },
     wallet: {
       memoricPhrase: 'Memoric Phrase',
