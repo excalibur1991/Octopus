@@ -1,18 +1,15 @@
 import React, {useEffect} from 'react';
 import {Text, Image, View, StyleSheet} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import {useStateValue} from '../services/State/State';
-import {reducer, actions} from '../services/State/Reducer';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector} from 'react-redux';
+import '../../global';
+import '../../shim';
+import {styles} from '../styles/loading';
+import {LoginProc} from '../functions/loading';
+import {withTranslation} from 'react-i18next';
 
-import {LoginProc} from '../functions/loading'
-import {styles} from '../styles/loading'
-
-
-const Loading = ({navigation}) => {
-  const web3 = useSelector(state=>state.web3);
-  const [{authInfo}, dispatch] = useStateValue();
-  
+const Loading = ({navigation, t}) => {
+  const web3 = useSelector((state) => state.web3);
   useEffect(() => {
     LoginProc(
       web3
@@ -36,9 +33,10 @@ const Loading = ({navigation}) => {
         source={require('../assets/icon.png')}
       />
       <View style={styles.creatingWallet}>
+        <Text style={styles.text}>{t('loading.poweredBy')}</Text>
         <Text
           style={styles.text}>
-          Creating wallet...
+          {t('loading.creatingWallet')}
         </Text>
       </View>
       <Text
@@ -49,4 +47,4 @@ const Loading = ({navigation}) => {
   );
 };
 
-export default Loading;
+export default withTranslation()(Loading);

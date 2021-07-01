@@ -1,4 +1,4 @@
-//import '../../shim.js'
+2//import '../../shim.js'
 import React, {Component} from 'react'
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
 import Clipboard from '@react-native-community/clipboard';
@@ -22,8 +22,7 @@ import {
   handleNewAccount,
   handleWalletDelete
 } from '../functions/walletsettings';
- 
-
+import {withTranslation} from 'react-i18next';
 
 class WalletSettings extends Component {
   constructor(props) {
@@ -75,7 +74,7 @@ class WalletSettings extends Component {
 
 
   render() {
-    
+    const {t} = this.props;
     return (
       <ScrollView  showsVerticalScrollIndicator={true}>
         <View style={{display: 'none'}}>
@@ -84,13 +83,18 @@ class WalletSettings extends Component {
             onValueChange={(itemValue, itemIndex) =>
               this.setState({networktype: itemValue })
             }>
-            <Picker.Item label="mainnet" value="mainnet" />
+            <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
+            <Picker.Item label={t('walletSettings.rinkeby')} value="rinkeby" />
+            <Picker.Item label={t('walletSettings.kovan')} value="kovan" />
+            <Picker.Item label={t('walletSettings.ropsten')} value="ropsten" />
           </Picker>
           <View style={styles.alignCenter}>
             <Text>
               {this.state.isConnected
-                ? `Connected to ${this.state.networktype} node`
-                : 'Not Connected'}
+                ? `${t('walletSettings.connectedTo')} ${
+                    this.state.networktype
+                  } ${t('walletSettings.node')}`
+                : t('walletSettings.notConnected')}
             </Text>
           </View>
         </View>
@@ -98,57 +102,84 @@ class WalletSettings extends Component {
           <View style={[styles.rows, {display: 'none'}]}>
             <View>
               <Text />
-              <Text style={styles.quickra}>0 QUICRA-0 </Text>
-              <Text style={styles.ocean}> {this.state.ethTokenBal} ETH </Text>
+              <Text style={styles.quickra}>0 {t('walletSettings.quicra')}</Text>
               <Text style={styles.ocean}>
-                {' '}
-                {this.state.oceanERC20TokenBal} OCEAN{' '}
+                {this.state.ethTokenBal} {t('walletSettings.eth')}
               </Text>
               <Text style={styles.ocean}>
-                {' '}
-                {this.state.phec0ERC20TokenBal} PHECOR-0{' '}
+                {this.state.oceanERC20TokenBal} {t('walletSettings.ocean')}
+              </Text>
+              <Text style={styles.ocean}>
+                {this.state.phec0ERC20TokenBal} {t('walletSettings.phecor')}
               </Text>
             </View>
             <View style={styles.alignEnd}>
-              <Text style={styles.txtPortfolio}> 24h Portfolio</Text>
+              <Text style={styles.txtPortfolio}>
+                24h {t('walletSettings.portfolio')}
+              </Text>
               <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
             </View>
           </View>
           <View>
-            <Text style={styles.bigTextView} >Public Key</Text>
+            <Text style={styles.bigTextView}>
+              {t('walletSettings.publicKey')}
+            </Text>
             <View style={styles.parent}>
               <Text numberOfLines={1} style={styles.boxText}>
-                  {' '}
-                  {this.state.publicKey}{' '}
+                {this.state.publicKey}
               </Text>
               <CButton text={this.state.publicKey}/>
             </View>
-            <Text style={styles.bigTextView} >Mnemonic Phrase</Text>
+            <Text style={styles.bigTextView}>
+              {t('walletSettings.mnemonicPhrase')}
+            </Text>
             <View style={styles.parent}>
               <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.mnemonics}{' '}
+                {this.state.mnemonics}
               </Text>
               <CButton text={this.state.mnemonics}/>
             </View>
-            <Text style={styles.bigTextView} >Private Key</Text>
+            <Text style={styles.bigTextView}>
+              {t('walletSettings.privateKey')}
+            </Text>
             <View style={styles.parent}>
               <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.privateKey}{' '}
+                {this.state.privateKey}
               </Text>
               <CButton text={this.state.privateKey}/>
             </View>
-            <Text style={styles.bigTextView} >Password</Text>
+            <Text style={styles.bigTextView}>
+              {t('walletSettings.password')}
+            </Text>
             <View style={styles.parent}>
               <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.pword}{' '}
+                {this.state.pword}
               </Text>
               <CButton text={this.state.pword}/>
             </View>
           </View>
+          <Button
+            color="#f2f2f2"
+            title={t('walletSettings.more')}
+            buttonStyle={styles.buttonStyle}
+            onPress={() => handleNewAccount(this)}
+            textStyle={styles.buttonText}
+          />
+          <Button
+            color="#f2f2f2"
+            title={t('walletSettings.deleteWallet')}
+            buttonStyle={styles.buttonStyle}
+            onPress={this.handleWalletRecovery}
+            textStyle={styles.buttonText}
+          />
         </View>
+        <Button
+          color="#f2f2f2"
+          title={t('walletSettings.newWallet')}
+          buttonStyle={styles.buttonStyle}
+          onPress={() => handleNewWallet(this)}
+          textStyle={styles.buttonText}
+        />
       </ScrollView>
     )
   }
@@ -168,8 +199,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect (
-  mapStateToProps,
-  mapDispatchToProps,
-) (WalletSettings);
-
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(WalletSettings),
+);
