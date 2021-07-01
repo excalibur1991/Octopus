@@ -120,12 +120,15 @@ export const styles = StyleSheet.create({
     marginBottom: 20
   },
   button: {
-    width: '92%',
-    paddingTop: 12,
-    paddingBottom: 12,
-    backgroundColor: '#AA00FF',
-    borderRadius: 5,
-    marginBottom: 20
+    borderRadius: 25,
+    width: '70%',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontSize: 19,
+    fontWeight: '600',
+    color: theme.APP_COLOR,
+    fontFamily: 'Inter-Bold',
   },
   TextStyle: {
     color: '#fff',

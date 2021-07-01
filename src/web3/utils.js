@@ -1,8 +1,32 @@
 import { randomBytes } from 'react-native-randombytes';
+import Web3 from 'web3'
 import {rinkebyConnect} from '../web3/getWeb3'
 import {ropstenConnect} from '../web3/getWeb3'
 import {kovanConnect} from '../web3/getWeb3'
 import {mainConnect} from '../web3/getWeb3'
+import {PRIVATE_KEY, INFURA_KEY} from '../../env'
+
+//const { INFURA_KEY } = process.env; 
+
+export const web3 = new Web3(Web3.givenProvider || `https://rinkeby.infura.io/v3/${INFURA_KEY}`);
+
+export const contracts = {
+ oceanRinkeby:"0x8967BCF84170c91B0d24D4302C2376283b0B3a07", 
+ walletAddress:"0x5D363EC1EF55005C39c0e36C50b06242aeb3C3D4", 
+ oceanRopsten:"0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9", 
+ oceanMainnet:"0x967da4048cD07aB37855c090aAF366e4ce1b9F48", 
+ polygonMainnet:"0x282d8efCe846A88B159800bd4130ad77443Fa1A1",
+ DaiMainnet:"0x6B175474E89094C44Da98b954EedeAC495271d0F",
+ DaiKovanContract:"0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
+ mDaiRinkebyContract:"0x6f5390A8CD02d83B23C5f1d594bFFB9050Eb4Ca3",
+ uniswapExchContract:"0xf5d915570bc477f9b8d6c0e980aa81757a3aac36",
+ quicraLiqPool:"0xAAB9EaBa1AA2653c1Dda9846334700b9F5e14E44",
+ quicraMainnet:"0x7Bce67697eD2858d0683c631DdE7Af823b7eea38",
+ phecorRinkeby:"0xe793a47892854260b42449291953dadbddb4226d",    
+ newPool1: '0xAa5226ACc808112E84249eD625cEB96b45AFD2Ac',// (pool contract created by newBPool() function)
+ newPool2: '0xedB28AFD5da300431CfA285388635c490C2a7192',
+ newPool3: '0x561af90e8233e924805eAD217De7fdd4BBe41Fd4'
+};
 
 export const getRandom = (count) => new Promise((resolve, reject) => {
   return randomBytes(count, (err, bytes) => {

@@ -147,6 +147,16 @@ class WalletSettings extends Component {
               </Text>
               <CButton text={this.state.pword}/>
             </View>
+            <Button
+              color="#f2f2f2"
+              title="Add Liquidity"
+              buttonStyle={styles.button}
+              onPress={() => this.props.navigation.navigate('Add Liquidity',
+              {publicKey: this.state.publicKey,
+              privateKey: this.state.privateKey})}
+              textStyle={styles.buttonText}
+          />
+
           </View>
         </View>
       </ScrollView>

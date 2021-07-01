@@ -41,7 +41,7 @@ export default class App extends Component {
     return (
       <Stack.Navigator>
         <Stack.Screen name="WalletHome" component={Home} options={{ title: 'Wallet Settings' }} />
-        <Stack.Screen name="My Wallet" component={WalletActions} navigation={this.props.navigation} />
+        <Stack.Screen name="Add Liquidity" component={WalletActions} navigation={this.props.navigation} />
         <Stack.Screen name="Wallet" component={WalletSettings} navigation={this.props.navigation} />
       </Stack.Navigator>
 )
