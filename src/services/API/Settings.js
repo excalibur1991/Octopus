@@ -13,6 +13,17 @@ export const settings = {
     //userStats: '/api/v1/stats/user?start_date=$[start_date]&end_date=$[end_date]',
     userStats: '/api/v1/stats/user-graph?start_date=$[start_date]&end_date=$[end_date]',
   },
+
+  metadata: {
+    getImageById: '/api/v1/get-image-by-id',
+    queryTags: '/api/v1/query-tags',
+    annotate: '/api/v1/annotate',
+    reportImages: '/api/v1/report-images',
+    verifiyImage: '/api/v1/verify-image',
+    myMetadata: '/api/get/my-metadata'
+  },
+
+
   //Authentification
   auth: {
     refreshToken: '/refresh',

@@ -9,6 +9,24 @@ import {styles} from '../styles/landingpage';
 const LandingPage = ({navigation}) => {
   const options = [
     {
+      title: 'Upload',
+      screen: 'Upload',
+      icon: 'analytics',
+      Icon: MaterialIcon,
+    },
+    {
+      title: 'Verfication',
+      screen: 'Verification',
+      icon: 'fingerprint',
+      Icon: MaterialIcon,
+    },
+    {
+      title: 'Stats',
+      screen: 'Stats',
+      icon: 'analytics',
+      Icon: MaterialIcon,
+    },
+    {
       title: 'My Stats',
       screen: 'MyStats',
       icon: 'analytics-sharp',
@@ -18,12 +36,6 @@ const LandingPage = ({navigation}) => {
       title: 'Learn',
       screen: 'Learn',
       icon: 'subscriptions',
-      Icon: MaterialIcon,
-    },
-    {
-      title: 'Stats',
-      screen: 'Stats',
-      icon: 'analytics',
       Icon: MaterialIcon,
     },
     {

@@ -13,6 +13,7 @@ import About from './screens/About';
 import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
+import Verification from './screens/Verification'
 import Wallet from './screens/Wallet';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
@@ -131,6 +132,27 @@ const AboutStack = () => (
     />
   </Stack.Navigator>
 );
+
+const VerificationStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Verification"
+      component={Verification}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
 
 const StatsStack = () => (
   <Stack.Navigator>
@@ -264,6 +286,15 @@ const BottomTabs = () => (
         unmountOnBlur: true,
         // eslint-disable-next-line react/display-name
         tabBarButton: props => <TabComponent label="About" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Verification"
+      component={VerificationStack}
+      options={{
+        unmountOnBlur: true,
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="Verification" {...props} />,
       }}
     />
     <Tab.Screen
