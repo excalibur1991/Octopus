@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: '4%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: '#4a4a4a',
   },
   swipeAiOuter: {
     marginTop: '-25%',
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     shadowOffset: {width: 0, height: 4},
-    backgroundColor: '#F5F6FC',
+    backgroundColor: '#1b1d1e',
     marginVertical: 10,
     marginHorizontal: '5%',
   },
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
     margin: '2%',
     borderRadius: 25,
-    backgroundColor: '#F5F6FC',
+    backgroundColor: '#1b1d1e',
   },
   listItemInner: {
     padding: '10%',
@@ -61,7 +61,7 @@ export const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 24,
     fontFamily: 'Inter-Bold',
-    color: '#41474E',
+    color: '#4a4a4a',
     fontWeight: '600',
     marginTop: '9%',
   },
@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
     marginVertical: '5%',
   },
   buttonText: {
-    color: '#000',
+    color: '#4a4a4a',
     fontSize: 24,
     fontFamily: 'Inter-Bold',
     alignSelf: 'flex-end',

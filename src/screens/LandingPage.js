@@ -9,6 +9,12 @@ import {styles} from '../styles/landingpage';
 const LandingPage = ({navigation}) => {
   const options = [
     {
+      title: 'Verify',
+      screen: 'MyStats',
+      icon: 'search',
+      Icon: IonIcon,
+    },    
+    {
       title: 'My Stats',
       screen: 'MyStats',
       icon: 'analytics-sharp',
@@ -47,9 +53,9 @@ const LandingPage = ({navigation}) => {
         innerStyle={styles.swipeAiInner}
         onPress={() => navigation.navigate('SwipeAI')}>
         <View style={styles.swipeAiIcon}>
-          <MaterialIcon size={50} name="swipe" color={theme.APP_COLOR} />
+          <MaterialIcon size={50} name="cloud-upload" color={theme.APP_COLOR} />
         </View>
-        <Text style={styles.buttonText}>Swipe AI</Text>
+        <Text style={styles.buttonText}>Upload</Text>
       </Ripple>
       <FlatList
         style={styles.Container}

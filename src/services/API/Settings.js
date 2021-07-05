@@ -1,6 +1,6 @@
 export const settings = {
   // development
-  baseUrl: 'https://dev.dataunion.app:8082/',
+  //baseUrl: 'https://dev.dataunion.app:8082/',
   //production 
   // baseUrl: 'https://alpha.dataunion.app:4430',
   taxonomy: {

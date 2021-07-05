@@ -23,12 +23,17 @@ const Loading = ({navigation}) => {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        resizeMode="stretch"
-        source={require('../assets/icon.png')}
+        resizeMode="contain"
+        source={require('../assets/VT.png')}
       />
       <View style={styles.creatingWallet}>
         <Text style={styles.text}>Powered by:</Text>
       </View>
+      <Image
+        style={styles.image}
+        resizeMode="contain"
+        source={require('../assets/icon.png')}
+      />
       <Image
         style={styles.image}
         resizeMode="contain"

@@ -30,7 +30,7 @@ const SwipeAI = () => {
         resizeMode="stretch"
         style={styles.topImage}
         source={
-          mainImage ? {uri: mainImage} : require('../assets/top_image.png')
+          mainImage ? {uri: mainImage} : require('../assets/vt_top_image.png')
         }
       />
       <GestureRecognizer
@@ -65,7 +65,7 @@ const SwipeAI = () => {
           source={
             mainImage
               ? {uri: cutoutImage}
-              : require('../assets/bottom_image.png')
+              : require('../assets/vt_bottom_image.png')
           }
         />
       </GestureRecognizer>

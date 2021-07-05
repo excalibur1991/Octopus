@@ -71,8 +71,8 @@ const Header = (
           innerStyle={{padding: 10}}>
           <Image
             style={styles.leftIcon}
-            resizeMode="stretch"
-            source={require('./assets/icon.png')}
+            resizeMode="contain"
+            source={require('./assets/VT.png')}
           />
         </Ripple>
       )
@@ -236,7 +236,7 @@ const BottomTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
       style: {
-        height: 60,
+        height: 0,
         backgroundColor: '#F2F2F2',
         elevation: 3,
         shadowColor: theme.APP_COLOR,
