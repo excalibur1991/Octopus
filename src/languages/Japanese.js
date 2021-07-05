@@ -11,6 +11,11 @@ export default {
       wallet: '財布',
       myStats: '私の統計',
       swipeAI: 'AIをスワイプ',
+      english: '英語',
+      chinese: '中国語',
+      deutsch: 'ドイツ語',
+      japanese: '日本語',
+      spanish: 'スペイン語',
     },
     about: {
       heading: '新しいデータエコノミーを開始する',
@@ -103,6 +108,7 @@ export default {
     },
     messages: {
       alert: 'アラート',
+      ok: 'OK',
       pressed: '押された',
       walletNotCreated: 'ウォレットが作成されていません！',
       errorOccured: 'エラーが発生',

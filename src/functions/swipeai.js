@@ -47,7 +47,7 @@ export const fetchImages = async (
         title: i18n.t('messages.errorOccured'),
         message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -137,7 +137,7 @@ export const onSwipe = async (
           title: t('messages.errorOccured'),
           message: t('messages.tryAgainLater'),
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: i18n.t('messages.ok'),
         },
       });
     }
@@ -150,7 +150,7 @@ export const onSwipe = async (
         title: i18n.t('messages.errorOccured'),
         message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -224,7 +224,7 @@ export const next = async (
         title: i18n.t('messages.errorOccured'),
         message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -298,7 +298,7 @@ export const prev = async (
         title: i18n.t('messages.errorOccured'),
         message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {

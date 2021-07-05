@@ -7,6 +7,7 @@ export const actions = {
   SET_APPOINTMENT_BOOKED: 'SET_APPOINTMENT_BOOKED',
   SET_NEW_MESSAGE: 'SET_NEW_MESSAGE',
   SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
+  SET_LANGUAGE: 'SET_LANGUAGE',
 };
 
 export const reducer = (state, action) => {
@@ -48,10 +49,15 @@ export const reducer = (state, action) => {
         ...state,
         newMessage: action.newMessage,
       };
-      case actions.SET_AUTH_TOKEN:
+    case actions.SET_AUTH_TOKEN:
       return {
         ...state,
         authInfo: action.authInfo,
+      };
+    case actions.SET_LANGUAGE:
+      return {
+        ...state,
+        selectedLanguage: action.selectedLanguage,
       };
     default:
       return state;

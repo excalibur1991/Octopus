@@ -2,7 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: '供电：',
-      creatingWallet: '正在创建钱包...'
+      creatingWallet: '正在创建钱包...',
     },
     landing: {
       info: '信息',
@@ -11,6 +11,11 @@ export default {
       wallet: '钱包',
       myStats: '我的统计数据',
       swipeAI: '刷卡AI',
+      english: '英语',
+      chinese: '中国人',
+      deutsch: '德语',
+      japanese: '日本人',
+      spanish: '西班牙语',
     },
     about: {
       heading: '启动新的数据经济',
@@ -39,7 +44,7 @@ export default {
       cumulative: '累计',
       count: '数数',
       cumulativeEarnings: '累积收益',
-      noChartDataAvailable: '没有可用的图表数据。'
+      noChartDataAvailable: '没有可用的图表数据。',
     },
     stats: {
       upload: '上传',
@@ -52,7 +57,7 @@ export default {
       cumulative: '累计',
       count: '数数',
       cumulativeEarnings: '累积收益',
-      noChartDataAvailable: '没有可用的图表数据。'
+      noChartDataAvailable: '没有可用的图表数据。',
     },
     wallet: {
       memoricPhrase: '助记词',
@@ -103,6 +108,7 @@ export default {
     },
     messages: {
       alert: '警报',
+      ok: '好的',
       pressed: '按下',
       walletNotCreated: '钱包未创建！',
       errorOccured: '发生了错误',

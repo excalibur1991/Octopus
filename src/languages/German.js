@@ -11,6 +11,11 @@ export default {
       wallet: 'Brieftasche',
       myStats: 'Meine Statistiken',
       swipeAI: 'Wischen Sie KI',
+      english: 'Englisch',
+      chinese: 'Chinesisch',
+      deutsch: 'Deutsch',
+      japanese: 'japanisch',
+      spanish: 'Spanisch',
     },
     about: {
       heading: 'Starten Sie die neue Datenwirtschaft',
@@ -103,6 +108,7 @@ export default {
     },
     messages: {
       alert: 'Aufmerksam',
+      ok: 'OK',
       pressed: 'Gedrückt',
       walletNotCreated: 'Wallet nicht erstellt!',
       errorOccured: 'Fehler aufgetreten',

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18next from 'i18next';
 
 const KEYS = {
   ACCEPTED_PRIVACY_AND_TERMS: 'ACCEPTED_PRIVACY_AND_TERMS',
@@ -6,6 +7,7 @@ const KEYS = {
   LAST_ACTIVITY: 'LAST_ACTIVITY',
   AUTH_TOKEN: 'AUTH_TOKEN',
   WALLET_KEY: '@save_Keys',
+  LANGUAGE: 'LANGUAGE',
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -30,10 +32,7 @@ export const getUserInfo = async () => {
 
 export const setPrivacyAndTermsAccepted = async () => {
   try {
-    await AsyncStorage.setItem(
-      KEYS.ACCEPTED_PRIVACY_AND_TERMS,
-      '1'
-    );
+    await AsyncStorage.setItem(KEYS.ACCEPTED_PRIVACY_AND_TERMS, '1');
     return true;
   } catch (err) {
     return false;
@@ -45,7 +44,7 @@ export const isPrivacyAndTermsAccepted = async () => {
     const response = await AsyncStorage.getItem(
       KEYS.ACCEPTED_PRIVACY_AND_TERMS,
     );
-    if (response && response == '1') {
+    if (response && response === '1') {
       return true;
     }
     return false;
@@ -74,7 +73,6 @@ export const getLastActivity = async () => {
   }
 };
 
-
 export const setAuthToken = async (authToken) => {
   try {
     await AsyncStorage.setItem(KEYS.AUTH_TOKEN, JSON.stringify(authToken));
@@ -96,26 +94,47 @@ export const getAuthToken = async () => {
 };
 
 export const walletKeys = {
-  password: "",
-  seedPhrase: "",
-  publicKey: "",
-  privateKey: "",
-  ethBal: "",
-  oceanBal: "",
-  phecorBal: ""
-}
+  password: '',
+  seedPhrase: '',
+  publicKey: '',
+  privateKey: '',
+  ethBal: '',
+  oceanBal: '',
+  phecorBal: '',
+};
 
-export const setWalletData = async(walletData) => {
+export const setWalletData = async (walletData) => {
   try {
     await AsyncStorage.setItem(KEYS.WALLET_KEY, JSON.stringify(walletData));
   } catch (err) {
     return null;
   }
-}
+};
 
 export const getWalletData = async () => {
   try {
     const response = await AsyncStorage.getItem(KEYS.WALLET_KEY);
+    if (response) {
+      return JSON.parse(response);
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const setLanguage = async (language) => {
+  try {
+    await AsyncStorage.setItem(KEYS.LANGUAGE, JSON.stringify(language));
+    i18next.changeLanguage(language);
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getLanguage = async () => {
+  try {
+    const response = await AsyncStorage.getItem(KEYS.LANGUAGE);
     if (response) {
       return JSON.parse(response);
     }

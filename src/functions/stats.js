@@ -421,7 +421,7 @@ export const fetchOverall = async (
         title: i18n.t('messages.errorOccured'),
         message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {

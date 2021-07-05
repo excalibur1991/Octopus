@@ -2,7 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: 'Energizado por:',
-      creatingWallet: 'Creando billetera ...'
+      creatingWallet: 'Creando billetera ...',
     },
     landing: {
       info: 'Información',
@@ -11,6 +11,11 @@ export default {
       wallet: 'Cartera',
       myStats: 'Mis estadísticas',
       swipeAI: 'Deslizar AI',
+      english: 'Inglesa',
+      chinese: 'China',
+      deutsch: 'Alemana',
+      japanese: 'Japonesa',
+      spanish: 'Española',
     },
     about: {
       heading: 'Ponga en marcha la nueva economía de datos',
@@ -39,7 +44,7 @@ export default {
       cumulative: 'ACUMULATIVA',
       count: 'CONTAR',
       cumulativeEarnings: 'GANANCIAS ACUMULATIVAS',
-      noChartDataAvailable: 'No hay datos gráficos disponibles.'
+      noChartDataAvailable: 'No hay datos gráficos disponibles.',
     },
     stats: {
       upload: 'SUBIR',
@@ -52,7 +57,7 @@ export default {
       cumulative: 'ACUMULATIVA',
       count: 'CONTAR',
       cumulativeEarnings: 'GANANCIAS ACUMULATIVAS',
-      noChartDataAvailable: 'No hay datos gráficos disponibles.'
+      noChartDataAvailable: 'No hay datos gráficos disponibles.',
     },
     wallet: {
       memoricPhrase: 'Frase mnemotécnica',
@@ -103,6 +108,7 @@ export default {
     },
     messages: {
       alert: 'Alerta',
+      ok: 'OK',
       pressed: 'Presionada',
       walletNotCreated: '¡Cartera no creada!',
       errorOccured: 'Ocurrió un error',

@@ -2,7 +2,7 @@ export default {
   translation: {
     loading: {
       poweredBy: 'Powered by:',
-      creatingWallet: 'Creating wallet...'
+      creatingWallet: 'Creating wallet...',
     },
     landing: {
       info: 'Info',
@@ -11,6 +11,11 @@ export default {
       wallet: 'Wallet',
       myStats: 'My Stats',
       swipeAI: 'Swipe AI',
+      english: 'English',
+      chinese: 'Chinese',
+      deutsch: 'Deutsch',
+      japanese: 'Japanese',
+      spanish: 'Spanish',
     },
     about: {
       heading: 'Kickstart the new data economy',
@@ -39,7 +44,7 @@ export default {
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
       cumulativeEarnings: 'CUMULATIVE EARNINGS',
-      noChartDataAvailable: 'No chart data available.'
+      noChartDataAvailable: 'No chart data available.',
     },
     stats: {
       upload: 'UPLOAD',
@@ -52,7 +57,7 @@ export default {
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
       cumulativeEarnings: 'CUMULATIVE EARNINGS',
-      noChartDataAvailable: 'No chart data available.'
+      noChartDataAvailable: 'No chart data available.',
     },
     wallet: {
       memoricPhrase: 'Memoric Phrase',
@@ -103,6 +108,7 @@ export default {
     },
     messages: {
       alert: 'Alert',
+      ok: 'Ok',
       pressed: 'Pressed',
       walletNotCreated: 'Wallet not created!',
       errorOccured: 'Error Occured',
