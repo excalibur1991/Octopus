@@ -6,7 +6,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TabComponent from './components/Tab';
+<<<<<<< HEAD
 import {StyleSheet, Image, Alert, View, Text} from 'react-native';
+=======
+import {StyleSheet, Image} from 'react-native';
+>>>>>>> dev
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
 import About from './screens/About';
@@ -17,10 +21,11 @@ import Learn from './screens/Learn';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
-import walletEntry from '../walletEntry';
+import walletEntry from '../walletEntry'
 import MyStats from './screens/MyStats';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
+<<<<<<< HEAD
 import i18n from './languages/i18n';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {useStateValue} from './services/State/State';
@@ -38,6 +43,8 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
+=======
+>>>>>>> dev
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -125,11 +132,17 @@ const Header = (
   headerRight: showRightButton
     ? () => (
         <Ripple
+<<<<<<< HEAD
           onPress={() =>
             Alert.alert(i18n.t('messages.alert'), i18n.t('messages.pressed'))
           }
           outerStyle={styles.rightButtonOuter}
           innerStyle={styles.rightButtonInner}>
+=======
+          onPress={() => alert('Pressed')}
+          outerStyle={styles.rightButton}
+          innerStyle={{padding: 5}}>
+>>>>>>> dev
           <Image
             style={styles.rightIcon}
             resizeMode="stretch"
@@ -397,7 +410,12 @@ const BottomTabs = () => (
       component={AboutStack}
       options={{
         unmountOnBlur: true,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="About" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="About" {...props} />,
+>>>>>>> dev
       }}
     />
     <Tab.Screen
@@ -405,7 +423,12 @@ const BottomTabs = () => (
       component={StatsStack}
       options={{
         unmountOnBlur: true,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="Stats" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="Stats" {...props} />,
+>>>>>>> dev
       }}
     />
     <Tab.Screen
@@ -414,7 +437,12 @@ const BottomTabs = () => (
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="SwipeAI" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="SwipeAI" {...props} />,
+>>>>>>> dev
       }}
     />
     <Tab.Screen
@@ -422,7 +450,12 @@ const BottomTabs = () => (
       component={LearnStack}
       options={{
         unmountOnBlur: true,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="Learn" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="Learn" {...props} />,
+>>>>>>> dev
       }}
     />
 
@@ -431,7 +464,12 @@ const BottomTabs = () => (
       component={WalletStack}
       options={{
         unmountOnBlur: true,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="Wallet" {...props} />,
+>>>>>>> dev
       }}
     />
     <Tab.Screen
@@ -439,7 +477,12 @@ const BottomTabs = () => (
       component={MyStatsStack}
       options={{
         unmountOnBlur: true,
+<<<<<<< HEAD
         tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
+=======
+        // eslint-disable-next-line react/display-name
+        tabBarButton: props => <TabComponent label="MyStats" {...props} />,
+>>>>>>> dev
       }}
     />
   </Tab.Navigator>

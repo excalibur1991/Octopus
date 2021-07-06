@@ -26,13 +26,14 @@ import i18next from 'i18next';
 import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
 
-getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
+getWeb3_.catch(
+  err => console.warn('Error in web3 initialization.', err)
+)
 
 const RootNavigator = () => {
   useEffect(() => {
-    checkLanguage();
-    checkStatus();
+      checkStatus();
   }, []);
 
   const [{progressSettings, alertSettings}, dispatch] = useStateValue();

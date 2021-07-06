@@ -10,10 +10,8 @@ import Button from '../components/Button';
 import {getWeb3} from '../web3/getWeb3';
 import {styles} from '../styles/walletactions';
 import {handleSendSignedTx} from '../functions/walletactions';
-import {withTranslation} from 'react-i18next';
-import {Alert} from 'react-native';
 
-const WalletActions = ({t, ...props}) => {
+const WalletActions = (props) => {
   const [destination, setDestination] = useState('');
   //const [password, setPassword] = useState("")
   const [amount, setAmount] = useState(0);
@@ -48,35 +46,33 @@ const WalletActions = ({t, ...props}) => {
     <ScrollView showsVerticalScrollIndicator={true}>
       <View style={styles.container}>
         <View>
-          <Text style={styles.bigTextView}>{t('walletActions.myAddress')}</Text>
+          <Text style={styles.bigTextView}>My Address</Text>
           <TextInput
             selectable={true}
             selectTextOnFocus={true}
-            placeholder={t('walletActions.publicAddress')}
+            placeholder="public address"
             value={newAccount}
           />
-          <Text style={styles.bigTextView}>{t('walletActions.sendTo')}</Text>
+          <Text style={styles.bigTextView}>Send to</Text>
           <TextInput
             selectable={true}
             selectTextOnFocus={true}
-            placeholder={t('walletActions.destinationAddress')}
+            placeholder="destination address"
             value={destination}
             onChangeText={(address) => setDestination(address)}
           />
-          <Text style={styles.bigTextView}>{t('walletActions.amountEth')}</Text>
-          <Text>
-            {tokenBal} {t('walletActions.ethAvailable')}
-          </Text>
+          <Text style={styles.bigTextView}>Amount (ETH)</Text>
+          <Text> {tokenBal} ETH Available</Text>
           <TextInput
             selectable={true}
             selectTextOnFocus={true}
-            placeholder={t('walletActions.amountToSend')}
+            placeholder="amount to send"
             onChangeText={(amount) => setAmount(amount)}
           />
           <Text />
           <Button
             color="#f2f2f2"
-            title={t('walletActions.send')}
+            title="Send"
             buttonStyle={styles.button}
             onPress={(amount) =>
               handleSendSignedTx(
@@ -90,28 +86,24 @@ const WalletActions = ({t, ...props}) => {
             }
             textStyle={styles.buttonText}
           />
-          <Text style={styles.bigTextView}>{t('walletActions.amount')}</Text>
-          <Text>0.22 {t('walletActions.quickraStaked')}</Text>
+          <Text style={styles.bigTextView}>Amount</Text>
+          <Text>0.22 Quickra-0 Staked</Text>
           <TextInput
-            placeholder={t('walletActions.amountToStake')}
+            placeholder="amount to stake"
             onChangeText={(amount) => setAmount(amount)}
           />
           <Button
             color="#f2f2f2"
-            title={t('walletActions.stake')}
+            title="Stake"
             buttonStyle={styles.button}
-            onPress={() =>
-              Alert.alert(i18n.t('messages.alert'), t('walletActions.stake'))
-            }
+            onPress={() => alert('Stake')}
             textStyle={styles.buttonText}
           />
           <Button
             color="#f2f2f2"
-            title={t('walletActions.unStake')}
+            title="UnStake"
             buttonStyle={styles.button}
-            onPress={() =>
-              Alert.alert(i18n.t('messages.alert'), t('walletActions.unStake'))
-            }
+            onPress={() => alert('Unstake')}
             textStyle={styles.buttonText}
           />
         </View>
@@ -128,4 +120,4 @@ const mapStateToProps = (state) => ({
   password: state.reducers.password,
 });
 
-export default withTranslation()(connect(mapStateToProps, null)(WalletActions));
+export default connect(mapStateToProps, null)(WalletActions);
