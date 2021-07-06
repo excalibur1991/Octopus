@@ -1,7 +1,5 @@
 import '../../global';
 import '../../shim';
-import {Alert} from 'react-native';
-import i18n from '../languages/i18n';
 import {userLogin, userRegister, getNounce} from '../services/API/APIManager';
 import { setAuthToken, getAuthToken, getWalletData, setWalletData } from '../services/DataManager';
 import * as Utils from '../web3/utils';
@@ -18,13 +16,6 @@ export const LoginProc = async (web3) => {
     var refresh_token = "";
     //check wallet
     let walletInfo = await getWalletData();
-    if (walletInfo == null) {
-      Alert.alert(
-        i18n.t('messages.alert'),
-        i18n.t('messages.walletNotCreated'),
-      );
-      return;
-    }
     let Web3 = web3.web3Instance
     var publicKey = ""
     var privateKey = ""
