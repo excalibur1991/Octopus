@@ -14,7 +14,7 @@ export default {
       english: 'Englisch',
       chinese: 'Chinesisch',
       deutsch: 'Deutsch',
-      japanese: 'japanisch',
+      japanese: 'Japanisch',
       spanish: 'Spanisch',
     },
     about: {
