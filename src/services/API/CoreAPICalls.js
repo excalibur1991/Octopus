@@ -63,6 +63,7 @@ export const getFile = async (relativeUrl) => {
     const result = await response.blob();
     return result;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };
@@ -150,6 +151,7 @@ export const postUserData = async (
       .catch(error => error);
     return response;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

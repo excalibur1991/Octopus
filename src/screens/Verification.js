@@ -14,7 +14,6 @@ import {
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {styles} from '../styles/swipeai';
-import {fetchImages, onSwipe} from '../functions/swipeai';
 
 import {isPrivacyAndTermsAccepted, setPrivacyAndTermsAccepted} from '../services/DataManager';
 
@@ -24,8 +23,6 @@ const Verification = () => {
   
   const initScreen = async ()=>{
     const _checked = await isPrivacyAndTermsAccepted();
-    console.log('_checked', _checked);
-  
     setTOCChecked(_checked);
   }
 
@@ -47,6 +44,7 @@ const Verification = () => {
        />
       }
       {
+        (isTOCChecked == true) &&
         <VeriPage />
       }
     </View>

@@ -296,6 +296,7 @@ export const fetchOverall = async (
     //const start = date.toISOString().replace(/T.*/, '').split('-').reverse().join('-');
     const start = '14-05-2021';
     const response = await getUserStats(start, end);
+    console.log(JSON.stringify(response));
     if (response && response.result) {
       let sum_anno_description = 0;
       let sum_anno_tags = 0;

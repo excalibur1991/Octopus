@@ -15,11 +15,12 @@ export const settings = {
   },
 
   metadata: {
-    getImageById: '/api/v1/get-image-by-id',
+    queryMetadata: '/api/v1/query-metadata',
+    getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',
     annotate: '/api/v1/annotate',
     reportImages: '/api/v1/report-images',
-    verifiyImage: '/api/v1/verify-image',
+    verifyImage: '/api/v1/verify-image',
     myMetadata: '/api/get/my-metadata'
   },
 

@@ -293,6 +293,7 @@ const BottomTabs = () => (
       component={VerificationStack}
       options={{
         unmountOnBlur: true,
+        tabBarVisible: false,
         // eslint-disable-next-line react/display-name
         tabBarButton: props => <TabComponent label="Verification" {...props} />,
       }}
