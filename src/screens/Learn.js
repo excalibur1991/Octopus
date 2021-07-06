@@ -36,14 +36,6 @@ const Learn = ({t}) => {
       icon: IonIcon,
       name: 'analytics-sharp',
     },
-    {
-      icon: MaterialIcon,
-      name: 'info',
-    },
-    {
-      icon: IonIcon,
-      name: 'analytics-sharp',
-    },
   ];
 
   const sectionsContent = [
