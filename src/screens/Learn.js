@@ -6,7 +6,6 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {Text, View, FlatList} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/learn';
-import {withTranslation} from 'react-i18next';
 
 const Learn = ({t}) => {
   const flatListRef = useRef(null);
@@ -152,4 +151,4 @@ const Learn = ({t}) => {
   );
 };
 
-export default withTranslation()(Learn);
+export default Learn;

@@ -5,36 +5,35 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {Text, View, FlatList} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
-import {withTranslation} from 'react-i18next';
 
-const LandingPage = ({navigation, t}) => {
+const LandingPage = ({navigation}) => {
   const options = [
     {
-      title: t('landing.myStats'),
+      title: 'My Stats',
       screen: 'MyStats',
       icon: 'analytics-sharp',
       Icon: IonIcon,
     },
     {
-      title: t('landing.learn'),
+      title: 'Learn',
       screen: 'Learn',
       icon: 'subscriptions',
       Icon: MaterialIcon,
     },
     {
-      title: t('landing.stats'),
+      title: 'Stats',
       screen: 'Stats',
       icon: 'analytics',
       Icon: MaterialIcon,
     },
     {
       icon: 'info',
-      title: t('landing.info'),
+      title: 'Info',
       screen: 'About',
       Icon: MaterialIcon,
     },
     {
-      title: t('landing.wallet'),
+      title: 'Wallet',
       screen: 'Wallet',
       icon: 'account-balance-wallet',
       Icon: MaterialIcon,
@@ -50,7 +49,7 @@ const LandingPage = ({navigation, t}) => {
         <View style={styles.swipeAiIcon}>
           <MaterialIcon size={50} name="swipe" color={theme.APP_COLOR} />
         </View>
-        <Text style={styles.buttonText}>{t('landing.swipeAI')}</Text>
+        <Text style={styles.buttonText}>Swipe AI</Text>
       </Ripple>
       <FlatList
         style={styles.Container}
@@ -78,4 +77,4 @@ const LandingPage = ({navigation, t}) => {
   );
 };
 
-export default withTranslation()(LandingPage);
+export default LandingPage;
