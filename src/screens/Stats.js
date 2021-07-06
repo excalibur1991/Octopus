@@ -11,11 +11,10 @@ import {
 
 import Button from '../components/Button';
 import {useStateValue} from '../services/State/State';
-import {styles} from '../styles/stats';
+import {styles} from '../styles/stats'
+import {fetchOverall} from '../functions/stats';
 
 const UploadIcon = require('../assets/uploads.png');
-import {updateChart, fetchOverall} from '../functions/stats';
-import {withTranslation} from 'react-i18next';
 
 var _arr_date = [];
 var _arr_uploads = [];
@@ -23,7 +22,7 @@ var _arr_tag_annotations = [];
 var _arr_text_annotations = [];
 var _arr_verifications = [];
 
-const Stats = ({t}) => {
+const Stats = () => {
   useEffect(() => {
     fetchOverall(
       dispatch,
@@ -56,7 +55,6 @@ const Stats = ({t}) => {
   const [verificationsQuicrra, setVerificationsQuicrra] = useState(0);
   const [cumuQuicrra, setCumuQuicrra] = useState(0);
 
-  const [graphTitle, setGraphTitle] = useState(t('stats.upload'));
   const [chartDate, setChartDate] = useState(['2020', '2021']); 
   const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']); 
   const [curChartState, setCurChartState] = useState('uploads');
@@ -79,12 +77,12 @@ const Stats = ({t}) => {
                 source={UploadIcon}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>{t('stats.uploads')}</Text>
+              <Text style={styles.itemTitle}>Uploads</Text>
               <Text style={styles.itemValue}>{uploads}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{uploadsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -94,12 +92,12 @@ const Stats = ({t}) => {
                 source={require('../assets/annotations.png')}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>{t('stats.annotations')}</Text>
+              <Text style={styles.itemTitle}>Annotations</Text>
               <Text style={styles.itemValue}>{annotations}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{annotationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -109,24 +107,22 @@ const Stats = ({t}) => {
                 source={require('../assets/verifications.png')}
                 style={styles.imageIcon}
               />
-              <Text style={styles.itemTitle}>{t('stats.verifications')}</Text>
+              <Text style={styles.itemTitle}>Verifications</Text>
               <Text style={styles.itemValue}>{verifications}</Text>
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{verificationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
             </View>
           </View>
         </View>
         <View style={styles.fullWidthBox}>
           <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
-          <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
+          <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>
-              {t('stats.cumulative')} {graphTitle} {t('stats.count')}
-            </Text>
+            <Text style={styles.graphTitle}>CUMULATIVE COUNT</Text>
             <LineChart
               style={styles.chart}
               data={curChartdata_new}
@@ -169,88 +165,11 @@ const Stats = ({t}) => {
               dragDecelerationEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
-              noDataText={t('stats.noChartDataAvailable')}
             />
           </View>
-          <View style={styles.buttonContainer}>
-            {curChartState !== 'uploads' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.uploads').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'uploads',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'annotations' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.annotations').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'annotations',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'verifications' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.verifications').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'verifications',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-          </View>
           <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>
-              {t('stats.cumulativeEarnings')}
-            </Text>
-            <Text style={styles.miniBoxFooter}>{t('stats.quicrra')}</Text>
+            <Text style={styles.graphTitle}>CUMULATIVE EARNINGS</Text>
+            <Text style={styles.miniBoxFooter}>QUICRRA-0</Text>
             <LineChart
               style={styles.chart}
               data={curCumuChartdata}
@@ -293,7 +212,6 @@ const Stats = ({t}) => {
               dragDecelerationEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
-              noDataText={t('stats.noChartDataAvailable')}
             />
           </View>
         </View>
@@ -302,4 +220,4 @@ const Stats = ({t}) => {
   );
 };
 
-export default withTranslation()(Stats);
+export default Stats;

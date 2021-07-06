@@ -6,7 +6,6 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {styles} from '../styles/swipeai';
 import {fetchImages, onSwipe} from '../functions/swipeai';
-import {withTranslation} from 'react-i18next';
 
 const SwipeAI = () => {
   useEffect(() => {
@@ -121,4 +120,4 @@ const SwipeAI = () => {
     </View>
   );
 };
-export default withTranslation()(SwipeAI);
+export default SwipeAI;
