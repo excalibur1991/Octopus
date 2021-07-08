@@ -21,7 +21,8 @@ export const settings = {
     annotate: '/api/v1/annotate',
     reportImages: '/api/v1/report-images',
     verifyImage: '/api/v1/verify-image',
-    myMetadata: '/api/get/my-metadata'
+    myMetadata: '/api/get/my-metadata',
+    getTags: '/staticdata/tags?type=$[word_type]'
   },
 
 

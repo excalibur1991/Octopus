@@ -169,3 +169,13 @@ export const reportImages = async(photos) => {
     return null;
   }
 }
+
+export const GetWords = async(word_type)=>{
+  try {
+    console.log('asdfasdfasdfasdfasdfasdf');
+    const response = await getData(s.metadata.getTags.replace('$[word_type]',word_type));
+    return response;
+  } catch(err) {
+    return null;
+  }
+}

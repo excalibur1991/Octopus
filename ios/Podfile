@@ -44,6 +44,8 @@ target 'DataUnion' do
 
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
 
+  pod 'ReactNativeKeyboardInput', :path => '../node_modules/react-native-keyboard-input'
+
   target 'DataUnionTests' do
     inherit! :complete
     # Pods for testing

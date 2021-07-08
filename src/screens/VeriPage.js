@@ -6,6 +6,9 @@ import {
     ScrollView,
     Keyboard,
     TextInput,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
     TouchableHighlightBase,
     KeyboardAvoidingView
 } from 'react-native';
@@ -17,11 +20,14 @@ import {
     queryMetadata,
     getImageById,
     reportImages,
-    verifyImage
+    verifyImage,
+    getBannedTags,
+    GetWords
   } from '../services/API/APIManager';
 import SwipeCards from 'react-native-swipe-cards';
 import { Chip, IconButton, Button } from 'react-native-paper';
 import { enableScreens } from 'react-native-screens';
+import Autocomplete from 'react-native-autocomplete-input'
 
 //CardView
 export const InCard = (props) => {
@@ -67,79 +73,115 @@ const cardImageArray = [];
 
 const VeriPage = (props) => {
 
-    const [checked, setChecked] = useState(false);
 
-    const [images, setImages] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-   // const [mainImage, setMainImage] = useState(null);
 
-    const [cutoutImage, setCutoutImage] = useState(null);
-    const [, dispatch] = useStateValue();
-    const [cards, setCards] = useState([]);
-    const [cardImages, setCardImages] = useState([]);
-    const [curPage, setCurPage] = useState(1);
-    const [maxPage, setMaxPage] = useState(1);
-    const [mainImage, setMainImage] = useState(null);
+  const [, dispatch] = useStateValue();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [cards, setCards] = useState([]);
+  const [cardImages, setCardImages] = useState([]);
+  const [curPage, setCurPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
 
-    //{"descriptions":["Waves in the baltic sea"],
-    // "image_id":"fffffff81e1c0000",
-    //"tag_data":["wave","waves","blue","sea","water","ocean"]}
-    const [metadata, setMetadata] = useState({});
-    const [imageId, setImageId] = useState("");
-    //reserve aannotation
-    const [annotations, setAnnotations] = useState({});
-    const [annoDescription, setAnnoDescription] = useState("");
-    const [annoTags, setAnnoTags] = useState([]);
-    
-    //verification: 
-    //    descriptions: {up_votes: ["red motorbike in front of a building"], down_votes: []},
-    //    tags: {up_votes: ["purple", "flower"], down_votes: ["green"]}
-    //verification
-    const [descriptions, setDescriptions] = useState([]);
-    const [downDescriptions, setDownDescriptions] = useState([]);
+  //{"descriptions":["Waves in the baltic sea"],
+  // "image_id":"fffffff81e1c0000",
+  //"tag_data":["wave","waves","blue","sea","water","ocean"]}
+  const [metadata, setMetadata] = useState({});
+  const [imageId, setImageId] = useState("");
+  //reserve aannotation
+  const [annotations, setAnnotations] = useState({});
+  const [annoDescription, setAnnoDescription] = useState("");
+  const [annoTags, setAnnoTags] = useState([]);
+  
+  //verification: 
+  //    descriptions: {up_votes: ["red motorbike in front of a building"], down_votes: []},
+  //    tags: {up_votes: ["purple", "flower"], down_votes: ["green"]}
+  //verification
+  const [descriptions, setDescriptions] = useState([]);
+  const [downDescriptions, setDownDescriptions] = useState([]);
 
-    const [tags, setTags] = useState([]);
-    const [downTags, setDownTags] = useState([]);
-    const [selectedTag, setSelectedTag] = useState("");
+  const [tags, setTags] = useState([]);
+  const [downTags, setDownTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState("");
 
-    const [annotationTags, setAnnotationTags] = useState([]);
+  const [annotationTags, setAnnotationTags] = useState([]);
 
-    const [textEditor,setTextEditor] = useState(null);
+  const [textEditor,setTextEditor] = useState(null);
 
-    const [editorType, setEditorType] = useState(""); //annotation | verification
+  const [editorType, setEditorType] = useState(""); //annotation | verification
 
-    const [bEditEnabled, setBEditEnabled] = useState(false);
-    const [tagEditValue, setTagEditValue] = useState("");
-    const [tagEditIndex, setTagEditindexx] = useState(0);
+  const [bEditEnabled, setBEditEnabled] = useState(false);
+  const [tagEditValue, setTagEditValue] = useState("");
+  const [tagEditIndex, setTagEditiIndex] = useState(0);
+
+  
+  const [recommendedTags, setRecommandedTags] = useState([]);
+  const [bannedTags, setBannedTags] = useState([]);
+
+  const [filteredTags, setFilteredTags] = useState([]);
+
+
+
+
+
+    const state = {
+      dispatch,
+      currentIndex, setCurrentIndex,
+      cards, setCards,
+      cardImages, setCardImages,
+      curPage, setCurPage,
+      maxPage, setMaxPage,
+      metadata, setMetadata,
+      setMetadata,
+      setImageId,
+      setDescriptions,
+      setTags,
+      setDownTags,
+      setDownDescriptions,
+      setSelectedTag,
+      setAnnotationTags,
+
+      textEditor,setTextEditor,
+      editorType, setEditorType,
+      bEditEnabled, setBEditEnabled,
+      tagEditIndex,setTagEditiIndex,
+      tagEditIndex, setTagEditiIndex,
+
+      recommendedTags, setRecommandedTags,
+      bannedTags, setBannedTags,
+    };
+
+    const initScreen = async() => {
+      //retreive tags
+    }
 
 
 
     //update metadata for currentIndex
-    const updateMetadata = async(cardArray, curIndex) => {
+    const updateMetadata = async(state, cardArray, curIndex) => {
       try{
         if(cardArray.length <= curIndex){
-          setMetadata({});
-          setImageId("");
-          setDescriptions([]);
-          setTags([]);
-          setDownTags([]);
-          setDownDescriptions([]);
-          setSelectedTag("");
+          state.setMetadata({});
+          state.setImageId("");
+          state.setDescriptions([]);
+          state.setTags([]);
+          state.setDownTags([]);
+          state.setDownDescriptions([]);
+          state.setSelectedTag("");
         }else {
           const metadata = cardArray[curIndex];
           console.log(JSON.stringify(metadata));
-          setMetadata(metadata);
-          setImageId(metadata.image_id);
-          setDescriptions(metadata.descriptions);
-          setTags(metadata.tag_data);
-          setDownTags([]);
-          setDownDescriptions([]);
-          setSelectedTag("");
+          state.setMetadata(metadata);
+          state.setImageId(metadata.image_id);
+          state.setDescriptions(metadata.descriptions);
+          state.setTags(metadata.tag_data);
+          state.setDownTags([]);
+          state.setDownDescriptions([]);
+          state.setSelectedTag("");
         }
 
-        setAnnotationTags([]);
-        setBEditEnabled(false);
-        setTagEditindexx(0);
+        state.setAnnotationTags([]);
+        state.setBEditEnabled(false);
+        state.setTagEditiIndex(0);
 
       }
       catch(err){
@@ -199,7 +241,7 @@ const VeriPage = (props) => {
           var arr = [...cards, ...response.result];
           setCards(arr)
           await updateImages(arr, currentIndex, 0);
-          await updateMetadata(arr, currentIndex);
+          await updateMetadata(state, arr, currentIndex);
 
         }
       }catch(err){
@@ -229,7 +271,7 @@ const VeriPage = (props) => {
     setCurrentIndex((++index));
     updateImages(cards, index, 0);
     callVerify(currentIndex);
-    updateMetadata(cards, index);
+    updateMetadata(state, cards, index);
   }
  
   const handleReport = (card) => {
@@ -238,7 +280,7 @@ const VeriPage = (props) => {
     updateImages(cards, index, 0);
     callReport(currentIndex);
 
-    updateMetadata(cards, index);
+    updateMetadata(state, cards, index);
   }
 
   const callVerify = async (currentIndex) => {
@@ -304,70 +346,76 @@ const VeriPage = (props) => {
     }
   }
 
- //add annotation tag
- const handleNewTag = ()=>{
-  setEditorType('annotation');
-  setTagEditindexx(annotationTags.length);
-  setBEditEnabled(true);
-  setTagEditValue("");
-  textEditor.focus();
+  //add annotation tag
+  const handleNewTag = ()=>{
+    setEditorType('annotation');
+    setTagEditiIndex(annotationTags.length);
+    setBEditEnabled(true);
+    setTagEditValue("");
+    textEditor.focus();
 
-   
- };
+    
+  };
 
- const editTag = (tag, index)=> {
-   setTagEditindexx(index);
-   setBEditEnabled(true);
-   setTagEditValue(tag);
-   textEditor.focus();
-   setTimeout(() => {
-  } ,100);
- };
+  const editTag = (tag, index)=> {
+    setTagEditiIndex(index);
+    setBEditEnabled(true);
+    setTagEditValue(tag);
+    textEditor.focus();
+    setTimeout(() => {
+    } ,100);
+  };
 
- const setTagsValue = (_tags, _editorType)=>{
-  if(editorType == 'annotation') {
-    setAnnotationTags(_tags);
-  }
-  else {
-    setTags(_tags);
-  }
-
- }
-
- const onSubmitText = ()=>{
-   const text = tagEditValue;
-    var _tags = [];
+  const setTagsValue = (_tags, _editorType)=>{
     if(editorType == 'annotation') {
+      setAnnotationTags(_tags);
+    }
+    else {
+      setTags(_tags);
+    }
+
+  }
+
+  const getTags = (tagtype)=>{
+    var _tags = [];
+    if(tagType == 'annotation') {
       _tags = [...annotationTags];
 
     }
     else {
       _tags = [...tags];
-    }
-    if(text == ""){
-      if(tagEditIndex < _tags.length) {
-        const tag = _tags[tagEditIndex];
-        deleteTag(tag, editorType);
-      }
-    }
-    else {
-      if(tagEditIndex >= _tags.length - 1) {
-        _tags.push(tagEditValue);
-        setTagsValue(_tags, editorType);
-      }else {
-        _tags[tagEditIndex] = tagEditValue;
-        setTagsValue(_tags, editorType);
-      }
-    }
- };
+    }  
+    return _tags;
+  }
 
- const setKeyboardListener = ()=> {
-  Keyboard.addListener('keyboardDidHide', ()=>{
-    setBEditEnabled(false);
-  });
- };
 
- const onChangeText = (text)=>{
+  const onSubmitText = ()=>{
+    const text = tagEditValue;
+      var _tags = getTags(editorType);
+      if(text === ""){
+        if(tagEditIndex < _tags.length) {
+          const tag = _tags[tagEditIndex];
+          deleteTag(tag, editorType);
+        }
+      }
+      else {
+        if(tagEditIndex >= _tags.length - 1) {
+          _tags.push(tagEditValue);
+          setTagsValue(_tags, editorType);
+        }else {
+          _tags[tagEditIndex] = tagEditValue;
+          setTagsValue(_tags, editorType);
+        }
+      }
+  };
+
+  const setKeyboardListener = ()=> {
+    Keyboard.addListener('keyboardDidHide', ()=>{
+      setBEditEnabled(false);
+    });
+  };
+
+  const onChangeText = (text)=>{
    setTagEditValue(text); 
   }
 
@@ -380,6 +428,76 @@ const VeriPage = (props) => {
       setCurrentIndex(0);
       fetchImages();
     }, []);
+
+
+    useEffect(()=>{
+      if(recommendedTags.length== 0){
+        GetWords('RECOMMENDED_WORDS').then(res=>{
+          setRecommandedTags(res.result);
+        });
+      }
+    }, [recommendedTags]);
+
+    useEffect(()=>{
+      if(!bannedTags){
+        GetWords('BANNED_WORDS').then(res=>{
+          setBannedTags(res.result);
+        });
+      }
+    }, bannedTags);
+
+    //mainloop
+    useEffect(()=>{
+
+    }
+    , [currentIndex]);
+
+
+    // FILTERS
+    const searchFilter = (filter_text) => {
+      if(filter_text == ""){
+        setFilteredTags([]) // local
+        return;
+      }
+      if (recommendedTags) {
+        const filteredItems = filter_text === '' ? recommendedTags : recommendedTags.filter(
+          (item) =>
+            item.slice(0, filter_text.length).toLocaleLowerCase().includes(filter_text)
+          )
+        const shuffled = filteredItems.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 5);
+        
+        setFilteredTags(selected) // local
+      }
+    };
+
+    const profanityFilter = (filter_text) => {
+      const filteredItems = badWords.filter((item) =>item.toLocaleLowerCase() === filter_text)
+        if (filteredItems.length === 0) {
+            return true
+        } else {
+            return false
+        }
+    };
+
+    const checkDuplicatedTag = (tag) => {
+      const low_tag = tag.toLocaleLowerCase()
+      const containTags = tags.filter((item)=>item.toLocaleLowerCase().contains(low_tag))
+      if(containTags.length != 0){
+        //tag exists
+        return false;
+      }
+      const containNewTags = annotationTags.filter((item)=>item.toLocaleLowerCase.contains(low_tag));
+      if(containNewTags.length != 0) {
+        //tag exists
+        return false;
+      }
+      return true;
+    }
+
+    useEffect(()=>{
+      searchFilter(tagEditValue);
+    }, [tagEditValue]);
 
     /**
      * SWIPE-DELETE Card - react-natve-swipecards
@@ -427,7 +545,7 @@ const VeriPage = (props) => {
           <View style={styles.TagsView}>
             
             <View style={{...styles.ChipWrapper, 
-            position: 'absolute',
+                  position: 'absolute',
                   left: 0,
                   top: -3,
                   }}>
@@ -445,7 +563,7 @@ const VeriPage = (props) => {
             {tags.map((vtag, index)=>(
                 <View style={ index == 0? styles.ChipWrapper1: styles.ChipWrapper}>
                   <Chip  
-                    key={index}
+                    key={vtag}
                     title={vtag}
                     onLongPress={()=>{deleteTag(vtag, 'verification')}}
                     onPress={()=>{editTag(vtag, index, 'verification')}}
@@ -478,16 +596,29 @@ const VeriPage = (props) => {
           </View>
 
         </ScrollView>
+        <View
+          style={{position : 'absolute', zIndex: 1001, bottom:bEditEnabled?48:-300, width:'100%'}}
+        >
+          {
+            filteredTags.map((item, index)=>(
+              <TouchableWithoutFeedback style={{backgroundColor:'red', width:'100%', height:50}} onPress={()=>{setTagEditValue(item)}}>
+              <Text style={{ backgroundColor:'#F2F2F2', fontSize: 16, borderColor:'#dddddd', borderTopWidth: 1, paddingVertical: 5, paddingLeft: 10}}>{item}</Text>
+              </TouchableWithoutFeedback >
+            ))
+
+          }
+        </View>
+
         <TextInput
-            ref={input => (setTextEditor(input))}
-            keyboardType = 'text'
-            value={tagEditValue}
-            
-            blurOnSubmit={true}
-            onChangeText={(text)=>{onChangeText(text)}}
-            onSubmitEditing={()=>{onSubmitText()}}
-            returnKeyType="done"
-            style={[styles.inputbox, {bottom:bEditEnabled? 0: -100}]}
+          ref={input => (setTextEditor(input))}
+          value={tagEditValue}
+          autoCapitalize='none'
+          blurOnSubmit={true} 
+          autoCorrect={false}
+          onChangeText={(text)=>{onChangeText(text)}}
+          onSubmitEditing={()=>{onSubmitText()}}
+          returnKeyType="done"
+          style={[styles.inputbox, {bottom:bEditEnabled? 0: -100}]}
         />
       </View>
     );
@@ -553,6 +684,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   ScrollView: {
+    height: '100%',
     padding: 10,
   },
   ChipText: {
