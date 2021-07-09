@@ -1,4 +1,4 @@
-import {View, Image} from 'react-native';
+import {View,Text, Image} from 'react-native';
 import Ripple from '../components/Ripple';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -30,7 +30,7 @@ const Verification = () => {
     initScreen();
   }, []);
 
-  
+  //set this true cause TOC first show always
   const [isTOCChecked, setTOCChecked] = useState(true);
 
   const [, dispatch] = useStateValue();
@@ -40,7 +40,7 @@ const Verification = () => {
         (isTOCChecked == false) &&
        <TOC 
         isTOCChecked={isTOCChecked}
-        setTOCChecked={()=>{setTOCChecked()}} 
+        setTOCChecked={()=>{setTOCChecked(true)}} 
        />
       }
       {

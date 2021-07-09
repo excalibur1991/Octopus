@@ -4,10 +4,8 @@ import {settings as s} from './Settings';
 export const getAllImages = async () => {
   try {
     const response = await getUserData(s.taxonomy.getImages);
-    console.log("response?", response)
     return response;
   } catch (err) {
-    console.log(err);
     return null;
   }
 };
@@ -121,7 +119,6 @@ export const queryMetadata = async(
       const response = await postUserData(s.metadata.queryMetadata, data);
       return response;
     } catch (err) {
-      console.log(err);
       return null;
     }
 }
@@ -133,7 +130,6 @@ export const getImageById = async(imageId) => {
     );
     return response;
   } catch (err) {
-    console.log(err);
     return null;
   }
 }
@@ -144,9 +140,8 @@ export const getImageById = async(imageId) => {
 * verification: {tags: {up_votes: [], down_votes: []}, descriptions: {up_votes: ["Peonies flower"], down_votes: []}}}
 */
 export const verifyImage = async(image_id, annotation, verification) => {
-  const data = {image_id: image_id, annotation: annotation, vereification: verification}
+  const data = {image_id: image_id, annotation: annotation, verification: verification}
   try {
-    console.log(JSON.stringify(data));
     const response = await postUserData(s.metadata.verifyImage, data);
     return response;
   } catch (err) {
@@ -162,7 +157,6 @@ export const verifyImage = async(image_id, annotation, verification) => {
 export const reportImages = async(photos) => {
   const data = {photos: [...photos]}
   try {
-    console.log(JSON.stringify(data));
     const response = await postUserData(s.metadata.reportImages, data);
     return response;
   } catch (err) {
@@ -172,7 +166,6 @@ export const reportImages = async(photos) => {
 
 export const GetWords = async(word_type)=>{
   try {
-    console.log('asdfasdfasdfasdfasdfasdf');
     const response = await getData(s.metadata.getTags.replace('$[word_type]',word_type));
     return response;
   } catch(err) {

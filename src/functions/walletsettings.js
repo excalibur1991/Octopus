@@ -67,10 +67,8 @@ export const webThreeReturned = async (context) => {
       }
     });
     try {
-      console.log('check account');
       Utils.checkAccount(context.web3, context.props.STPupdateAccounts);
     } catch (err) {
-      console.error('error', err);
     }
   }
 };

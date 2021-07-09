@@ -16,16 +16,14 @@ const Loading = ({navigation}) => {
   useEffect(() => {
     LoginProc(
       web3
-    );
-
-    setTimeout(() => {
+    ).then(()=>(
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{name: 'Home'}],
         }),
-      );
-    }, 2000);
+      )
+    ));
   }, []);
 
   return (

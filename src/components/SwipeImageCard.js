@@ -1,13 +1,25 @@
+import React from 'react';
 import {
     View, 
     Image,
+    Text,
     StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 
 
-const SwipeImageCard = (props) => {
+export const NoMoreCards = (props) => {
+
+  return (
+    <View style={styles.card}>
+      <Text>No more Images.</Text>
+    </View>
+  );
+
+};
+
+export const SwipeImageCard = (props) => {
     const {
         images = [], 
         image_id=''
@@ -55,8 +67,6 @@ const styles = StyleSheet.create({
   })
 
 SwipeImageCard.propTypes = {
-    images = PropTypes.array,
-    image_id = PropTypes.string,
+    images : PropTypes.array,
+    image_id: PropTypes.string,
 };
-
-export default SwipeImageCard;

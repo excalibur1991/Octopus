@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {
     View, 
     Image,
@@ -6,14 +7,10 @@ import {
     ScrollView,
     Keyboard,
     TextInput,
-    FlatList,
     TouchableWithoutFeedback,
-    TouchableOpacity,
-    TouchableHighlightBase,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
-import {theme} from '../services/Common/theme';
-import React, {useEffect, useState} from 'react';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
 import {
@@ -21,55 +18,17 @@ import {
     getImageById,
     reportImages,
     verifyImage,
-    getBannedTags,
     GetWords
   } from '../services/API/APIManager';
 import SwipeCards from 'react-native-swipe-cards';
 import { Chip, IconButton, Button } from 'react-native-paper';
-import { enableScreens } from 'react-native-screens';
-import Autocomplete from 'react-native-autocomplete-input'
 
-//CardView
-export const InCard = (props) => {
-  useEffect( () => {
-  }, []);
-
-  const findImage = (props) => {
-    var card = null;
-    props.images.map((data)=>{
-      if(data.image_id == props.image_id){
-        card = data;
-      }
-    })
-    return card ? {uri:card.image} : require('../assets/top_image.png')
-  }
-
-  return (
-    <View style={styles.card}>
-      <Image 
-        style={styles.thumbnail}
-        source={ 
-          findImage(props)
-        } />
-    </View>
-    );
-};
+import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
+import TagInput from '../components/TagInput'
+import AddTag from '../components/AddTag';
+import Tags from '../components/Tags'
 
 
-export const NoMoreCards = (props) => {
-  useEffect(()=>{
-
-  }, []);
-
-  return (
-    <View style={styles.card}>
-      <Text>No more Images.</Text>
-    </View>
-  );
-
-};
-
-const cardImageArray = [];
 
 const VeriPage = (props) => {
 
@@ -87,10 +46,10 @@ const VeriPage = (props) => {
   //"tag_data":["wave","waves","blue","sea","water","ocean"]}
   const [metadata, setMetadata] = useState({});
   const [imageId, setImageId] = useState("");
+  const [cardImageArray, setCardImageArray] = useState([]);
   //reserve aannotation
   const [annotations, setAnnotations] = useState({});
   const [annoDescription, setAnnoDescription] = useState("");
-  const [annoTags, setAnnoTags] = useState([]);
   
   //verification: 
   //    descriptions: {up_votes: ["red motorbike in front of a building"], down_votes: []},
@@ -119,92 +78,59 @@ const VeriPage = (props) => {
 
   const [filteredTags, setFilteredTags] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(false);
 
 
 
-
-    const state = {
-      dispatch,
-      currentIndex, setCurrentIndex,
-      cards, setCards,
-      cardImages, setCardImages,
-      curPage, setCurPage,
-      maxPage, setMaxPage,
-      metadata, setMetadata,
-      setMetadata,
-      setImageId,
-      setDescriptions,
-      setTags,
-      setDownTags,
-      setDownDescriptions,
-      setSelectedTag,
-      setAnnotationTags,
-
-      textEditor,setTextEditor,
-      editorType, setEditorType,
-      bEditEnabled, setBEditEnabled,
-      tagEditIndex,setTagEditiIndex,
-      tagEditIndex, setTagEditiIndex,
-
-      recommendedTags, setRecommandedTags,
-      bannedTags, setBannedTags,
-    };
-
-    const initScreen = async() => {
-      //retreive tags
-    }
+  const max_image_load = 5;
 
 
 
     //update metadata for currentIndex
-    const updateMetadata = async(state, cardArray, curIndex) => {
+    const updateMetadata = async( cardArray, curIndex) => {
       try{
         if(cardArray.length <= curIndex){
-          state.setMetadata({});
-          state.setImageId("");
-          state.setDescriptions([]);
-          state.setTags([]);
-          state.setDownTags([]);
-          state.setDownDescriptions([]);
-          state.setSelectedTag("");
+          setMetadata({});
+          setImageId("");
+          setDescriptions([]);
+          setTags([]);
+          setDownTags([]);
+          setDownDescriptions([]);
+          setSelectedTag("");
         }else {
           const metadata = cardArray[curIndex];
-          console.log(JSON.stringify(metadata));
-          state.setMetadata(metadata);
-          state.setImageId(metadata.image_id);
-          state.setDescriptions(metadata.descriptions);
-          state.setTags(metadata.tag_data);
-          state.setDownTags([]);
-          state.setDownDescriptions([]);
-          state.setSelectedTag("");
+          setMetadata(metadata);
+          setImageId(metadata.image_id);
+          setDescriptions(metadata.descriptions);
+          setTags(metadata.tag_data);
+          setDownTags([]);
+          setDownDescriptions([]);
+          setSelectedTag("");
         }
 
-        state.setAnnotationTags([]);
-        state.setBEditEnabled(false);
-        state.setTagEditiIndex(0);
+        setAnnotationTags([]);
+        setBEditEnabled(false);
+        setTagEditiIndex(0);
 
       }
       catch(err){
-        console.log(err)
       }
 
     }
 
+    //update image
     const updateImages = async (cardArray, curIndex, idx) => {
       try{
         //if (cards.length <= currentIndex) break;
         if(cardArray.length <= curIndex + idx) return;
-
-
 
         const image_id = cardArray[curIndex + idx].image_id;
         var found = false;
         cardImageArray.map((value,index)=>{
           if(value.image_id === image_id) found = true;
         })
-        console.log(cardImageArray.length, found, currentIndex, (currentIndex + idx));
         if(found) {
-          if(idx < 2 ){
+          if(idx < max_image_load ){
             updateImages(cardArray, curIndex, ++idx);
           }
           return;
@@ -215,24 +141,22 @@ const VeriPage = (props) => {
         fileReaderInstance.onload = () => {
           cardImageArray.push({image_id: image_id, image: fileReaderInstance.result});
           setCardImages([...cardImageArray]);
-         // console.log(cardImageArray.length);
-          if(idx < 2 ){
-            updateImages(cardArray, curIndex, ++idx);
+          if(idx < max_image_load ){
+             updateImages(cardArray, curIndex, ++idx);
           }
         };
       }catch(err){
-        console.log(err);  
       }
     }
 
-  const fetchImages = async () => {
+  const fetchImages = async (bUpdateImage=true) => {
       try {
         dispatch({
           type: actions.SET_PROGRESS_SETTINGS,
           show: true,
-        }); 
+        });
+        setIsLoading(true);
         const response = await queryMetadata(curPage);
-        console.log(JSON.stringify(response));
         if(response && response.result && response.result.length > 0) {
           setMaxPage(response.pageSize);
           setCurPage(response.page  + 1);
@@ -240,8 +164,10 @@ const VeriPage = (props) => {
           //actually this not works properly
           var arr = [...cards, ...response.result];
           setCards(arr)
-          await updateImages(arr, currentIndex, 0);
-          await updateMetadata(state, arr, currentIndex);
+          if(bUpdateImage) {
+            await updateImages(arr, currentIndex, 0);
+          }
+          await updateMetadata( arr, currentIndex);
 
         }
       }catch(err){
@@ -269,25 +195,26 @@ const VeriPage = (props) => {
   const handleVerify = (card) => {
     let  index = currentIndex;
     setCurrentIndex((++index));
-    updateImages(cards, index, 0);
+
+    //find nextImage
     callVerify(currentIndex);
-    updateMetadata(state, cards, index);
+    updateMetadata( cards, index);
   }
  
   const handleReport = (card) => {
     let  index = currentIndex;
     setCurrentIndex(++index);
-    updateImages(cards, index, 0);
+
     callReport(currentIndex);
 
-    updateMetadata(state, cards, index);
+    updateMetadata( cards, index);
   }
 
   const callVerify = async (currentIndex) => {
 
     const response = await verifyImage( 
       imageId,
-      {tags:[], description:""},
+      {tags:[...annotationTags], description:""},
       {
         tags: {
           up_votes:[...tags], 
@@ -296,14 +223,11 @@ const VeriPage = (props) => {
           up_votes:[...descriptions],
           down_votes:[...downDescriptions]}}
     );
-    console.log("callVerify()", JSON.stringify(response));
   }
 
   const callReport = async(currentIndex) => {
     const photos = [imageId,];
-    console.log(JSON.stringify(photos));
     const response = await reportImages(photos);
-    console.log("callReport()", JSON.stringify(response));
   }
 
   const deleteTag = (tag, tagType)=> {
@@ -312,7 +236,7 @@ const VeriPage = (props) => {
       var tagArr = [...tags];
       var downTagsArr = [...downTags];
         downTagsArr.push(tag);
-      const modTagArr = tagArr.filter((value)=> {return value != tag})
+      const modTagArr = tagArr.filter((value)=> (value != tag));
       if(modTagArr) {
         setSelectedTag(tag)
         setDownTags(downTagsArr);
@@ -321,11 +245,11 @@ const VeriPage = (props) => {
           setTags(modTagArr);
         }, 500);
       }
-    } else {
+    } else if(tagType == 'annotation') {
       var tagArr = [...annotationTags];
-      const modTagArr = tagArr.filter((value) => {return value != tag})
+      const modTagArr = tagArr.filter((value) => (value != tag));
       if(modTagArr) {
-
+        setSelectedTag(tag);
         setTimeout(()=>{
           setAnnotationTags(modTagArr);
         }, 500);
@@ -334,16 +258,28 @@ const VeriPage = (props) => {
   }
  
   const cardRemoved = (index) => {
-    console.log(`The index is ${index}`);
     let CARD_REFRESH_LIMIT = 3
     if (cards.length - index <= CARD_REFRESH_LIMIT + 1) {
-      console.log(`There are only ${cards.length - index - 1} cards left.`);
       try{
-        fetchImages();
+        fetchImages(false);
       }catch(err){
-        console.log(err);
       }
     }
+    if(currentIndex +1 < cards.length) {
+      if(!cardImageArray.find((image)=>(image.image_id == cards[currentIndex+1].image_id))){
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: true,
+        });
+        updateImages(cards, currentIndex, 0).then(()=>{
+          dispatch({
+            type: actions.SET_PROGRESS_SETTINGS,
+            show: false,
+          });
+        });
+      }
+    }
+
   }
 
   //add annotation tag
@@ -353,13 +289,12 @@ const VeriPage = (props) => {
     setBEditEnabled(true);
     setTagEditValue("");
     textEditor.focus();
-
-    
   };
 
-  const editTag = (tag, index)=> {
+  const editTag = (tag, index, _editorType)=> {
     setTagEditiIndex(index);
     setBEditEnabled(true);
+    setEditorType(_editorType);
     setTagEditValue(tag);
     textEditor.focus();
     setTimeout(() => {
@@ -376,7 +311,7 @@ const VeriPage = (props) => {
 
   }
 
-  const getTags = (tagtype)=>{
+  const getTags = (tagType)=>{
     var _tags = [];
     if(tagType == 'annotation') {
       _tags = [...annotationTags];
@@ -392,6 +327,9 @@ const VeriPage = (props) => {
   const onSubmitText = ()=>{
     const text = tagEditValue;
       var _tags = getTags(editorType);
+      const curTag = tagEditIndex < _tags.length ? _tags[tagEditIndex]: "";
+
+
       if(text === ""){
         if(tagEditIndex < _tags.length) {
           const tag = _tags[tagEditIndex];
@@ -399,10 +337,24 @@ const VeriPage = (props) => {
         }
       }
       else {
-        if(tagEditIndex >= _tags.length - 1) {
+
+        //profanity filteer
+        if(!profanityFilter(text)) {
+          alert('taboo words');
+          return;
+        }
+
+        if(isDuplicated(text) && curTag != text) {
+          alert('Duplicated Tag Exists!');
+          return;
+        }
+
+        if(tagEditIndex >= _tags.length) {
+          //new addition
           _tags.push(tagEditValue);
           setTagsValue(_tags, editorType);
         }else {
+          // modification
           _tags[tagEditIndex] = tagEditValue;
           setTagsValue(_tags, editorType);
         }
@@ -419,15 +371,33 @@ const VeriPage = (props) => {
    setTagEditValue(text); 
   }
 
+  const [keyboardOffset, setKeyboardOffset] = useState(-300);
+
+  const _keyboardDidShow = (event)=> {
+    setKeyboardOffset(Platform.OS === "ios" ? event.endCoordinates.height - 40 : 0);
+  };
+
+  const _keyboardDidHide=()=> {
+    setKeyboardOffset(-300);
+  }
 
     useEffect(() => {
       //setKeyboardListener();
       Keyboard.addListener('keyboardDidHide', ()=>{
         setBEditEnabled(false);
       });
+      Keyboard.addListener(
+        'keyboardDidShow',
+        _keyboardDidShow,
+    );
+    Keyboard.addListener(
+        'keyboardDidHide',
+        _keyboardDidHide,
+    );
       setCurrentIndex(0);
       fetchImages();
     }, []);
+
 
 
     useEffect(()=>{
@@ -439,26 +409,37 @@ const VeriPage = (props) => {
     }, [recommendedTags]);
 
     useEffect(()=>{
-      if(!bannedTags){
+      if(bannedTags.length == 0){
+
         GetWords('BANNED_WORDS').then(res=>{
           setBannedTags(res.result);
         });
       }
-    }, bannedTags);
+    }, [bannedTags]);
 
-    //mainloop
     useEffect(()=>{
-
-    }
-    , [currentIndex]);
+      if(isLoading){
+          dispatch({
+            type: actions.SET_PROGRESS_SETTINGS,
+            show: true,
+          });
+      }else {
+          dispatch({
+            type: actions.SET_PROGRESS_SETTINGS,
+            show: false,
+          });
+      }
+    },
+    [isLoading]);
 
 
     // FILTERS
-    const searchFilter = (filter_text) => {
+    const searchFilter = (_filter_text) => {
       if(filter_text == ""){
         setFilteredTags([]) // local
         return;
       }
+      const filter_text = _filter_text.toLocaleLowerCase();
       if (recommendedTags) {
         const filteredItems = filter_text === '' ? recommendedTags : recommendedTags.filter(
           (item) =>
@@ -466,13 +447,12 @@ const VeriPage = (props) => {
           )
         const shuffled = filteredItems.sort(() => 0.5 - Math.random());
         const selected = shuffled.slice(0, 5);
-        
         setFilteredTags(selected) // local
       }
     };
 
     const profanityFilter = (filter_text) => {
-      const filteredItems = badWords.filter((item) =>item.toLocaleLowerCase() === filter_text)
+      const filteredItems = bannedTags.filter((item) =>item.toLocaleLowerCase() === filter_text)
         if (filteredItems.length === 0) {
             return true
         } else {
@@ -480,19 +460,20 @@ const VeriPage = (props) => {
         }
     };
 
-    const checkDuplicatedTag = (tag) => {
-      const low_tag = tag.toLocaleLowerCase()
-      const containTags = tags.filter((item)=>item.toLocaleLowerCase().contains(low_tag))
+    //
+    const isDuplicated = (tag) => {
+      const low_tag = tag.trim().toLocaleLowerCase();
+      const containTags = tags.filter((item)=>(item.trim().toLocaleLowerCase() === low_tag))
       if(containTags.length != 0){
         //tag exists
-        return false;
+        return true;
       }
-      const containNewTags = annotationTags.filter((item)=>item.toLocaleLowerCase.contains(low_tag));
+      const containNewTags = annotationTags.filter((item)=>(item.trim().toLocaleLowerCase() === low_tag));
       if(containNewTags.length != 0) {
         //tag exists
-        return false;
+        return true;
       }
-      return true;
+      return false;
     }
 
     useEffect(()=>{
@@ -510,7 +491,8 @@ const VeriPage = (props) => {
      */
     return (
         <View style={styles.container}>
-
+         
+          
           <View style={styles.CardWrapper}>
 
             <Image
@@ -520,7 +502,11 @@ const VeriPage = (props) => {
             <View style={styles.CardView}>
             <SwipeCards
               cards={cards}
-              renderCard={(cardData)=> <InCard {...cardData} images={cardImages} currentIndex={currentIndex} />}
+              renderCard={(cardData)=> 
+              <SwipeImageCard 
+              image_id={cardData.image_id}
+              images={cardImages} 
+              />}
               renderNoMoreCards={() =><NoMoreCards />}
               nopeText='Reported'
               yupText='Verified' 
@@ -542,89 +528,46 @@ const VeriPage = (props) => {
             style={styles.ScrollView} 
             showsVerticalScrollIndicator={false}>
             
-          <View style={styles.TagsView}>
-            
-            <View style={{...styles.ChipWrapper, 
-                  position: 'absolute',
-                  left: 0,
-                  top: -3,
-                  }}>
-              <IconButton 
-                icon='plus'
-                color='#FFFFFF'
-                textStyle={styles.ChipText}
-                style={{    
-                  backgroundColor:  "#3A506B",
-                }}
-                onPress={()=>{handleNewTag()}}
-                />
+            <View style={styles.TagsView}>
+              <AddTag
+                handleNewTag={handleNewTag}
+              />
+              <Tags 
+                tags={tags}
+                tag_type={"verification"}
+                selectedTag={selectedTag}
+                deleteTag={deleteTag}
+                editTag={editTag}
+                bIndent={true}
+              />
+              <Tags 
+                tags={annotationTags}
+                tag_type={"annotation"}
+                selectedTag = {selectedTag}
+                deleteTag = {deleteTag}
+                editTag = {editTag}
+                bIndent = {tags.length == 0}
+              />
             </View>
-
-            {tags.map((vtag, index)=>(
-                <View style={ index == 0? styles.ChipWrapper1: styles.ChipWrapper}>
-                  <Chip  
-                    key={vtag}
-                    title={vtag}
-                    onLongPress={()=>{deleteTag(vtag, 'verification')}}
-                    onPress={()=>{editTag(vtag, index, 'verification')}}
-                    textStyle={styles.ChipText}
-                    style={[styles.Chip, {    
-                      backgroundColor:  selectedTag == vtag ? "#EB5454" : "#3A506B",
-                    }]}>
-                    {vtag}
-                  </Chip>
-                </View>
-              ))}              
-            
-            
-            {annotationTags.map((tag, index)=>(
-              <View style={styles.ChipWrapper}>
-                <Chip  
-                  key={index}
-                  title={tag}
-                  onLongPress={()=>{deleteTag(tag, 'annotation')}}
-                  onPress={()=>{editTag(tag, index, 'annotation')}}s
-                  textStyle={styles.ChipText}
-                  style={[styles.Chip, {    
-                    backgroundColor:  selectedTag == tag ? "#EB5454" : "#3A506B",
-                  }]}>
-                  {tag}
-                </Chip>
-              </View>
-            ))}
-            
-          </View>
-
-        </ScrollView>
-        <View
-          style={{position : 'absolute', zIndex: 1001, bottom:bEditEnabled?48:-300, width:'100%'}}
-        >
-          {
-            filteredTags.map((item, index)=>(
-              <TouchableWithoutFeedback style={{backgroundColor:'red', width:'100%', height:50}} onPress={()=>{setTagEditValue(item)}}>
-              <Text style={{ backgroundColor:'#F2F2F2', fontSize: 16, borderColor:'#dddddd', borderTopWidth: 1, paddingVertical: 5, paddingLeft: 10}}>{item}</Text>
-              </TouchableWithoutFeedback >
-            ))
-
-          }
-        </View>
-
-        <TextInput
-          ref={input => (setTextEditor(input))}
-          value={tagEditValue}
-          autoCapitalize='none'
-          blurOnSubmit={true} 
-          autoCorrect={false}
-          onChangeText={(text)=>{onChangeText(text)}}
-          onSubmitEditing={()=>{onSubmitText()}}
-          returnKeyType="done"
-          style={[styles.inputbox, {bottom:bEditEnabled? 0: -100}]}
-        />
+          </ScrollView>
+         <TagInput
+          bEditEnabled={bEditEnabled}
+          tagEditValue = {tagEditValue}
+          filteredTags = {filteredTags}
+          onChangeText = {onChangeText}
+          onSubmitEditing = {onSubmitText}
+          setTextEditor = {setTextEditor}
+          setTagEditValue = {setTagEditValue}
+          keyboardOffset = {keyboardOffset}
+         />
       </View>
     );
 };
 
 export default VeriPage;
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -632,17 +575,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0,
   },
-  card: {
-    alignItems: 'center',
-    overflow: 'hidden',
-    borderColor: 'grey',
-    backgroundColor: 'white',
-    borderRadius: 43,
-    width: 302,
-    height: 307,
-    borderWidth: 0,  
-    elevation: 1
-  },
+ 
   leftbar: {
       zIndex: 0,
       left: 0
@@ -651,20 +584,7 @@ const styles = StyleSheet.create({
     zIndex: 0,  
     right: 0
   },
-  thumbnail: {
-    width: 302,
-    height: 307,
-  },
-  text: {
-    fontSize: 20,
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-  noMoreCards: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
   CardWrapper: {
     //    justifyContent: 'space-between',
     height: 350,
@@ -679,42 +599,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     zIndex: 0,
+    minHeight: 100,
     flexWrap: 'wrap',
     marginBottom: 20,
     justifyContent: 'space-between'
   },
   ScrollView: {
-    height: '100%',
     padding: 10,
   },
-  ChipText: {
-    fontSize: 15,
-    color: '#ffffff',
-  },
-  Chip: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    borderRadius: 26,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  ChipWrapper1: {
-    marginHorizontal: 2,
-    marginVertical: 3,
-    flexWrap: 'wrap',
-    marginLeft:60,
-   },
-  ChipWrapper: {
-    marginHorizontal: 2,
-    marginVertical: 3,
-    flexWrap: 'wrap',
-   },
-  inputbox: {
-    width: '100%',
-    position: 'absolute',
-    
-    backgroundColor: '#0B132B',
-    color: 'white',
-    display: 'none'
-  }
+  
 })

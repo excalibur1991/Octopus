@@ -105,7 +105,6 @@ export const onSwipe = async (
       image_id: images[currentIndex].image_id,
     };
     const response = await storeUserResponse(reqBody);
-    console.log('abcde', response);
     if (response && response.status && response.status === 'success') {
       if (userResponse === 'YES') {
         next(

@@ -21,13 +21,14 @@ export const LoginProc = async (web3) => {
     var privateKey = ""
     var seedPhrase = ""
 
+
     if(walletInfo == null || walletInfo.publicKey == "") {
       //create new wallet
 
       const wallet = ethers.Wallet.createRandom();
-      const privateKey = wallet.privateKey;
-      const publicKey = wallet.address;
-      const seedPhrase = wallet.mnemonic.phrase;
+      privateKey = wallet.privateKey;
+      publicKey = wallet.address;
+      seedPhrase = wallet.mnemonic.phrase;
 
       let arr = new Uint8Array(20);
       crypto.getRandomValues(arr);
@@ -56,7 +57,7 @@ export const LoginProc = async (web3) => {
       nounce = nonceResponse.nonce; 
     }
 
-    let sign = Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)
+    let sign = await Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)
     if(sign && sign.signature) {
       signature = sign.signature;
 
