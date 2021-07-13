@@ -16,7 +16,7 @@ import DaiToken from '../abis/DaiToken.json';
 import erc20 from '../abis/erc20.json';
 import { contextType } from 'react-native/Libraries/Image/ImageBackground';
 
-const STORAGE_KEY = '@save_Keys'
+const STORAGE_KEY = '@saved_Keys'
 const STORAGE_KEY2 = '@save_Pwd'
 const STORAGE_KEY3 = '@save_Phrase'
 

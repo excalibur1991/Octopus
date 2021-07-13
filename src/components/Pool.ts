@@ -9,6 +9,9 @@ import { PoolFactory } from './PoolFactory'
 import Decimal from 'decimal.js'
 import {web3} from '../web3/utils'
 import {PRIVATE_KEY2, INFURA_KEY} from '../../env'
+import {OceanPool}  from '../components/OceanPool'
+
+
 
 const MaxUint256 =
   '115792089237316195423570985008687907853269984665640564039457584007913129639934'
@@ -224,7 +227,7 @@ export class Pool extends PoolFactory {
   transaction.sign(privateKey)
   console.log('getting approval...')
   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+  console.log('Success!!. Spender Approved to spend tokens  on behalf of owner....')
   console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
@@ -621,13 +624,22 @@ export class Pool extends PoolFactory {
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+        console.log('Swapping tokens in...')
+        console.log({Swap_GasEstimate: estGas, account:account, tokenIn:tokenIn,
+           minAmountOut: minAmountOut, maxPrice: maxPrice })
     } catch (e) {
-      this.logger.log('Error estimate gas swapExactAmountIn')
-      this.logger.log(e)
+      console.log('Error estimate gas swapExactAmountIn')
+      console.log(e)
       estGas = gasLimitDefault
     }
+
+   
     try {
-      result = await pool.methods
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY2, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
+
+      let tx = await pool.methods
         .swapExactAmountIn(
           tokenIn,
           web3.utils.toWei(tokenAmountIn),
@@ -635,16 +647,35 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minAmountOut),
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
-    } catch (e) {
+
+        let encodededABI = tx.encodeABI()
+
+        let rawTransaction = {
+         "from":account,
+         "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
+         "gasLimit": web3.utils.toHex(estGas + 1),
+         "to":poolAddress,
+         "data":encodededABI,
+         "nonce":web3.utils.toHex(count)
+     };
+   
+     let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
+     transaction.sign(privateKey)
+     result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+     console.log('Success!!. You have swapped your tokens in....')
+     console.log({SwapStatus: result.status, SwapReceipt: result})
+      
+    } 
+    catch (e) {
       console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
     }
+  
     return result
+
+
+
   }
+
 
   /**
    * swapExactAmountOut
@@ -682,28 +713,52 @@ export class Pool extends PoolFactory {
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+        console.log('Swapping tokens out...')
+        console.log({account: account, poolAddress: poolAddress, tokenIn: tokenIn, tokenOut:tokenOut, 
+         maxAmountIn:maxAmountIn,minAmountOut:minAmountOut,maxPrice:maxPrice})
     } catch (e) {
       estGas = gasLimitDefault
-      this.logger.log('Error estimate gas swapExactAmountIn')
-      this.logger.log(e)
+      console.log('Error estimate gas swapExactAmountOut')
+      console.log(e)
     }
-    try {
-      result = await pool.methods
-        .swapExactAmountOut(
-          tokenIn,
-          web3.utils.toWei(maxAmountIn),
-          tokenOut,
-          web3.utils.toWei(minAmountOut),
-          maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
-        )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
+    /**
+       try {
+
+          let Tx = require('ethereumjs-tx').Transaction;
+          let privateKey = Buffer.from(PRIVATE_KEY2, 'hex');
+          let count = await web3.eth.getTransactionCount(account);
+    
+          let tx = await pool.methods
+          .swapExactAmountOut(
+            tokenIn,
+            web3.utils.toWei(maxAmountIn),
+            tokenOut,
+            web3.utils.toWei(minAmountOut),
+            maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
+          )
+    
+            let encodededABI = tx.encodeABI()
+    
+            let rawTransaction = {
+             "from":account,
+             "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
+             "gasLimit": web3.utils.toHex(estGas + 1),
+             "to":poolAddress,
+             "data":encodededABI,
+             "nonce":web3.utils.toHex(count)
+         };
+       
+         let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
+         transaction.sign(privateKey)
+         result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+         console.log('Success!!. You have swapped your tokens Out....')
+         console.log({SwapOutStatus: result.status, SwapOutReceipt: result})
+
     } catch (e) {
       console.log(`ERROR: Failed to swap exact amount out: ${e.message}`)
     }
+
+     */
     return result
   }
 

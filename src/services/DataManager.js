@@ -5,7 +5,7 @@ const KEYS = {
   USER_INFO: 'USER_INFO',
   LAST_ACTIVITY: 'LAST_ACTIVITY',
   AUTH_TOKEN: 'AUTH_TOKEN',
-  WALLET_KEY: '@save_Keys',
+  WALLET_KEY: '@saved_Keys',
 };
 
 export const setUserInfo = async (userDetails) => {

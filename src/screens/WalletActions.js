@@ -48,9 +48,44 @@ const WalletActions = (props) => {
   const ocean = new OceanPool()
 
   const walletParams = props.route.params;
-  console.log({walletParams: walletParams, privateKey:walletParams.privateKey,
-               publicKey:walletParams.publicKey})
-               
+  //console.log('PrivateKey:', walletParams.privateKey)
+
+  
+  const swapTokensIn = async() => {
+    /**
+     * async swapExactAmountIn(   account: string, poolAddress: string, tokenIn: string, tokenAmountIn: string,
+    tokenOut: string, minAmountOut: string, maxPrice?: string)
+    */
+    const swapIn = await ocean.swapExactAmountIn(
+                 newAccount,
+                 destination,
+                 await ocean.getDTAddress(destination),
+                 '10',
+                 "0xE793a47892854260B42449291953dADbdDb4226d",
+                 '1',
+                 '100000000'
+                 )
+           return swapIn
+
+  }
+  const swapTokensOut = async() => { 
+    /**
+     * async swapExactAmountOut(   account: string, poolAddress: string, tokenIn: string, 
+     * maxAmountIn: string ,tokenOut: string,minAmountOut: string, maxPrice?: string)
+    */
+    const swapOut = await ocean.swapExactAmountOut(
+                 newAccount,
+                 destination,
+                 await ocean.getDTAddress(destination),
+                 '10',
+                 "0xE793a47892854260B42449291953dADbdDb4226d",
+                 '0.5',
+                 '100000000'
+                 )
+                return swapOut
+  
+  }
+
   const getLiquidityApproval = async() => {
     try{
       const dtAddress = await ocean.getDTAddress(destination)
@@ -116,12 +151,7 @@ const UnStakeDT = async() => {
   }
 }
 
-const onSuccess = (url) => {
 
-}
-const setApproval = (amount) => {
-    setApprovalAmount(amount)
-}
   useEffect(() => {
     const init = async () => {
 
@@ -194,6 +224,20 @@ const setApproval = (amount) => {
             title="Get Approval "
             buttonStyle={styles.button}
             onPress={() => getLiquidityApproval()}
+            textStyle={styles.buttonText}
+          />
+          <Button
+            color="#f2f2f2"
+            title="SwapIn "
+            buttonStyle={styles.button}
+            onPress={() => swapTokensIn()}
+            textStyle={styles.buttonText}
+          />
+          <Button
+            color="#f2f2f2"
+            title="SwapOut "
+            buttonStyle={styles.button}
+            onPress={() => swapTokensOut()}
             textStyle={styles.buttonText}
           />
           <TextInput

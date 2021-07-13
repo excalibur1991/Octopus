@@ -185,6 +185,7 @@ export class OceanPool extends Pool {
         // TODO: Potential timing attack, left side: true
         if (token !== this.oceanAddress) this.dtAddress = token
       }
+      console.log({oceanAddres: this.oceanAddress, token: token})
       console.log('DataToken address in this pool:', this.dtAddress)
     return this.dtAddress
   }
@@ -726,6 +727,7 @@ export class OceanPool extends Pool {
       console.log('ERROR: Too much reserve to add')
       return null
     }
+    
     const txid = await super.approve(
       account,
       dtAddress,
@@ -737,6 +739,7 @@ export class OceanPool extends Pool {
       console.log('ERROR: DT approve failed')
       return null
     }
+ 
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,

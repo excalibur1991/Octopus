@@ -1,15 +1,8 @@
 //import '../../shim.js'
 import React, {Component} from 'react'
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
-import Clipboard from '@react-native-community/clipboard';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid } from 'react-native'
 import {connect} from "react-redux"
 import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
-import * as Utils from '../web3/utils'
-import Dialog from "react-native-dialog"
-//import lightwallet from 'eth-lightwallet'
-import bip39 from 'react-native-bip39'
-import { hdPathString, localStorageKey } from '../web3/constants'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button';
 import {Picker} from '@react-native-picker/picker';
 import CButton from '../components/CButton';
@@ -17,10 +10,7 @@ import {styles} from '../styles/walletsettings';
 import {
   chkNetwork,
   webThreeReturned,
-  handleNewWallet,
   readStoredWallet,
-  handleNewAccount,
-  handleWalletDelete
 } from '../functions/walletsettings';
  
 
@@ -33,23 +23,12 @@ class WalletSettings extends Component {
       publicKey: '',
       privateKey: '',
       pword: '',
-      mnemonics:'',
-      newdialogVisible: false,
-      restoredialogVisible: false,
-      selectedLanguage: '',
+      mnemonics:'', 
       networktype: 'none',
-      wallet: ' ',
       ethTokenBal: ' ',
       oceanERC20TokenBal: ' ',
       phec0ERC20TokenBal: ' ',
       account: '0x0',
-      daiToken: '',
-      dappToken: {},
-      tokenFarm: {},
-      daiTokenBalance: '0',
-      dappTokenBalance: '0',
-      stakingBalance: '0',
-      age: '',
     };
 
 
@@ -57,14 +36,9 @@ class WalletSettings extends Component {
 
     this.web3 = null;
     this.rinkebynet = 'none';
-    this.ropstennet = 'none';
-    this.kovannet = 'none';
-    this.mainnet = 'none';
-    this.rinkebyCheck = 'none';
-    this.ropstenCheck = 'none';
     this.kovannetCheck = 'none';
     this.mainnetCheck = 'none';
-    //this.wallet = ""
+ 
   }
 
   componentDidMount() {
@@ -125,26 +99,35 @@ class WalletSettings extends Component {
             </View>
             <Text style={styles.bigTextView} >Mnemonic Phrase</Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.mnemonics}{' '}
-              </Text>
+              <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.mnemonics}
+               editable={false}         
+               secureTextEntry={this.state.mnemonics? true:false}   
+              />
               <CButton text={this.state.mnemonics}/>
             </View>
             <Text style={styles.bigTextView} >Private Key</Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.privateKey}{' '}
-              </Text>
+              <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.privateKey}
+               editable={false}         
+               secureTextEntry={this.state.privateKey? true:false}   
+              />
               <CButton text={this.state.privateKey}/>
             </View>
             <Text style={styles.bigTextView} >Password</Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {' '}
-                {this.state.pword}{' '}
-              </Text>
+              <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.pword}
+               editable={false}          
+               secureTextEntry={this.state.pword? true:false}        
+              />
               <CButton text={this.state.pword}/>
             </View>
             <Button
