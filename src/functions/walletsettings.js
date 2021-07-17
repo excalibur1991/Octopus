@@ -25,7 +25,7 @@ const STORAGE_KEY3 = '@save_Phrase'
 
 
 export const chkNetwork = async (context) => {
-  try {
+    try {
       //this.setState({networktype: await rinkebyConnect().eth.net.getNetworkType()})
       //this.setState({networktype: await kovanConnect().eth.net.getNetworkType()})
       //this.setState({networktype: await ropstenConnect().eth.net.getNetworkType()})
@@ -39,13 +39,13 @@ export const chkNetwork = async (context) => {
       //this.kovannetCheck = await kovanConnect().eth.net.isListening()
       context.mainnetCheck = await mainConnect().eth.net.isListening()
 
-  } catch (error) {
-  }
+    } catch (error) {
+    }
 
  if (context.rinkebyCheck == true || context.ropstenCheck == true || context.kovannetCheck == true || context.mainnetCheck == true ) {
   context.setState({ isConnected: true, })
-  }
-  //rinkebynet = await rinkebyConnect().eth.net.getNetworkType()
+ }
+ //rinkebynet = await rinkebyConnect().eth.net.getNetworkType()
  //this.setState({ rinkebynet: await rinkebyConnect().eth.net.getNetworkType()})
 }
 
@@ -75,7 +75,7 @@ export const webThreeReturned = async (context) => {
   }
 };
 
-export const createNewAccts = async (context) => {
+export const createNewAccts = async(context) => {
   let allWallets = []
   const entropy = await Utils.getRandom(16);
   try {
@@ -83,9 +83,9 @@ export const createNewAccts = async (context) => {
   } catch (error) {
   }
   return allWallets[0].address
-    ? allWallets[0].address
-    : allWallets[0].privateKey
-    ? allWallets[0].privateKey
+  ? allWallets[0].address
+  : allWallets[0].privateKey
+  ? allWallets[0].privateKey
   : ''
 }
 
@@ -113,13 +113,13 @@ export const handleWalletDelete = async(context) => {
 }
 
 
-export const handleNewWallet = async (context) => {
+export const handleNewWallet = async(context) => {
     let allWallets = []
     let allEthBal = " "
     let oceanrinkeby, oceanropsten, oceanmainnet = ""
     let daiToken, daiTokenBalance = " "
     let phec0rinkeby = ""
-  const entropy = await Utils.getRandom(16);
+    const entropy = await Utils.getRandom(16);
     let oceanRinkebyContract = "0x8967BCF84170c91B0d24D4302C2376283b0B3a07"; //rinkeby ocean
     let walletAddress = "0x5D363EC1EF55005C39c0e36C50b06242aeb3C3D4"; // wallet
     let oceanRopstenContract = "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9"; // ropsten ocean
@@ -137,7 +137,7 @@ export const handleNewWallet = async (context) => {
     let phecor0RinkebyTokenContract = "0xe793a47892854260b42449291953dadbddb4226d"
 
 
-  try {
+    try {
       
       allWallets = await (web3(context.state.networktype)).eth.accounts.wallet.create(1, entropy) 
       allEthBal = await (web3(context.state.networktype)).eth.getBalance(allWallets[0].address).then(bal => 
@@ -146,11 +146,11 @@ export const handleNewWallet = async (context) => {
         context.state.isConnected?context.setState({ wallet: allWallets }):context.setState({wallet: "" })
         context.state.isConnected?context.setState({publicKey: allWallets[0].address}): context.setState({publicKey: ''})
         context.state.isConnected?context.setState({privateKey: allWallets[0].privateKey}):context.setState({privateKey: " "})
-
-    // saving..
-  } catch (error) {
-  }
-  //DaiToken...
+      
+      // saving..
+    } catch (error) {
+    }
+    //DaiToken...
     const networkId = await (web3(context.state.networktype)).eth.net.getId()
     const daiTokenData = DaiToken.networks[5777]
 
@@ -158,24 +158,24 @@ export const handleNewWallet = async (context) => {
   if ((context.state.isConnected && context.state.networktype == "rinkeby")) {
       oceanrinkeby = new (web3(context.state.networktype)).eth.Contract(minABI, oceanRinkebyContract);
       phec0rinkeby = new (web3(context.state.networktype)).eth.Contract(erc20, phecor0RinkebyTokenContract);
+    
 
-
-    phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
+      phec0rinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
         let formatted = (new Web3(rinkeby)).utils.fromWei(balance )
         let rounded = (Math.round((formatted) * 100)) / 100
         context.setState({phec0ERC20TokenBal: rounded})
-      });
+    });
       oceanrinkeby.methods.balanceOf(walletAddress).call((error, balance) => {
         context.setState({oceanERC20TokenBal: (new Web3(rinkeby)).utils.fromWei(balance)})
-    });
-
+      });
+      
   }
   
   else if ((context.state.isConnected && context.state.networktype == "ropsten")) {
     oceanropsten = new (web3(context.state.networktype)).eth.Contract(minABI, oceanRopstenContract);
     oceanropsten.methods.balanceOf(walletAddress).call((error, balance) => {
         context.setState({oceanERC20TokenBal: (new Web3(ropsten)).utils.fromWei(balance)})
-      });
+    });
   } else if ((context.state.isConnected && context.state.networktype == "kovan")) {
         
   } else {
@@ -193,24 +193,24 @@ export const handleNewWallet = async (context) => {
   const saveWallet = async (context, walletdump) => {
     await AsyncStorage.setItem(localStorageKey, JSON.stringify(walletdump));
   };
-
+  
   try {
     
     await bip39.generateMnemonic(128).then((phrase) => {
       context.setState({mnemonics: phrase})
       //seedPhrase = phrase
-      // Utils.updateSeedPhrase(seedPhrase, context.props.STPupdateSeedPhrase)
+     // Utils.updateSeedPhrase(seedPhrase, context.props.STPupdateSeedPhrase)
     })  
 
     let arr = new Uint8Array(20);
     crypto.getRandomValues(arr);
 
     let password = btoa(String.fromCharCode(...arr)).split('').filter(value => {
-        return !['+', '/', '='].includes(value);
+        return !['+', '/' ,'='].includes(value);
       }).slice(0,10).join('');
 
     context.setState({pword: password})  
-
+    
     sKeys = {
       password: context.state.pword,
       seedPhrase: context.state.mnemonics,
@@ -220,14 +220,14 @@ export const handleNewWallet = async (context) => {
       oceanBal: context.state.oceanERC20TokenBal,
       phecorBal: context.state.phec0ERC20TokenBal
     }
-    context.storeKeys = sKeys;
+     context.storeKeys = sKeys;
 
     context.saveWallet();
-      }
-  catch(err){
-    }
-
   }
+  catch(err){
+  }
+  
+}
 
 export const saveData = async (context) => {
   try {
@@ -250,7 +250,7 @@ export const readData = async (context) => {
     if (userAge !== null) {
       //setAge(userAge)
       context.setState({age: userAge});
-    }
+}
   } catch (e) {
     Alert.alert(i18n.t('messages.alert'), i18n.t('messages.failedToFetchData'));
   }

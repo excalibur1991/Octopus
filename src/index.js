@@ -506,4 +506,3 @@ const CreateRootNavigator = () => {
 };
 
 export default CreateRootNavigator;
-s

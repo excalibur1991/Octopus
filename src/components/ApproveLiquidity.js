@@ -1,6 +1,5 @@
 //import onlyone from '../abis/onlyone-abi.json'
 import jsonpoolABI from '@oceanprotocol/contracts/artifacts/BPool.json'
-//import {web3} from '../web3/utils'
 import Web3 from 'web3'
 import {allowance} from '../components/AddDTLiquidity'
 import {getFairGasPrice} from '../components/AddDTLiquidity'

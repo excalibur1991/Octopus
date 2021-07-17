@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {theme} from '../services/Common/theme';
+import React, {useState, useEffect} from 'react';
 import {LineChart} from 'react-native-charts-wrapper';
 import {
   Image,
   ScrollView,
   Text,
-  StyleSheet,
   View,
   Dimensions,
   processColor,
-
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -18,6 +15,7 @@ import {styles} from '../styles/mystats';
 import {sumCumuData, updateChart, fetchOverall} from '../functions/mystats';
 import {withTranslation} from 'react-i18next';
 
+const UploadIcon = require('../assets/uploads.png');
 
 var _arr_date = [];
 var _arr_uploads = [];
@@ -130,85 +128,6 @@ const MyStats = ({t}) => {
               {t('myStats.cumulative')} {graphTitle} {t('myStats.count')}
             </Text>
             <LineChart
-              fromZero
-              transparent
-              height={200}
-              yAxisSuffix=""
-              style={styles.graph}
-              withVerticalLines={false}
-              width={Dimensions.get('window').width}
-              data={curChartdata}
-              chartConfig={{
-                decimalPlaces: 0,
-                fillShadowGradientOpacity: 1,
-                fillShadowGradient: '#a5c4f8',
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              }}
-              noDataText={t('myStats.noChartDataAvailable')}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            {curChartState !== 'uploads' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('myStats.uploads').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'uploads',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'annotations' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('myStats.annotations').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'annotations',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'verifications' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('myStats.verifications').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'verifications',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            </View>
-            <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>{t('myStats.cumulative').toUpperCase()} {t('myStats.count').toUpperCase()}</Text>
-            <LineChart
               style={styles.chart}
               data={curChartdata_new}
               chartDescription={{text: ''}}
@@ -218,19 +137,19 @@ const MyStats = ({t}) => {
                 backgroundTint: processColor('black'),
                 markerColor: processColor('#80cccccc'),
                 textColor: processColor('white'),
-                    }}
-                    xAxis={{
-                      granularityEnabled: true,
-                      granularity: 1,
-                      position: 'BOTTOM',
-                      valueFormatter: chartDate,
-                      drawGridLines:false
-                    }}
-                    yAxis={{
-                      left:{axisMinimum:0},
-                       right: {enabled: false},
-                       drawGridLines: false,
-                      }}
+              }}
+              xAxis={{
+                granularityEnabled: true,
+                granularity: 1,
+                position: 'BOTTOM',
+                valueFormatter: chartDate,
+                drawGridLines:false
+              }}
+              yAxis={{
+                 left:{axisMinimum:0},
+                 right: {enabled: false},
+                 drawGridLines: false,
+                }}
               drawGridBackground={false}
               borderColor={processColor('#F0C0FF8C')}
               borderWidth={0}
@@ -251,7 +170,7 @@ const MyStats = ({t}) => {
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
               noDataText={t('myStats.noChartDataAvailable')}
-             />
+            />
           </View>
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>
@@ -277,7 +196,7 @@ const MyStats = ({t}) => {
                 drawGridLines:false
               }}
               yAxis={{
-                left:{axisMinimum:0},
+                 left:{axisMinimum:0},
                  right: {enabled: false},
                  drawGridLines: false,
                 }}
@@ -301,7 +220,7 @@ const MyStats = ({t}) => {
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
               noDataText={t('myStats.noChartDataAvailable')}
-                          />
+            />
           </View>
         </View>
       </ScrollView>

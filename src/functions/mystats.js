@@ -9,13 +9,8 @@ import {
   calcVeriCumu,
 } from '../services/Common/CommonFunctions';
 import i18n from '../languages/i18n';
-
-var _arr_date = [];
-var _arr_uploads = [];
-var _arr_tag_annotations = [];
-var _arr_text_annotations = [];
-var _arr_verifications = [];
 import update from 'immutability-helper';
+
 
 //Get uploads/annotations/verification cumulative points per date
 const sumCumuData = (  
@@ -27,7 +22,7 @@ const sumCumuData = (
   _arr_tag_annotations,
   _arr_text_annotations,
   _arr_verifications
-) => {
+  ) => {
   var curCumuValue = 0;
   let _chartDataX = [];
   let _chartDataY = [];
@@ -58,38 +53,38 @@ const sumCumuData = (
   });
 
   //chart dataset
-let chartDataClone = {};
-const arr = update(chartDataClone, {
-  $set: {
-    dataSets: [
-      {
-        values: _chartDataY,
-        label: 'Earnings',
-        config: {
-          lineWidth: 1,
-          drawFilled: true,
-          fillAlpha: 35,
-          color: processColor('#28a745'),
-          mode: 'LINEAR',
-          drawValues: false,
-          axisDependency: 'RIGHT',
-          fillColor: processColor('#28a745'),
-          circleRadius: 1,
-          circleColor: processColor('#28a745'),
-          highlightLineWidth: 1,
-          highlightColor: processColor('#28a745'),
-          drawCircleHole: false,
-        },
-      }
-    ],
-  }
-  
-});
+  let chartDataClone = {};
+  const arr = update(chartDataClone, {
+    $set: {
+      dataSets: [
+        {
+          values: _chartDataY,
+          label: 'Earnings',
+          config: {
+            lineWidth: 1,
+            drawFilled: true,
+            fillAlpha: 35,
+            color: processColor('#28a745'),
+            mode: 'LINEAR',
+            drawValues: false,
+            axisDependency: 'RIGHT',
+            fillColor: processColor('#28a745'),
+            circleRadius: 1,
+            circleColor: processColor('#28a745'),
+            highlightLineWidth: 1,
+            highlightColor: processColor('#28a745'),
+            drawCircleHole: false,
+          },
+        }
+      ],
+    }
+    
+  });
 
 
 //  chartDataClone.dataSets[0].values = [..._chartDataY];
-setCurCumuChartdata(arr);
-setCumuChartDate(_chartDataX);
+  setCurCumuChartdata(arr);
+  setCumuChartDate(_chartDataX);
 
 };
 
@@ -100,22 +95,22 @@ const getChartData = (
   _arr_tag_annotations,
   _arr_text_annotations,
   _arr_verifications
-) => {
+  ) => {
   //let _chartDataX = [];
     //let _chartDataY = [];
     let _chartData = [];
-  var curValue = 0;
+    var curValue = 0;
 
-  if (chartType == 'uploads') {
-    curValue = 0;
-    _arr_uploads.map((value, index) => {
-      curValue += value;
+    if (chartType == 'uploads') {
+      curValue = 0;
+      _arr_uploads.map((value, index) => {
+        curValue += value;
         _chartData.push({x:index, y:curValue, marker: `${_arr_date[index]}\r\nUploads:${curValue}`});
-    });
+      });
       //setGraphTitle('UPLOAD');
-  } else if (chartType == 'annotations') {
-    curValue = 0;
-    _arr_tag_annotations.map((value, index) => {
+    } else if (chartType == 'annotations') {
+      curValue = 0;
+      _arr_tag_annotations.map((value, index) => {
         curValue += value + _arr_text_annotations[index];
         _chartData.push({x:index, y:curValue, marker:`${_arr_date[index]}\r\nAnnotations:${curValue}`});
       });
@@ -124,9 +119,9 @@ const getChartData = (
     } else if (chartType == 'verifications') {
       curValue = 0;
       _arr_verifications.map((value, index) => {
-      curValue += value;
+        curValue += value;
         _chartData.push({x:index, y:curValue, marker:`${_arr_date[index]}\r\nVerifications:${curValue}`});
-    });
+      });
       //setGraphTitle('VERIFICATION');
     }
 
@@ -175,42 +170,9 @@ const updateChart = (
   _arr_date.map((value)=>{
     _chartDate.push(value.split('-')[2]);
   });
-  var curValue = 0;
 
-  if (chartType == 'uploads') {
-    _charDataY = [..._arr_uploads];
-    curValue = 0;
-    _arr_uploads.map((value, index) => {
-      curValue += value;
-      _chartDataY.push(curValue);
-    });
-    setGraphTitle(i18n.t('myStats.upload'));
-  } else if (chartType == 'annotations') {
-    curValue = 0;
-    _arr_tag_annotations.map((value, index) => {
-      curValue += value;
-      _chartDataY.push(curValue);
-    });
 
-    curValue = 0;
-    _arr_text_annotations.map((value, index) => {
-      curValue += value;
-      _chartDataY[index] = curValue;
-    });
-    setGraphTitle(i18n.t('myStats.annotation'));
-  } else if (chartType == 'verifications') {
-    curValue = 0;
-    _arr_verifications.map((value, index) => {
-      curValue += value;
-      _chartDataY[index] = curValue;
-    });
-    setGraphTitle(i18n.t('myStats.verification'));
-  }
-  _chartDataX.push(
-    (Number(_chartDataX[_chartDataX.length - 1]) + 1).toString(),
-  );
-  let xData = [];
-  _chartDataX.map((value, index) => {
+  _chartDate.map((value, index) => {
     if (index == 0) {
     } else if (index == _chartDate.length - 1) {
     } else {
@@ -222,7 +184,7 @@ const updateChart = (
   });
 
   try{
-  //chart dataset
+      //chart dataset
     let chartDataClone = {};
     const arr = update(chartDataClone, {
       $set:{
@@ -247,7 +209,7 @@ const updateChart = (
             },
           },
           {
-            values: annotationChart,
+           values: annotationChart,
             label: 'Annotations',
             config: {
               lineWidth: 1,
@@ -268,7 +230,7 @@ const updateChart = (
           {
             values: verficationChart,
             label: 'Verifications',
-              config: {
+             config: {
               lineWidth: 1,
               drawFilled: true,
               fillAlpha: 35,
@@ -285,13 +247,13 @@ const updateChart = (
             },
           },
         ]
-      
+     
       }
 
 
     });
     setCurChartdataNew(arr);
-  setCurChartState(chartType);
+    setCurChartState(chartType);
     setChartDate(_chartDate);
   }
   catch(err){
@@ -320,7 +282,7 @@ export const fetchOverall = async (
   setCurChartdataNew,
   setCurCumuChartdata
 ) => {
-  try {
+    try {
     dispatch({
       type: actions.SET_OVERALL,
     });

@@ -2,8 +2,6 @@ import React, {useEffect} from 'react';
 import {Text, Image, View, StyleSheet} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import '../../global';
-import '../../shim';
 import {styles} from '../styles/loading';
 import {LoginProc} from '../functions/loading';
 import {withTranslation} from 'react-i18next';

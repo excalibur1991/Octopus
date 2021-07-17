@@ -12,7 +12,7 @@ export default {
       myStats: 'My Stats',
       swipeAI: 'Swipe AI',
       upload: 'Upload',
-      verification: 'Verification',
+      verification: 'Verify',
       english: 'English',
       chinese: 'Chinese',
       deutsch: 'Deutsch',

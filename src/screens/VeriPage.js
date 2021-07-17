@@ -684,13 +684,13 @@ const VeriPage = (props) => {
             <BountyView 
               wrapperStyle={{marginTop: annotationTags.length == 0 && tags.length == 0? 50: 10}}
               bountyData={piis}
-              onPress={handlePii}
+              handlePress={handlePii}
             />
             <Divider />
             <BountyView 
               wrapperStyle={{ marginBottom: 20}}
               bountyData={bounties}
-              onPress={handleBounty}
+              handlePress={handleBounty}
             />
           </ScrollView>
         <TagInput

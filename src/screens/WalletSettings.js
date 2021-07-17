@@ -1,4 +1,4 @@
-2//import '../../shim.js'
+//import '../../shim.js'
 import React, {Component} from 'react'
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
 import Clipboard from '@react-native-community/clipboard';
@@ -32,7 +32,7 @@ class WalletSettings extends Component {
       publicKey: '',
       privateKey: '',
       pword: '',
-      mnemonics: '',
+      mnemonics:'',
       newdialogVisible: false,
       restoredialogVisible: false,
       selectedLanguage: '',
@@ -49,6 +49,7 @@ class WalletSettings extends Component {
       dappTokenBalance: '0',
       stakingBalance: '0',
       age: '',
+      pword: ''
     };
 
 
@@ -76,17 +77,14 @@ class WalletSettings extends Component {
   render() {
     const {t} = this.props;
     return (
-      <ScrollView showsVerticalScrollIndicator={true}>
+      <ScrollView  showsVerticalScrollIndicator={true}>
         <View style={{display: 'none'}}>
           <Picker
             selectedValue={this.state.networktype}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue})
+              this.setState({networktype: itemValue })
             }>
             <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
-            <Picker.Item label={t('walletSettings.rinkeby')} value="rinkeby" />
-            <Picker.Item label={t('walletSettings.kovan')} value="kovan" />
-            <Picker.Item label={t('walletSettings.ropsten')} value="ropsten" />
           </Picker>
           <View style={styles.alignCenter}>
             <Text>
@@ -128,7 +126,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.publicKey}
               </Text>
-              <CButton text={this.state.publicKey} />
+              <CButton text={this.state.publicKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.mnemonicPhrase')}
@@ -137,7 +135,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.mnemonics}
               </Text>
-              <CButton text={this.state.mnemonics} />
+              <CButton text={this.state.mnemonics}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.privateKey')}
@@ -146,7 +144,7 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.privateKey}
               </Text>
-              <CButton text={this.state.privateKey} />
+              <CButton text={this.state.privateKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.password')}
@@ -155,31 +153,10 @@ class WalletSettings extends Component {
               <Text numberOfLines={1} style={styles.boxText}>
                 {this.state.pword}
               </Text>
-              <CButton text={this.state.pword} />
+              <CButton text={this.state.pword}/>
             </View>
           </View>
-          <Button
-            color="#f2f2f2"
-            title={t('walletSettings.more')}
-            buttonStyle={styles.buttonStyle}
-            onPress={() => handleNewAccount(this)}
-            textStyle={styles.buttonText}
-          />
-          <Button
-            color="#f2f2f2"
-            title={t('walletSettings.deleteWallet')}
-            buttonStyle={styles.buttonStyle}
-            onPress={this.handleWalletRecovery}
-            textStyle={styles.buttonText}
-          />
         </View>
-        <Button
-          color="#f2f2f2"
-          title={t('walletSettings.newWallet')}
-          buttonStyle={styles.buttonStyle}
-          onPress={() => handleNewWallet(this)}
-          textStyle={styles.buttonText}
-        />
       </ScrollView>
     )
   }

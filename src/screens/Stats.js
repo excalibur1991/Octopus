@@ -125,7 +125,7 @@ const Stats = ({t}) => {
         <View style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>
-              {t('stats.cumulative')} {graphTitle} {t('stats.count')}
+              {t('stats.cumulative')} {t('stats.count')}
             </Text>
             <LineChart
               style={styles.chart}
@@ -171,80 +171,6 @@ const Stats = ({t}) => {
               keepPositionOnRotation={false}
               noDataText={t('stats.noChartDataAvailable')}
             />
-          </View>
-          <View style={styles.buttonContainer}>
-            {curChartState !== 'uploads' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.uploads').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'uploads',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'annotations' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.annotations').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'annotations',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
-            {curChartState !== 'verifications' && (
-              <View style={styles.buttonInnerContainer}>
-                <Button
-                  color="#F5F6FC"
-                  title={t('stats.verifications').toUpperCase()}
-                  buttonStyle={styles.button}
-                  onPress={() =>
-                    updateChart(
-                      'verifications',
-                      setGraphTitle,
-                      curChartdata,
-                      setCurChartdata,
-                      setCurChartState,
-                      _arr_date,
-                      _arr_uploads,
-                      _arr_tag_annotations,
-                      _arr_text_annotations,
-                      _arr_verifications,
-                    )
-                  }
-                  textStyle={styles.buttonText}
-                />
-              </View>
-            )}
           </View>
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>
