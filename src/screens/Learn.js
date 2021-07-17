@@ -3,9 +3,10 @@ import {theme} from '../services/Common/theme';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import Ripple from '../components/Ripple';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {Text, View, FlatList} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {ScrollView, Text, View, FlatList} from 'react-native';
 import {styles} from '../styles/learn';
+import {withTranslation} from 'react-i18next';
 
 const Learn = ({t}) => {
   const flatListRef = useRef(null);
@@ -87,7 +88,8 @@ const Learn = ({t}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{t('learn.heading')}</Text>
+      <ScrollView>
+        <Text style={styles.header}>{t('learn.heading')}</Text>
       <View style={styles.row}>
         <MaterialIcon name="arrow-left" size={30} onPress={()=>{
            if (iconListRef.current && iconIndex-2 >=0) {
@@ -131,7 +133,10 @@ const Learn = ({t}) => {
             setIconIndex(iconIndex+2);
           }
         }}/>
-      </View>
+        <Text style={styles.text}>{t('learn.para')}</Text>
+        <View style={styles.box}>
+          <YoutubePlayer height={180} videoId={'LXb3EKWsInQ'} play={false} />
+        </View>
       <FlatList
         horizontal
         ref={flatListRef}
@@ -147,8 +152,10 @@ const Learn = ({t}) => {
           </View>
         )}
       />
+      </View>
+      </ScrollView>
     </View>
   );
 };
 
-export default Learn;
+export default withTranslation()(Learn);

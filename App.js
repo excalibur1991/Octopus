@@ -1,4 +1,10 @@
-import {SafeAreaView, StatusBar, LogBox} from 'react-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  LogBox,
+  NativeModules,
+  Platform,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import CreateRootNavigator from './src/index';
 import {StateProvider} from './src/services/State/State';
@@ -8,26 +14,45 @@ import {useStateValue} from './src/services/State/State';
 import ModalActivityIndicator from './src/components/ModalActivityIndicator';
 import AppAlert from './src/components/AppAlert';
 import {theme} from './src/services/Common/theme';
-import {getUserInfo} from './src/services/DataManager';
-import { store } from './src/store/store.js'
-import { getWeb3_} from './src/web3/getWeb3'
-import { Provider } from 'react-redux'
-import { persistStore } from "redux-persist"
-import { PersistGate } from 'redux-persist/integration/react';
+import {getLanguage, getUserInfo} from './src/services/DataManager';
+import {store} from './src/store/store.js';
+import {getWeb3_} from './src/web3/getWeb3';
+import {Provider} from 'react-redux';
+import {persistStore} from 'redux-persist';
+import {PersistGate} from 'redux-persist/integration/react';
+import i18next from 'i18next';
+import {I18nextProvider} from 'react-i18next';
+import {MenuProvider} from 'react-native-popup-menu';
 
+getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
-getWeb3_.catch(
-  err => console.warn('Error in web3 initialization.', err)
-)
 
 const RootNavigator = () => {
   useEffect(() => {
-      checkStatus();
+    checkLanguage();
+    checkStatus();
   }, []);
 
   const [{progressSettings, alertSettings}, dispatch] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
+
+  const checkLanguage = async () => {
+    let language = await getLanguage();
+    if (!language) {
+      const deviceLanguage =
+        Platform.OS === 'ios'
+          ? NativeModules.SettingsManager.settings.AppleLocale ||
+            NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+          : NativeModules.I18nManager.localeIdentifier;
+      language = deviceLanguage.split('_')[0];
+    }
+    i18next.changeLanguage(language);
+    dispatch({
+      type: actions.SET_LANGUAGE,
+      selectedLanguage: language,
+    });
+  };
 
   const checkStatus = async () => {
     try {
@@ -43,7 +68,6 @@ const RootNavigator = () => {
           user: '',
         });
       }
-      // eslint-disable-next-line no-empty
     } catch (err) {}
   };
 
@@ -93,7 +117,11 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <StateProvider initialState={initialState} reducer={reducer}>
-          <RootNavigator />
+          <MenuProvider>
+            <I18nextProvider i18n={i18next}>
+              <RootNavigator />
+            </I18nextProvider>
+          </MenuProvider>
         </StateProvider>
       </PersistGate>
     </Provider>

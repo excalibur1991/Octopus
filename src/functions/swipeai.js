@@ -7,6 +7,7 @@ import {
   getLabelImage,
   storeUserResponse,
 } from '../services/API/APIManager';
+import i18n from '../languages/i18n';
 
 export const fetchImages = async (
   dispatch,
@@ -43,11 +44,10 @@ export const fetchImages = async (
       alertSettings: {
         show: true,
         type: 'error',
-        title: 'Error Occured',
-        message:
-          'This Operation Could Not Be Completed. Please Try Again Later.',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -133,11 +133,10 @@ export const onSwipe = async (
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: t('messages.errorOccured'),
+          message: t('messages.tryAgainLater'),
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: i18n.t('messages.ok'),
         },
       });
     }
@@ -147,11 +146,10 @@ export const onSwipe = async (
       alertSettings: {
         show: true,
         type: 'error',
-        title: 'Error Occured',
-        message:
-          'This Operation Could Not Be Completed. Please Try Again Later.',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -222,11 +220,10 @@ export const next = async (
       alertSettings: {
         show: true,
         type: 'error',
-        title: 'Error Occured',
-        message:
-          'This Operation Could Not Be Completed. Please Try Again Later.',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
@@ -297,11 +294,10 @@ export const prev = async (
       alertSettings: {
         show: true,
         type: 'error',
-        title: 'Error Occured',
-        message:
-          'This Operation Could Not Be Completed. Please Try Again Later.',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
         showConfirmButton: true,
-        confirmText: 'Ok',
+        confirmText: i18n.t('messages.ok'),
       },
     });
   } finally {
