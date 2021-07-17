@@ -9,7 +9,7 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
-    Platform
+    Platform,
 } from 'react-native';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
@@ -21,12 +21,39 @@ import {
     GetWords
   } from '../services/API/APIManager';
 import SwipeCards from 'react-native-swipe-cards';
-import { Chip, IconButton, Button } from 'react-native-paper';
+import { 
+  Chip, 
+  IconButton, 
+  Button,
+  Divider,
+  Checkbox
+} from 'react-native-paper';
 
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
 import TagInput from '../components/TagInput'
 import AddTag from '../components/AddTag';
-import Tags from '../components/Tags'
+import Tags from '../components/Tags';
+import BountyView from '../components/BountyView';
+
+
+const initial_piis = [
+  {tag: 'biometric', desc: 'This image contains biometric information.', checked: false, disabled: false},
+  {tag: 'PII - faces', desc: 'This image contains PII of faces.', checked: false, disabled: false},
+  {tag: 'PII - non faces',desc: 'This image contains PII  of non-faces.', checked: false, disabled: false},
+  {tag: 'Copyright', desc: 'Copyright', checked: false, disabled: false},
+];
+  const initial_bounties = [
+    {tag: 'annonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
+    {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
+    {tag: 'project.bb bounty', desc: 'project.bb bounty(cigarette butt on the beach)', checked: false, disabled: false},
+    {tag: 'nft+art bounty', desc: 'NFT Bounty(photos of NFTs)', checked: false, disabled: false},
+    {tag: 'traffic sign bounty', desc: 'Traffiic Sign Bounty', checked: false, disabled: false},
+    {tag: 'meme bounty', desc: 'Meme Bounty', checked: false, disabled: false},
+    {tag: 'product bounty', desc: 'Product Bounty(photos of products)', checked: false, disabled: false},
+    {tag: 'ocr bounty', desc: 'OCR Bounty(photos with text in them)', checked: false, disabled: false},
+  ];
+
+
 
 
 
@@ -80,74 +107,116 @@ const VeriPage = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-
+  const [bounties, setBounties] = useState(initial_bounties);
+  const [piis, setPiis] = useState(initial_piis);
 
   const max_image_load = 5;
 
 
+  const tagHandler = (tags, annotations)=> {
 
-    //update metadata for currentIndex
-    const updateMetadata = async( cardArray, curIndex) => {
-      try{
-        if(cardArray.length <= curIndex){
-          setMetadata({});
-          setImageId("");
-          setDescriptions([]);
-          setTags([]);
-          setDownTags([]);
-          setDownDescriptions([]);
-          setSelectedTag("");
-        }else {
-          const metadata = cardArray[curIndex];
-          setMetadata(metadata);
-          setImageId(metadata.image_id);
-          setDescriptions(metadata.descriptions);
-          setTags(metadata.tag_data);
-          setDownTags([]);
-          setDownDescriptions([]);
-          setSelectedTag("");
-        }
+  }
 
-        setAnnotationTags([]);
-        setBEditEnabled(false);
-        setTagEditiIndex(0);
-
+  const checkBounties = (_tags)=>
+  {
+    const _bounties = [...bounties];
+    _bounties.map((value, index)=> {
+      const found = _tags.find((tag)=>(value.tag == tag))
+      if (found) {
+        _bounties[index].checked = true
+        //_bounties[index].checked = true
+      }else{
+        _bounties[index].checked = false
+        //_bounties[index].checked = false
       }
-      catch(err){
+      
+    })
+
+    setBounties(_bounties);
+  };
+
+  const checkPii = (_tags)=>
+  {
+    const _piis = [...piis];
+    _piis.map((value, index)=> {
+      const found = _tags.find((tag)=>(value.tag == tag))
+      if (found) {
+        _piis[index].checked = true
+        //_bounties[index].checked = true
+      }else{
+        _piis[index].checked = false
+        //_bounties[index].checked = false
       }
+    })  
+    setPiis(_piis);
+  };
+
+
+  //update metadata for currentIndex
+  const updateMetadata = async( cardArray, curIndex) => {
+    try{
+      if(cardArray.length <= curIndex){
+        setMetadata({});
+        setImageId("");
+        setDescriptions([]);
+        setTags([]);
+        setDownTags([]);
+        setDownDescriptions([]);
+        setSelectedTag("");
+        checkBounties([]);
+        checkPii([]);
+      }else {
+        const metadata = cardArray[curIndex];
+        setMetadata(metadata);
+        setImageId(metadata.image_id);
+        setDescriptions(metadata.descriptions);
+        setTags(metadata.tag_data);
+        setDownTags([]);
+        setDownDescriptions([]);
+        setSelectedTag("");
+        checkBounties(metadata.tag_data);
+        checkPii(metadata.tag_data);
+      }
+
+      setAnnotationTags([]);
+      setBEditEnabled(false);
+      setTagEditiIndex(0);
 
     }
-
-    //update image
-    const updateImages = async (cardArray, curIndex, idx) => {
-      try{
-        //if (cards.length <= currentIndex) break;
-        if(cardArray.length <= curIndex + idx) return;
-
-        const image_id = cardArray[curIndex + idx].image_id;
-        var found = false;
-        cardImageArray.map((value,index)=>{
-          if(value.image_id === image_id) found = true;
-        })
-        if(found) {
-          if(idx < max_image_load ){
-            updateImages(cardArray, curIndex, ++idx);
-          }
-          return;
-        }
-        const result = await getImageById (image_id);
-        const fileReaderInstance = new FileReader();
-        fileReaderInstance.readAsDataURL(result);
-        fileReaderInstance.onload = () => {
-          cardImageArray.push({image_id: image_id, image: fileReaderInstance.result});
-          setCardImages([...cardImageArray]);
-          if(idx < max_image_load ){
-             updateImages(cardArray, curIndex, ++idx);
-          }
-        };
-      }catch(err){
-      }
+    catch(err){
     }
+  }
+
+  //update image
+  const updateImages = async (cardArray, curIndex, idx) => {
+    try{
+      //if (cards.length <= currentIndex) break;
+      if(cardArray.length <= curIndex + idx) return;
+
+      const image_id = cardArray[curIndex + idx].image_id;
+      var found = false;
+      cardImageArray.map((value,index)=>{
+        if(value.image_id === image_id) found = true;
+      })
+      if(found) {
+        if(idx < max_image_load ){
+          updateImages(cardArray, curIndex, ++idx);
+        }
+        return;
+      }
+      const result = await getImageById (image_id);
+      const fileReaderInstance = new FileReader();
+      fileReaderInstance.readAsDataURL(result);
+      fileReaderInstance.onload = () => {
+        cardImageArray.push({image_id: image_id, image: fileReaderInstance.result});
+        setCardImages([...cardImageArray]);
+        if(idx < max_image_load ){
+          updateImages(cardArray, curIndex, ++idx);
+        }
+      };
+    }catch(err){
+    }
+  }
 
   const fetchImages = async (bUpdateImage=true) => {
       try {
@@ -243,6 +312,7 @@ const VeriPage = (props) => {
   
         setTimeout(()=>{
           setTags(modTagArr);
+          setSelectedTag("");
         }, 500);
       }
     } else if(tagType == 'annotation') {
@@ -252,6 +322,7 @@ const VeriPage = (props) => {
         setSelectedTag(tag);
         setTimeout(()=>{
           setAnnotationTags(modTagArr);
+          setSelectedTag("");
         }, 500);
       }
     }
@@ -358,6 +429,9 @@ const VeriPage = (props) => {
           _tags[tagEditIndex] = tagEditValue;
           setTagsValue(_tags, editorType);
         }
+
+        checkBounties(_tags);
+        checkPii(_tags);
       }
   };
 
@@ -473,8 +547,68 @@ const VeriPage = (props) => {
         //tag exists
         return true;
       }
+
       return false;
     }
+
+    const handleBounty = (index)=>{
+      const checked = bounties[index].checked;
+      const _bounties = [...bounties];
+      const tag = _bounties[index].tag;
+      _bounties[index].checked = !checked;
+      setBounties(_bounties);
+
+      //add to annotations
+      if(_bounties[index].checked == false) {
+        //remove annotation
+        const filtered_tags = annotationTags.filter((value)=>(value != tag) )
+        setAnnotationTags([...filtered_tags]);
+
+      }else{
+        //add annotation
+        const filtered_tags = annotationTags.filter((value)=>(value != tag) )
+        setAnnotationTags([...filtered_tags, tag]);
+      }
+    }
+
+    const handlePii = (index)=>{
+      const checked = piis[index].checked;
+      const _piis = [...piis];
+      _piis[index].checked = !checked;
+      const tag = _piis[index].tag;
+      setPiis(_piis);
+
+       //add to annotations
+       if(_piis[index].checked == false) {
+        //remove annotation
+        const filtered_tags = annotationTags.filter((value)=>value !== tag )
+        setAnnotationTags([...filtered_tags]);
+
+      }else{
+        //add annotation
+        const filtered_tags = annotationTags.filter((value)=>value !== tag )
+        setAnnotationTags([...filtered_tags, tag]);
+      }
+    }
+
+    const filterViewTags = (_tags) => {
+      const filtered_tags = _tags.filter((value)=>{
+        //check if piis contains this tag
+        var found = false;
+        const pii_filter = piis.filter((pii)=>(pii.tag === value));
+        if(pii_filter.length != 0){
+          return false;
+        }
+
+        const bounty_filter = bounties.filter((bounty)=>(bounty.tag === value));
+        if(bounty_filter.length != 0){
+          return false;
+        }
+        return true
+      })
+      return filtered_tags;
+    }
+
 
     useEffect(()=>{
       searchFilter(tagEditValue);
@@ -491,38 +625,35 @@ const VeriPage = (props) => {
      */
     return (
         <View style={styles.container}>
-         
-          
           <View style={styles.CardWrapper}>
-
             <Image
               style={styles.leftbar}
               source={require('../assets/left.png')}
             />
             <View style={styles.CardView}>
-            <SwipeCards
-              cards={cards}
-              renderCard={(cardData)=> 
-              <SwipeImageCard 
-              image_id={cardData.image_id}
-              images={cardImages} 
-              />}
-              renderNoMoreCards={() =><NoMoreCards />}
-              nopeText='Reported'
-              yupText='Verified' 
-              stack={false} 
-              handleYup={ (card)=> handleVerify(card) }
-              handleNope={ (card)=>handleReport(card) }
-              hasMaybeAction={false}
-              cardRemoved={ (index)=>cardRemoved(index) }
-              showYup = {false}
-              showNope = {false}
-              />
+              <SwipeCards
+                cards={cards}
+                renderCard={(cardData)=> 
+                <SwipeImageCard 
+                image_id={cardData.image_id}
+                images={cardImages} 
+                />}
+                renderNoMoreCards={() =><NoMoreCards />}
+                nopeText='Reported'
+                yupText='Verified' 
+                stack={false} 
+                handleYup={ (card)=> handleVerify(card) }
+                handleNope={ (card)=>handleReport(card) }
+                hasMaybeAction={false}
+                cardRemoved={ (index)=>cardRemoved(index) }
+                showYup = {false}
+                showNope = {false}
+                />
             </View>
             <Image
-            style={styles.rightbar}
-            source={require('../assets/right.png')}
-            />
+              style={styles.rightbar}
+              source={require('../assets/right.png')}
+              />
           </View>
           <ScrollView 
             style={styles.ScrollView} 
@@ -533,7 +664,7 @@ const VeriPage = (props) => {
                 handleNewTag={handleNewTag}
               />
               <Tags 
-                tags={tags}
+                tags={filterViewTags(tags)}
                 tag_type={"verification"}
                 selectedTag={selectedTag}
                 deleteTag={deleteTag}
@@ -541,16 +672,28 @@ const VeriPage = (props) => {
                 bIndent={true}
               />
               <Tags 
-                tags={annotationTags}
+                tags={filterViewTags(annotationTags)}
                 tag_type={"annotation"}
-                selectedTag = {selectedTag}
-                deleteTag = {deleteTag}
-                editTag = {editTag}
-                bIndent = {tags.length == 0}
+                selectedTag={selectedTag}
+                deleteTag={deleteTag}
+                editTag={editTag}
+                bIndent={tags.length == 0}
               />
             </View>
+            <Divider />
+            <BountyView 
+              wrapperStyle={{marginTop: annotationTags.length == 0 && tags.length == 0? 50: 10}}
+              bountyData={piis}
+              onPress={handlePii}
+            />
+            <Divider />
+            <BountyView 
+              wrapperStyle={{ marginBottom: 20}}
+              bountyData={bounties}
+              onPress={handleBounty}
+            />
           </ScrollView>
-         <TagInput
+        <TagInput
           bEditEnabled={bEditEnabled}
           tagEditValue = {tagEditValue}
           filteredTags = {filteredTags}
@@ -559,7 +702,7 @@ const VeriPage = (props) => {
           setTextEditor = {setTextEditor}
           setTagEditValue = {setTagEditValue}
           keyboardOffset = {keyboardOffset}
-         />
+          />
       </View>
     );
 };
@@ -586,7 +729,6 @@ const styles = StyleSheet.create({
   },
   
   CardWrapper: {
-    //    justifyContent: 'space-between',
     height: 350,
     zIndex: 1000,
     justifyContent: 'space-between',
@@ -596,10 +738,8 @@ const styles = StyleSheet.create({
     zIndex: 1000
   },
   TagsView: {
-    flex: 1,
     flexDirection: 'row',
     zIndex: 0,
-    minHeight: 100,
     flexWrap: 'wrap',
     marginBottom: 20,
     justifyContent: 'space-between'
@@ -607,5 +747,4 @@ const styles = StyleSheet.create({
   ScrollView: {
     padding: 10,
   },
-  
-})
+});

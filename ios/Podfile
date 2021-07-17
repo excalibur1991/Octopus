@@ -30,7 +30,6 @@ target 'DataUnion' do
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
   pod 'TcpSockets', :path => '../node_modules/react-native-tcp'
 

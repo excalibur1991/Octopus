@@ -128,13 +128,13 @@ const TOC = (props) => {
                     <Text color={''} onPress={()=> {Linking.openURL('https://alpha.dataunion.app/terms/')}}> Terms of service.</Text> 
                     </Text>
                     <Checkbox.Item
-                    onPress={()=>onCheck(!checked)}
-                    status={ checked ? 'checked': 'unchecked'}
-                    labelStyle={{
-                        fontSize: 10
-                    }}
-                    color='#ccc'
-                    position='leading'
+                        onPress={()=>onCheck(!checked)}
+                        status={ checked ? 'checked': 'unchecked'}
+                        labelStyle={{
+                            fontSize: 10
+                        }}
+                        color='#ccc'
+                        position='leading'
                         label={'I accept DataUnion\'s Guidelines and Terms of Service'}
                         
                     />
