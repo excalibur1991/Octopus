@@ -15,11 +15,14 @@ import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
 import Verification from './screens/Verification'
 import Wallet from './screens/Wallet';
+import UploadGuidelines from './screens/UploadGuidelines';
+import UploadImage from './screens/UploadImage';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
 import walletEntry from '../walletEntry'
 import Staking from './screens/Staking'
+import walletEntry from '../walletEntry';
 import MyStats from './screens/MyStats';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
@@ -42,10 +45,10 @@ import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator(); 
 
 const styles = StyleSheet.create({
-  leftIcon: {
+  leftIcon: { 
     width: 40,
     height: 24,
   },
@@ -311,6 +314,46 @@ const StatsStack = () => (
   </Stack.Navigator>
 );
 
+const UploadGuidelinesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelines}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const UploadImageStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadImage"
+      component={UploadImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
 const LearnStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -474,6 +517,16 @@ const BottomTabs = () => (
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
       }}
+    />
+    <Tab.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelinesStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
+      name="UploadImage"
+      component={UploadImageStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
   </Tab.Navigator>
 );
