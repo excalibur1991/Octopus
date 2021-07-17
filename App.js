@@ -9,20 +9,19 @@ import ModalActivityIndicator from './src/components/ModalActivityIndicator';
 import AppAlert from './src/components/AppAlert';
 import {theme} from './src/services/Common/theme';
 import {getUserInfo} from './src/services/DataManager';
-import { store } from './src/store/store.js'
-import { getWeb3_} from './src/web3/getWeb3'
-import { Provider } from 'react-redux'
-import { persistStore } from "redux-persist"
-import { PersistGate } from 'redux-persist/integration/react';
+import {store} from './src/store/store.js';
+import {getWeb3_} from './src/web3/getWeb3';
+import {Provider} from 'react-redux';
+import {persistStore} from 'redux-persist';
+import {PersistGate} from 'redux-persist/integration/react';
+import {MenuProvider} from 'react-native-popup-menu';
 
 const persistor = persistStore(store);
-getWeb3_.catch(
-  err => console.warn('Error in web3 initialization.', err)
-)
+getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 
 const RootNavigator = () => {
   useEffect(() => {
-      checkStatus();
+    checkStatus();
   }, []);
 
   const [{progressSettings, alertSettings}, dispatch] = useStateValue();
@@ -93,7 +92,9 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <StateProvider initialState={initialState} reducer={reducer}>
-          <RootNavigator />
+          <MenuProvider>
+            <RootNavigator />
+          </MenuProvider>
         </StateProvider>
       </PersistGate>
     </Provider>

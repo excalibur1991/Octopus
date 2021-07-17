@@ -1,20 +1,21 @@
-import * as React from 'react';
-import {Text, Animated, TouchableOpacity, Easing} from 'react-native';
+import React, {useState} from 'react';
+import {Text, Animated, TouchableOpacity, StyleSheet} from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import {theme} from '../services/Common/theme';
 
-class CheckBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      springValue: new Animated.Value(1),
-    };
-  }
-
-  spring = () => {
-    if (this.props.onChange) {
-      this.props.onChange(!this.props.isChecked);
+const CheckBox = ({
+  title = '',
+  disabled = false,
+  isChecked = false,
+  onChange = () => {},
+  textColor = 'black',
+  fontSize = 11,
+}) => {
+  const [springValue] = useState(new Animated.Value(1));
+  const spring = () => {
+    if (onChange) {
+      onChange(!isChecked);
     }
-    const {springValue} = this.state;
     springValue.setValue(0.7);
     Animated.spring(springValue, {
       toValue: 1,
@@ -23,49 +24,46 @@ class CheckBox extends React.Component {
     }).start();
   };
 
-  render() {
-    const {title = '', size = 20, textColor = '#000', editable = true} =
-      this.props || {};
-    const {springValue} = this.state;
+  const checkBoxStyle = {
+    borderColor: isChecked ? theme.APP_COLOR : '#949aa2',
+    backgroundColor: isChecked ? theme.APP_COLOR : '#e3e7ff',
+    transform: [{scale: springValue}],
+  };
 
-    return (
-      <TouchableOpacity
-        style={{
-          marginVertical: 5,
-          alignItems: 'center',
-          flexDirection: 'row',
-        }}
-        disabled={!editable}
-        onPress={this.spring.bind(this, Easing.bounce)}>
-        <Animated.View
-          style={{
-            width: size,
-            height: size,
-            borderWidth: 1,
-            borderColor: this.props.isChecked ? '#00a9a5' : '#949aa2',
-            borderRadius: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: this.props.isChecked ? '#00a9a5' : 'transparent',
-            transform: [{scale: springValue}],
-          }}>
-          {this.props.isChecked ? (
-            <EntypoIcon name="check" color="#fff" size={size - 5} />
-          ) : null}
-        </Animated.View>
-        <Text
-          style={{
-            marginLeft: 5,
-            fontSize: size - 8,
-            textAlign: 'center',
-            marginTop: -2,
-            color: textColor,
-          }}>
-          {title}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-}
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      disabled={disabled}
+      onPress={spring}>
+      <Animated.View style={[styles.checkBox, checkBoxStyle]}>
+        {isChecked ? <EntypoIcon name="check" color="#fff" size={13} /> : null}
+      </Animated.View>
+      <Text style={[styles.text, {color: textColor, fontSize: fontSize}]}>
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default CheckBox;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
+  checkBox: {
+    width: 16,
+    height: 16,
+    borderRadius: 5,
+    borderWidth: 0.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: '#000',
+    marginTop: -3,
+    marginLeft: '2%',
+    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+  },
+});

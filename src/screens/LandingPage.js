@@ -9,6 +9,18 @@ import {styles} from '../styles/landingpage';
 const LandingPage = ({navigation}) => {
   const options = [
     {
+      title: 'Upload',
+      screen: 'UploadGuidelines',
+      icon: 'analytics-sharp',
+      Icon: IonIcon,
+    },
+    {
+      title: 'Stats',
+      screen: 'Stats',
+      icon: 'analytics',
+      Icon: MaterialIcon,
+    },
+    {
       title: 'My Stats',
       screen: 'MyStats',
       icon: 'analytics-sharp',
@@ -21,21 +33,15 @@ const LandingPage = ({navigation}) => {
       Icon: MaterialIcon,
     },
     {
-      title: 'Stats',
-      screen: 'Stats',
-      icon: 'analytics',
+      title: 'Wallet',
+      screen: 'Wallet',
+      icon: 'account-balance-wallet',
       Icon: MaterialIcon,
     },
     {
       icon: 'info',
       title: 'Info',
       screen: 'About',
-      Icon: MaterialIcon,
-    },
-    {
-      title: 'Wallet',
-      screen: 'Wallet',
-      icon: 'account-balance-wallet',
       Icon: MaterialIcon,
     },
   ];
