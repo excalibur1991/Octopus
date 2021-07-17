@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
   },
   container_: {
     flex: 2,
-    backgroundColor: '#9999',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -143,5 +142,22 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     width: 300
    // justifyContent: 'flex-start'
-  }
+  },
+  buttonStyle: {
+      borderRadius: 25,
+      width: '70%',
+      alignSelf: 'center',
+    },
+    buttonText: {
+      fontSize: 19,
+      fontWeight: '600',
+      color: theme.APP_COLOR,
+      fontFamily: 'Inter-Bold',
+    },
+    deleteButtonText: {
+      fontSize: 19,
+      fontWeight: '600',
+      color: '#FF1493',
+      fontFamily: 'Inter-Bold',
+    },
 });

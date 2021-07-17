@@ -14,19 +14,10 @@ export const LoginProc = async (web3) => {
     var refresh_token = '';
     //check wallet
     let walletInfo = await getWalletData();
-//    if (walletInfo == null) {
-      
-//      Alert.alert(
-//        i18n.t('messages.alert'),
-//        i18n.t('messages.walletNotCreated'),
-//      );
-//      return;
-//    }
     let Web3 = web3.web3Instance
     var publicKey = ""
     var privateKey = ""
     var seedPhrase = ""
-
 
     if(walletInfo == null || walletInfo.publicKey == "") {
       //create new wallet
@@ -52,41 +43,24 @@ export const LoginProc = async (web3) => {
     {
       privateKey = walletInfo.privateKey;
       publicKey = walletInfo.publicKey;
-//=======
-//      alert('Wallet not created!');
-//      return;
-//>>>>>>> origin/fix-staking2
     }
-
-    let registerResponse = await userRegister(walletInfo.publicKey);
+    let registerResponse = await userRegister(publicKey);
     if (registerResponse && registerResponse.status == 'success') {
       //first time register
       nounce = registerResponse.nonce;
     } else {
       //already registered
-      let nonceResponse = await getNounce(walletInfo.publicKey);
+      let nonceResponse = await getNounce(publicKey);
       nounce = nonceResponse.nonce;
     }
 
     let sign = await Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)
     if(sign && sign.signature) {
-/*=======
-    //web3 initialization - currently redux weird implementation
-    //let web3 = new Web3(new Web3.providers.HttpProvider(rinkeby))
-
-    let Web3 = web3.web3Instance;
-    let sign = Web3.eth.accounts.sign(
-      Web3.utils.utf8ToHex(nounce.toString()),
-      walletInfo.privateKey,
-    );
-    if (sign && sign.signature) {
->>>>>>> origin/fix-staking2 */
       signature = sign.signature;
 
       let loginResponse = await userLogin(walletInfo.publicKey, signature);
 
-      if (
-        loginResponse &&
+      if (loginResponse &&
         loginResponse.access_token &&
         loginResponse.refresh_token
       ) {

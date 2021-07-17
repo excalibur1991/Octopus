@@ -355,7 +355,7 @@ const WalletStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Wallet"
-      component={Staking}
+      component={walletEntry}
       options={({navigation}) => {
         return Header(
           {

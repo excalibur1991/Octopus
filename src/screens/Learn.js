@@ -88,7 +88,6 @@ const Learn = ({t}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
         <Text style={styles.header}>{t('learn.heading')}</Text>
       <View style={styles.row}>
         <MaterialIcon name="arrow-left" size={30} onPress={()=>{
@@ -133,10 +132,7 @@ const Learn = ({t}) => {
             setIconIndex(iconIndex+2);
           }
         }}/>
-        <Text style={styles.text}>{t('learn.para')}</Text>
-        <View style={styles.box}>
-          <YoutubePlayer height={180} videoId={'LXb3EKWsInQ'} play={false} />
-        </View>
+      </View>
       <FlatList
         horizontal
         ref={flatListRef}
@@ -152,8 +148,6 @@ const Learn = ({t}) => {
           </View>
         )}
       />
-      </View>
-      </ScrollView>
     </View>
   );
 };
