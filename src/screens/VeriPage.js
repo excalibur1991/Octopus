@@ -29,6 +29,9 @@ import {
   Checkbox
 } from 'react-native-paper';
 
+import MultiSelect from 'react-native-multiple-select'
+//import SelectDropdown from "react-native-select-dropdown";
+
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
 import TagInput from '../components/TagInput'
 import AddTag from '../components/AddTag';
@@ -43,7 +46,7 @@ const initial_piis = [
   {tag: 'Copyright', desc: 'Copyright', checked: false, disabled: false},
 ];
   const initial_bounties = [
-    {tag: 'annonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
+    {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
     {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
     {tag: 'project.bb bounty', desc: 'project.bb bounty(cigarette butt on the beach)', checked: false, disabled: false},
     {tag: 'nft+art bounty', desc: 'NFT Bounty(photos of NFTs)', checked: false, disabled: false},
@@ -56,8 +59,10 @@ const initial_piis = [
 
 
 
+var _bEditEnabled = false;
 
 const VeriPage = (props) => {
+
 
 
 
@@ -86,8 +91,9 @@ const VeriPage = (props) => {
   const [downDescriptions, setDownDescriptions] = useState([]);
 
   const [tags, setTags] = useState([]);
+  const [upTags, setUpTags] = useState([]);
   const [downTags, setDownTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState("");
+  const [selectedTag, setSelectedTag] = useState(""); //
 
   const [annotationTags, setAnnotationTags] = useState([]);
 
@@ -110,6 +116,8 @@ const VeriPage = (props) => {
   const [bounties, setBounties] = useState(initial_bounties);
   const [piis, setPiis] = useState(initial_piis);
 
+  const [selectedPII, setSelectedPII] = useState([]);
+  const [selectedBounties, setSelectedBounties] = useState([]);
   const max_image_load = 5;
 
 
@@ -123,16 +131,25 @@ const VeriPage = (props) => {
     _bounties.map((value, index)=> {
       const found = _tags.find((tag)=>(value.tag == tag))
       if (found) {
-        _bounties[index].checked = true
-        //_bounties[index].checked = true
+        _bounties[index].disabled = true
       }else{
-        _bounties[index].checked = false
-        //_bounties[index].checked = false
+        _bounties[index].disabled = false
       }
-      
     })
-
     setBounties(_bounties);
+    //selection
+  };
+  const checkBountiesSelection = (_tags)=>{
+
+    var _selectedBounties = [];
+    _tags.map((value)=>{
+      const found = bounties.find((bounty)=>(bounty.tag === value));
+      if(found){
+        _selectedBounties.push(value);
+      }
+    });
+
+    setSelectedBounties(_selectedBounties);
   };
 
   const checkPii = (_tags)=>
@@ -141,16 +158,25 @@ const VeriPage = (props) => {
     _piis.map((value, index)=> {
       const found = _tags.find((tag)=>(value.tag == tag))
       if (found) {
-        _piis[index].checked = true
-        //_bounties[index].checked = true
+        _piis[index].disabled = true
       }else{
-        _piis[index].checked = false
-        //_bounties[index].checked = false
+        _piis[index].disabled = false
       }
     })  
     setPiis(_piis);
   };
+  const checkPIISelection = (_tags)=>{
 
+    var _selectedPII = [];
+    _tags.map((value)=>{
+      const found = piis.find((pii)=>(pii.tag === value));
+      if(found){
+        _selectedPII.push(value);
+      }
+    });
+
+    setSelectedPII(_selectedPII);
+  };
 
   //update metadata for currentIndex
   const updateMetadata = async( cardArray, curIndex) => {
@@ -163,8 +189,7 @@ const VeriPage = (props) => {
         setDownTags([]);
         setDownDescriptions([]);
         setSelectedTag("");
-        checkBounties([]);
-        checkPii([]);
+
       }else {
         const metadata = cardArray[curIndex];
         setMetadata(metadata);
@@ -174,8 +199,6 @@ const VeriPage = (props) => {
         setDownTags([]);
         setDownDescriptions([]);
         setSelectedTag("");
-        checkBounties(metadata.tag_data);
-        checkPii(metadata.tag_data);
       }
 
       setAnnotationTags([]);
@@ -286,7 +309,7 @@ const VeriPage = (props) => {
       {tags:[...annotationTags], description:""},
       {
         tags: {
-          up_votes:[...tags], 
+          up_votes:[...upTags], 
           down_votes:[...downTags]}, 
         descriptions: {
           up_votes:[...descriptions],
@@ -372,6 +395,19 @@ const VeriPage = (props) => {
     } ,100);
   };
 
+  const UpvoteTag = (tag, index, _editorType)=>{
+    var _upTags = upTags;
+    const founded_tag = upTags.find((value)=>(value === tag));
+    if(founded_tag) {
+      //remove from upTag
+      const moded_tag = upTags.filter((value)=>(value != tag));
+      setUpTags(moded_tag);
+    }else {
+      //add to upTag
+      setUpTags([...upTags, tag]);
+    }
+  }
+
   const setTagsValue = (_tags, _editorType)=>{
     if(editorType == 'annotation') {
       setAnnotationTags(_tags);
@@ -429,16 +465,7 @@ const VeriPage = (props) => {
           _tags[tagEditIndex] = tagEditValue;
           setTagsValue(_tags, editorType);
         }
-
-        checkBounties(_tags);
-        checkPii(_tags);
       }
-  };
-
-  const setKeyboardListener = ()=> {
-    Keyboard.addListener('keyboardDidHide', ()=>{
-      setBEditEnabled(false);
-    });
   };
 
   const onChangeText = (text)=>{
@@ -448,15 +475,19 @@ const VeriPage = (props) => {
   const [keyboardOffset, setKeyboardOffset] = useState(-300);
 
   const _keyboardDidShow = (event)=> {
-    setKeyboardOffset(Platform.OS === "ios" ? event.endCoordinates.height - 40 : 0);
+      if(Platform.OS === 'ios') {
+        setKeyboardOffset(event.endCoordinates.height - 40 );
+       }
+       else{
+         setKeyboardOffset(0);
+       }
   };
 
   const _keyboardDidHide=()=> {
-    setKeyboardOffset(-300);
+      setKeyboardOffset(-300);
   }
 
     useEffect(() => {
-      //setKeyboardListener();
       Keyboard.addListener('keyboardDidHide', ()=>{
         setBEditEnabled(false);
       });
@@ -506,6 +537,17 @@ const VeriPage = (props) => {
     },
     [isLoading]);
 
+    useEffect(()=>{
+
+      checkBountiesSelection(annotationTags);
+      checkPIISelection(annotationTags);
+    },[annotationTags]);
+
+    useEffect(()=>{
+      checkBounties(tags);
+      checkPii(tags);
+    }, [tags]);
+
 
     // FILTERS
     const searchFilter = (_filter_text) => {
@@ -551,64 +593,45 @@ const VeriPage = (props) => {
       return false;
     }
 
-    const handleBounty = (index)=>{
-      const checked = bounties[index].checked;
-      const _bounties = [...bounties];
-      const tag = _bounties[index].tag;
-      _bounties[index].checked = !checked;
-      setBounties(_bounties);
-
-      //add to annotations
-      if(_bounties[index].checked == false) {
-        //remove annotation
-        const filtered_tags = annotationTags.filter((value)=>(value != tag) )
-        setAnnotationTags([...filtered_tags]);
-
-      }else{
-        //add annotation
-        const filtered_tags = annotationTags.filter((value)=>(value != tag) )
-        setAnnotationTags([...filtered_tags, tag]);
-      }
-    }
-
-    const handlePii = (index)=>{
-      const checked = piis[index].checked;
-      const _piis = [...piis];
-      _piis[index].checked = !checked;
-      const tag = _piis[index].tag;
-      setPiis(_piis);
-
-       //add to annotations
-       if(_piis[index].checked == false) {
-        //remove annotation
-        const filtered_tags = annotationTags.filter((value)=>value !== tag )
-        setAnnotationTags([...filtered_tags]);
-
-      }else{
-        //add annotation
-        const filtered_tags = annotationTags.filter((value)=>value !== tag )
-        setAnnotationTags([...filtered_tags, tag]);
-      }
-    }
-
-    const filterViewTags = (_tags) => {
-      const filtered_tags = _tags.filter((value)=>{
-        //check if piis contains this tag
-        var found = false;
-        const pii_filter = piis.filter((pii)=>(pii.tag === value));
-        if(pii_filter.length != 0){
-          return false;
+    const handleBountySelection = (items)=>{
+      var _bounties = [];
+      //remove prev iems
+      annotationTags.map((value)=>{
+        const found = selectedBounties.find((bounty)=>(value == bounty));
+        if(found){
+          //remove
+        }else{
+          _bounties.push(value);
         }
-
-        const bounty_filter = bounties.filter((bounty)=>(bounty.tag === value));
-        if(bounty_filter.length != 0){
-          return false;
-        }
-        return true
       })
-      return filtered_tags;
+
+      items.map((value)=>{
+        _bounties.push(value);
+      })
+      
+      setSelectedBounties(items);
+      setAnnotationTags(_bounties);
     }
 
+    const handlePiiSelection = (items)=>{
+      var _annotations = [];
+      //remove prev iems
+      annotationTags.map((value)=>{
+        const found = selectedPII.find((pii)=>(value==pii));
+        if(found){
+          //remove
+        }else{
+          _annotations.push(value);
+        }
+      })
+
+      items.map((value)=>{
+        _annotations.push(value);
+      })
+      
+      setSelectedPII(items);
+      setAnnotationTags(_annotations);
+    }
 
     useEffect(()=>{
       searchFilter(tagEditValue);
@@ -664,15 +687,17 @@ const VeriPage = (props) => {
                 handleNewTag={handleNewTag}
               />
               <Tags 
-                tags={filterViewTags(tags)}
+                tags={tags}
+                upTags={upTags}
                 tag_type={"verification"}
                 selectedTag={selectedTag}
                 deleteTag={deleteTag}
-                editTag={editTag}
+                editTag={UpvoteTag}
                 bIndent={true}
               />
               <Tags 
-                tags={filterViewTags(annotationTags)}
+                tags={annotationTags}
+                upTags={[]}
                 tag_type={"annotation"}
                 selectedTag={selectedTag}
                 deleteTag={deleteTag}
@@ -680,17 +705,55 @@ const VeriPage = (props) => {
                 bIndent={tags.length == 0}
               />
             </View>
-            <Divider />
-            <BountyView 
-              wrapperStyle={{marginTop: annotationTags.length == 0 && tags.length == 0? 50: 10}}
-              bountyData={piis}
-              handlePress={handlePii}
+            <Divider style={
+              {marginTop: annotationTags.length == 0 && tags.length == 0? 50: 10}
+            }/>
+            <MultiSelect 
+              hideTags
+              hideSubmitButton
+              items={piis}
+              uniqueKey="tag"
+              selectText="PII"
+              displayKey="tag"
+              single={false}
+              selectedItems={selectedPII}
+              onSelectedItemsChange={(items)=>{ handlePiiSelection(items)}}
+              showFilter={false}
+              canAddItems={false}
+              onToggleList={(value)=>{
+              }}
+              textInputProps={{
+                editable:false
+              }}
+              searchInputPlaceholderText="PII ..."
+              selectedItemTextColor={'#00A5FF'}
+              styleDropdownMenu={{
+                height:56,
+              }}
             />
             <Divider />
-            <BountyView 
-              wrapperStyle={{ marginBottom: 20}}
-              bountyData={bounties}
-              handlePress={handleBounty}
+            <MultiSelect 
+              hideTags
+              hideSubmitButton
+              items={bounties}
+              uniqueKey="tag"
+              selectText="PII Bounty"
+              displayKey="tag"
+              single={false}
+              onSelectedItemsChange={(items)=>{}}
+              showFilter={false}
+              canAddItems={false}
+              selectedItems={selectedBounties}
+              onSelectedItemsChange={(items)=>{handleBountySelection(items) }}
+
+              textInputProps={{
+                editable:false
+              }}
+              searchInputPlaceholderText="Bounties ..."
+              selectedItemTextColor={'#00A5FF'}
+              styleDropdownMenu={{
+                height:56,
+              }}
             />
           </ScrollView>
         <TagInput

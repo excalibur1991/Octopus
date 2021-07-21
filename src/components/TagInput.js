@@ -49,7 +49,7 @@ const TagInput = (props) => {
                 }} 
                 onPress={()=>{
                     props.setTagEditValue(item)
-                }}>
+                }} key={index}>
                 <Text style={{ 
                     backgroundColor:'#F2F2F2', 
                     fontSize: 16, 

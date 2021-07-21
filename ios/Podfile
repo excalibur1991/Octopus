@@ -12,6 +12,9 @@ target 'DataUnion' do
     :hermes_enabled => false
   )
 
+  pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper' # do not delete this 
+
+
   target 'DataUnionTests' do
     inherit! :complete
     # Pods for testing

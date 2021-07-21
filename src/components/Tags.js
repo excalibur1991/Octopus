@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 const Tags = (props) => {
     const {
       tags=[],
+      upTags=[],
       tag_type="verification",
       selectedTag = "",
       deleteTag = ()=>{},
@@ -20,20 +21,20 @@ const Tags = (props) => {
 
     return (
       <>
-      {props.tags.map((vtag, index)=>(
-        <View style={ index == 0 && bIndent? styles.ChipWrapperOdd: styles.ChipWrapper}>
+      {props.tags && props.tags.map((vtag, index)=>{return(
+        <View style={ index == 0 && bIndent? styles.ChipWrapperOdd: styles.ChipWrapper} key={vtag}>
           <Chip  
             title={vtag}
             onLongPress={()=>{props.deleteTag(vtag, props.tag_type)}}
             onPress={()=>{props.editTag(vtag, index, props.tag_type)}}
             textStyle={styles.ChipText}
             style={[styles.Chip, {    
-              backgroundColor:  props.selectedTag == vtag ? "#EB5454" : "#3A506B",
+              backgroundColor:  props.selectedTag == vtag ? "#EB5454" : ((props.tag_type==="verification") && props.upTags.find((value)=>(value === vtag)) ?"#00A5FF": "#3A506B" ) ,
             }]}>
             {vtag}
           </Chip>
-        </View>
-      ))}              
+        </View>)}
+      )}              
      </>
     );
 };
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
 
 Tags.propTypes = {
   tags: PropTypes.array,
+  upTags: PropTypes.array,
   tag_type: PropTypes.string,
   selectedTag: PropTypes.string,
   deleteTag : PropTypes.func,
