@@ -21,7 +21,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Home from './src/WalletHome'
 import WalletSettings from './src/screens/WalletSettings'
-import WalletActions from './src/screens/WalletActions'
+import FormLiquidity from './src/screens/FormLiquidity'
+import FormSwap from './src/screens/FormSwap'
 
 
 
@@ -41,7 +42,8 @@ export default class App extends Component {
     return (
       <Stack.Navigator>
         <Stack.Screen name="WalletHome" component={Home} options={{ title: 'Wallet Settings' }} />
-        <Stack.Screen name="Add Liquidity" component={WalletActions} navigation={this.props.navigation} />
+        <Stack.Screen name="Add Liquidity" component={FormLiquidity} navigation={this.props.navigation} />
+        <Stack.Screen name="Swap" component={FormSwap} navigation={this.props.navigation} /> 
         <Stack.Screen name="Wallet" component={WalletSettings} navigation={this.props.navigation} />
       </Stack.Navigator>
 )

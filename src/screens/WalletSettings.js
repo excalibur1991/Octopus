@@ -12,6 +12,7 @@ import {
   webThreeReturned,
   readStoredWallet,
 } from '../functions/walletsettings';
+import WalletActions from '../components/WalletActions'
  
 
 
@@ -31,7 +32,7 @@ class WalletSettings extends Component {
       account: '0x0',
     };
 
-
+  
     // const [age, setAge] = useState('')
 
     this.web3 = null;
@@ -41,12 +42,19 @@ class WalletSettings extends Component {
  
   }
 
+
+
   componentDidMount() {
     chkNetwork(this);
     webThreeReturned(this);
     readStoredWallet(this)
+    //console.log({myprops: this.exportWalletInfo()})
   }
 
+  exportWalletInfo = async() =>{
+    //let result =  await readStoredWallet(this);
+     console.log(this.state)
+}
 
   render() {
     
@@ -136,9 +144,22 @@ class WalletSettings extends Component {
               buttonStyle={styles.button}
               onPress={() => this.props.navigation.navigate('Add Liquidity',
               {publicKey: this.state.publicKey,
-              privateKey: this.state.privateKey})}
+              privateKey: this.state.privateKey})  
+            }
               textStyle={styles.buttonText}
           />
+            <Button
+              color="#f2f2f2"
+              title="Swap"
+              buttonStyle={styles.button}
+              onPress={() => this.props.navigation.navigate('Swap',
+              {publicKey: this.state.publicKey,
+              privateKey: this.state.privateKey
+            })}
+              textStyle={styles.buttonText}
+          />
+
+         {/** <WalletActions publicKey={this.state.publicKey}/>  */}
 
           </View>
         </View>

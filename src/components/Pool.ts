@@ -227,10 +227,10 @@ export class Pool extends PoolFactory {
   transaction.sign(privateKey)
   console.log('getting approval...')
   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  console.log('Success!!. Spender Approved to spend tokens  on behalf of owner....')
+  console.log(`Success!!. Spender Approved to spend ${amount} tokens  on behalf of owner....`)
   console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+      console.log(`ERRPR: Failed to approve spender to spend  tokens : ${e.message}`)
       result = e.message
     }
     return result 
@@ -614,6 +614,11 @@ export class Pool extends PoolFactory {
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
     let estGas
+
+    //Record storage inRecord = _records[address(tokenIn)];
+    //  tokenAmountIn <= bmul(inRecord.balance, MAX_IN_RATIO), //balance:196
+    console.log({tokenAmountIn: web3.utils.toWei(tokenAmountIn),
+    minAmountOut:web3.utils.toWei(minAmountOut), tokenIn:tokenIn,tokenOut:tokenOut})
     try {
       estGas = await pool.methods
         .swapExactAmountIn(
@@ -633,7 +638,7 @@ export class Pool extends PoolFactory {
       estGas = gasLimitDefault
     }
 
-   
+  
     try {
       let Tx = require('ethereumjs-tx').Transaction;
       let privateKey = Buffer.from(PRIVATE_KEY2, 'hex');
@@ -669,7 +674,7 @@ export class Pool extends PoolFactory {
     catch (e) {
       console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
     }
-  
+ 
     return result
 
 
@@ -1222,6 +1227,7 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
+      console.log({oceanAmountNeeded: amount})
     } catch (e) {
       console.log('ERROR: Failed to calcInGivenOut')
     }
@@ -1251,6 +1257,7 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
+      console.log({oceanAmountToReceive: amount})
     } catch (e) {
       console.log('ERROR: Failed to calcOutGivenIn')
     }

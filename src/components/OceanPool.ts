@@ -69,6 +69,7 @@ export class OceanPool extends Pool {
     startBlock?: number
   ) {
     super(web3, logger, factoryABI, poolABI, factoryAddress)
+    oceanAddress = '0xE793a47892854260B42449291953dADbdDb4226d'
     if (oceanAddress) {
       this.oceanAddress = oceanAddress
     }
@@ -223,7 +224,9 @@ export class OceanPool extends Pool {
     tokenAddress: string
   ): Promise<string> {
     const balance = await super.getReserve(poolAddress, tokenAddress)
-    return new Decimal(balance).div(3).toString()
+    const maxBuy = new Decimal(balance).div(3).toString()
+    console.log({maxOceanBuyQuantity:maxBuy})
+    return maxBuy
   }
 
   /**
@@ -672,6 +675,7 @@ export class OceanPool extends Pool {
       return null
     }
     const dtAddress = await this.getDTAddress(poolAddress)
+    console.log({oceanAmountWanted: new Decimal(oceanAmountWanted)})
     if (
       new Decimal(oceanAmountWanted).greaterThan(
         await this.getOceanMaxBuyQuantity(poolAddress)

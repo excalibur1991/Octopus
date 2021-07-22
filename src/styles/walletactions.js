@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -6,20 +6,33 @@ export const styles = StyleSheet.create({
     fontFamily: 'Cochin',
     fontSize: 15,
     fontWeight: 'bold',
+    marginTop: '5%',
   },
+  
+  sendTo: {
+    //marginTop: '0.1%',
+    fontFamily: 'Cochin',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
   container: {
     flex: 1,
     marginTop: '2%',
     paddingTop: '5%',
-    paddingHorizontal: '4%',
+    paddingHorizontal: '2%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: theme.COLORS.WHITE,
   },
   rows: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
+   // borderRadius: 25,
+   
+    
   },
   quickra: {
     fontSize: 27,
@@ -73,11 +86,27 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
+  buttonRight: {
+    borderRadius: 25,
+    width: '40%',
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  buttonLeft: {
+    borderRadius: 25,
+    width: '40%',
+    alignSelf: 'flex-start',
+    marginBottom: 20,
+    marginTop: 20,
+  },
   buttonText: {
     fontSize: 19,
     fontWeight: '600',
     color: theme.APP_COLOR,
     fontFamily: 'Inter-Bold',
+    alignItems: 'center',
+
   },
   topContainer: {
     flexDirection: 'row',
@@ -122,11 +151,12 @@ export const styles = StyleSheet.create({
     borderColor: theme.APP_COLOR,
     borderRadius: 8,
     marginBottom: 20,
-    width: 300
+    width: Dimensions.get('window').width * 0.9
+   // width: 330
    // justifyContent: 'flex-start'
   },
   boxText: {
-    marginTop: '4%',
-    width: 250,
+    marginTop: '3%',
+    width: Dimensions.get('window').width * 0.9,
   },
 });
