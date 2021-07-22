@@ -30,15 +30,12 @@ const Loading = ({navigation, t}) => {
       />
       <View style={styles.creatingWallet}>
         <Text style={styles.text}>{t('loading.poweredBy')}</Text>
-        <Text
-          style={styles.text}>
-          {t('loading.creatingWallet')}
-        </Text>
       </View>
-      <Text
-        style={styles.text}>
-        free. quickly. automatically.
-      </Text>
+      <Image
+        style={styles.image}
+        resizeMode="contain"
+        source={require('../assets/ocean.png')}
+      />
     </View>
   );
 };

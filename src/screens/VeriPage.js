@@ -737,7 +737,7 @@ const VeriPage = (props) => {
               hideSubmitButton
               items={bounties}
               uniqueKey="tag"
-              selectText="PII Bounty"
+              selectText="Bounty"
               displayKey="tag"
               single={false}
               onSelectedItemsChange={(items)=>{}}
