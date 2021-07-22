@@ -54,6 +54,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-get-random-values": "^1.7.0",
     "react-native-level-fs": "^3.0.1",
     "react-native-multiple-select": "^0.5.6",
     "react-native-os": "^1.2.6",

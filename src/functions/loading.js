@@ -2,9 +2,11 @@ import '../../global';
 import '../../shim';
 import {Alert} from 'react-native';
 import i18n from '../languages/i18n';
-import {setAuthToken, getWalletData} from '../services/DataManager';
+import {setAuthToken, getWalletData, setWalletData} from '../services/DataManager';
 import {userLogin, userRegister, getNounce} from '../services/API/APIManager';
-
+import * as Utils from '../web3/utils';
+import bip39 from 'react-native-bip39';
+import {ethers} from 'ethers';
 export const LoginProc = async (web3) => {
   try {
     //register to check account
@@ -19,7 +21,7 @@ export const LoginProc = async (web3) => {
     var privateKey = ""
     var seedPhrase = ""
 
-    if(walletInfo == null || walletInfo.publicKey == "") {
+    if(walletInfo == null) {
       //create new wallet
 
       const wallet = ethers.Wallet.createRandom();

@@ -250,6 +250,7 @@ const VeriPage = (props) => {
         setIsLoading(true);
         const response = await queryMetadata(curPage);
         if(response && response.result && response.result.length > 0) {
+          console.log(JSON.stringify(response));
           setMaxPage(response.pageSize);
           setCurPage(response.page  + 1);
           // imagees exists then add these
@@ -378,11 +379,17 @@ const VeriPage = (props) => {
 
   //add annotation tag
   const handleNewTag = ()=>{
-    setEditorType('annotation');
-    setTagEditiIndex(annotationTags.length);
-    setBEditEnabled(true);
-    setTagEditValue("");
-    textEditor.focus();
+    try{console.log('asd');
+      setEditorType('annotation');
+      setTagEditiIndex(annotationTags?annotationTags.length: 0);
+      setBEditEnabled(true);
+      setTagEditValue("");
+      textEditor.focus();
+  
+    }catch(err){
+      console.log(err);
+    }
+    
   };
 
   const editTag = (tag, index, _editorType)=> {
@@ -706,7 +713,7 @@ const VeriPage = (props) => {
               />
             </View>
             <Divider style={
-              {marginTop: annotationTags.length == 0 && tags.length == 0? 50: 10}
+              {marginTop: 10}
             }/>
             <MultiSelect 
               hideTags
@@ -795,7 +802,7 @@ const styles = StyleSheet.create({
     height: 350,
     zIndex: 1000,
     justifyContent: 'space-between',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   CardView: {
     zIndex: 1000
@@ -804,8 +811,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     zIndex: 0,
     flexWrap: 'wrap',
-    marginBottom: 20,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   ScrollView: {
     padding: 10,

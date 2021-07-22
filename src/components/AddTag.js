@@ -12,10 +12,12 @@ const AddTag = (props) => {
     } = props || {};
 
     return (
+        <View width={60} height={60}>
         <View style={styles.ChipWrapper}>
         <IconButton 
           icon='plus'
           color='#FFFFFF'
+         
           textStyle={styles.ChipText}
           style={{    
             backgroundColor:  "#3A506B",
@@ -23,6 +25,8 @@ const AddTag = (props) => {
           onPress={()=>{props.handleNewTag()}}
           />
       </View>
+        </View>
+
     );
 };
 
@@ -37,6 +41,7 @@ const styles = StyleSheet.create({
         top: -3,
         width: 60,
         height: 60,
+        zIndex: 1000,
     },
     ChipText: {
         fontSize: 15,
