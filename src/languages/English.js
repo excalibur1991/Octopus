@@ -13,6 +13,7 @@ export default {
       swipeAI: 'Swipe AI',
       upload: 'Upload',
       verification: 'Verify',
+      annotation: 'Annotate',
       english: 'English',
       chinese: 'Chinese',
       deutsch: 'Deutsch',

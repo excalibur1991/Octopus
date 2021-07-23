@@ -14,6 +14,7 @@ import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
 import Verification from './screens/Verification'
+import Annotation from './screens/Annotation'
 import Wallet from './screens/Wallet';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
@@ -290,6 +291,25 @@ const VerificationStack = () => (
   </Stack.Navigator>
 );
 
+const AnnotationStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Annotation"
+      component={Annotation}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
 
 const StatsStack = () => (
   <Stack.Navigator>
@@ -431,6 +451,15 @@ const BottomTabs = () => (
         unmountOnBlur: true,
         tabBarVisible: false,
         tabBarButton: props => <TabComponent label="Verification" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Annotation"
+      component={AnnotationStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarVisible: false,
+        tabBarButton: props => <TabComponent label="Annotation" {...props} />,
       }}
     />
     <Tab.Screen
