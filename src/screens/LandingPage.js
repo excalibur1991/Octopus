@@ -11,7 +11,7 @@ const LandingPage = ({navigation, t}) => {
   const options = [
     {
       title: t('landing.upload'),
-      screen: 'Upload',
+      screen: 'UploadGuidelines',
       icon: 'analytics',
       Icon: MaterialIcon,
     },

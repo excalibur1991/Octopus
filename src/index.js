@@ -20,9 +20,8 @@ import UploadImage from './screens/UploadImage';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
-import walletEntry from '../walletEntry'
-import Staking from './screens/Staking'
 import walletEntry from '../walletEntry';
+import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';

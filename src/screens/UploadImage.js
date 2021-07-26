@@ -256,7 +256,7 @@ const Upload = ({navigation}) => {
                   placeholder="Add Description"
                   onChangeText={setDescription}
                 />
-                <TagInput
+                <ImageTagInput
                   tags={tags}
                   onChange={setTags}
                   placeholder="Enter tags"
