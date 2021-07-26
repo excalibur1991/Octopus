@@ -6,7 +6,7 @@ import {theme} from '../services/Common/theme';
 import Ripple from './Ripple';
 
 const UploadProgress = ({
-  progress = 0.1,
+  progress = 0,
   success = false,
   error = false,
   errorText = '',
@@ -33,7 +33,7 @@ const UploadProgress = ({
             borderWidth={0}
             height={6}
             color="#4e9cf9"
-            progress={success ? 1 : progress}
+            progress={progress}
             unfilledColor="#e0eeff"
           />
           {!success && (

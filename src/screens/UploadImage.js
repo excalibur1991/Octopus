@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import {theme} from '../services/Common/theme';
 import TextInput from '../components/TextInput';
 import TagInput from '../components/TagInput';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import MultiSelect from '../components/MultiSelect';
 import UploadProgress from '../components/UploadProgress';
 import UploadProgressTile from '../components/UploadProgressTile';
@@ -16,22 +16,34 @@ import {
   onPickFile,
   handlePiiSelect,
   handleBountySelect,
+  verifyFields,
+  submitTags,
+  getSuccess,
+  getError,
+  onRemove,
+  canProceed,
+  submitMultipleImageTags,
 } from '../functions/uploadimage';
+import {useStateValue} from '../services/State/State';
 
-const Upload = () => {
+const Upload = ({navigation}) => {
   const [progress, setProgress] = useState(0);
   const [files, setFiles] = useState([]);
+  const [fileUploadResponses, setFileUploadResponses] = useState([]);
+  const [uploadingImageIndex, setUploadingImageIndex] = useState(null);
+  const [imageId, setImageId] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState(
-    'Image width too small, minimum allowed [400]',
-  );
+  const [errorText, setErrorText] = useState('');
   const [readOnly, setReadOnly] = useState(false);
+  const [multipleFileInputMode, setMultipleFileInputMode] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState('');
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState([]);
   const [pii, setPii] = useState([]);
   const [bounties, setBounties] = useState([]);
+  const [, dispatch] = useStateValue();
 
   const piiOptions = [
     'This image contains PII of faces',
@@ -40,17 +52,6 @@ const Upload = () => {
   ];
   const bountyOptions = ['Traffic sign bounty', 'Food bounty'];
 
-  useEffect(() => {
-    if (files && files.length > 0 && files[0] && files[0].uri) {
-      setTimeout(() => {
-        setSuccess(true);
-        // setError(true);
-      }, 2000);
-    } else {
-      setSuccess(false);
-    }
-  }, [files]);
-
   return (
     <View style={styles.container}>
       {readOnly ? (
@@ -58,14 +59,28 @@ const Upload = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.uploadScrollContainer}>
           <View style={styles.readOnlyContainer}>
-            {files && files[0] && files[0].uri && (
-              <Image
-                borderRadius={10}
-                resizeMode="stretch"
-                style={styles.image}
-                source={{uri: files[0].uri}}
-              />
-            )}
+            {files && files.length > 0
+              ? fileUploadResponses && fileUploadResponses.length > 0
+                ? files.map((file, index) =>
+                    fileUploadResponses[index].id ? (
+                      <Image
+                        borderRadius={10}
+                        resizeMode="stretch"
+                        style={[styles.image, styles.space]}
+                        source={{uri: file.uri}}
+                      />
+                    ) : null,
+                  )
+                : files[0] &&
+                  files[0].uri && (
+                    <Image
+                      borderRadius={10}
+                      resizeMode="stretch"
+                      style={styles.image}
+                      source={{uri: files[0].uri}}
+                    />
+                  )
+              : null}
             <Text style={styles.textFieldHeader}>Description</Text>
             <View style={styles.descroptionContainer}>
               <ScrollView
@@ -94,11 +109,33 @@ const Upload = () => {
             </View>
           </View>
           <Button
-            onPress={() => {}}
+            disabled={loading}
+            loading={loading}
             color={theme.APP_COLOR}
             buttonStyle={styles.button}
             textStyle={styles.buttonText}
             title={'Submit Description & Tags'}
+            onPress={() => {
+              if (fileUploadResponses && fileUploadResponses.length > 0) {
+                submitMultipleImageTags(
+                  dispatch,
+                  setLoading,
+                  fileUploadResponses,
+                  navigation,
+                  description,
+                  tags,
+                );
+              } else {
+                submitTags(
+                  dispatch,
+                  setLoading,
+                  navigation,
+                  imageId,
+                  description,
+                  tags,
+                );
+              }
+            }}
           />
         </ScrollView>
       ) : files && files.length > 0 ? (
@@ -108,11 +145,17 @@ const Upload = () => {
             contentContainerStyle={styles.uploadScrollContainer}>
             <UploadProgress
               file={files[0]}
-              progress={progress || 0.5}
+              progress={progress}
               success={success}
               error={error}
               errorText={errorText}
-              onCancel={() => setFiles([])}
+              onCancel={() => {
+                setProgress(0);
+                setSuccess(false);
+                setError(false);
+                setErrorText('');
+                setFiles([]);
+              }}
             />
             <TextInput
               isTextArea
@@ -151,9 +194,23 @@ const Upload = () => {
               buttonStyle={styles.button}
               onPress={() => {
                 if (error) {
-                  onPickFile(files, setFiles, setProgress);
+                  onPickFile(
+                    dispatch,
+                    files,
+                    setFiles,
+                    fileUploadResponses,
+                    setFileUploadResponses,
+                    setUploadingImageIndex,
+                    setProgress,
+                    setSuccess,
+                    setError,
+                    setErrorText,
+                    setImageId,
+                  );
                 } else if (success) {
-                  setReadOnly(true);
+                  if (verifyFields(dispatch, description, tags)) {
+                    setReadOnly(true);
+                  }
                 } else {
                   setFiles([]);
                 }
@@ -167,25 +224,121 @@ const Upload = () => {
             contentContainerStyle={styles.uploadScrollContainer}>
             <Text style={styles.multipleFilesHeader}>Files</Text>
             {files.map((file, index) => (
-              <UploadProgressTile file={file} success={index % 2 === 0} />
+              <UploadProgressTile
+                file={file}
+                progress={
+                  index === uploadingImageIndex
+                    ? 0.8
+                    : fileUploadResponses &&
+                      fileUploadResponses.length > 0 &&
+                      fileUploadResponses[index]
+                    ? 1
+                    : 0
+                }
+                success={getSuccess(fileUploadResponses, index)}
+                error={getError(fileUploadResponses, index)}
+                onRemove={() =>
+                  onRemove(
+                    files,
+                    setFiles,
+                    fileUploadResponses,
+                    setFileUploadResponses,
+                    index,
+                  )
+                }
+              />
             ))}
-            <View style={styles.uploadBorderContainer}>
-              <Image
-                resizeMode="stretch"
-                source={CloudUpload}
-                style={styles.imageIcon}
-              />
-              <Text style={[styles.uploadText, styles.marginBottom3p]}>
-                Personal Information, Tutorial, Data Bounties
-              </Text>
-              <Button
-                title="Upload Image"
-                onPress={() => onPickFile(files, setFiles, setProgress, true)}
-                color={theme.APP_COLOR}
-                buttonStyle={styles.button}
-                textStyle={styles.buttonText}
-              />
-            </View>
+            {multipleFileInputMode ? (
+              <>
+                <TextInput
+                  isTextArea
+                  value={description}
+                  placeholder="Add Description"
+                  onChangeText={setDescription}
+                />
+                <TagInput
+                  tags={tags}
+                  onChange={setTags}
+                  placeholder="Enter tags"
+                  onSubmitEditing={() => {
+                    const allTags = tags.slice();
+                    allTags.push(tag);
+                    setTag('');
+                    setTags(allTags);
+                  }}
+                />
+                <MultiSelect
+                  textColor={theme.APP_COLOR}
+                  placeholder="Choose PII"
+                  options={piiOptions}
+                  selectedIndices={pii}
+                  onSelect={(val) => handlePiiSelect(val, pii, setPii)}
+                />
+                <MultiSelect
+                  textColor="#ED8495"
+                  options={bountyOptions}
+                  selectedIndices={bounties}
+                  placeholder="Choose Bounties"
+                  onSelect={(val) =>
+                    handleBountySelect(val, bounties, setBounties)
+                  }
+                />
+                <Button
+                  color={theme.APP_COLOR}
+                  title="Next"
+                  buttonStyle={styles.button}
+                  onPress={() => {
+                    if (verifyFields(dispatch, description, tags)) {
+                      setReadOnly(true);
+                    }
+                  }}
+                  textStyle={styles.buttonText}
+                />
+              </>
+            ) : (
+              <>
+                <View style={styles.uploadBorderContainer}>
+                  <Image
+                    resizeMode="stretch"
+                    source={CloudUpload}
+                    style={styles.imageIcon}
+                  />
+                  <Text style={[styles.uploadText, styles.marginBottom3p]}>
+                    Personal Information, Tutorial, Data Bounties
+                  </Text>
+                  <Button
+                    title="Upload Image"
+                    onPress={() =>
+                      onPickFile(
+                        dispatch,
+                        files,
+                        setFiles,
+                        fileUploadResponses,
+                        setFileUploadResponses,
+                        setUploadingImageIndex,
+                        setProgress,
+                        setSuccess,
+                        setError,
+                        setErrorText,
+                        setImageId,
+                        true,
+                      )
+                    }
+                    color={theme.APP_COLOR}
+                    buttonStyle={styles.button}
+                    textStyle={styles.buttonText}
+                  />
+                </View>
+                <Button
+                  title="Next"
+                  color={theme.APP_COLOR}
+                  disabled={!canProceed(fileUploadResponses)}
+                  buttonStyle={styles.button}
+                  onPress={() => setMultipleFileInputMode(true)}
+                  textStyle={styles.buttonText}
+                />
+              </>
+            )}
           </ScrollView>
         )
       ) : (
@@ -203,7 +356,21 @@ const Upload = () => {
             </Text>
             <Button
               title="Upload"
-              onPress={() => onPickFile(files, setFiles, setProgress)}
+              onPress={() =>
+                onPickFile(
+                  dispatch,
+                  files,
+                  setFiles,
+                  fileUploadResponses,
+                  setFileUploadResponses,
+                  setUploadingImageIndex,
+                  setProgress,
+                  setSuccess,
+                  setError,
+                  setErrorText,
+                  setImageId,
+                )
+              }
               color={theme.APP_COLOR}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
