@@ -102,17 +102,6 @@ export const userLogout = async () => {
   }
 };
 
-export const getNounce = async (public_address) => {
-  try {
-    const response = await getData(
-      s.auth.get_nounce.replace('$[public_address]', public_address),
-    );
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
-
 /**
  * Verification APIs
  */
@@ -149,14 +138,16 @@ export const getImageById = async(imageId) => {
     return null;
   }}
 
-export const uploadImage = async (data) => {
+export const getNounce = async (public_address) => {
   try {
-    const response = await postData(s.taxonomy.uploadImage, data, true);
+    const response = await getData(
+      s.auth.get_nounce.replace('$[public_address]', public_address),
+    );
     return response;
   } catch (err) {
     return null;
   }
-}
+};
 
 /**
 * {annotation: {tags: [], description: ""}
@@ -167,6 +158,15 @@ export const verifyImage = async(image_id, annotation, verification) => {
   const data = {image_id: image_id, annotation: annotation, verification: verification}
   try {
     const response = await postUserData(s.metadata.verifyImage, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const uploadImage = async (data) => {
+  try {
+    const response = await postData(s.taxonomy.uploadImage, data, true);
     return response;
   } catch (err) {
     return null;
