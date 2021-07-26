@@ -7,29 +7,39 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import {theme} from '../services/Common/theme';
 
 const UploadProgress = ({
+  file = null,
   progress = 0.1,
   success = false,
-  error = false,
-  errorText = '',
-  file = null,
-  onCancel = () => {},
+  error = '',
+  onRemove = () => {},
 }) => {
   return (
     <View style={styles.container}>
       <OctIcon name="file-media" size={45} color="lightgray" />
       <View style={styles.uploadContainer}>
         <View style={styles.upperContainer}>
-          <Text style={styles.fileNameText}>{file && file.name}</Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="middle"
+            style={styles.fileNameText}>
+            {file && file.name}
+          </Text>
           {success ? (
             <>
               <Text style={styles.statusText}>Uploaded</Text>
-              <AntIcon name="delete" size={18} color={theme.APP_COLOR} />
+              <AntIcon
+                size={18}
+                name="delete"
+                onPress={onRemove}
+                color={theme.APP_COLOR}
+              />
             </>
           ) : (
             <>
               <Text style={styles.percentageText}>{`${progress * 100}%`}</Text>
               <IonIcon
                 size={18}
+                onPress={onRemove}
                 color={theme.APP_COLOR}
                 name="close-circle-outline"
               />
@@ -39,11 +49,15 @@ const UploadProgress = ({
         <Progress.Bar
           borderWidth={0}
           color="#4e9cf9"
-          progress={success ? 1 : progress}
+          progress={progress}
           unfilledColor="#e0eeff"
           width={220}
         />
-        <Text style={styles.timeText}>2 min remaining</Text>
+        {error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : !(progress === 1) ? (
+          <Text style={styles.timeText}>{'2 min remaining'}</Text>
+        ) : null}
       </View>
     </View>
   );
@@ -65,6 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   uploadContainer: {
+    flex: 1,
     paddingVertical: '3%',
     paddingHorizontal: '3%',
     justifyContent: 'center',
@@ -99,6 +114,12 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '500',
     color: '#BDC4CD',
+    fontFamily: 'Inter-Regular',
+  },
+  errorText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#D60E18',
     fontFamily: 'Inter-Regular',
   },
 });

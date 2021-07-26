@@ -72,6 +72,9 @@ export default StyleSheet.create({
     height: 200,
     width: '100%',
   },
+  space: {
+    marginBottom: 15,
+  },
   textFieldHeader: {
     fontSize: 12,
     marginTop: 10,
