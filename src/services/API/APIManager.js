@@ -102,17 +102,6 @@ export const userLogout = async () => {
   }
 };
 
-export const getNounce = async (public_address) => {
-  try {
-    const response = await getData(
-      s.auth.get_nounce.replace('$[public_address]', public_address),
-    );
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
-
 /**
  * Verification APIs
  */
@@ -156,7 +145,18 @@ export const uploadImage = async (data) => {
   } catch (err) {
     return null;
   }
-}
+};
+
+export const getNounce = async (public_address) => {
+  try {
+    const response = await getData(
+      s.auth.get_nounce.replace('$[public_address]', public_address),
+    );
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
 
 /**
 * {annotation: {tags: [], description: ""}
