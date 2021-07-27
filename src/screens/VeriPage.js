@@ -45,16 +45,16 @@ const initial_piis = [
   {tag: 'PII - non faces',desc: 'This image contains PII  of non-faces.', checked: false, disabled: false},
   {tag: 'Copyright', desc: 'Copyright', checked: false, disabled: false},
 ];
-  const initial_bounties = [
-    {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
-    {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
-    {tag: 'project.bb bounty', desc: 'project.bb bounty(cigarette butt on the beach)', checked: false, disabled: false},
-    {tag: 'nft+art bounty', desc: 'NFT Bounty(photos of NFTs)', checked: false, disabled: false},
-    {tag: 'traffic sign bounty', desc: 'Traffiic Sign Bounty', checked: false, disabled: false},
-    {tag: 'meme bounty', desc: 'Meme Bounty', checked: false, disabled: false},
-    {tag: 'product bounty', desc: 'Product Bounty(photos of products)', checked: false, disabled: false},
-    {tag: 'ocr bounty', desc: 'OCR Bounty(photos with text in them)', checked: false, disabled: false},
-  ];
+const initial_bounties = [
+  {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
+  {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
+  {tag: 'project.bb bounty', desc: 'project.bb bounty(cigarette butt on the beach)', checked: false, disabled: false},
+  {tag: 'nft+art bounty', desc: 'NFT Bounty(photos of NFTs)', checked: false, disabled: false},
+  {tag: 'traffic sign bounty', desc: 'Traffiic Sign Bounty', checked: false, disabled: false},
+  {tag: 'meme bounty', desc: 'Meme Bounty', checked: false, disabled: false},
+  {tag: 'product bounty', desc: 'Product Bounty(photos of products)', checked: false, disabled: false},
+  {tag: 'ocr bounty', desc: 'OCR Bounty(photos with text in them)', checked: false, disabled: false},
+];
 
 
 
@@ -499,11 +499,11 @@ const VeriPage = (props) => {
         setBEditEnabled(false);
       });
       Keyboard.addListener(
-        'keyboardDidShow',
+        'keyboardWillShow',
         _keyboardDidShow,
     );
     Keyboard.addListener(
-        'keyboardDidHide',
+        'keyboardWillHide',
         _keyboardDidHide,
     );
       setCurrentIndex(0);
