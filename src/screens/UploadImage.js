@@ -46,11 +46,20 @@ const Upload = ({navigation}) => {
   const [, dispatch] = useStateValue();
 
   const piiOptions = [
+    'This image contains biometric information',
     'This image contains PII of faces',
     'This image contains PII of non-faces',
     'Copyright',
   ];
-  const bountyOptions = ['Traffic sign bounty', 'Food bounty'];
+  const bountyOptions = ['Anonymization Bounty (photos of faces)',
+  'Traffic sign bounty', 
+  'Food bounty',
+  'Project.bb bounty(cigarette butts on the beach)',
+  'NFT Bounty (photos of NFTs)',
+  'OCR Bounty (photos with text in them)',
+  'Meme Bounty',
+  'Product Bounty (photos of products)'
+];
 
   return (
     <View style={styles.container}>
