@@ -250,7 +250,6 @@ const VeriPage = (props) => {
         setIsLoading(true);
         const response = await queryMetadata(curPage);
         if(response && response.result && response.result.length > 0) {
-          console.log(JSON.stringify(response));
           setMaxPage(response.pageSize);
           setCurPage(response.page  + 1);
           // imagees exists then add these
@@ -379,7 +378,7 @@ const VeriPage = (props) => {
 
   //add annotation tag
   const handleNewTag = ()=>{
-    try{console.log('asd');
+    try{
       setEditorType('annotation');
       setTagEditiIndex(annotationTags?annotationTags.length: 0);
       setBEditEnabled(true);
@@ -387,7 +386,6 @@ const VeriPage = (props) => {
       textEditor.focus();
   
     }catch(err){
-      console.log(err);
     }
     
   };
