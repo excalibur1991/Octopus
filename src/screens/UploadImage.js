@@ -125,6 +125,8 @@ const Upload = ({navigation}) => {
             textStyle={styles.buttonText}
             title={'Submit Description & Tags'}
             onPress={() => {
+              const piiTags = pii.map(index=>piiOptions[index]);
+              const bountyTags = bounties.map(index=>bountyOptions[index]);
               if (fileUploadResponses && fileUploadResponses.length > 0) {
                 submitMultipleImageTags(
                   dispatch,
@@ -132,7 +134,7 @@ const Upload = ({navigation}) => {
                   fileUploadResponses,
                   navigation,
                   description,
-                  tags,
+                  [...tags, ...piiTags, ...bountyTags],
                 );
               } else {
                 submitTags(
@@ -141,7 +143,7 @@ const Upload = ({navigation}) => {
                   navigation,
                   imageId,
                   description,
-                  tags,
+                  [...tags, ...piiTags, ...bountyTags],
                 );
               }
             }}
