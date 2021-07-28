@@ -57,25 +57,23 @@ const Annotation = () => {
   const [bounties, setBounties] = useState([]);
   const [selectedBounties, setSelectedBounties] = useState([]);
   const [bountyPlaceholder, setBountyPlaceholder] = useState("Bounties");
-  const [annotationTags, setAnnotationTags] = useState(['Fruits', 'Berrys', 'Creative']);
+  const [annotationTags, setAnnotationTags] = useState([]);
 
   const [metadata, setMetadata] = useState([]);
   const [curPage, setCurPage] = useState(0);
   const [maxPage, setMaxPage] = useState(0);
   const [curImageIndex, setCurImageIndex] = useState(0);
   const [curMetadata, setCurMetadata] = useState({});
-  const [canvas, setCanvas]  = useState(null);
-  const [frame, setFrame] = useState(null);
 
   const [frameDimension, setFrameDimension] = useState({width: 400, height: 300});
   
   const [imageBlob, setImageBlob] = useState(null);
-  const [rectX, setRectX] = useState(0);
-  const [rectY, setRectY] = useState(0);
 
   const [annoRect, setAnnoRect] = useState([]);
   const [curTag, setCurTag] = useState("");
   const [rectScale, setRectScale] = useState(1.0);
+  const [zoomView,setZoomView] = useState(null);
+  const [cropPosition, setCropPosition] = useState({x:0, y:0});
 
   useEffect(() => {
     setCurImageIndex(0);
@@ -87,6 +85,7 @@ const Annotation = () => {
   }, [curPage]);
 
   useEffect(()=>{
+    console.log(curImageIndex);
     updateMetadata();
   }, 
   [curImageIndex]);
@@ -101,32 +100,51 @@ const Annotation = () => {
   },
   [imageBlob]);
 
+  const init_variables = ()=>{
+    setCropPosition({x: 0, y: 0});
+    setRectScale(1.0);
+    setCurTag("");
+    setAnnoRect([]);
+    setSelectedBounties([]);
+
+    if (zoomView){
+      zoomView.reset();
+      console.log('zoomView.resetScale();');
+    }
+
+
+  };
+
 
  
   const updateMetadata = async ()=>{
+    var arr = [];
     if(curImageIndex>= metadata.length){
-      const arr = await fetchMetadata();
-      if(curImageIndex < arr.length ){
-        const _metadata = arr[curImageIndex];
-        console.log(_metadata);
-        setCurMetadata(_metadata);
-        var _annotationTags = [];
-        var _bounties = [];
-        _metadata.tag_data.map((value)=>{
-          const found = initial_bounties.find((bounty)=>(bounty.tag == value));
-          if(found){
-            _bounties.push({tag: value, checked: false, disabled: false});
-          }else{
-            _annotationTags.push({tag: value, checked: false, disabled: false});
-          }
-        });
-
-        setAnnotationTags(_annotationTags);
-        setBounties(_bounties);
-      }
-      const image_id = arr[curImageIndex].image_id;
-      await getImage(image_id);
+      arr = await fetchMetadata();
+    }else{
+      arr = metadata;
     }
+    console.log(arr.length);
+    if(curImageIndex < arr.length ){
+      const _metadata = arr[curImageIndex];
+      setCurMetadata(_metadata);
+      var _annotationTags = [];
+      var _bounties = [];
+      _metadata.tag_data.map((value)=>{
+        const found = initial_bounties.find((bounty)=>(bounty.tag == value));
+        if(found){
+          _bounties.push({tag: value, checked: false, disabled: false});
+        }else{
+          _annotationTags.push({tag: value, checked: false, disabled: false});
+        }
+      });
+
+      setAnnotationTags(_annotationTags);
+      setBounties(_bounties);
+      init_variables();
+    }
+    const image_id = arr[curImageIndex].image_id;
+    await getImage(image_id);
   };
 
   const fetchMetadata = async ()=>{
@@ -137,7 +155,6 @@ const Annotation = () => {
       });
       const response = await queryMetadata(curPage);
       if(response && response.result && response.result.length > 0) {
-        console.log(JSON.stringify(response));
         setMaxPage(response.pageSize);
         // imagees exists then add these
         //actually this not works properly
@@ -168,7 +185,6 @@ const Annotation = () => {
   }
 
   const  getImage = async (image_id)=>{
-    console.log(image_id);
     const result = await getImageById (image_id);
     const fileReaderInstance = new FileReader();
     fileReaderInstance.readAsDataURL(result);
@@ -179,11 +195,19 @@ const Annotation = () => {
 
 
   const handleBountySelection = (items)=>{
+    annotationTags.map((value,index)=>{
+      value.checked = false;
+    });
     setSelectedBounties(items);
+    if(items.length > 0){
+      setCurTag(items[0].tag);
+    }
   };
 
   const saveAnnotation = async ()=>{
     //save annotation
+    if(curImageIndex >= metadata.length) return;
+
     const image_id = curMetadata.image_id;
 
     var _rects = [];
@@ -198,25 +222,6 @@ const Annotation = () => {
     setCurImageIndex((curImageIndex+1));
   };
 
-  const drawGrid = ()=>{
-    let ctx = canvas.getContext('2d')
-				
-    let s = 20
-    let nX = Math.floor(canvas.width / 2);
-    let nY = Math.floor(canvas.height / 2);
-    ctx.strokeStyle = 'black'
-    ctx.beginPath()
-    for (var x = 0; x <= canvas.width; x += s) {
-      ctx.moveTo(x, 0)
-      ctx.lineTo(x, canvas.height)
-    }
-
-    for (var y = 0; y <= canvas.height; y += s) {
-      ctx.moveTo(0, y)
-      ctx.lineTo(canvas.width, y )
-    }
-    ctx.stroke()
-  }
 
 
   const find_dimesions = (layout)=> {
@@ -225,33 +230,27 @@ const Annotation = () => {
   };
 
 
-  const drawImage = ()=>{
-    const _canvas = new Canvas();
-    if(canvas == null)  return;
-    const image = new CanvasImage(canvas);
-    const context = canvas.getContext('2d');
-    image.src = imageBlob;
-    image.addEventListener('load', () => {
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      drawGrid();
-    });
-  }
-
-  const onDraw = ()=>{
-    if(canvas == null){
-      return;
-    }
-    //draw background
-    canvas.width = frameDimension.width;
-    canvas.height = frameDimension.height;
-    //const context = canvas.getContext('2d');
-    //draw Rect
-    drawImage();
-    //draw grid
-    //drawGrid();
-  }
 
   const handleOnMove = (position)=>{
+    //onPanResponderRelease
+    const originalImageWidth = zoomView.props.imageWidth;
+    const originalImageHeight = zoomView.props.imageHeight;
+    const cropWidth = zoomView.props.cropWidth;
+    const cropHeight = zoomView.props.cropHeight;
+    const scaledImageWidth = originalImageWidth * rectScale;
+    const scaledImageHeight = originalImageHeight * rectScale;
+    const scaledCropWidth = cropWidth // rectScale;
+    const scaledCropHeight = cropHeight // rectScale;
+
+    const positionX = position.positionX * rectScale;
+    const positionY = position.positionY * rectScale;
+    const originX = (scaledImageWidth - scaledCropWidth) / 2;
+    const originY = (scaledImageHeight - scaledCropHeight) / 2;
+
+    const cropPosX = originX - positionX;
+    const cropPosY = originY - positionY;
+    
+    setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
     setRectScale(position.scale);
   }
 
@@ -267,17 +266,16 @@ const Annotation = () => {
     if(curTag == "") return;
     var found = false;
     var _rect = [];
-    console.log(rectScale);
-    console.log(position);
-    const _rectX = position.locationX * rectScale;
-    const _rectY = position.locationY * rectScale;
-    const _rectWidth = rectWidth * rectScale;
-    const _rectHeight = rectHeight * rectScale;
-
+    const origLocX = position.locationX;
+    const origLocY = position.locationY;
+    const _rectX = origLocX , _rectY = origLocY, _rectWidth = rectWidth / rectScale, _rectHeight = rectHeight / rectScale;
+    console.log('position', position, rectScale);
+    console.log('origLocX',cropPosition,  origLocX, origLocY);
     console.log(_rectX, _rectY, _rectWidth, _rectHeight);
 
-    const blockX = Math.floor(_rectX / _rectWidth) * _rectWidth; 
-    const blockY = Math.floor(_rectY / _rectHeight) * _rectHeight; 
+    const blockX = Math.floor((origLocX) / _rectWidth) * _rectWidth + cropPosition.x % _rectWidth;
+    const blockY = Math.floor((origLocY) / _rectWidth) * _rectHeight + cropPosition.y % _rectWidth;
+
 
     annoRect.map((value, index)=>{
       if(value.tag == curTag) {
@@ -301,6 +299,8 @@ const Annotation = () => {
   };
 
   const handlePressAnnoTag = (_annoTag)=>{
+    setSelectedBounties([]);
+
     if(_annoTag.checked){
       setCurTag("");
     }else{
@@ -311,6 +311,8 @@ const Annotation = () => {
     annotationTags.map((value,index)=>{
       if(_annoTag.tag == value.tag){
         value.checked = !_annoTag.checked;
+      }else{
+        value.checked = false;
       }
       _tags.push(value);
     });
@@ -332,7 +334,6 @@ const Annotation = () => {
           selectText="Bounty"
           displayKey="tag"
           single={true}
-          onSelectedItemsChange={(items)=>{}}
           showFilter={false}
           canAddItems={false}
           selectedItems={selectedBounties}
@@ -378,6 +379,7 @@ const Annotation = () => {
                 margin:2                   
               }}
               title={annoTag.tag}
+              icon={()=>null}
               onLongPress={()=>{}}
               onPress={()=>{handlePressAnnoTag(annoTag)}}
               selected={annoTag.checked}
@@ -395,6 +397,7 @@ const Annotation = () => {
           flex: 0.8
         }}>
           <ImageZoom 
+          ref={(view)=>{setZoomView(view)}}
             cropWidth={frameDimension.width}
             cropHeight={frameDimension.height}
             imageWidth={frameDimension.width}
@@ -406,7 +409,7 @@ const Annotation = () => {
               borderWidth: 1
               }}
               onMove={(position)=>{handleOnMove(position)}}
-              onLongPress={(position)=>{handleOnClick(position)}}
+              onClick={(position)=>{handleOnClick(position)}}
             >
             <Image
             style={{
@@ -450,12 +453,13 @@ const Annotation = () => {
           pointerEvents={'box-none'}
           >
             {
-              annoRect.filter((_rect)=>(_rect.tag == curTag)).map((rect)=>(
+              annoRect.filter((_rect)=>(_rect.tag == curTag)).map((rect,index)=>(
                 <Rect
-                x={rect.x / rectScale}
-                y={rect.y / rectScale}
-                width={rect.width / rectScale}
-                height={rect.height / rectScale}
+                key={index}
+                x={(rect.x - cropPosition.x) * rectScale}
+                y={(rect.y - cropPosition.y) * rectScale}
+                width={rect.width * rectScale}
+                height={rect.height * rectScale}
                 fill="#ff000030"
                 stroke="none"
                 strokeWidth="0"
