@@ -7,7 +7,7 @@ const Panel = ({title, children}) => {
   const [maxHeight, setMaxHeight] = useState();
   const [minHeight, setMinHeight] = useState();
   const [expanded, setExpanded] = useState(true);
-  const [animation, setAnimation] = useState(null);
+  const [animation, setAnimation] = useState(new Animated.Value(400));
 
   const toggle = () => {
     let initialValue = expanded ? maxHeight + minHeight : minHeight,
