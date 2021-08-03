@@ -38,7 +38,8 @@ export const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: '#DADADA',
       paddingHorizontal: 14,
-      paddingVertical: 10
+      paddingVertical: 10,
+      marginBottom: 10
     },
     imageView: {
       marginTop: 10,

@@ -847,7 +847,7 @@ export default class MultiSelect extends Component {
       flexDirection: 'row',
       alignItems: 'center',
       paddingLeft: 16,
-      paddngTop: 10,
+      
       height: 53,
       backgroundColor: colorPack.light,
     },
@@ -856,7 +856,6 @@ export default class MultiSelect extends Component {
       alignItems: 'center',
       height: 40,
       marginBottom: 10,
-      borderColor: 'red'
     },
   };
   

@@ -31,6 +31,7 @@ import {
     props.setRectScale(1.0);
     props.setCurTag("");
     props.setAnnoRect([]);
+    props.setAnnoDot([]);
     props.setSelectedBounties([]);
 
     if (props.zoomView){
@@ -71,7 +72,6 @@ import {
             await getImage(props, image_id);
         }
     } catch(err){
-        console.log(err);
     }
 
   };
@@ -94,7 +94,6 @@ import {
         return arr;
       }
     }catch(err){
-        console.log(err);
         props.dispatch({
         type: actions.SET_ALERT_SETTINGS,
         alertSettings: {
@@ -133,7 +132,6 @@ import {
     props.annotationTags.map((value,index)=>{
       value.checked = false;
     });
-    console.log(items);
     props.setSelectedBounties(items);
     if(items.length > 0){
         props.setCurTag(items[0]);
@@ -159,6 +157,19 @@ import {
         y: (value.y / originalImageHeight), 
         width: (value.width / originalImageWidth),
         height: (value.height / originalImageHeight)
+      });
+    });
+    
+    props.annoDot.map((value)=>{
+      var _dots = [];
+      value.dots.map((dot)=>{
+        //_dots.push({x: (dot.x / originalImageWidth), y: (dot.y / originalImageHeight)});
+        _dots.push({x: (dot.x), y: (dot.y)});
+      });
+      _rects.push({
+        type: 'dots',
+        tag: value.tag,
+        dots: _dots
       });
     });
 
@@ -208,37 +219,75 @@ import {
     return false;
   };
 
+  export const intersectCircle = (x, y, ptX, ptY, r=3)=>{
+    return (Math.sqrt((x-ptX) * (x-ptX)  + (y - ptY) * (y - ptY)) < r)
+  }
+
+  export const sameDot = (x, y, ptX, ptY)=>{
+    if(x == ptX && y == ptY){
+      return true;
+    }
+    return false;
+  };
+
   export const handleOnClick = (props, position)=>{
     if(props.curTag == "") return;
     var found = false;
     var _rect = [];
-    const origLocX = position.locationX;
-    const origLocY = position.locationY;
+    const origLocX = Math.floor(position.locationX);
+    const origLocY = Math.floor(position.locationY);
     const _rectX = origLocX , _rectY = origLocY, _rectWidth = rectWidth / props.rectScale, _rectHeight = rectHeight / props.rectScale;
    
 
-    const blockX = Math.floor((origLocX) / _rectWidth) * _rectWidth + props.cropPosition.x % _rectWidth;
-    const blockY = Math.floor((origLocY) / _rectWidth) * _rectHeight + props.cropPosition.y % _rectWidth;
+    //const blockX = Math.floor((origLocX) / _rectWidth) * _rectWidth + ((origLocX-props.cropPosition.x) % _rectWidth);
+    //const blockY = Math.floor((origLocY) / _rectHeight) * _rectHeight + ((origLocY- props.cropPosition.y) % _rectHeight);
 
+    const blockX = props.cropPosition.x + Math.floor((origLocX-props.cropPosition.x) / _rectWidth) * _rectWidth;
+    const blockY = props.cropPosition.y + Math.floor((origLocY-props.cropPosition.y) / _rectHeight) * _rectHeight;
 
-    props.annoRect.map((value, index)=>{
-      if(value.tag == props.curTag) {
-        if(intersect(value.x, value.y, value.width, value.height, _rectX, _rectY)){
-          //found
-          found = true
+    if(props.curAnnoMode == 'box'){
+      props.annoRect.map((value, index)=>{
+        if(value.tag == props.curTag) {
+          if(intersect(value.x, value.y, value.width, value.height, _rectX, _rectY)){
+            //found
+            found = true
+          }else{
+            _rect.push(value);
+          }
         }else{
           _rect.push(value);
         }
-      }else{
-        _rect.push(value);
+      });
+  
+      if(found == false){
+        _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
       }
-    });
+      props.setAnnoRect(_rect);
 
-    if(found == false){
-      _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
+    }else if(props.curAnnoMode == 'dots') {
+      //find tag
+      var hasTag = props.annoDot.find((value)=>(value.tag == props.curTag));
+      if(hasTag){
+        props.annoDot.map((value, index)=>{
+          if(value.tag == props.curTag){
+            var foundedItem = value.dots.find((dot)=>(intersectCircle(dot.x, dot.y, _rectX, _rectY)));
+            if(foundedItem){
+              var remained_dots = value.dots.filter((dot)=>(!intersectCircle(dot.x, dot.y, _rectX, _rectY)));
+              _rect.push({tag: value.tag, type: 'dots', dots: remained_dots});
+            }else{
+              _rect.push({tag: value.tag, type: 'dots', dots: [...value.dots, {x: _rectX, y: _rectY}]});
+            }
+          }else{
+            //org value
+            _rect.push(value);
+          }
+        })
+      }else{
+        _rect.push({tag: props.curTag, type: 'dots', dots: [{x: _rectX, y: _rectY}]});
+      }
+
+      props.setAnnoDot(_rect);
     }
-
-    props.setAnnoRect(_rect);
   };
 
   

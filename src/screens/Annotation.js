@@ -12,7 +12,7 @@ import {
   Button,
 } from 'react-native-paper';
 import ImageZoom from 'react-native-image-pan-zoom';
-import Svg, {Line, Defs, Pattern, Rect, Path, G} from 'react-native-svg';
+import Svg, {Line, Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 
 import {
   updateMetadata,
@@ -27,6 +27,7 @@ import {
 } from '../functions/annotation'
 import {styles} from '../styles/annotation';
 import {withTranslation} from 'react-i18next';
+import { isNullOrUndefined } from 'util';
 
 
 const Annotation = () => {
@@ -47,7 +48,14 @@ const Annotation = () => {
   
   const [imageBlob, setImageBlob] = useState(null);
 
+  //type: 'box', x: 0, y: 0, width: 30, height: 30
   const [annoRect, setAnnoRect] = useState([]);
+  //type: 'dots', dots: [{x: 0, y: 0}]
+  const [annoDot, setAnnoDot] = useState([]);
+
+  const [annoMode, setAnnoMode] = useState([{type:'box', checked: true}, {type: 'dots', checked: false}]); // 'dots'
+  const [curAnnoMode, setCurAnnoMode] = useState(['box']);
+
   const [curTag, setCurTag] = useState("");
   const [rectScale, setRectScale] = useState(1.0);
   const [zoomView,setZoomView] = useState(null);
@@ -85,7 +93,11 @@ const Annotation = () => {
     zoomView:zoomView,
     setZoomView:setZoomView,
     cropPosition:cropPosition, 
-    setCropPosition:setCropPosition
+    setCropPosition:setCropPosition,
+    curAnnoMode: curAnnoMode, 
+    setCurAnnoMode: setCurAnnoMode,
+    annoDot:annoDot, 
+    setAnnoDot:setAnnoDot,
   };
 
   useEffect(() => {
@@ -98,10 +110,13 @@ const Annotation = () => {
 
       updateMetadata(props);
     }catch(err){
-      console.log(err);
     }
   }, 
   [curImageIndex]);
+
+  const handleAnnoModeSelection = (items)=>{
+    setCurAnnoMode(items);
+  }
 
 
   
@@ -151,13 +166,37 @@ const Annotation = () => {
                       onPress={()=>{handlePressAnnoTag(props, annoTag)}}
                       selected={annoTag.checked}
                       closeIconAccessibilityLabel={'Close'}
-                      onClose={()=>{console.log('onClose')}}
-                      >{annoTag.tag}</Chip>
+                    >{annoTag.tag}</Chip>
                   ))
                 }
                 </View>)
 
         }
+
+          <MultiSelect 
+          hideTags
+          hideSubmitButton
+          hideDropdown        
+          items={annoMode}
+          uniqueKey="type"
+          selectText="Type"
+          displayKey="type"
+          single={true}
+          showFilter={false}
+          canAddItems={false}
+          selectedItems={curAnnoMode}
+          onSelectedItemsChange={(items)=>{handleAnnoModeSelection(items) }}
+          textInputProps={{
+            editable:false
+          }}
+          searchInputPlaceholderText={bountyPlaceholder}
+          selectedItemTextColor={'#00A5FF'}
+          styleDropdownMenu={{
+            height:56,
+          }}
+          styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
+          styleInputGroup={styles.styleInputGroup}
+        />
 
         <View
           onLayout={(event) => {find_dimesions(props, event.nativeEvent.layout) }}
@@ -169,9 +208,9 @@ const Annotation = () => {
             imageWidth={frameDimension.width}
             imageHeight={frameDimension.height}
             style={styles.imageZoom}
-              onMove={(position)=>{handleOnMove(props, position)}}
-              onClick={(position)=>{handleOnClick(props, position)}}
-            >
+            onMove={(position)=>{handleOnMove(props, position)}}
+            onClick={(position)=>{handleOnClick(props, position)}}
+          >
             <Image
             style={styles.imageContainer}
             source={{uri:imageBlob}}
@@ -201,7 +240,7 @@ const Annotation = () => {
               {
                 annoRect.filter((_rect)=>(_rect.tag == curTag)).map((rect,index)=>(
                   <Rect
-                  key={index}
+                  key={'annoRect' + index}
                   x={(rect.x - cropPosition.x) * rectScale}
                   y={(rect.y - cropPosition.y) * rectScale}
                   width={rect.width * rectScale}
@@ -211,6 +250,22 @@ const Annotation = () => {
                   strokeWidth="0"
                 />
                 ))
+              }
+              {
+                annoDot.filter((_rect)=>(_rect.tag == curTag)).map((rect, index)=>(
+                  rect.dots.map((dot, index)=>(
+                    <Circle
+                    key={'annoDot' + rect.tag + index}
+                    cx={(dot.x - cropPosition.x) * rectScale}
+                    cy={(dot.y - cropPosition.y) * rectScale}
+                    r={3*rectScale}
+                    fill="#FF000080"
+                    stroke="none"
+                    strokeWidth="0"
+                    />
+                  ))
+                ))
+
               }
               </G>
            </Svg>
