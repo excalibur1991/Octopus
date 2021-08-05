@@ -57,6 +57,12 @@ const LandingPage = ({navigation, t}) => {
       icon: 'account-balance-wallet',
       Icon: MaterialIcon,
     },
+    {
+      title: t('landing.bounty'),
+      screen: 'Bounty',
+      icon: 'card-giftcard',
+      Icon: MaterialIcon,
+    },
   ];
 
   return (

@@ -22,6 +22,7 @@ import Wallet from './screens/Wallet';
 import walletEntry from '../walletEntry'
 import Staking from './screens/Staking'
 import MyStats from './screens/MyStats';
+import Bounty from './screens/Bounty';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
 import i18n from './languages/i18n';
@@ -411,6 +412,27 @@ const MyStatsStack = () => (
   </Stack.Navigator>
 );
 
+//please ensure these information pages should be in here?
+const BountyStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Bounty"
+      component={Bounty}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
 const BottomTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
@@ -502,6 +524,15 @@ const BottomTabs = () => (
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Bounty"
+      component={BountyStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarVisible: false,
+        tabBarButton: props => <TabComponent label="Bounty" {...props} />,
       }}
     />
   </Tab.Navigator>

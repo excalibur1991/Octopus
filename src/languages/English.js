@@ -14,6 +14,7 @@ export default {
       upload: 'Upload',
       verification: 'Verify',
       annotation: 'Annotate',
+      bounty: 'Bounties',
       english: 'English',
       chinese: 'Chinese',
       deutsch: 'Deutsch',
