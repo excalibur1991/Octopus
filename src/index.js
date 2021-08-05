@@ -23,6 +23,7 @@ import walletEntry from '../walletEntry'
 import Staking from './screens/Staking'
 import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
+import ImageCategorization from './screens/ImageCategorization';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
 import i18n from './languages/i18n';
@@ -418,6 +419,26 @@ const BountyStack = () => (
     <Stack.Screen
       name="Bounty"
       component={Bounty}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const ImageCategorizationStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="ImageCategorization"
+      component={ImageCategorization}
       options={({navigation}) => {
         return Header(
           {

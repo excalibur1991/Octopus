@@ -1,24 +1,19 @@
 import {
     View,
     StyleSheet,
-    Image,
     Text,
-    ScrollView,
     Linking,
-    Dimensions 
+    Dimensions,
+    VirtualizedList,
+    useNavigation
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import {theme} from '../services/Common/theme';
 import {withTranslation} from 'react-i18next';
-import {Chip} from 'react-native-paper';
-import {
-    ScrollIntoView,
-    useScrollIntoView,
-    wrapScrollView,
-    ScrollIntoViewScrollView
-} from 'react-native-scroll-into-view';
 import HTML from 'react-native-render-html';
+
+import MultiSelect from '../components/Multiselect'
 
 const bounty_tags = [
     {
@@ -85,7 +80,7 @@ const bounty_tags = [
     },
     {
         tag: 'Optical Character Recognition Bounty (OCR)',
-        header: '<h4>Opticaal Charactere Recognition Bounty (OCR)</h4>',
+        header: '<h4>Optical Character Recognition Bounty (OCR)</h4>',
         content:
         `
         <p><a target="_blank" href="https://towardsdatascience.com/a-gentle-introduction-to-ocr-ee1469a201aa">Optical Character Recognition</a>, shortened to OCR, is a machine learning technique performed on images with text or numerical characters in them. For this bounty, you need to <b>upload photos with text or numbers in them.</b> By posting these photos you are helping to solve long-time machine learning problems such as <a target="_blank" href="https://medium.com/@andreasveit/reading-text-in-the-wild-383c93a6c5e5">OCR in the Wild</a>. Some examples: </p>
@@ -115,46 +110,48 @@ const bounty_tags = [
 ];
 
 
-const Bounty = ({t}) => {
+const Bounty = ({navigation, t}) => {
 
     const [, dispatch] = useStateValue();
-    const sectionRefs = [];
-
-    for(var i = 0; i < bounty_tags.length; i++){
-        sectionRefs[i] = useRef();
-    }
- 
-    console.log(sectionRefs);
-  
+    const [listView, setListView] = useState(null);
+    const [bountyPlaceholder, setBountyPlaceholder] = useState("Bounties");
+    const [selectedBounties, setSelectedBounties] = useState([]);
+    const handleBountySelection = (items)=>{
+        var index  = 0;
+        for(var i = 0; i < bounty_tags.length; i++){
+            if(bounty_tags[i].tag === items[0]){
+                index = i;
+                break;
+            }
+        }
+        listView.scrollToIndex({index: index});
+        setSelectedBounties(items);
+      };
 
     useEffect(()=>{
 
     }, []);
 
-    const scrollSectionIntoView = (index)=>{
-        sectionRefs[index].current.scrollIntoView({align: 'top'});
-    };
-
     const classesStyles = {
         
       }
       
-      const tagsStyles = {
+    const tagsStyles = {
         h1: {
-          color: '#6728C7',
-          textAlign: 'center',
-          marginBottom: 10
+            color: '#6728C7',
+            textAlign: 'center',
+            marginBottom: 10
         },
         h4: {
             color: '#41474E',
             fontSize: 16
         },
         img: {
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 20,
-          width: '80%',
-          backgroundColor: 'red'
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: 20,
+            width: '80%',
+            backgroundColor: 'red'
         },
         label: {
             color: '#41474E',
@@ -165,76 +162,104 @@ const Bounty = ({t}) => {
         a: {
             color: '#ff4092'
         }
+    };
+
+    
+
+    const renderersProps = {
+        a: {
+          onPress(event, url, htmlAttribs, target) {
+            // Do stuff
+            console.log(url);
+            if(url.indexOf('/image_categorization') != -1){
+                //const navigation = useNavigation();
+                navigation.navigate('ImageCategorization');
+            }else{
+                Linking.openURL(url)
+            }
+          }
+        }
       }
 
      
     return (
         <View style={styles.container}>
-            <ScrollView
-                showsVerticalScrollIndicator={false} 
-            >
-                <Text>Data Bounties</Text>
+                <Text style={styles.header}>Data Bounties</Text>
                 <Text>Read about how you can earn extra rewards</Text>
-                <View style={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row'
-                }}>
-                    {
-                        bounty_tags.map((bounty, index)=>(
-                            <Chip 
-                            style={{
-                                width: '45%',
-                                margin: 5
-                            }}
-                            onPress={()=>{scrollSectionIntoView(index)}}
-                            >{bounty.tag}</Chip>
-                        ))
-                    }
-                </View>
+                <View style={styles.column}>
+                 <MultiSelect 
+                    hideTags
+                    hideSubmitButton
+                    hideDropdown        
+                    items={bounty_tags}
+                    uniqueKey="tag"
+                    selectText="Bounty"
+                    displayKey="tag"
+                    single={true}
+                    showFilter={false}
+                    canAddItems={false}
+                    selectedItems={selectedBounties}
+                    onSelectedItemsChange={(items)=>{handleBountySelection(items) }}
+                    textInputProps={{
+                        editable:false
+                    }}
+                    searchInputPlaceholderText={bountyPlaceholder}
+                    selectedItemTextColor={'#00A5FF'}
+                    styleDropdownMenu={{
+                        height:56,
+                    }}
+                    styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
+                    styleInputGroup={styles.styleInputGroup}
+                    />
                 
-                    {bounty_tags.map((bounty, index)=>(
-                     <ScrollIntoView
-                        key={index}
-                        ref={sectionRefs[index]}
+                <VirtualizedList 
+                showsVerticalScrollIndicator={false}
+                ref={(view)=>{setListView(view)}}
+                data={bounty_tags}
+                keyExtractor={(item, index) => index}
+                renderItem={(item ) => (
+                    <>
+                   <View
+                    style={{
+                        borderTopLeftRadius: 15,
+                        borderTopRightRadius: 15,
+                        backgroundColor: '#8b98a9',
+                        paddingHorizontal: 20,
+                        marginTop: 20,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                     >
-                            <View
-                                style={{
-                                    borderTopLeftRadius: 15,
-                                    borderTopRightRadius: 15,
-                                    backgroundColor: '#8b98a9',
-                                    paddingHorizontal: 20,
-                                    marginTop: 20,
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                                >
-                                <HTML 
-                                    source={{html: bounty_tags[index].header}} 
-                                    imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                                    staticContentMaxWidth={Dimensions.get('window').width * .9 }
-                                    tagsStyles={tagsStyles}
-                                    classesStyles={classesStyles}
-                                    onLinkPress={(event, url) =>  Linking.openURL(url)}
-                                />
-                            </View>
-                            <ScrollView 
-                            style={{
-                                backgroundColor: '#f2f2f2',
-                                paddingHorizontal: 20,
-                                paddingVertical: 10,
-                            }}>
-                            <HTML 
-                                source={{html: bounty_tags[index].content}} 
-                                imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                                staticContentMaxWidth={Dimensions.get('window').width * .9 }
-                                tagsStyles={tagsStyles}
-                                classesStyles={classesStyles}
-                                onLinkPress={(event, url) =>  Linking.openURL(url)}
-                            />
-                        </ScrollView>
-                    </ScrollIntoView>   
-                    ))}
-            </ScrollView>
+                    <HTML 
+                        source={{html: item.item.header}} 
+                        imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                        staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                        tagsStyles={tagsStyles}
+                        classesStyles={classesStyles}
+                        renderersProps={renderersProps}
+                    />
+                </View>
+                <View 
+                style={{
+                    backgroundColor: '#f2f2f2',
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                }}>
+                <HTML 
+                    source={{html: item.item.content}} 
+                    imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                    staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                    tagsStyles={tagsStyles}
+                    classesStyles={classesStyles}
+                    renderersProps={renderersProps}
+                />
+            </View>
+            </>
+                )}
+               getItem={(data, index)=>(data[index])}
+               getItemCount={()=>bounty_tags.length}
+                />
+                </View>
         </View>
     );
 };
@@ -243,6 +268,7 @@ const Bounty = ({t}) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      width: '100%',
       marginTop: '2%',
       paddingTop: '5%',
       paddingHorizontal: 25,
@@ -251,12 +277,34 @@ const styles = StyleSheet.create({
       borderTopRightRadius: 25,
       backgroundColor: theme.COLORS.WHITE,
     },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold'
+
+    },
+    column: {
+        width: '100%', 
+         flex: 1,
+         height: 100
+    },
     headerLink: {
         color:'#ff4092'
     },
     bodyLink: {
         color:'#ff4092'
-    }
+    },
+    styleDropdownMenuSubsection: {
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#DADADA',
+        paddingLeft: 10
+      },
+      styleInputGroup: {
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#DADADA',
+        paddingLeft: 10
+      },
 });
 
 
