@@ -184,42 +184,42 @@ const Bounty = ({navigation, t}) => {
      
     return (
         <View style={styles.container}>
-                <Text style={styles.header}>Data Bounties</Text>
-                <Text>Read about how you can earn extra rewards</Text>
-                <View style={styles.column}>
-                 <MultiSelect 
-                    hideTags
-                    hideSubmitButton
-                    hideDropdown        
-                    items={bounty_tags}
-                    uniqueKey="tag"
-                    selectText="Bounty"
-                    displayKey="tag"
-                    single={true}
-                    showFilter={false}
-                    canAddItems={false}
-                    selectedItems={selectedBounties}
-                    onSelectedItemsChange={(items)=>{handleBountySelection(items) }}
-                    textInputProps={{
-                        editable:false
-                    }}
-                    searchInputPlaceholderText={bountyPlaceholder}
-                    selectedItemTextColor={'#00A5FF'}
-                    styleDropdownMenu={{
-                        height:56,
-                    }}
-                    styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
-                    styleInputGroup={styles.styleInputGroup}
-                    />
-                
-                <VirtualizedList 
-                showsVerticalScrollIndicator={false}
-                ref={(view)=>{setListView(view)}}
-                data={bounty_tags}
-                keyExtractor={(item, index) => index}
-                renderItem={(item ) => (
-                    <>
-                   <View
+            <Text style={styles.header}>Data Bounties</Text>
+            <Text>Read about how you can earn extra rewards</Text>
+            <View style={styles.column}>
+                <MultiSelect 
+                hideTags
+                hideSubmitButton
+                hideDropdown        
+                items={bounty_tags}
+                uniqueKey="tag"
+                selectText="Bounty"
+                displayKey="tag"
+                single={true}
+                showFilter={false}
+                canAddItems={false}
+                selectedItems={selectedBounties}
+                onSelectedItemsChange={(items)=>{handleBountySelection(items) }}
+                textInputProps={{
+                    editable:false
+                }}
+                searchInputPlaceholderText={bountyPlaceholder}
+                selectedItemTextColor={'#00A5FF'}
+                styleDropdownMenu={{
+                    height:56,
+                }}
+                styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
+                styleInputGroup={styles.styleInputGroup}
+                />
+            
+            <VirtualizedList 
+            showsVerticalScrollIndicator={false}
+            ref={(view)=>{setListView(view)}}
+            data={bounty_tags}
+            keyExtractor={(item, index) => index}
+            renderItem={(item ) => (
+                <>
+                    <View
                     style={{
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15,
@@ -230,36 +230,36 @@ const Bounty = ({navigation, t}) => {
                         justifyContent: 'center'
                     }}
                     >
-                    <HTML 
-                        source={{html: item.item.header}} 
-                        imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                        staticContentMaxWidth={Dimensions.get('window').width * .9 }
-                        tagsStyles={tagsStyles}
-                        classesStyles={classesStyles}
-                        renderersProps={renderersProps}
-                    />
-                </View>
-                <View 
-                style={{
-                    backgroundColor: '#f2f2f2',
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                }}>
-                <HTML 
-                    source={{html: item.item.content}} 
-                    imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                    staticContentMaxWidth={Dimensions.get('window').width * .9 }
-                    tagsStyles={tagsStyles}
-                    classesStyles={classesStyles}
-                    renderersProps={renderersProps}
+                        <HTML 
+                            source={{html: item.item.header}} 
+                            imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                            staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                            tagsStyles={tagsStyles}
+                            classesStyles={classesStyles}
+                            renderersProps={renderersProps}
+                        />
+                    </View>
+                    <View 
+                    style={{
+                        backgroundColor: '#f2f2f2',
+                        paddingHorizontal: 20,
+                        paddingVertical: 10,
+                    }}>
+                        <HTML 
+                            source={{html: item.item.content}} 
+                            imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                            staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                            tagsStyles={tagsStyles}
+                            classesStyles={classesStyles}
+                            renderersProps={renderersProps}
+                        />
+                    </View>
+                </>
+                )}
+                getItem={(data, index)=>(data[index])}
+                getItemCount={()=>bounty_tags.length}
                 />
             </View>
-            </>
-                )}
-               getItem={(data, index)=>(data[index])}
-               getItemCount={()=>bounty_tags.length}
-                />
-                </View>
         </View>
     );
 };
