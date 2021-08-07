@@ -16,6 +16,8 @@ import Learn from './screens/Learn';
 import Verification from './screens/Verification'
 import Annotation from './screens/Annotation'
 import Wallet from './screens/Wallet';
+import UploadGuidelines from './screens/UploadGuidelines';
+import UploadImage from './screens/UploadImage';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
@@ -336,6 +338,47 @@ const StatsStack = () => (
   </Stack.Navigator>
 );
 
+
+const UploadGuidelinesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelines}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const UploadImageStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadImage"
+      component={UploadImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
 const LearnStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -599,6 +642,16 @@ const BottomTabs = () => (
         tabBarVisible: false,
         tabBarButton: props => <TabComponent label="Legal" {...props} />,
       }}
+    />
+    <Tab.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelinesStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
+      name="UploadImage"
+      component={UploadImageStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
   </Tab.Navigator>
 );
