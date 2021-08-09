@@ -117,16 +117,16 @@ const icons = {
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
-  Bounty: (
+  Legal: (
     <MaterialIcon
-      name="card-giftcard"
+      name="privacy-tip"
       size={24}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
-  BountyFocused: (
+  LegalFocused: (
     <MaterialIcon
-      name="card-giftcard"
+      name="privacy-tip"
       size={24}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />

@@ -1,25 +1,161 @@
 import {
     View,
     StyleSheet,
-    Text,
-    Linking,
     Dimensions,
     VirtualizedList,
-    useNavigation
+    Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import {theme} from '../services/Common/theme';
 import {withTranslation} from 'react-i18next';
 import HTML from 'react-native-render-html';
+/**
+ * Privacy Information
+ * https://alpha.dataunion.app/image_categorization/
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
 
-import MultiSelect from '../components/Multiselect'
+
 
 const ImageCategorization = ({navigation, t}) => {
 
+    const [, dispatch] = useStateValue();
+    const [listView, setListView] = useState(null);
+
+    
+const image_categorization = [
+    {
+        tag: 'header',
+        content: t('ImageCategorization.mainHeader.content')
+    },
+    {
+        tag: 'info',
+        content: t('ImageCategorization.info.content')
+    },
+    {
+        tag: 'why',
+        content: t('ImageCategorization.why.content')
+
+    },
+    {
+        tag: 'how',
+        content: t('ImageCategorization.how.content')
+
+    },
+    {
+        tag: 'biometric',
+        content: t('ImageCategorization.biometric.content')
+
+    },
+    {
+        tag: 'faces',
+        content: t('ImageCategorization.faces.content')
+
+    },
+    {
+        tag: 'nonFaces',
+        content: t('ImageCategorization.nonFaces.content')
+
+    },
+    {
+        tag: 'nonPII',
+        content: t('ImageCategorization.nonPII.content')
+
+    },
+    {
+        tag: 'notSure',
+        content: t('ImageCategorization.notSure.content')
+
+    }
+];
+   
+    useEffect(()=>{
+        }, []);
+
+    const classesStyles = {
+    
+    }
+        
+    const tagsStyles = {
+        h1: {
+            color: '#000000',
+            textAlign: 'center',
+            marginBottom: 10
+        },
+        h4: {
+            color: '#41474E',
+            fontSize: 16,
+            textAlign: 'center'
+        },
+        img: {
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: 20,
+            width: Dimensions.get('window').width * .85,
+        },
+        label: {
+            color: '#41474E',
+        },
+        b: {
+            color: '#000000'
+        },
+        a: {
+            color: '#ff4092'
+        },
+        p: {
+            textAlign: 'justify',
+
+        }
+    };
+
+    const renderersProps = {
+        a: {
+          onPress(event, url, htmlAttribs, target) {
+            Linking.openURL(url)
+          }
+        }
+    };
+     
     return (
-        <>
-        </>
+        <View style={styles.container}>
+             <VirtualizedList 
+            showsVerticalScrollIndicator={false}
+            ref={(view)=>{setListView(view)}}
+            data={image_categorization}
+            keyExtractor={(item, index) => index}
+            renderItem={(item ) => {
+                    if(item.item.tag == 'header'){
+                        return (
+                            <HTML 
+                            source={{html: item.item.content}} 
+                            imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                            staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                            tagsStyles={tagsStyles}
+                            classesStyles={classesStyles}
+                            renderersProps={renderersProps}
+                        />
+                        )
+                    }else{
+                        return (
+                            <HTML 
+                                source={{html: item.item.content}} 
+                                imagesMaxWidth={Dimensions.get('window').width * .9 } 
+                                staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                                tagsStyles={tagsStyles}
+                                classesStyles={classesStyles}
+                                renderersProps={renderersProps}
+                            />
+                        )
+                    }
+
+            }}
+            getItem={(data, index)=>(data[index])}
+            getItemCount={()=>image_categorization.length}
+            />
+        </View>
     );
 };
 
@@ -35,35 +171,7 @@ const styles = StyleSheet.create({
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
       backgroundColor: theme.COLORS.WHITE,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold'
-
-    },
-    column: {
-        width: '100%', 
-         flex: 1,
-         height: 100
-    },
-    headerLink: {
-        color:'#ff4092'
-    },
-    bodyLink: {
-        color:'#ff4092'
-    },
-    styleDropdownMenuSubsection: {
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#DADADA',
-        paddingLeft: 10
-      },
-      styleInputGroup: {
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#DADADA',
-        paddingLeft: 10
-      },
+    }
 });
 
 

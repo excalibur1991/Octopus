@@ -24,6 +24,9 @@ import Staking from './screens/Staking'
 import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
 import ImageCategorization from './screens/ImageCategorization';
+import TOS from './screens/TOS';
+import PrivacyInformation from './screens/PrivacyInformation';
+import Legal from './screens/Legal';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
 import i18n from './languages/i18n';
@@ -414,8 +417,23 @@ const MyStatsStack = () => (
 );
 
 //please ensure these information pages should be in here?
-const BountyStack = () => (
+const LegalStack = () => (
   <Stack.Navigator>
+    <Stack.Screen
+      name="Legal"
+      component={Legal}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
     <Stack.Screen
       name="Bounty"
       component={Bounty}
@@ -423,7 +441,52 @@ const BountyStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: true,
+            showAppIcon: false,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="PrivacyInformation"
+      component={PrivacyInformation}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: false,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageCategorization"
+      component={ImageCategorization}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: false,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="TOS"
+      component={TOS}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: false,
             isTransparent: true,
             showRightButton: true,
           },
@@ -434,25 +497,6 @@ const BountyStack = () => (
   </Stack.Navigator>
 );
 
-const ImageCategorizationStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="ImageCategorization"
-      component={ImageCategorization}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
 
 const BottomTabs = () => (
   <Tab.Navigator
@@ -548,12 +592,12 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="Bounty"
-      component={BountyStack}
+      name="Legal"
+      component={LegalStack}
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Bounty" {...props} />,
+        tabBarButton: props => <TabComponent label="Legal" {...props} />,
       }}
     />
   </Tab.Navigator>

@@ -58,9 +58,9 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     {
-      title: t('landing.bounty'),
-      screen: 'Bounty',
-      icon: 'card-giftcard',
+      title: t('Legal'),
+      screen: 'Legal',
+      icon: 'privacy-tip',
       Icon: MaterialIcon,
     },
   ];
