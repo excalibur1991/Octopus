@@ -9,8 +9,11 @@ import { PoolFactory } from './PoolFactory'
 import Decimal from 'decimal.js'
 import {web3} from '../web3/utils'
 import {PRIVATE_KEY, INFURA_KEY} from '../../env'
+import {OceanPool}  from '../components/OceanPool'
 
-const MaxUint256 =
+
+
+export const MaxUint256 =
   '115792089237316195423570985008687907853269984665640564039457584007913129639934'
 /**
  * Provides an interface to Balancer BPool & BFactory
@@ -130,9 +133,9 @@ export class Pool extends PoolFactory {
       from: spender
     })
     const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-    console.log('getting allowance for both datatoken and ocean...')
-    console.log({AllowanceTxReceipt: web3.utils.fromWei(trxReceipt), owner: owner,
-       spender:spender, tokenAddres: tokenAdress })
+    //console.log('getting allowance for both datatoken and ocean...')
+    //console.log({AllowanceTxReceipt: web3.utils.fromWei(trxReceipt), owner: owner,
+    //   spender:spender, tokenAddres: tokenAdress })
     return web3.utils.fromWei(trxReceipt)
   }
 
@@ -181,7 +184,7 @@ export class Pool extends PoolFactory {
     })
     if (!force) {
       const currentAllowence = await this.allowance(tokenAddress, account, spender)
-      console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
+      //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
         return null
@@ -194,7 +197,7 @@ export class Pool extends PoolFactory {
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+        //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -210,7 +213,7 @@ export class Pool extends PoolFactory {
     let Tx = require('ethereumjs-tx').Transaction;
      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
      let count = await web3.eth.getTransactionCount(account);
- 
+     console.log({nonce: count})
      let rawTransaction = {
       "from":account,
       "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
@@ -224,12 +227,13 @@ export class Pool extends PoolFactory {
   transaction.sign(privateKey)
   console.log('getting approval...')
   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+  console.log(`Success!!. Spender Approved to spend ${amount} tokens  on behalf of owner....`)
   console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+      console.log(`ERRPR: Failed to approve spender to spend  tokens : ${e.message}`)
+      result = e.message
     }
-    return result
+    return result 
   }
 
   /**
@@ -244,7 +248,7 @@ export class Pool extends PoolFactory {
       const token = new web3.eth.Contract(this.poolABI, poolAddress)
       const balance = await token.methods.balanceOf(account).call()
       result = web3.utils.fromWei(balance)
-      console.log({user_shares_of_pool_balance: result, account:account, poolAddress:poolAddress})
+      //console.log({user_shares_of_pool_balance: result, account:account, poolAddress:poolAddress})
     } catch (e) {
       console.log(`ERROR: Failed to get shares of pool : ${e.message}`)
     }
@@ -366,11 +370,11 @@ export class Pool extends PoolFactory {
   async getPoolSharesTotalSupply(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let amount = null
-    console.log('geting total supply of pool shares...')
+   // console.log('geting total supply of pool shares...')
     try {
       const result = await pool.methods.totalSupply().call()
       amount = web3.utils.fromWei(result)
-      console.log('total supply of pool shares:', amount)
+     // console.log('total supply of pool shares:', amount)
     } catch (e) {
       console.log(`ERROR: Failed to get total supply of pool shares: ${e.message}`)
     }
@@ -387,8 +391,8 @@ export class Pool extends PoolFactory {
     let result = null
     try {
       result = await pool.methods.getCurrentTokens().call()
-      console.log("getting tokens composing this pool...")
-      console.log('pool tokens:', result)
+     // console.log("getting tokens composing this pool...")
+      //console.log('pool tokens:', result)
     } catch (e) {
       console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
     }
@@ -405,6 +409,7 @@ export class Pool extends PoolFactory {
     let result = null
     try {
       result = await pool.methods.getFinalTokens().call()
+      //console.log("Pool final tokens:", result)
     } catch (e) {
       console.log(`ERROR: Failed to get the final tokens composing this pool`)
     }
@@ -479,12 +484,12 @@ export class Pool extends PoolFactory {
    */
   async getReserve(poolAddress: string, token: string): Promise<string> {
     let amount = null
-    console.log('geting pool reserve(how many tokens are in the pool...)')
+    console.log('getting pool reserve(how much tokens are in the pool...)')
     try {
       const pool = new web3.eth.Contract(this.poolABI, poolAddress)
       const result = await pool.methods.getBalance(token).call()
       amount = web3.utils.fromWei(result)
-      console.log('poolReserve(amount of tokens in pool):', amount)
+      //console.log('poolReserve(amount of tokens in pool):', amount)
     } catch (e) {
       console.log(`ERROR: Failed to get how many tokens \
       are in the pool: ${e.message}`)
@@ -516,11 +521,11 @@ export class Pool extends PoolFactory {
   async getSwapFee(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let fee = null
-    console.log('getting pool swap fee..')
+    //console.log('getting pool swap fee..')
     try {
       const result = await pool.methods.getSwapFee().call()
       fee = web3.utils.fromWei(result)
-      console.log('pool swap fee:', fee)
+      //console.log('pool swap fee:', fee)
     } catch (e) {
       console.log(`ERROR: Failed to get pool fee: ${e.message}`)
     }
@@ -554,11 +559,11 @@ export class Pool extends PoolFactory {
   async getDenormalizedWeight(poolAddress: string, token: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let weight = null
-    console.log('getting DenormalizedWeight of a token in pool...')
+    //console.log('getting DenormalizedWeight of a token in pool...')
     try {
       const result = await pool.methods.getDenormalizedWeight(token).call()
       weight = web3.utils.fromWei(result)
-      console.log('DenormalizedWeight of a token in pool:', weight)
+      //console.log('DenormalizedWeight of a token in pool:', weight)
     } catch (e) {
       console.log('ERROR: Failed to get denormalized weight of a token in pool')
     }
@@ -573,11 +578,11 @@ export class Pool extends PoolFactory {
   async getTotalDenormalizedWeight(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let weight = null
-    console.log('getting TotalDenormalizedWeight in pool...')
+    //console.log('getting TotalDenormalizedWeight in pool...')
     try {
       const result = await pool.methods.getTotalDenormalizedWeight().call()
       weight = web3.utils.fromWei(result)
-      console.log('TotalDenormalizedWeight in pool:', weight)
+      //console.log('TotalDenormalizedWeight in pool:', weight)
     } catch (e) {
       console.log('ERROR: Failed to get total denormalized weight in pool')
     }
@@ -610,6 +615,11 @@ export class Pool extends PoolFactory {
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
     let estGas
+
+    //Record storage inRecord = _records[address(tokenIn)];
+    //  tokenAmountIn <= bmul(inRecord.balance, MAX_IN_RATIO), //balance:196
+    //console.log({tokenAmountIn: web3.utils.toWei(tokenAmountIn),
+    //minAmountOut:web3.utils.toWei(minAmountOut), tokenIn:tokenIn,tokenOut:tokenOut})
     try {
       estGas = await pool.methods
         .swapExactAmountIn(
@@ -620,13 +630,22 @@ export class Pool extends PoolFactory {
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+      //  console.log('Swapping tokens in...')
+      //  console.log({Swap_GasEstimate: estGas, account:account, tokenIn:tokenIn,
+      //     minAmountOut: minAmountOut, maxPrice: maxPrice })
     } catch (e) {
-      this.logger.log('Error estimate gas swapExactAmountIn')
-      this.logger.log(e)
+      console.log('Error estimate gas swapExactAmountIn')
+      console.log(e)
       estGas = gasLimitDefault
     }
+
+  
     try {
-      result = await pool.methods
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
+
+      let tx = await pool.methods
         .swapExactAmountIn(
           tokenIn,
           web3.utils.toWei(tokenAmountIn),
@@ -634,16 +653,35 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minAmountOut),
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
-    } catch (e) {
+
+        let encodededABI = tx.encodeABI()
+
+        let rawTransaction = {
+         "from":account,
+         "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
+         "gasLimit": web3.utils.toHex(estGas + 1),
+         "to":poolAddress,
+         "data":encodededABI,
+         "nonce":web3.utils.toHex(count)
+     };
+   
+     let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
+     transaction.sign(privateKey)
+     result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+     console.log('Success!!. You have swapped your tokens in....')
+     console.log({SwapStatus: result.status, SwapReceipt: result})
+      
+    } 
+    catch (e) {
       console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
     }
+ 
     return result
+
+
+
   }
+
 
   /**
    * swapExactAmountOut
@@ -681,28 +719,52 @@ export class Pool extends PoolFactory {
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+        console.log('Swapping tokens out...')
+        console.log({account: account, poolAddress: poolAddress, tokenIn: tokenIn, tokenOut:tokenOut, 
+         maxAmountIn:maxAmountIn,minAmountOut:minAmountOut,maxPrice:maxPrice})
     } catch (e) {
       estGas = gasLimitDefault
-      this.logger.log('Error estimate gas swapExactAmountIn')
-      this.logger.log(e)
+      console.log('Error estimate gas swapExactAmountOut')
+      console.log(e)
     }
-    try {
-      result = await pool.methods
-        .swapExactAmountOut(
-          tokenIn,
-          web3.utils.toWei(maxAmountIn),
-          tokenOut,
-          web3.utils.toWei(minAmountOut),
-          maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
-        )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
+   
+       try {
+
+          let Tx = require('ethereumjs-tx').Transaction;
+          let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+          let count = await web3.eth.getTransactionCount(account);
+    
+          let tx = await pool.methods
+          .swapExactAmountOut(
+            tokenIn,
+            web3.utils.toWei(maxAmountIn),
+            tokenOut,
+            web3.utils.toWei(minAmountOut),
+            maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
+          )
+    
+            let encodededABI = tx.encodeABI()
+    
+            let rawTransaction = {
+             "from":account,
+             "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
+             "gasLimit": web3.utils.toHex(estGas + 1),
+             "to":poolAddress,
+             "data":encodededABI,
+             "nonce":web3.utils.toHex(count)
+         };
+       
+         let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
+         transaction.sign(privateKey)
+         result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+         console.log('Success!!. You have swapped your tokens Out....')
+         console.log({SwapOutStatus: result.status, SwapOutReceipt: result})
+
     } catch (e) {
       console.log(`ERROR: Failed to swap exact amount out: ${e.message}`)
     }
+
+    
     return result
   }
 
@@ -849,7 +911,7 @@ export class Pool extends PoolFactory {
       */
 
         let Tx = require('ethereumjs-tx').Transaction;
-        let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+        let privateKey = Buffer.from(PRIVATE_KEY2, 'hex');
         let count = await web3.eth.getTransactionCount(account);
     
         let tx = pool.methods.joinswapExternAmountIn(
@@ -1038,7 +1100,7 @@ export class Pool extends PoolFactory {
        */
 
         let Tx = require('ethereumjs-tx').Transaction;
-        let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+        let privateKey = Buffer.from(PRIVATE_KEY2, 'hex');
         let count = await web3.eth.getTransactionCount(account);
     
         let tx = pool.methods.exitswapExternAmountOut(
@@ -1166,6 +1228,7 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
+      console.log({oceanAmountNeeded: amount})
     } catch (e) {
       console.log('ERROR: Failed to calcInGivenOut')
     }
@@ -1195,6 +1258,7 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
+      //console.log({oceanAmountToReceive_calcOutGivenIn: amount})
     } catch (e) {
       console.log('ERROR: Failed to calcOutGivenIn')
     }
@@ -1312,7 +1376,7 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
-      console.log('PoolInGivenSingleOut:', amount)
+    //  console.log('PoolInGivenSingleOut:', amount)
     } catch (e) {
       console.log(`ERROR: Failed to calculate PoolInGivenSingleOut : ${e.message}`)
     }

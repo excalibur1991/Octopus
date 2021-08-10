@@ -24,7 +24,8 @@ export const contracts = {
  quicraMainnet:"0x7Bce67697eD2858d0683c631DdE7Af823b7eea38",
  phecorRinkeby:"0xe793a47892854260b42449291953dadbddb4226d",    
  newPool1: '0xAa5226ACc808112E84249eD625cEB96b45AFD2Ac',// (pool contract created by newBPool() function)
- newPool2: '0xedB28AFD5da300431CfA285388635c490C2a7192'
+ newPool2: '0xedB28AFD5da300431CfA285388635c490C2a7192',
+ newPool3: '0x561af90e8233e924805eAD217De7fdd4BBe41Fd4'
 
  };
 export const getRandom = (count) => new Promise((resolve, reject) => {

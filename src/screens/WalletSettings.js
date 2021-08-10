@@ -77,86 +77,77 @@ class WalletSettings extends Component {
   render() {
     const {t} = this.props;
     return (
-      <ScrollView  style={styles.container} showsVerticalScrollIndicator={true}>
-        <View style={{display: 'none'}}>
-          <Picker
-            selectedValue={this.state.networktype}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue })
-            }>
-            <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
-          </Picker>
-          <View style={styles.alignCenter}>
-            <Text>
-              {this.state.isConnected
-                ? `${t('walletSettings.connectedTo')} ${
-                    this.state.networktype
-                  } ${t('walletSettings.node')}`
-                : t('walletSettings.notConnected')}
-            </Text>
-          </View>
-        </View>
+   
+    <ScrollView showsVerticalScrollIndicator={true}>
+      <View style={styles.container}>
         <View>
-          <View style={[styles.rows, {display: 'none'}]}>
-            <View>
-              <Text />
-              <Text style={styles.quickra}>0 {t('walletSettings.quicra')}</Text>
-              <Text style={styles.ocean}>
-                {this.state.ethTokenBal} {t('walletSettings.eth')}
-              </Text>
-              <Text style={styles.ocean}>
-                {this.state.oceanERC20TokenBal} {t('walletSettings.ocean')}
-              </Text>
-              <Text style={styles.ocean}>
-                {this.state.phec0ERC20TokenBal} {t('walletSettings.phecor')}
-              </Text>
-            </View>
-            <View style={styles.alignEnd}>
-              <Text style={styles.txtPortfolio}>
-                24h {t('walletSettings.portfolio')}
-              </Text>
-              <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
-            </View>
-          </View>
-          <View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.publicKey')}
-            </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.publicKey}
-              </Text>
-              <CButton text={this.state.publicKey}/>
-            </View>
-            <Text style={styles.bigTextView}>
+         <Text style={styles.bigTextView}>
+            {t('walletSettings.publicKey')}
+          </Text>
+          <View style={styles.parent}>
+           <Text numberOfLines={1} style={styles.boxText}>
+              {this.state.publicKey}
+           </Text>
+            <CButton text={this.state.publicKey}/>
+          </View> 
+          <Text style={styles.bigTextView}>
               {t('walletSettings.mnemonicPhrase')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.mnemonics}
-              </Text>
+            <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.mnemonics}
+               editable={false}         
+               secureTextEntry={this.state.mnemonics? true:false}   
+              />
               <CButton text={this.state.mnemonics}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.privateKey')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.privateKey}
-              </Text>
+            <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.privateKey}
+               editable={false}         
+               secureTextEntry={this.state.privateKey? true:false}   
+              />
               <CButton text={this.state.privateKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.password')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.pword}
-              </Text>
+            <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.pword}
+               editable={false}          
+               secureTextEntry={this.state.pword? true:false}        
+              /> 
               <CButton text={this.state.pword}/>
             </View>
-          </View>
-        </View>
+           <Button
+              color="#f2f2f2"
+              title="Add Liquidity"
+              buttonStyle={styles.button}
+              onPress={() => this.props.navigation.navigate('Add Liquidity',
+              {publicKey: this.state.publicKey})  
+            }
+              textStyle={styles.buttonText}
+           />
+            <Button
+              color="#f2f2f2"
+              title="Swap"
+              buttonStyle={styles.button}
+              onPress={() => this.props.navigation.navigate('Swap',
+              {publicKey: this.state.publicKey})}
+              textStyle={styles.buttonText}
+            />
+          </View> 
+    </View>
       </ScrollView>
     )
   }

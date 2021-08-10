@@ -69,6 +69,7 @@ export class OceanPool extends Pool {
     startBlock?: number
   ) {
     super(web3, logger, factoryABI, poolABI, factoryAddress)
+    //oceanAddress = '0xE793a47892854260B42449291953dADbdDb4226d'
     if (oceanAddress) {
       this.oceanAddress = oceanAddress
     }
@@ -185,7 +186,8 @@ export class OceanPool extends Pool {
         // TODO: Potential timing attack, left side: true
         if (token !== this.oceanAddress) this.dtAddress = token
       }
-      console.log('DataToken address in this pool:', this.dtAddress)
+    //  console.log({tokenAddress: tokens[0], oceanAddress: token})
+    //  console.log('DataToken address in this pool:', this.dtAddress)
     return this.dtAddress
   }
 
@@ -222,7 +224,10 @@ export class OceanPool extends Pool {
     tokenAddress: string
   ): Promise<string> {
     const balance = await super.getReserve(poolAddress, tokenAddress)
-    return new Decimal(balance).div(3).toString()
+    //const maxBuy = new Decimal(balance).div(3).toString()
+    const maxBuy = (balance)
+    //console.log({maxOceanBuyQuantity:maxBuy})
+    return maxBuy
   }
 
   /**
@@ -231,7 +236,9 @@ export class OceanPool extends Pool {
    * @param tokenAddress
    */
   public async getOceanMaxBuyQuantity(poolAddress: string): Promise<string> {
-    return this.getMaxBuyQuantity(poolAddress, this.oceanAddress)
+    const tokens = await this.getCurrentTokens(poolAddress)
+   // console.log('this.oceanAddress:', tokens[0])
+    return this.getMaxBuyQuantity(poolAddress, tokens[0])
   }
 
   /**
@@ -396,9 +403,9 @@ export class OceanPool extends Pool {
     poolAddress: string,
     dtAmount: string
   ): Promise<string> {
-    console.log('geting PoolSharesRequiredToRemoveDT....')
+    //console.log('geting PoolSharesRequiredToRemoveDT....')
     const dtAddress = await this.getDTAddress(poolAddress)
-    console.log('PoolSharesRequiredToRemoveDT:', await this.calcPoolInGivenSingleOut(poolAddress, dtAddress, dtAmount))
+    //console.log('PoolSharesRequiredToRemoveDT:', await this.calcPoolInGivenSingleOut(poolAddress, dtAddress, dtAmount))
     return this.calcPoolInGivenSingleOut(poolAddress, dtAddress, dtAmount)
   }
 
@@ -473,7 +480,7 @@ export class OceanPool extends Pool {
    */
   public async getDTMaxAddLiquidity(poolAddress: string): Promise<string> {
     const dtAddress = await this.getDTAddress(poolAddress)
-    console.log('MaxLiq:', this.getMaxAddLiquidity(poolAddress, dtAddress) )
+   // console.log('MaxLiq:', await this.getMaxAddLiquidity(poolAddress, dtAddress) )
     return this.getMaxAddLiquidity(poolAddress, dtAddress)
   }
 
@@ -496,7 +503,7 @@ export class OceanPool extends Pool {
   ): Promise<string> {
     const balance = await super.getReserve(poolAddress, tokenAddress)
     const max = new Decimal(balance).mul(POOL_MAX_AMOUNT_IN_LIMIT).toString()
-    console.log('max amount of tokens that you can add to the pool:', max)
+    //console.log('max amount of tokens that you can add to the pool:', max)
     if (parseFloat(balance) > 0) {
       return max
     } else return '0'
@@ -525,7 +532,7 @@ export class OceanPool extends Pool {
   public async getDTMaxRemoveLiquidity(poolAddress: string): Promise<string> {
     console.log('getting amount of DT that you can withdraw from the pool...')
     const dtAddress = await this.getDTAddress(poolAddress)
-    console.log('DTMaxRemoveLiquidity:', await this.getMaxRemoveLiquidity(poolAddress, dtAddress))
+   // console.log('DTMaxRemoveLiquidity:', await this.getMaxRemoveLiquidity(poolAddress, dtAddress))
     return this.getMaxRemoveLiquidity(poolAddress, dtAddress)
   }
 
@@ -609,6 +616,8 @@ export class OceanPool extends Pool {
     OceanAmount: string,
     maxPrice?: string
   ): Promise<TransactionReceipt> {
+    const tokens = await super.getCurrentTokens(poolAddress);
+    this.oceanAddress = tokens[0]
     if (this.oceanAddress == null) {
       console.log('ERROR: undefined ocean token contract address')
       return null
@@ -634,6 +643,7 @@ export class OceanPool extends Pool {
       poolAddress,
       web3.utils.toWei(OceanAmount)
     )
+
     if (!txid) {
       console.log('ERROR: OCEAN approve failed')
       return null
@@ -647,6 +657,9 @@ export class OceanPool extends Pool {
       minimumdtAmountWanted,
       maxPrice
     )
+
+ 
+
     return tx
   }
 
@@ -666,11 +679,14 @@ export class OceanPool extends Pool {
     oceanAmountWanted: string,
     maxPrice?: string
   ): Promise<TransactionReceipt> {
+    const tokens = await super.getCurrentTokens(poolAddress);
+    this.oceanAddress = tokens[0]
     if (this.oceanAddress == null) {
       console.log('ERROR: oceanAddress is not defined')
       return null
     }
     const dtAddress = await this.getDTAddress(poolAddress)
+    console.log({oceanAmountWanted: new Decimal(oceanAmountWanted), oceanAddress: this.oceanAddress})
     if (
       new Decimal(oceanAmountWanted).greaterThan(
         await this.getOceanMaxBuyQuantity(poolAddress)
@@ -703,6 +719,8 @@ export class OceanPool extends Pool {
       oceanAmountWanted,
       maxPrice
     )
+
+
     return tx
   }
 
@@ -726,6 +744,7 @@ export class OceanPool extends Pool {
       console.log('ERROR: Too much reserve to add')
       return null
     }
+    
     const txid = await super.approve(
       account,
       dtAddress,
@@ -737,6 +756,7 @@ export class OceanPool extends Pool {
       console.log('ERROR: DT approve failed')
       return null
     }
+ 
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
@@ -1003,7 +1023,12 @@ export class OceanPool extends Pool {
    */
   public async getOceanReceived(poolAddress: string, dtAmount: string): Promise<string> {
     const dtAddress = await this.getDTAddress(poolAddress)
-    return this.calcOutGivenIn(poolAddress, dtAddress, this.oceanAddress, dtAmount)
+    const tokens = await this.getCurrentTokens(poolAddress)
+    const amount = await this.calcOutGivenIn(poolAddress, tokens[0], dtAddress, dtAmount)
+    //console.log({addr1: this.oceanAddress, addr2: tokens[0]})
+    //console.log({OceanAmountToReceive_calcOutGivenIn: amount})
+    return amount
+   // return this.calcOutGivenIn(poolAddress, dtAddress, this.oceanAddress, dtAmount)
   }
 
   /**
@@ -1014,7 +1039,11 @@ export class OceanPool extends Pool {
    */
   public async getDTReceived(poolAddress: string, oceanAmount: string): Promise<string> {
     const dtAddress = await this.getDTAddress(poolAddress)
-    return this.calcOutGivenIn(poolAddress, this.oceanAddress, dtAddress, oceanAmount)
+    const tokens = await this.getCurrentTokens(poolAddress)
+    const amount = await this.calcOutGivenIn(poolAddress, dtAddress, tokens[0], oceanAmount)
+    //console.log({DTAmountToReceive_calcOutGivenIn: amount})
+    return amount
+    //return this.calcOutGivenIn(poolAddress, this.oceanAddress, dtAddress, oceanAmount)
   }
 
   public async getDTNeeded(poolAddress: string, OceanRequired: string): Promise<string> {
@@ -1036,7 +1065,7 @@ export class OceanPool extends Pool {
    */
   public async getPoolsbyCreator(account?: string): Promise<PoolDetails[]> {
     const result: PoolDetails[] = []
-    const factory = new web3.eth.Contract(this.factoryABI, this.factoryAddress)
+    const factory = new web3.eth.Contract(this.factoryABI, 'this.factoryAddress')
 
     const events = await factory.getPastEvents('BPoolRegistered', {
       filter: account ? { registeredBy: account } : {},

@@ -23,6 +23,8 @@ import Home from './src/WalletHome';
 import WalletSettings from './src/screens/WalletSettings';
 import WalletActions from './src/screens/WalletActions';
 import {withTranslation} from 'react-i18next';
+import FormLiquidity from './src/screens/FormLiquidity'
+import FormSwap from './src/screens/FormSwap'
 
 const Stack = createStackNavigator();
 
@@ -51,6 +53,8 @@ class App extends Component {
           component={WalletSettings}
           navigation={this.props.navigation}
         />
+        <Stack.Screen name="Add Liquidity" component={FormLiquidity} navigation={this.props.navigation} />
+        <Stack.Screen name="Swap" component={FormSwap} navigation={this.props.navigation} /> 
       </Stack.Navigator>
     );
   }
