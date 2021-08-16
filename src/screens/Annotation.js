@@ -1,6 +1,5 @@
 import {
   View,
-  StyleSheet,
   Image,
   ScrollView
 } from 'react-native';
@@ -12,7 +11,7 @@ import {
   Button,
 } from 'react-native-paper';
 import ImageZoom from 'react-native-image-pan-zoom';
-import Svg, {Line, Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
+import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 
 import {
   updateMetadata,
@@ -27,10 +26,9 @@ import {
 } from '../functions/annotation'
 import {styles} from '../styles/annotation';
 import {withTranslation} from 'react-i18next';
-import { isNullOrUndefined } from 'util';
 
 
-const Annotation = () => {
+const Annotation = ({t}) => {
   const [, dispatch] = useStateValue();
   
   const [bounties, setBounties] = useState([]);
@@ -131,7 +129,7 @@ const Annotation = () => {
           hideDropdown        
           items={bounties}
           uniqueKey="tag"
-          selectText="Bounty"
+          selectText={t('Annotations.Bounty')}
           displayKey="tag"
           single={true}
           showFilter={false}
@@ -179,7 +177,7 @@ const Annotation = () => {
           hideDropdown        
           items={annoMode}
           uniqueKey="type"
-          selectText="Type"
+          selectText={t('Annotations.Type')}
           displayKey="type"
           single={true}
           showFilter={false}
@@ -275,7 +273,7 @@ const Annotation = () => {
         <Button 
         mode={'contained'}
         style={styles.button}
-        onPress={()=>saveAnnotation(props)} >Save</Button>
+        onPress={()=>saveAnnotation(props)} >{t('Annotations.save')}</Button>
       </View>
       </ScrollView>
     </View>
