@@ -16,6 +16,12 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     {
+      title: t('landing.annotation'),
+      screen: 'Annotation',
+      icon: 'note-add',
+      Icon: MaterialIcon,
+    },
+    {
       title: t('landing.verification'),
       screen: 'Verification',
       icon: 'fingerprint',

@@ -144,7 +144,7 @@ export const postUserData = async (
     config.body = isFormData ? data : JSON.stringify(data);
   }
   try {
-    const response = await fetch(url, config)
+   const response = await fetch(url, config)
       .then(res => res.json())
       .then(res => res)
       .catch(error => error);

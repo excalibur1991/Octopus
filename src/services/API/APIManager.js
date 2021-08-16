@@ -162,7 +162,7 @@ export const reportImages = async(photos) => {
   } catch (err) {
     return null;
   }
-}
+};
 
 export const GetWords = async(word_type)=>{
   try {
@@ -171,4 +171,20 @@ export const GetWords = async(word_type)=>{
   } catch(err) {
     return null;
   }
-}
+};
+
+/**
+ * 
+ * {
+ *  image_id:"f7f080000080f8fc",
+ *  annotations: [{type: "box", tag: "food bounty", x: 0.017901029601219743, y: 0.245839636913767, width: 0.9639395801815431,height: 0.3282904689863842}, ...]
+ * }
+ */
+export const annotate = async(data)=>{
+  try {
+    const response = await postUserData(s.metadata.annotate, data);
+    return response;
+  }catch(err){
+  }
+  return null;
+};

@@ -13,6 +13,7 @@ export default {
       swipeAI: 'Swipe AI',
       upload: 'Upload',
       verification: 'Verify',
+      annotation: 'Annotate',
       english: 'English',
       chinese: 'Chinese',
       deutsch: 'Deutsch',
@@ -122,5 +123,10 @@ export default {
       storageSuccessfullyCleared: 'Storage successfully cleared!',
       failedToClearAsyncStorage: 'Failed to clear the async storage.',
     },
+    Annotations: {
+      save: 'Save',
+      Bounty: 'Bounty',
+      Type: 'Type'
+    }
   },
 };

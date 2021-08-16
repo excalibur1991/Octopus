@@ -103,6 +103,20 @@ const icons = {
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
+  Annotation: (
+    <MaterialIcon
+      name="note-add"
+      size={24}
+      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
+    />
+  ),
+  AnnotationFocused: (
+    <MaterialIcon
+      name="note-add"
+      size={24}
+      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
+    />
+  ),
 };
 
 const Container = styled.TouchableWithoutFeedback``;
