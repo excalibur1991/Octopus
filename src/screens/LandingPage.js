@@ -57,6 +57,12 @@ const LandingPage = ({navigation, t}) => {
       icon: 'account-balance-wallet',
       Icon: MaterialIcon,
     },
+    {
+      title: t('Legal'),
+      screen: 'Legal',
+      icon: 'privacy-tip',
+      Icon: MaterialIcon,
+    },
   ];
 
   return (
