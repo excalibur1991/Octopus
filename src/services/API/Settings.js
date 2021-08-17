@@ -22,7 +22,12 @@ export const settings = {
     reportImages: '/api/v1/report-images',
     verifyImage: '/api/v1/verify-image',
     myMetadata: '/api/get/my-metadata',
-    getTags: '/staticdata/tags?type=$[word_type]'
+    getTags: '/staticdata/tags?type=$[word_type]',
+    uploadImage: 'api/v1/upload-file',
+    annotateImage: 'api/v1/annotate',
+    getPlayAIAnnotation: 'api/v1/get_playai_annotate',
+    setPlayAIAnnotation:'api/v1/set_playai_annotate',
+
   },
 
 

@@ -188,3 +188,43 @@ export const annotate = async(data)=>{
   }
   return null;
 };
+
+
+export const uploadImage = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.uploadImage, data, true);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const annotateImage = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.annotateImage, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+
+// {image_id: "1234356789"}
+export const getPlayAIAnnotation = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.getPlayAIAnnotation, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const setPlayAIAnnotation = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.setPlayAIAnnotation, data);
+    return response;
+  }catch(err) {
+    return null;
+  }
+
+};

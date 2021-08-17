@@ -13,8 +13,9 @@ import About from './screens/About';
 import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
-import Verification from './screens/Verification'
-import Annotation from './screens/Annotation'
+import Verification from './screens/Verification';
+import Annotation from './screens/Annotation';
+import PlayAI from './screens/PlayAI';
 import Wallet from './screens/Wallet';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
@@ -498,6 +499,27 @@ const LegalStack = () => (
 );
 
 
+const PlayAIStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="PlayAI"
+      component={PlayAI}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+
 const BottomTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
@@ -599,6 +621,14 @@ const BottomTabs = () => (
         tabBarVisible: false,
         tabBarButton: props => <TabComponent label="Legal" {...props} />,
       }}
+    />
+    <Tab.Screen
+      name="PlayAI"
+      component={PlayAIStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarVisible: false,
+        tabBarButton: () => null}}
     />
   </Tab.Navigator>
 );
