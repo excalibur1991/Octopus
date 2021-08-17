@@ -18,6 +18,12 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     {
+      title: 'Roman Number Upload',
+      screen: 'RomanNumberUpload',
+      icon: 'analytics',
+      Icon: MaterialIcon,
+    },
+    {
       title: t('landing.verification'),
       screen: 'Verification',
       icon: 'fingerprint',

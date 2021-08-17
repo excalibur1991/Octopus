@@ -167,17 +167,21 @@ export const verifyImage = async(image_id, annotation, verification) => {
 export const uploadImage = async (data) => {
   try {
     const response = await postUserData(s.taxonomy.uploadImage, data, true);
+    console.log('error uploadImage', response)
     return response;
   } catch (err) {
+    console.log('error uploadImage', err)
     return null;
   }
 };
 
 export const annotateImage = async (data) => {
   try {
-    const response = await postUserData(s.taxonomy.annotateImage, data);
+    const response = await postUserData(s.taxonomy.annotateImage, data); 
+    console.log('error annotateImage', response)
     return response;
   } catch (err) {
+    console.log('error annotateImage', err)
     return null;
   }
 }
@@ -225,8 +229,10 @@ export const annotate = async(data)=>{
 export const getUsageFlag = async()=>{
   try {
     const response = await getUserData(s.auth.usageFlag);
+    console.log('getUsageFlag', response)
     return response;
   } catch(err) {
+    console.log('error getUsageFlag', err)
     return null;
   }
 };
@@ -234,6 +240,17 @@ export const getUsageFlag = async()=>{
 export const saveUsageFlag = async(data)=>{
   try {
     const response = await postUserData(s.auth.usageFlag, data);
+    console.log('saveUsageFlag', response)
+    return response;
+  } catch(err) {
+    console.log('error saveUsageFlag', err)
+    return null;
+  }
+}
+
+export const getRomanNumberStats = async () => {
+  try {
+    const response = await getUserData(s.taxonomy.getRomanNumberStats);
     return response;
   } catch(err) {
     return null;

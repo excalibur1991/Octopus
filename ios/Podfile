@@ -13,7 +13,7 @@ target 'DataUnion' do
   )
 
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper' # do not delete this 
-
+  pod 'RNSketchCanvas', :path => '../node_modules/@terrylinla/react-native-sketch-canvas'
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
