@@ -13,15 +13,17 @@ import About from './screens/About';
 import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
-import Verification from './screens/Verification'
+import Verification from './screens/Verification';
 import Wallet from './screens/Wallet';
 import UploadGuidelines from './screens/UploadGuidelines';
 import UploadImage from './screens/UploadImage';
+import RomanNumberUpload from './screens/RomanNumberUpload';
+import RomanNumberStats from './screens/RomanNumberStats';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
-import walletEntry from '../walletEntry'
-import Staking from './screens/Staking'
+import walletEntry from '../walletEntry';
+import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
 import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
@@ -134,7 +136,6 @@ const Header = (
           }
           outerStyle={styles.rightButtonOuter}
           innerStyle={styles.rightButtonInner}>
-
           <Image
             style={styles.rightIcon}
             resizeMode="stretch"
@@ -292,7 +293,6 @@ const VerificationStack = () => (
   </Stack.Navigator>
 );
 
-
 const StatsStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -312,7 +312,6 @@ const StatsStack = () => (
     />
   </Stack.Navigator>
 );
-
 
 const UploadGuidelinesStack = () => (
   <Stack.Navigator>
@@ -339,6 +338,46 @@ const UploadImageStack = () => (
     <Stack.Screen
       name="UploadImage"
       component={UploadImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const RomanNumberUploadStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="RomanNumberUpload"
+      component={RomanNumberUpload}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const RomanNumberStatsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="RomanNumberStats"
+      component={RomanNumberStats}
       options={({navigation}) => {
         return Header(
           {
@@ -473,7 +512,9 @@ const BottomTabs = () => (
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Verification" {...props} />,
+        tabBarButton: (props) => (
+          <TabComponent label="Verification" {...props} />
+        ),
       }}
     />
     <Tab.Screen
@@ -490,7 +531,7 @@ const BottomTabs = () => (
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: (props) => <TabComponent label="SwipeAI" {...props} />
+        tabBarButton: (props) => <TabComponent label="SwipeAI" {...props} />,
       }}
     />
     <Tab.Screen
@@ -526,6 +567,16 @@ const BottomTabs = () => (
     <Tab.Screen
       name="UploadImage"
       component={UploadImageStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
+      name="RomanNumberUpload"
+      component={RomanNumberUploadStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
+      name="RomanNumberStats"
+      component={RomanNumberStatsStack}
       options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
   </Tab.Navigator>

@@ -12,6 +12,12 @@ import {getUsageFlag} from '../services/API/APIManager';
 const LandingPage = ({navigation, t}) => {
   const [options, setOptions] = useState([
     {
+      title: 'Roman Number Upload',
+      screen: 'RomanNumberUpload',
+      icon: 'analytics',
+      Icon: MaterialIcon,
+    },
+    {
       title: t('landing.verification'),
       screen: 'Verification',
       icon: 'fingerprint',
