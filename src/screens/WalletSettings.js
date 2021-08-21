@@ -17,10 +17,7 @@ import {styles} from '../styles/walletsettings';
 import {
   chkNetwork,
   webThreeReturned,
-  handleNewWallet,
   readStoredWallet,
-  handleNewAccount,
-  handleWalletDelete
 } from '../functions/walletsettings';
 import {withTranslation} from 'react-i18next';
 
@@ -33,130 +30,199 @@ class WalletSettings extends Component {
       privateKey: '',
       pword: '',
       mnemonics:'',
-      newdialogVisible: false,
-      restoredialogVisible: false,
-      selectedLanguage: '',
-      networktype: 'none',
       wallet: ' ',
-      ethTokenBal: ' ',
-      oceanERC20TokenBal: ' ',
-      phec0ERC20TokenBal: ' ',
       account: '0x0',
-      daiToken: '',
-      dappToken: {},
-      tokenFarm: {},
-      daiTokenBalance: '0',
-      dappTokenBalance: '0',
-      stakingBalance: '0',
-      age: '',
-      pword: ''
+      pword: '',
+      importedPriv_Key: '',
+      importedPub_Key: '',
+      accountType: 'main',
+      importDialog: false,
+
     };
 
-
-    // const [age, setAge] = useState('')
-
+   
     this.web3 = null;
-    this.rinkebynet = 'none';
-    this.ropstennet = 'none';
-    this.kovannet = 'none';
     this.mainnet = 'none';
-    this.rinkebyCheck = 'none';
-    this.ropstenCheck = 'none';
-    this.kovannetCheck = 'none';
     this.mainnetCheck = 'none';
-    //this.wallet = ""
+
   }
 
   componentDidMount() {
     chkNetwork(this);
     webThreeReturned(this);
     readStoredWallet(this)
+    this.getImported();
   }
 
+   importedKey = '@imported'
+
+  getImported = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(this.importedKey)
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+
+     // console.log('retrieving imported....\n', jsonValue)
+      
+      if(this.state.importedPriv_Key === "") {
+        this.setState({importedPriv_Key: JSON.parse(jsonValue).key})
+      } 
+
+      if(this.state.importedPub_Key === "") {
+        this.setState({importedPub_Key: JSON.parse(jsonValue).address})
+      }
+       
+
+    } catch(e) {
+      // error reading value
+    }
+}
+
+
+  handleImportAccount = () => {
+    console.log("importing account...")
+    this.setState({ importDialog: true });
+  }
+
+  handleImportCancel = () => {
+    this.setState({ importDialog: false });
+  }
+
+  handleImportSubmit = () => {
+    this.setState({ importDialog: false })
+
+    try {
+  
+      const address = Utils.web3.eth.accounts.privateKeyToAccount(this.state.importedPriv_Key)
+      this.setState({importedPub_Key:address.address})
+      
+      let storedObjs = {
+           address: address.address,
+           key: this.state.importedPriv_Key
+      }
+
+      AsyncStorage.setItem(this.importedKey, JSON.stringify(storedObjs));  
+      console.log({pkey:this.state.importedPriv_Key, address: address.address, accountType: this.state.accountType,
+      storedObjs:storedObjs})
+    } catch (error) {
+      
+    }
+
+  }
 
   render() {
     const {t} = this.props;
     return (
-      <ScrollView  style={styles.container} showsVerticalScrollIndicator={true}>
-        <View style={{display: 'none'}}>
+      <ScrollView showsVerticalScrollIndicator={true}>
           <Picker
-            selectedValue={this.state.networktype}
+            selectedValue={this.state.accountType}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue })
-            }>
-            <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
-          </Picker>
-          <View style={styles.alignCenter}>
-            <Text>
-              {this.state.isConnected
-                ? `${t('walletSettings.connectedTo')} ${
-                    this.state.networktype
-                  } ${t('walletSettings.node')}`
-                : t('walletSettings.notConnected')}
-            </Text>
-          </View>
-        </View>
-        <View>
-          <View style={[styles.rows, {display: 'none'}]}>
-            <View>
-              <Text />
-              <Text style={styles.quickra}>0 {t('walletSettings.quicra')}</Text>
-              <Text style={styles.ocean}>
-                {this.state.ethTokenBal} {t('walletSettings.eth')}
-              </Text>
-              <Text style={styles.ocean}>
-                {this.state.oceanERC20TokenBal} {t('walletSettings.ocean')}
-              </Text>
-              <Text style={styles.ocean}>
-                {this.state.phec0ERC20TokenBal} {t('walletSettings.phecor')}
-              </Text>
-            </View>
-            <View style={styles.alignEnd}>
-              <Text style={styles.txtPortfolio}>
-                24h {t('walletSettings.portfolio')}
-              </Text>
-              <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
-            </View>
-          </View>
+            this.setState({accountType: itemValue })
+          }>
+          <Picker.Item label="Main Account" value="main" />
+          <Picker.Item label="Imported Account" value="imported" />
+        </Picker>
+      <View style={styles.container}>
+        {
+         (this.state.accountType == "main" && this.state.accountType !== '' ) ? (
           <View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.publicKey')}
+          <Text style={styles.bigTextView}>
+             {t('walletSettings.publicKey')}
+           </Text>
+           <View style={styles.parent}>
+            <Text numberOfLines={1} style={styles.boxText}>
+               {this.state.publicKey}
             </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.publicKey}
-              </Text>
-              <CButton text={this.state.publicKey}/>
-            </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.mnemonicPhrase')}
+             <CButton text={this.state.publicKey}/>
+           </View> 
+           <Text style={styles.bigTextView}>
+               {t('walletSettings.mnemonicPhrase')}
+             </Text>
+             <View style={styles.parent}>
+             <TextInput
+                numberOfLines={1} 
+                style={styles.boxText}
+                value={this.state.mnemonics}
+                editable={false}         
+                secureTextEntry={this.state.mnemonics? true:false}   
+               />
+               <CButton text={this.state.mnemonics}/>
+             </View>
+             <Text style={styles.bigTextView}>
+               {t('walletSettings.privateKey')}
+             </Text>
+             <View style={styles.parent}>
+             <TextInput
+                numberOfLines={1} 
+                style={styles.boxText}
+                value={this.state.privateKey}
+                editable={false}         
+                secureTextEntry={this.state.privateKey? true:false}   
+               />
+               <CButton text={this.state.privateKey}/>
+             </View>
+             <Text style={styles.bigTextView}>
+               {t('walletSettings.password')}
+             </Text>
+             <View style={styles.parent}>
+             <TextInput
+                numberOfLines={1} 
+                style={styles.boxText}
+                value={this.state.pword}
+                editable={false}          
+                secureTextEntry={this.state.pword? true:false}        
+               /> 
+               <CButton text={this.state.pword}/>
+             </View>
+            
+           </View> 
+         ):
+         <View>
+           <Text style={styles.bigTextView}>
+             {t('walletSettings.publicKey')}
+           </Text>
+           <View style={styles.parent}>
+            <Text numberOfLines={1} style={styles.boxText}>
+               {this.state.importedPub_Key}
             </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.mnemonics}
-              </Text>
-              <CButton text={this.state.mnemonics}/>
-            </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.privateKey')}
-            </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.privateKey}
-              </Text>
-              <CButton text={this.state.privateKey}/>
-            </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.password')}
-            </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.pword}
-              </Text>
-              <CButton text={this.state.pword}/>
-            </View>
-          </View>
-        </View>
+             <CButton text={this.state.importedPub_Key}/>
+           </View>
+           <Text style={styles.bigTextView}>
+               {t('walletSettings.privateKey')}
+             </Text>
+             <View style={styles.parent}>
+             <TextInput
+                numberOfLines={1} 
+                style={styles.boxText}
+                value={this.state.importedPriv_Key}
+                editable={false}         
+                secureTextEntry={this.state.importedPriv_Key? true:false}   
+               />
+               <CButton text={this.state.importedPriv_Key}/>
+             </View>
+             <Button
+               color="#f2f2f2"
+               title="Import Account"
+               buttonStyle={styles.button}
+               onPress={this.handleImportAccount}
+               textStyle={styles.buttonText}
+            />
+            <Dialog.Container visible={this.state.importDialog}>
+           <Dialog.Title>Enter Private Key</Dialog.Title>
+           <Dialog.Description>
+             for importing a wallet account
+           </Dialog.Description>
+           <Dialog.Input
+             wrapperStyle={styles.wrapperStyle}
+             onChangeText={(text) => this.setState({importedPriv_Key:text})}
+           />
+           <Dialog.Button label="Submit" onPress={this.handleImportSubmit} />
+           <Dialog.Button label="Cancel" onPress={this.handleImportCancel} />
+         </Dialog.Container>
+         </View>  
+           
+        }
+        
+      </View>
       </ScrollView>
     )
   }
