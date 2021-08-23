@@ -91,6 +91,11 @@ const DrawingPan = (props) => {
       };
     
 
+      useEffect(()=>{
+        console.log(props.annoRect);
+      }, []);
+    
+
     return (
         <View
           onLayout={(event) => {find_dimensions(props, event.nativeEvent.layout) }}
@@ -115,19 +120,25 @@ const DrawingPan = (props) => {
             style={styles.overlay}
             pointerEvents={'none'}
           >
-          <Svg
-            width={'100%'}
-            height={'100%'}
-            style={styles.svgRect}
-            >
-              <G>
-                <Defs>
-                  <Pattern id="grid" width={props.rectWidth} height={props.rectHeight} patternUnits="userSpaceOnUse">
-                    <Path d="M 30 0 L 0 0 0 30" fill="none" stroke="gray" stroke-width="1"/>
-                  </Pattern>
-                </Defs>
-                <Rect width="100%" height="100%" fill="url(#grid)" />
-              </G>
+            <Svg
+              width={'100%'}
+              height={'100%'}
+              >
+                <G>
+                  <Defs>
+                    <Pattern id="grid" width={30} height={30} patternUnits="userSpaceOnUse">
+                      <Path d="M 0 30 L 30 30 L 30 0" fill="none" stroke="gray" stroke-width="1"/>
+                    </Pattern>
+                  </Defs>
+                  <Rect width={'100%'} height={'100%'} fill="url(#grid)" />
+                </G>
+            </Svg>
+            <Svg
+              width={frameDimension.width}
+              height={frameDimension.width}
+              style={styles.svgRect}
+              >
+                
               <G>
               {
                 props.annoRect.map((rect,index)=>(
@@ -144,7 +155,7 @@ const DrawingPan = (props) => {
                 ))
               }
               </G>
-           </Svg>
+            </Svg>
           </View>
         </View>
     );
@@ -165,7 +176,6 @@ export default DrawingPan;
 export const styles = StyleSheet.create({
    
     imageView: {
-      marginTop: 10,
       width: '100%',
       aspectRatio: 1.2,
     },
@@ -173,7 +183,7 @@ export const styles = StyleSheet.create({
       backgroundColor: '#ffffff',
       borderRadius: 8,
       borderColor: '#DADADA',
-      borderWidth: 1
+      borderWidth: 1,
     },
     imageContainer: {
       width: '100%',

@@ -3,28 +3,38 @@ import {
     Image,
     Text,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    Modal,
+    Alert,
+    TextInput,
+    Pressable
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import UploadProgress from '../components/UploadProgress';
 import UploadProgressTile from '../components/UploadProgressTile';
 import {useStateValue} from '../services/State/State';
 import  Button from '../components/Button';
+//import TextInput from '../components/TextInput';
 import {theme} from '../services/Common/theme';
 const CloudUpload = require('../assets/cloud_upload.png');
-
+import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import {actions} from '../services/State/Reducer';
 import {
+  annotate,
   uploadImage, 
   annotateImage,
   getImageById,
   getPlayAIAnnotation,
   setPlayAIAnnotation
 } from '../services/API/APIManager';
+import MultiSelect from '../components/Multiselect.js';
 import DrawingPan from '../components/DrawingPan';
 import DocumentPicker from 'react-native-document-picker';
 import { nullLiteralTypeAnnotation } from 'jscodeshift';
 import { uploadFiles } from 'react-native-fs';
+//import {ColorPicker} from 'react-native-color-picker-light';
+//import ColorPicker from 'react-native-rectangle-color-picker';
+import ColorPicker from 'react-native-wheel-color-picker';
 import {withTranslation} from 'react-i18next';
 
 const playAI_tag = '';
@@ -43,10 +53,14 @@ const PlayAI = ({navigation, t}) => {
   const [readOnly, setReadOnly] = useState(false);
   const [bounds, setBounds] = useState([]); 
   const [imageData, setImageData] = useState(null);
+  const [age, setAge] = useState(1);
+  const [gender, setGender] = useState(['Male']);
+  const [skinColor, setSkinColor] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const uploadFile = async(file)=>{
     try{
-      setProgress(0.8);
+      setProgress(0.5);
       const filedata = new FormData();
       filedata.append('file', file);
       const result = await uploadImage(filedata);
@@ -54,8 +68,17 @@ const PlayAI = ({navigation, t}) => {
         console.log(result);
         if(result.id){
           setImageId(result.id);
-          setProgress(1);
-          setSuccess(true);
+          
+          const tag_result = await submitTags(result.id);
+          if(tag_result){
+            setProgress(1);
+            setSuccess(true);
+          }
+          else{
+            setError(true);
+            setErrorText("Submit Annotation failed.");
+          }
+
         } else if (result.message) {
           setError(true);
           setErrorText(result.message);
@@ -101,6 +124,7 @@ const PlayAI = ({navigation, t}) => {
   };
 
   const submitTags = async(imageId, description='', tags=['playai_anonymisation_bounty'])=>{
+    let ret = false;
     try{
       setLoading(true);
       const req = {
@@ -121,6 +145,7 @@ const PlayAI = ({navigation, t}) => {
             confirmText: 'Ok',
           },
         });
+        ret = true;
         //navigation.navigate('LandingPage');
       } else {
         dispatch({
@@ -152,6 +177,7 @@ const PlayAI = ({navigation, t}) => {
     } finally {
       setLoading(false);
     }
+    return ret;
 
   };
 
@@ -200,15 +226,14 @@ const PlayAI = ({navigation, t}) => {
         fileReaderInstance.readAsDataURL(result);
         fileReaderInstance.onload = () => {
           setImageData(fileReaderInstance.result);
-          console.log(fileReaderInstance.result);
-
+          
           //retrieve playAI metadata 
           //const ai_result = await getPlayAIAnnotation({image_id: image_id});
           const ai_result = {
             image_id: imageId,
             annotations: [
-              {tag: 'playai_anonymisation_bounty', type: 'box', x: 0.05, y: 0.05, width: 0.01, height: 0.01},
-              {tag: 'playai_anonymisation_bounty', type: 'box', x: 0.05, y: 0.06, width: 0.01, height: 0.01}
+              {tag: 'playai_anonymisation_bounty', type: 'box', x: 30, y: 30, width: 100, height: 100},
+              {tag: 'playai_anonymisation_bounty', type: 'box', x: 60, y: 100, width: 50, height: 70}
             ]
           };
 
@@ -223,17 +248,31 @@ const PlayAI = ({navigation, t}) => {
     //}
   }
 
+  const submitBounds = async ()=>{
+    //submit bounds to server
+    let annotations = [];
+    let data = {
+      image_id: imageId,
+      annotations: annotations
+    };
+    const result = await annotate(data);
+    setReadOnly(false);
+    setFile(null);
+  };
+
   useEffect(()=>{
     fetchImage();
   }, [imageId]);
 
 
+
+
   return (
       <View style={styles.container}>
-        {readOnly? (
+        {!readOnly? (
           <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.uploadScrollContainer}>
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.uploadScrollContainer}>
           <View style={styles.readOnlyContainer}>
             <DrawingPan
               setAnnoRect={setBounds}
@@ -241,10 +280,96 @@ const PlayAI = ({navigation, t}) => {
               imageSource={{uri: imageData}}
             />
           </View>
-          
-        </ScrollView>
-
-        ) : file ? (
+          <TextInput
+            style={styles.ageInput}
+            keyboardType={'numeric'}
+            value={age}
+            placeholder={t('playAI.age')}
+            placeholderTextColor={'#A9A9A9'}
+            onChangeText={setAge}
+          />
+          <MultiSelect 
+            hideTags
+            hideSubmitButton
+            hideDropdown        
+            items={[
+              {name: t('playAI.male'), value:'Male'}, 
+              {name: t('playAI.female'), value: 'Female'}, 
+              {name: t('playAI.other'), value: 'Other'}]}
+            uniqueKey="value"
+            selectText={t('playAI.gender')}
+            displayKey="name"
+            single={true}
+            showFilter={false}
+            canAddItems={false}
+            selectedItems={gender}
+            onSelectedItemsChange={(items)=>{ setGender(items) }}
+            textInputProps={{
+              editable:false
+            }}
+            searchInputPlaceholderText={t('playAI.gender')}
+            
+            selectedItemTextColor={'#00A5FF'}
+            styleMainWrapper={{
+              marginTop: 10
+            }}/>
+          <Pressable
+            style={styles.skinButton}
+            onPress={()=>{
+              setModalVisible(!modalVisible);
+            }}>
+            <Text style={{
+              alignSelf: 'center'
+            }} color={'#A9A9A9'}>{t('playAI.skinColor')}</Text>
+            <View
+              style={{
+                marginLeft: 10,
+                backgroundColor: skinColor,
+                paddingHorizontal: 10,
+                paddingVertical: 3,
+                borderColor: '#ADADAD',
+                borderWidth: 1
+              }}>
+              <Text>{skinColor}</Text>
+            </View>
+          </Pressable>
+          {modalVisible && (
+          <View
+            style={styles.colorPickerView}>
+            <ColorPicker
+              // ref={r => { this.picker = r }}
+              color={skinColor ? skinColor: '#FFFFFF'}
+              swatchesOnly={false}
+              onColorChange={(color)=>{
+                console.log(color);
+              }}
+              onColorChangeComplete={(color)=>{
+                setSkinColor(color)
+                console.log(color);
+              }}
+              thumbSize={15}
+              sliderSize={15}
+              noSnap={false}
+              row={true}
+              swatchesLast={false}
+              swatches={false}
+              discrete={false}
+              style={styles.colorPicker}/>
+            </View>
+          )}
+          <Button
+            color={theme.APP_COLOR}
+            title={t('playAI.submit')}
+            buttonStyle={styles.button}
+            onPress={
+              ()=>{
+                submitBounds();
+              }
+            }
+            textStyle={styles.buttonText}
+            />
+          </ScrollView>
+          ) : file ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.uploadScrollContainer}>
@@ -262,10 +387,9 @@ const PlayAI = ({navigation, t}) => {
                 setFile(null);
               }}
             />
-            
             <Button
               color={theme.APP_COLOR}
-              title={error ? 'Upload' : success ? 'Next' : 'Back'}
+              title={error ? t('playAI.upload') : success ? t('playAI.next') : t('playAI.back')}
               buttonStyle={styles.button}
               onPress={() => {
                 if (error) {
@@ -285,29 +409,28 @@ const PlayAI = ({navigation, t}) => {
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.uploadScrollContainer}>
-                <View style={styles.uploadBorderContainer}>
-                  <Image
-                    resizeMode="stretch"
-                    source={CloudUpload}
-                    style={styles.imageIcon}
-                  />
-                  <Text style={[styles.uploadText, styles.marginBottom3p]}>
-                    PlayAI  Anonymization
-                  </Text>
-                  <Button
-                    title="Upload Image"
-                    onPress={() =>
-                      onPickFile()
-                    }
-                    color={theme.APP_COLOR}
-                    buttonStyle={styles.button}
-                    textStyle={styles.buttonText}
-                  />
-                </View>
-              </ScrollView>
+              <View style={styles.uploadBorderContainer}>
+                <Image
+                  resizeMode="stretch"
+                  source={CloudUpload}
+                  style={styles.imageIcon}
+                />
+                <Text style={[styles.uploadText, styles.marginBottom3p]}>
+                  {t('playAI.title')}
+                </Text>
+                <Button
+                  title={t('playAI.uploadImage')}
+                  onPress={() =>
+                    onPickFile()
+                  }
+                  color={theme.APP_COLOR}
+                  buttonStyle={styles.button}
+                  textStyle={styles.buttonText}
+                />
+              </View>
+            </ScrollView>
           )
         }
-        
       </View>
   );
 };
@@ -369,8 +492,6 @@ const styles = StyleSheet.create({
   },
   readOnlyContainer: {
     borderRadius: 15,
-    paddingVertical: '8%',
-    paddingHorizontal: '4%',
     backgroundColor: '#F5F6FC',
     marginBottom: '3%',
   },
@@ -410,6 +531,35 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Inter-Regular',
   },
+  colorPicker:  {
+    height: 200,
+    marginVertical: 10,
+  },
+  colorPickerView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    borderColor: '#e9e9e9',
+    borderRadius: 5,
+    borderWidth: 1,
+    padding: 10,
+    marginTop: 10,
+  },
+  skinButton: {
+    borderColor: '#e9e9e9',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingLeft: 10,
+    flexDirection: 'row',
+  },
+  ageInput: {
+    borderColor: '#e9e9e9',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+  }
 });
 
   export default withTranslation()(PlayAI);

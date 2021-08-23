@@ -216,7 +216,7 @@ export const getPlayAIAnnotation = async (data) => {
     return response;
   } catch (err) {
     return null;
-  }
+  } 
 };
 
 export const setPlayAIAnnotation = async (data) => {
@@ -226,5 +226,20 @@ export const setPlayAIAnnotation = async (data) => {
   }catch(err) {
     return null;
   }
+};
 
+/**
+ * 
+ * @param {*} data {
+ * "image_ids":["00000cf8fc7c3cd8"],
+ * "annotations" :["BoundingBox", "GeoLocation"]}
+ * @returns 
+ */
+export const queryAnnotation =async(data) => {
+  try {
+    const response = await postUserData(s.metadata.query,data);
+    return response;
+  }catch(err){
+    return null;
+  }
 };

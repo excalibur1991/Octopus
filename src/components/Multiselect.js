@@ -792,9 +792,10 @@ export default class MultiSelect extends Component {
     },
     subSection: {
       backgroundColor: colorPack.light,
-      borderBottomWidth: 1,
+      borderWidth: 1,
+      borderRadius:5,
       borderColor: colorPack.borderColor,
-      paddingLeft: 0,
+      paddingLeft: 10,
       paddingRight: 20,
       flex: 1,
       flexDirection: 'row',
@@ -846,15 +847,17 @@ export default class MultiSelect extends Component {
     inputGroup: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingLeft: 16,
-      
+      paddingLeft: 10,
       height: 53,
       backgroundColor: colorPack.light,
+      borderColor: colorPack.borderColor,
+      borderRadius: 5,
+      borderWidth: 1
     },
     dropdownView: {
       flexDirection: 'row',
       alignItems: 'center',
-      height: 40,
+      height: 56,
       marginBottom: 10,
     },
   };

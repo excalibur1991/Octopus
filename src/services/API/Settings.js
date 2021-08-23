@@ -27,6 +27,7 @@ export const settings = {
     annotateImage: 'api/v1/annotate',
     getPlayAIAnnotation: 'api/v1/get_playai_annotate',
     setPlayAIAnnotation:'api/v1/set_playai_annotate',
+    query: '/api/v1/metadata/query'
 
   },
 
