@@ -44,12 +44,14 @@ const ImageTagInput = ({
           style={[styles.inputSingleline, {minWidth: 100}]}
           returnKeyType="default"
           onSubmitEditing={(e) => {
-            setTimeout(() => {
-              tagInputRef.current.focus();
-            }, 1);
-            const allTags = tags.slice();
-            allTags.push(tag);
-            onChangeTags(allTags);
+            if (tag.trim()) {
+              setTimeout(() => {
+                tagInputRef.current.focus();
+              }, 1);
+              const allTags = tags.slice();
+              allTags.push(tag);
+              onChangeTags(allTags);
+            }
             setTag('');
           }}
         />
@@ -79,12 +81,14 @@ const ImageTagInput = ({
           style={[styles.inputSingleline, {minWidth: 145}]}
           returnKeyType="default"
           onSubmitEditing={(e) => {
-            setTimeout(() => {
-              commonTagInputRef.current.focus();
-            }, 1);
-            const allCommonTags = commonTags.slice();
-            allCommonTags.push(commonTag);
-            onChangeCommonTags(allCommonTags);
+            if (commonTag.trim()) {
+              setTimeout(() => {
+                commonTagInputRef.current.focus();
+              }, 1);
+              const allCommonTags = commonTags.slice();
+              allCommonTags.push(commonTag);
+              onChangeCommonTags(allCommonTags);
+            }
             setCommonTag('');
           }}
         />
