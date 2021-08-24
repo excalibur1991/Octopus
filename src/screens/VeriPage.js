@@ -29,8 +29,7 @@ import {
   Checkbox
 } from 'react-native-paper';
 
-import MultiSelect from 'react-native-multiple-select'
-//import SelectDropdown from "react-native-select-dropdown";
+import MultiSelect from '../components/Multiselect'
 
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
 import TagInput from '../components/TagInput'
@@ -718,6 +717,7 @@ const VeriPage = (props) => {
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={piis}
               uniqueKey="tag"
               selectText="PII"
@@ -738,10 +738,10 @@ const VeriPage = (props) => {
                 height:56,
               }}
             />
-            <Divider />
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={bounties}
               uniqueKey="tag"
               selectText="Bounty"

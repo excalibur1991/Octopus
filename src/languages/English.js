@@ -126,7 +126,18 @@ export default {
     Annotations: {
       save: 'Save',
       Bounty: 'Bounty',
-      Type: 'Type'
+      Type: 'Type',
+      uploadImage: 'Upload Image',
+      upload: 'Upload',
+      next: 'Next',
+      back: 'Back',
+      submit: 'Submit',
+      skinColor: 'Skin Color:',
+      gender: 'Gender',
+      male: 'Male',
+      female: 'Female',
+      other: 'Other',
+      age: 'Age'
     }
   },
 };

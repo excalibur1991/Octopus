@@ -15,6 +15,7 @@ export const settings = {
   },
 
   metadata: {
+    queryAnnotation: 'api/v1/metadata/query',
     queryMetadata: '/api/v1/query-metadata',
     getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',

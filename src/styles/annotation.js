@@ -79,5 +79,34 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         top: 0
-    }
+    },
+    ageInput: {
+      borderColor: '#e9e9e9',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingLeft: 10,
+    },
+    skinButton: {
+      borderColor: '#e9e9e9',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingVertical: 10,
+      paddingLeft: 10,
+      flexDirection: 'row',
+    },
+    colorPickerView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+      borderColor: '#e9e9e9',
+      borderRadius: 5,
+      borderWidth: 1,
+      padding: 10,
+      marginTop: 10,
+    },
+    colorPicker:  {
+      height: 200,
+      marginVertical: 10,
+    },
 });

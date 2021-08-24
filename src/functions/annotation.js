@@ -138,6 +138,11 @@ import groupBy from 'lodash.groupby'
     props.setSelectedBounties(items);
     if(items.length > 0){
         props.setCurTag(items[0]);
+        if(items[0].toLocaleLowerCase() == 'anonymization bounty'){
+          props.setIsAnonymization(true);
+        }else{
+          props.setIsAnonymization(false);
+        }
     }
   };
 
@@ -146,6 +151,11 @@ import groupBy from 'lodash.groupby'
   export const saveAnnotation = async (props)=>{
     //save annotation
     if(props.curImageIndex >= props.metadata.length) return;
+
+    props.dispatch({
+      type: actions.SET_PROGRESS_SETTINGS,
+      show: true,
+    });
 
     const image_id = props.curMetadata.image_id;
     const originalImageWidth = props.zoomView.props.imageWidth;
@@ -181,6 +191,10 @@ import groupBy from 'lodash.groupby'
     const response = await annotate({image_id: image_id, annotations: _rects});
     
     props.setCurImageIndex((props.curImageIndex+1));
+    props.dispatch({
+      type: actions.SET_PROGRESS_SETTINGS,
+      show: false,
+    });
   };
 
   

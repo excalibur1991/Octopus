@@ -1,7 +1,10 @@
 import {
   View,
   Image,
-  ScrollView
+  ScrollView,
+  Pressable,
+  Text,
+  TextInput
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MultiSelect from '../components/Multiselect'
@@ -23,12 +26,13 @@ import {
   saveAnnotation,
   rectWidth,
   rectHeight
-} from '../functions/annotation'
+} from '../functions/annotation';
+import ColorPicker from 'react-native-wheel-color-picker';
 import {styles} from '../styles/annotation';
 import {withTranslation} from 'react-i18next';
 
 
-const Annotation = ({t}) => {
+const Annotation = ({navigation, t}) => {
   const [, dispatch] = useStateValue();
   
   const [bounties, setBounties] = useState([]);
@@ -58,6 +62,12 @@ const Annotation = ({t}) => {
   const [rectScale, setRectScale] = useState(1.0);
   const [zoomView,setZoomView] = useState(null);
   const [cropPosition, setCropPosition] = useState({x:0, y:0});
+  const [isAnonymization, setIsAnonymization] = useState(false);
+  const [age, setAge] = useState(25);
+  const [gender, setGender] = useState(['Male']);
+  const [skinColor, setSkinColor] = useState(null);
+  const [modalVisible, setModalVisible] = useState(true);
+  const [anonymizationBounties, setAnonymizationBounties] = useState([]);
 
 
   const props = {
@@ -96,6 +106,10 @@ const Annotation = ({t}) => {
     setCurAnnoMode: setCurAnnoMode,
     annoDot:annoDot, 
     setAnnoDot:setAnnoDot,
+    isAnonymization,
+    setIsAnonymization,
+    anonymizationBounties,
+    setAnonymizationBounties
   };
 
   useEffect(() => {
@@ -148,9 +162,8 @@ const Annotation = ({t}) => {
           styleInputGroup={styles.styleInputGroup}
         />
         {
-               (annotationTags.length > 0) && (<View
-                  style={styles.tagWrapper}
-                >
+               (annotationTags.length > 0) && (
+               <View style={styles.tagWrapper}>
                 {
                   annotationTags.map((annoTag)=>(
                     <Chip
@@ -219,11 +232,11 @@ const Annotation = ({t}) => {
             style={styles.overlay}
             pointerEvents={'none'}
           >
-          <Svg
-            width={'100%'}
-            height={'100%'}
-            style={styles.svgRect}
-            >
+            <Svg
+              width={'100%'}
+              height={'100%'}
+              style={styles.svgRect}
+              >
               {(curTag != "") && 
               <G>
                 <Defs>
@@ -270,6 +283,88 @@ const Annotation = ({t}) => {
           </View>
           
         </View>
+          {isAnonymization &&
+          (
+            <View>
+          <TextInput
+            style={styles.ageInput}
+            keyboardType={'numeric'}
+            value={age}
+            placeholder={t('Annotations.age')}
+            placeholderTextColor={'#A9A9A9'}
+            onChangeText={setAge}
+          />
+          <MultiSelect 
+            hideTags
+            hideSubmitButton
+            hideDropdown        
+            items={[
+              {name: t('Annotations.male'), value:'Male'}, 
+              {name: t('Annotations.female'), value: 'Female'}, 
+              {name: t('Annotations.other'), value: 'Other'}]}
+            uniqueKey="value"
+            selectText={t('Annotations.gender')}
+            displayKey="name"
+            single={true}
+            showFilter={false}
+            canAddItems={false}
+            selectedItems={gender}
+            onSelectedItemsChange={(items)=>{ setGender(items) }}
+            textInputProps={{
+              editable:false
+            }}
+            searchInputPlaceholderText={t('Annotations.gender')}
+            
+            selectedItemTextColor={'#00A5FF'}
+            styleMainWrapper={{
+              marginTop: 10
+            }}/>
+            <Pressable
+            style={styles.skinButton}
+            onPress={()=>{
+              setModalVisible(!modalVisible);
+            }}>
+            <Text style={{
+              alignSelf: 'center'
+            }} color={'#A9A9A9'}>{t('Annotations.skinColor')}</Text>
+            <View
+              style={{
+                marginLeft: 10,
+                backgroundColor: skinColor,
+                paddingHorizontal: 10,
+                paddingVertical: 3,
+                borderColor: '#ADADAD',
+                borderWidth: 1
+              }}>
+              <Text>{skinColor}</Text>
+            </View>
+          </Pressable>
+          {modalVisible && (
+          <View
+            style={styles.colorPickerView}>
+            <ColorPicker
+              // ref={r => { this.picker = r }}
+              color={skinColor ? skinColor: '#FFFFFF'}
+              swatchesOnly={false}
+              onColorChange={(color)=>{
+                console.log(color);
+              }}
+              onColorChangeComplete={(color)=>{
+                setSkinColor(color)
+                console.log(color);
+              }}
+              thumbSize={15}
+              sliderSize={15}
+              noSnap={false}
+              row={true}
+              swatchesLast={false}
+              swatches={false}
+              discrete={false}
+              style={styles.colorPicker}/>
+            </View>
+          )}
+          </View>
+          )}
         <Button 
         mode={'contained'}
         style={styles.button}

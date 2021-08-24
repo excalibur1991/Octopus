@@ -103,17 +103,27 @@ export const getNounce = async (public_address)=> {
 /**
  * queryMetadata
  * @param {*} page 
- * @param {*} status 
- * @param {*} fields 
+ * @param {*} type (optional) BoundingBox, TextTag, Anonymization
+ * @param {*} tags (optional) ["birdhouse"]
+ * @param {*} fields (optional) ["image_id","descriptions","tags"],
+ * 
  * @returns 
+ * 
  */
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
 export const queryMetadata = async(
   page, 
   status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"]) => {
+  fields=["image_id", "tag_data", "descriptions"],
+  type="Anonymization",
+  tags=[]
+  ) => {
 
-    const data = {page: page, status: status, fields: fields}
+    const data = {page: page, status: status, fields: fields, type: type};
+    //check if tags empty, then what result?
+    if(tags){
+      data.tags = tags;
+    }
 
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);
@@ -188,3 +198,24 @@ export const annotate = async(data)=>{
   }
   return null;
 };
+
+
+/**
+ * 
+ * @param {
+ * "image_ids":["00000cf8fc7c3cd8"],
+ *   "annotations" :["BoundingBox", "GeoLocation"]} 
+ * data 
+ * @returns 
+ * {"result": {"BoundingBox": [{"image_id": "00000cf8fc7c3cd8", "value": {"height": 34, "tag": "sample", "width": 23.2, "x": 1, "y": 1}}],
+ *             "GeoLocation": [{"image_id": "00000cf8fc7c3cd8", "value": {"latitude": 48.74553,"longitude": 9.10044}}]},
+ *  "status": "success"}
+ */
+export const queryAnnotation = async(data)=>{
+  try {
+    const response = await postUserData(s.metadata.queryAnnotation, data);
+    return response;
+  }catch(err){
+    return null;
+  }
+}
