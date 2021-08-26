@@ -283,7 +283,7 @@ const Annotation = ({navigation, t}) => {
           </View>
           
         </View>
-          {isAnonymization &&
+          {isAnonymization && annoRect.find((value)=>(value.tag.toLowerCase() == 'anonymization bounty')) &&
           (
             <View>
           <TextInput
