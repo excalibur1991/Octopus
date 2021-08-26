@@ -37,6 +37,7 @@ class WalletSettings extends Component {
       importedPub_Key: '',
       accountType: 'main',
       importDialog: false,
+      overWriteDialog: false,
 
     };
 
@@ -77,6 +78,10 @@ class WalletSettings extends Component {
     }
 }
 
+ handleOverwriteWallet = async() => {
+  console.log("overWriting account...")
+  this.setState({ overWriteDialog: true });
+ }
 
   handleImportAccount = () => {
     console.log("importing account...")
@@ -87,6 +92,23 @@ class WalletSettings extends Component {
     this.setState({ importDialog: false });
   }
 
+  handleOverwriteCancel = () => {
+    this.setState({ overWriteDialog: false });
+  }
+
+  handleOverwriteSubmit = async() => {
+    this.setState({overWriteDialog: false})
+    this.setState({publicKey: ""})
+    //this.setState({privateKey: ""})
+    //this.setState({mnemonics: ""})
+    //this.setState({pword: ""})
+    try {
+      await AsyncStorage.removeItem('@save_Keys')
+      
+    } catch (e) {
+      
+    }
+  }
   handleImportSubmit = () => {
     this.setState({ importDialog: false })
 
@@ -109,6 +131,7 @@ class WalletSettings extends Component {
 
   }
 
+  hand
   render() {
     const {t} = this.props;
     return (
@@ -123,7 +146,7 @@ class WalletSettings extends Component {
         </Picker>
       <View style={styles.container}>
         {
-         (this.state.accountType == "main" && this.state.accountType !== '' ) ? (
+         (this.state.accountType == "main" && this.state.accountType !== '' && this.state.publicKey !== '' ) ? (
           <View>
           <Text style={styles.bigTextView}>
              {t('walletSettings.publicKey')}
@@ -206,18 +229,34 @@ class WalletSettings extends Component {
                onPress={this.handleImportAccount}
                textStyle={styles.buttonText}
             />
+             <Button
+               color="#f2f2f2"
+               title="Overwrite Wallet"
+               buttonStyle={styles.button}
+               onPress={this.handleOverwriteWallet}
+               textStyle={styles.buttonText}
+            />
             <Dialog.Container visible={this.state.importDialog}>
-           <Dialog.Title>Enter Private Key</Dialog.Title>
-           <Dialog.Description>
-             for importing a wallet account
-           </Dialog.Description>
-           <Dialog.Input
-             wrapperStyle={styles.wrapperStyle}
-             onChangeText={(text) => this.setState({importedPriv_Key:text})}
-           />
-           <Dialog.Button label="Submit" onPress={this.handleImportSubmit} />
-           <Dialog.Button label="Cancel" onPress={this.handleImportCancel} />
-         </Dialog.Container>
+              <Dialog.Title>Enter Private Key to Import Wallet</Dialog.Title>
+              <Dialog.Description>
+                Pls. remember to safely store your current wallet details!
+              </Dialog.Description>
+              <Dialog.Input
+                wrapperStyle={styles.wrapperStyle}
+                onChangeText={(text) => this.setState({importedPriv_Key:text})}
+              />
+              <Dialog.Button label="Submit" onPress={this.handleImportSubmit} />
+              <Dialog.Button label="Cancel" onPress={this.handleImportCancel} />
+          </Dialog.Container>
+          <Dialog.Container visible={this.state.overWriteDialog}>
+              <Dialog.Title>Delete Main Wallet?</Dialog.Title>
+              <Dialog.Description>
+                Pls. write down your Main Wallet details, as it will be erased!
+              </Dialog.Description>
+  
+              <Dialog.Button label="Delete" onPress={this.handleOverwriteSubmit} />
+              <Dialog.Button label="Cancel" onPress={this.handleOverwriteCancel} />
+          </Dialog.Container>
          </View>  
            
         }
