@@ -43,13 +43,19 @@ const ImageTagInput = ({
           placeholder={tagsPlaceholder}
           style={[styles.inputSingleline, {minWidth: 100}]}
           returnKeyType="default"
+          autoCapitalize="none"
           onSubmitEditing={(e) => {
-            if (tag.trim()) {
+            const newTag = tag.trim().toLowerCase();
+            if (
+              newTag &&
+              !tags.includes(newTag) &&
+              !commonTags.includes(newTag)
+            ) {
               setTimeout(() => {
                 tagInputRef.current.focus();
               }, 1);
               const allTags = tags.slice();
-              allTags.push(tag);
+              allTags.push(newTag);
               onChangeTags(allTags);
             }
             setTag('');
@@ -80,13 +86,19 @@ const ImageTagInput = ({
           placeholder={commonTagsPlaceholder}
           style={[styles.inputSingleline, {minWidth: 145}]}
           returnKeyType="default"
+          autoCapitalize="none"
           onSubmitEditing={(e) => {
-            if (commonTag.trim()) {
+            const newCommonTag = commonTag.trim().toLowerCase();
+            if (
+              newCommonTag &&
+              !tags.includes(newCommonTag) &&
+              !commonTags.includes(newCommonTag)
+            ) {
               setTimeout(() => {
                 commonTagInputRef.current.focus();
               }, 1);
               const allCommonTags = commonTags.slice();
-              allCommonTags.push(commonTag);
+              allCommonTags.push(newCommonTag);
               onChangeCommonTags(allCommonTags);
             }
             setCommonTag('');
