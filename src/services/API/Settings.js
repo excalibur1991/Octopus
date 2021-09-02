@@ -1,6 +1,6 @@
 export const settings = {
   // development
-  baseUrl: 'https://dev.dataunion.app:8082/',
+  baseUrl: 'https://dev.dataunion.app:8082',
   //production 
   // baseUrl: 'https://alpha.dataunion.app:4430',
   taxonomy: {
@@ -18,15 +18,15 @@ export const settings = {
     queryMetadata: '/api/v1/query-metadata',
     getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',
-    annotate: 'api/v1/metadata/annotation',
+    annotate: '/api/v1/metadata/annotation',
     reportImages: '/api/v1/report-images',
     verifyImage: '/api/v1/verify-image',
     myMetadata: '/api/get/my-metadata',
     getTags: '/staticdata/tags?type=$[word_type]',
-    uploadImage: 'api/v1/upload-file',
-    annotateImage: 'api/v1/annotate',
-    getPlayAIAnnotation: 'api/v1/get_playai_annotate',
-    setPlayAIAnnotation:'api/v1/set_playai_annotate',
+    uploadImage: '/api/v1/upload-file',
+    annotateImage: '/api/v1/annotate',
+    getPlayAIAnnotation: '/api/v1/get_playai_annotate',
+    setPlayAIAnnotation:'/api/v1/set_playai_annotate',
     query: '/api/v1/metadata/query'
 
   },

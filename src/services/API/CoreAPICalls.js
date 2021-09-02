@@ -132,6 +132,8 @@ export const postUserData = async (
   setLastActivity();
   const authToken = await refreshTokenAPI();
   const url = getEndpointUrl(relativeUrl);
+ 
+  console.log(url);
   const config = {
     method: 'post',
     headers: {

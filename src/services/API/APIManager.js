@@ -75,6 +75,7 @@ export const userRegister = async (public_address) => {
     const response = await postData(s.auth.register, data);
     return response;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }
@@ -195,6 +196,7 @@ export const uploadImage = async (data) => {
     const response = await postUserData(s.metadata.uploadImage, data, true);
     return response;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

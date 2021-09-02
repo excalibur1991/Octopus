@@ -8,7 +8,9 @@ import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {theme} from '../services/Common/theme';
-
+import {DragResizeBlock} from '../components/DragResizeBlock';
+import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
 
 const DrawingPan = (props) => {
     const {
@@ -17,8 +19,17 @@ const DrawingPan = (props) => {
         imageSource ={},
         rectHeight = 30,
         rectWidth = 30,
+        onLongPressRect=()=>{},
+        onResizeEnd=()=>{},
+        onDragEnd=()=>{},
+        onAddRect=()=>{},
+        onDeleteRect=()=>{},
+        onSelectRect=()=>{},
+        curRectIndex = -1,
+        setCurRectIndex= ()=>{}
       } = props || {};
 
+    const [, dispatch] = useStateValue();
     const [cropPosition, setCropPosition] = useState({x:0, y:0});
     const [rectScale, setRectScale] = useState(1.0);
     const [zoomView, setZoomView] = useState(null);
@@ -65,6 +76,9 @@ const DrawingPan = (props) => {
         _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
         }
         props.setAnnoRect(_rect);
+        if(found == false){
+          props.setCurRectIndex(_rect.length - 1);
+        }
     };
 
     const handleOnMove = (props, position)=>{
@@ -89,11 +103,37 @@ const DrawingPan = (props) => {
         setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
         setRectScale(position.scale);
       };
+
+      const handleRectMove = (event, index)=>{
+
+        let rects = [...props.annoRect];
+        rects.map((rect, rectIndex)=>{
+          if(rectIndex == index){
+            rects[rectIndex].x=event[0];
+            rects[rectIndex].y=event[1];
+            rects[rectIndex].width = event[2];
+            rects[rectIndex].height = event[3];
+          }
+        });
+        props.setAnnoRect(rects);
+        props.setCurRectIndex(index);
+      };
     
 
       useEffect(()=>{
         console.log(props.annoRect);
       }, []);
+
+      const removeRect = (index)=>{
+        let rects = [];
+        props.annoRect.map((rect, rectIndex)=>{
+          if(rectIndex != index){
+            rects.push(rect);
+          }
+        })
+        props.setAnnoRect(rects);
+        props.setCurRectIndex(-1);
+      }
     
 
     return (
@@ -114,49 +154,59 @@ const DrawingPan = (props) => {
             style={styles.imageContainer}
             source={props.imageSource}
             />
-            
-          </ImageZoom>
-          <View 
-            style={styles.overlay}
-            pointerEvents={'none'}
-          >
-            <Svg
-              width={'100%'}
-              height={'100%'}
-              >
-                <G>
-                  <Defs>
-                    <Pattern id="grid" width={30} height={30} patternUnits="userSpaceOnUse">
-                      <Path d="M 0 30 L 30 30 L 30 0" fill="none" stroke="gray" stroke-width="1"/>
-                    </Pattern>
-                  </Defs>
-                  <Rect width={'100%'} height={'100%'} fill="url(#grid)" />
-                </G>
-            </Svg>
-            <Svg
-              width={frameDimension.width}
-              height={frameDimension.width}
-              style={styles.svgRect}
-              >
-                
-              <G>
-              {
-                props.annoRect.map((rect,index)=>(
-                  <Rect
-                  key={'annoRect' + index}
-                  x={(rect.x - cropPosition.x) * rectScale}
-                  y={(rect.y - cropPosition.y) * rectScale}
-                  width={rect.width * rectScale}
-                  height={rect.height * rectScale}
-                  fill="#00ff0030"
-                  stroke="none"
-                  strokeWidth="0"
-                />
-                ))
+
+            {props.annoRect.map((rect, index)=>(
+             <DragResizeBlock
+              key={'annoRect' + index}
+              index={index}
+              curRectIndex={props.curRectIndex}
+              x={(rect.x - cropPosition.x) * rectScale}
+              y={(rect.y - cropPosition.y) * rectScale}
+              w={rect.width * rectScale}
+              h={rect.height * rectScale}
+              onPress={(event)=>{console.log(event)}}
+              onLongPress={(event)=>{
+                if(props.onLongPressRect){
+                  //delete operation
+                  props.onLongPressRect(event, index);
+                }}
               }
-              </G>
-            </Svg>
-          </View>
+              onResizeEnd={(event)=>{
+                handleRectMove(event, index);
+              }}
+              onDragEnd={(event)=>{
+                handleRectMove(event, index);
+              }}
+              onClose={(event)=>{
+                //if(props.onClose){
+                //  props.onClose(event, index);
+                //}
+                dispatch({
+                  type: actions.SET_ALERT_SETTINGS,
+                  alertSettings: {
+                    show: true,
+                    type: 'alert',
+                    tile: 'Notice',
+                    message: 'Do you really delete this bounding box?',
+                    showConfirmButton: true,
+                    confirmText: 'Ok',
+                    onConfirmPressed: ()=>{
+                      removeRect(index);
+                    }
+                  }
+                });
+          
+              }}
+              >
+             <View
+               style={{
+                 width: '100%',
+                 height: '100%',
+               }}
+             />
+            </DragResizeBlock>
+            ))}
+          </ImageZoom>
         </View>
     );
 };
@@ -168,6 +218,11 @@ DrawingPan.propTypes = {
     imageSource: PropTypes.object,
     rectHeight: PropTypes.number,
     rectWidth: PropTypes.number,
+    onLongPressRect: PropTypes.func,
+    onResizeEnd: PropTypes.func,
+    onDragEnd: PropTypes.func,
+    curRectIndex: PropTypes.number,
+    setCurRectIndex: PropTypes.func,
 };
   
 export default DrawingPan;
