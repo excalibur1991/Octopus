@@ -4,9 +4,10 @@ import {
   ScrollView,
   Pressable,
   Text,
+  Dimensions,
   TextInput
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import MultiSelect from '../components/Multiselect'
 import {useStateValue} from '../services/State/State';
 import {
@@ -15,7 +16,8 @@ import {
 } from 'react-native-paper';
 import ImageZoom from 'react-native-image-pan-zoom';
 import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
-
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {theme} from '../services/Common/theme';
 import {
   updateMetadata,
   handleBountySelection,
@@ -25,11 +27,13 @@ import {
   handleOnClick,
   saveAnnotation,
   rectWidth,
-  rectHeight
+  rectHeight,
+  drawCanvas
 } from '../functions/annotation';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {styles} from '../styles/annotation';
 import {withTranslation} from 'react-i18next';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 
 const Annotation = ({navigation, t}) => {
@@ -46,7 +50,8 @@ const Annotation = ({navigation, t}) => {
   const [curImageIndex, setCurImageIndex] = useState(0);
   const [curMetadata, setCurMetadata] = useState({});
 
-  const [frameDimension, setFrameDimension] = useState({width: 400, height: 300});
+  const [frameDimension, setFrameDimension] = useState({width: Dimensions.get('window').width - 50, height: 300});
+  const [imageDimension, setImageDimension] = useState({widt: 400, height: 300});
   
   const [imageBlob, setImageBlob] = useState(null);
 
@@ -68,7 +73,12 @@ const Annotation = ({navigation, t}) => {
   const [skinColor, setSkinColor] = useState(null);
   const [modalVisible, setModalVisible] = useState(true);
   const [anonymizationBounties, setAnonymizationBounties] = useState([]);
-
+  const [imageRatio, setImageRatio] = useState(1.0);
+  const [isEyeDrop, setEyeDrop]= useState(false);
+  const [canvas, setCanvas]= useState(null);
+ 
+  
+  const canvasRef = useRef(null);
 
   const props = {
     dispatch: dispatch,
@@ -109,8 +119,22 @@ const Annotation = ({navigation, t}) => {
     isAnonymization,
     setIsAnonymization,
     anonymizationBounties,
-    setAnonymizationBounties
+    setAnonymizationBounties,
+    imageDimension,
+    setImageDimension,
+    canvas,
+    imageRatio,
+    setImageRatio,
+    isEyeDrop,
+    setEyeDrop,
+    setSkinColor,
+    skinColor
   };
+
+  
+  const handleAnnoModeSelection = (items)=>{
+    setCurAnnoMode(items);
+  }
 
   useEffect(() => {
     setCurImageIndex(0);
@@ -126,15 +150,22 @@ const Annotation = ({navigation, t}) => {
   }, 
   [curImageIndex]);
 
-  const handleAnnoModeSelection = (items)=>{
-    setCurAnnoMode(items);
-  }
+  useEffect(()=>{
+    drawCanvas(props, imageBlob);
+  },
+  [imageBlob]);
+
+  useEffect(()=>{
+    console.log('setcanvas');
+    setCanvas(canvasRef.current);
+  }, [canvasRef]);
 
 
   
   return (
     <View style={styles.container}>
     <ScrollView 
+    style={ {width: '100%', paddingHorizontal: 25}}
     showsVerticalScrollIndicator={false}>
       <View style={styles.column}>
         <MultiSelect 
@@ -183,8 +214,9 @@ const Annotation = ({navigation, t}) => {
                 </View>)
 
         }
-
-          <MultiSelect 
+        {/**
+         * comment this part in current release
+         * <MultiSelect 
           hideTags
           hideSubmitButton
           hideDropdown        
@@ -207,7 +239,9 @@ const Annotation = ({navigation, t}) => {
           }}
           styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
           styleInputGroup={styles.styleInputGroup}
-        />
+        /> 
+         */}
+          
 
         <View
           onLayout={(event) => {find_dimesions(props, event.nativeEvent.layout) }}
@@ -222,11 +256,14 @@ const Annotation = ({navigation, t}) => {
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}
           >
+            {/**
             <Image
             style={styles.imageContainer}
             source={{uri:imageBlob}}
             />
-            
+            */}
+            <Canvas
+            ref={canvasRef} />
           </ImageZoom>
           <View 
             style={styles.overlay}
@@ -322,7 +359,8 @@ const Annotation = ({navigation, t}) => {
             <Pressable
             style={styles.skinButton}
             onPress={()=>{
-              setModalVisible(!modalVisible);
+              //setModalVisible(!modalVisible);
+              setEyeDrop(!isEyeDrop);
             }}>
             <Text style={{
               alignSelf: 'center'
@@ -338,8 +376,9 @@ const Annotation = ({navigation, t}) => {
               }}>
               <Text>{skinColor}</Text>
             </View>
+            <MaterialIcon size={25} name="color-lens" color={isEyeDrop ? theme.APP_COLOR: '#333333'} />
           </Pressable>
-          {modalVisible && (
+          {isEyeDrop && (
           <View
             style={styles.colorPickerView}>
             <ColorPicker
@@ -347,11 +386,9 @@ const Annotation = ({navigation, t}) => {
               color={skinColor ? skinColor: '#FFFFFF'}
               swatchesOnly={false}
               onColorChange={(color)=>{
-                console.log(color);
               }}
               onColorChangeComplete={(color)=>{
                 setSkinColor(color)
-                console.log(color);
               }}
               thumbSize={15}
               sliderSize={15}

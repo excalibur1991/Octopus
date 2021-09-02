@@ -8,6 +8,7 @@ import {
 
  import i18n from '../languages/i18n';
 import { block } from 'react-native-reanimated';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 import groupBy from 'lodash.groupby'
 
@@ -126,6 +127,7 @@ import groupBy from 'lodash.groupby'
     fileReaderInstance.readAsDataURL(result);
     fileReaderInstance.onload = () => {
       props.setImageBlob(fileReaderInstance.result);
+      //drawCanvas(props, fileReaderInstance.result);
     };
   };
 
@@ -136,6 +138,7 @@ import groupBy from 'lodash.groupby'
       value.checked = false;
     });
     props.setSelectedBounties(items);
+    props.setEyeDrop(false);
     if(items.length > 0){
         props.setCurTag(items[0]);
         if(items[0].toLocaleLowerCase() == 'anonymization bounty'){
@@ -201,6 +204,7 @@ import groupBy from 'lodash.groupby'
   export const find_dimesions = (props, layout)=> {
     const {x, y, width, height} = layout;
     props.setFrameDimension({width: width, height: height});
+    props.setImageDimension({width:width, height: height});
   };
 
 
@@ -251,6 +255,7 @@ import groupBy from 'lodash.groupby'
 
   export const handleOnClick = (props, position)=>{
     if(props.curTag == "") return;
+
     var found = false;
     var _rect = [];
     const origLocX = Math.floor(position.locationX);
@@ -263,6 +268,12 @@ import groupBy from 'lodash.groupby'
 
     const blockX = props.cropPosition.x + Math.floor((origLocX-props.cropPosition.x) / _rectWidth) * _rectWidth;
     const blockY = props.cropPosition.y + Math.floor((origLocY-props.cropPosition.y) / _rectHeight) * _rectHeight;
+
+    if(props.isEyeDrop){
+      console.log(position, props.imageRatio);
+      getImageColor(props, position.locationX / props.imageRatio, position.locationY / props.imageRatio);
+      return;
+    }
 
     if(props.curAnnoMode == 'box'){
       props.annoRect.map((value, index)=>{
@@ -435,3 +446,44 @@ import groupBy from 'lodash.groupby'
     });
     return optBlocks;
   };
+
+
+  
+  const rgbToHex = (r, g, b)=> {
+    if (r > 255 || g > 255 || b > 255)
+        throw "Invalid color component";
+    return ((r << 16) | (g << 8) | b).toString(16);
+  }
+
+  export const getImageColor = (props, x, y)=>{
+    const context = props.canvas.getContext('2d');
+    context.getImageData(x, y, 1, 1).then(
+      (imageData)=>{
+        if(imageData){
+          const p = imageData.data;
+          var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+          props.setSkinColor(hex);  
+        }
+      }
+    );
+  }
+
+  export const drawCanvas = (props, blob)=>{
+    if(props.canvas == null) return;
+    const image = new CanvasImage(props.canvas);
+    const context = props.canvas.getContext('2d');
+    image.src = blob;
+    image.addEventListener('load', () => {
+      //assume current drawingpan is landcape
+      const width_ratio =  props.frameDimension.width/image.width;
+      var image_ratio = width_ratio;
+      var width = props.frameDimension.width;
+      var height = image.height * image_ratio;
+      props.canvas.width = width;
+      props.canvas.height = height;
+      context.drawImage(image, 0, 0, width, height);
+      props.setFrameDimension({width: width, height: height});
+      props.setImageRatio(image_ratio);
+    });
+  }
+

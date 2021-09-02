@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
       flex: 1,
       marginTop: '2%',
       paddingTop: '5%',
-      paddingHorizontal: 25,
+      paddingHorizontal: 0,
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     imageView: {
       marginTop: 10,
       width: '100%',
-      aspectRatio: 1.2
     },
     imageZoom: {
       backgroundColor: '#ffffff',
