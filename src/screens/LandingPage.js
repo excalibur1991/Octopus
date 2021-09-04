@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -6,19 +7,20 @@ import {Text, View, FlatList} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
+import {getUsageFlag} from '../services/API/APIManager';
 
 const LandingPage = ({navigation, t}) => {
-  const options = [
-    {
-      title: t('landing.upload'),
-      screen: 'Upload',
-      icon: 'analytics',
-      Icon: MaterialIcon,
-    },
+  const [options, setOptions] = useState([
     {
       title: t('landing.annotation'),
       screen: 'Annotation',
       icon: 'note-add',
+      Icon: MaterialIcon,
+    },
+    {
+      title: 'Roman Number Upload',
+      screen: 'RomanNumberUpload',
+      icon: 'analytics',
       Icon: MaterialIcon,
     },
     {
@@ -63,7 +65,30 @@ const LandingPage = ({navigation, t}) => {
       icon: 'privacy-tip',
       Icon: MaterialIcon,
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    const setup = async () => {
+      const res = await getUsageFlag();
+      const item = {
+        title: t('landing.upload'),
+        screen: 'UploadGuidelines',
+        icon: 'analytics',
+        Icon: MaterialIcon,
+      };
+      if (
+        res &&
+        res.usage_flag &&
+        res.usage_flag.toLowerCase() === 'accepted'
+      ) {
+        item.screen = 'UploadImage';
+      }
+      const allOptions = options.slice();
+      allOptions.splice(0, 0, item);
+      setOptions(allOptions);
+    };
+    setup();
+  }, []);
 
   return (
     <View style={styles.container}>
