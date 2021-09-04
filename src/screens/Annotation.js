@@ -4,7 +4,7 @@ import {
   ScrollView
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import MultiSelect from '../components/MultiSelect'
+import MultiSelect from '../components/Multiselect'
 import {useStateValue} from '../services/State/State';
 import {
   Chip,
