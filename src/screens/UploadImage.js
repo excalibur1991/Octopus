@@ -4,7 +4,7 @@ import {theme} from '../services/Common/theme';
 import TextInput from '../components/TextInput';
 import ImageTagInput from '../components/ImageTagInput';
 import React, {useState} from 'react';
-import TagsMultiSelect from '../components/TagsMultiSelect';
+import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import UploadProgress from '../components/UploadProgress';
 const CloudUpload = require('../assets/cloud_upload.png');
 import {ScrollView, Text, View, Image} from 'react-native';
@@ -230,7 +230,7 @@ const Upload = ({navigation}) => {
                 tagsPlaceholder="Enter Tags"
                 commonTagsPlaceholder="Enter Common Tags"
               />
-              <TagsMultiSelect
+              <MultiSelectDropDown
                 textColor={theme.APP_COLOR}
                 placeholder="Choose PII"
                 options={piiOptions}
@@ -239,7 +239,7 @@ const Upload = ({navigation}) => {
                   handlePiiSelect(val, selectedIndex, pii, setPii)
                 }
               />
-              <TagsMultiSelect
+              <MultiSelectDropDown
                 textColor="#ED8495"
                 options={bountyOptions}
                 selectedIndices={bounties[selectedIndex]}
