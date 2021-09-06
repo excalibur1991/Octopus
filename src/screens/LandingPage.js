@@ -11,18 +11,22 @@ import {getUsageFlag} from '../services/API/APIManager';
 
 const LandingPage = ({navigation, t}) => {
   const [options, setOptions] = useState([
+    /*
     {
       title: t('landing.annotation'),
       screen: 'Annotation',
       icon: 'note-add',
       Icon: MaterialIcon,
     },
+    */
+    /*
     {
       title: 'Roman Number Upload',
       screen: 'RomanNumberUpload',
       icon: 'analytics',
       Icon: MaterialIcon,
     },
+    */
     {
       title: t('landing.verification'),
       screen: 'Verification',
@@ -35,24 +39,28 @@ const LandingPage = ({navigation, t}) => {
       icon: 'analytics-sharp',
       Icon: IonIcon,
     },
+    /*
     {
       title: t('landing.learn'),
       screen: 'Learn',
       icon: 'subscriptions',
       Icon: MaterialIcon,
     },
+    */
     {
       title: t('landing.stats'),
       screen: 'Stats',
       icon: 'analytics',
       Icon: MaterialIcon,
     },
+    /*
     {
       icon: 'info',
       title: t('landing.info'),
       screen: 'About',
       Icon: MaterialIcon,
     },
+    */
     {
       title: t('landing.wallet'),
       screen: 'Wallet',
@@ -95,11 +103,11 @@ const LandingPage = ({navigation, t}) => {
       <Ripple
         outerStyle={styles.swipeAiOuter}
         innerStyle={styles.swipeAiInner}
-        onPress={() => navigation.navigate('SwipeAI')}>
+        onPress={() => navigation.navigate('About')}>
         <View style={styles.swipeAiIcon}>
-          <MaterialIcon size={50} name="swipe" color={theme.APP_COLOR} />
+          <MaterialIcon size={50} name="info" color={theme.APP_COLOR} />
         </View>
-        <Text style={styles.buttonText}>{t('landing.swipeAI')}</Text>
+        <Text style={styles.buttonText}>{t('landing.info')}</Text>
       </Ripple>
       <FlatList
         style={styles.Container}

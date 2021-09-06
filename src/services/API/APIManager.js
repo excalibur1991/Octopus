@@ -235,29 +235,6 @@ export const getUsageFlag = async()=>{
     console.log('error getUsageFlag', err)
     return null;
   }
-};
-
-export const saveUsageFlag = async(data)=>{
-  try {
-    const response = await postUserData(s.auth.usageFlag, data);
-    console.log('saveUsageFlag', response)
-    return response;
-  } catch(err) {
-    console.log('error saveUsageFlag', err)
-    return null;
-  }
-}
-
-
-export const getUsageFlag = async()=>{
-  try {
-    const response = await getUserData(s.auth.usageFlag);
-    console.log('getUsageFlag', response)
-    return response;
-  } catch(err) {
-    console.log('error getUsageFlag', err)
-    return null;
-  }
 }
 
 export const saveUsageFlag = async(data)=>{

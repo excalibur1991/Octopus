@@ -19,7 +19,7 @@ const Legal = ({navigation, t}) => {
             screen: 'Bounty'
         },
         {
-            title: 'Image Categorization',
+            title: 'Personal Information',
             screen: 'ImageCategorization'
         },
         {

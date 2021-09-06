@@ -176,7 +176,7 @@ const MyStats = ({t}) => {
             <Text style={styles.graphTitle}>
               {t('myStats.cumulativeEarnings')}
             </Text>
-            <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+            <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             <LineChart
               style={styles.chart}
               data={curCumuChartdata}
