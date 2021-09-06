@@ -5,14 +5,13 @@ import {
     getImageById,
     annotate
   } from '../services/API/APIManager';
-
- import i18n from '../languages/i18n';
+import i18n from '../languages/i18n';
 import { block } from 'react-native-reanimated';
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
-
 import groupBy from 'lodash.groupby'
+import { TextPropTypes } from 'react-native';
 
- export const initial_bounties = [
+  export const initial_bounties = [
     {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
     {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
     {tag: 'project.bb bounty', desc: 'project.bb bounty(cigarette butt on the beach)', checked: false, disabled: false},
@@ -61,7 +60,8 @@ import groupBy from 'lodash.groupby'
             var _annotationTags = [];
             var _bounties = [];
             _metadata.tag_data.map((value)=>{
-                const found = initial_bounties.find((bounty)=>(bounty.desc.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) > -1));
+                //const found = initial_bounties.find((bounty)=>(bounty.desc.toLocaleLowerCase().indexOf('bounty') != -1));
+                const found = (value.toLocaleLowerCase().indexOf('bounty') != -1);
                 if(found){
                 _bounties.push({tag: value, checked: false, disabled: false});
                 }else{
@@ -77,7 +77,6 @@ import groupBy from 'lodash.groupby'
         }
     } catch(err){
     }
-
   };
 
   
@@ -88,7 +87,11 @@ import groupBy from 'lodash.groupby'
         type: actions.SET_PROGRESS_SETTINGS,
         show: true,
       });
-      const response = await queryMetadata(props.curPage);
+      const response = await queryMetadata({page: props.curPage, 
+        status:"VERIFIABLE", 
+        fields:["image_id", "tag_data", "descriptions"],
+        type:"Anonymization",
+        tags:[]});
       if(response && response.result && response.result.length > 0) {
         props.setMaxPage(response.pageSize);
         // imagees exists then add these
@@ -118,7 +121,6 @@ import groupBy from 'lodash.groupby'
     }
     return [];
   }
-
   
   //load Image api call
   export const  getImage = async (props, image_id)=>{
@@ -130,7 +132,6 @@ import groupBy from 'lodash.groupby'
       //drawCanvas(props, fileReaderInstance.result);
     };
   };
-
   
   //bounty selection handler
   export const handleBountySelection = (props, items)=>{
@@ -140,15 +141,12 @@ import groupBy from 'lodash.groupby'
     props.setSelectedBounties(items);
     props.setEyeDrop(false);
     if(items.length > 0){
-        props.setCurTag(items[0]);
-        if(items[0].toLocaleLowerCase() == 'anonymization bounty'){
-          props.setIsAnonymization(true);
-        }else{
-          props.setIsAnonymization(false);
-        }
+      props.setCurTag(items[0]);
+    }
+    else {
+      props.setCurTag('');
     }
   };
-
   
   // save annotation handler
   export const saveAnnotation = async (props)=>{
@@ -164,17 +162,25 @@ import groupBy from 'lodash.groupby'
     const originalImageWidth = props.zoomView.props.imageWidth;
     const originalImageHeight = props.zoomView.props.imageHeight;
     const optBlocks = optimizeBlocks(props.annoRect);
+    console.log(optBlocks);
 
     var _rects = [];
     //props.annoRect.map((value)=>{
     optBlocks.map((value)=>{  
     //should change the scale issue
       _rects.push({type: 'box', 
-        tag: value.tag, 
-        x: (value.x / originalImageWidth), 
-        y: (value.y / originalImageHeight), 
-        width: (value.width / originalImageWidth),
-        height: (value.height / originalImageHeight)
+        tag: value.tag,
+        //web vesrsion value in propotion
+        //x: (value.x / originalImageWidth), 
+        //y: (value.y / originalImageHeight), 
+        //width: (value.width / originalImageWidth),
+        //height: (value.height / originalImageHeight)
+
+        //mobile version in actual value
+        x: value.x, 
+        y: value.y, 
+        width: value.width,
+        height: value.height
       });
     });
     
@@ -190,6 +196,19 @@ import groupBy from 'lodash.groupby'
         dots: _dots
       });
     });
+
+    const hasAnonymBounds = _rects.find((value)=>(
+      value.tag.toLocaleLowerCase() == 'anonymization bounty'
+    ));
+    if(hasAnonymBounds){
+      _rects.push({
+        type: 'anonymization',
+        skin_color: props.skinColor || '',
+        gender: props.gender || '',
+        age: props.age ? parseInt(props.age) : -1
+      });
+    }
+
 
     const response = await annotate({image_id: image_id, annotations: _rects});
     
@@ -262,7 +281,6 @@ import groupBy from 'lodash.groupby'
     const origLocY = Math.floor(position.locationY);
     const _rectX = origLocX , _rectY = origLocY, _rectWidth = rectWidth / props.rectScale, _rectHeight = rectHeight / props.rectScale;
    
-
     //const blockX = Math.floor((origLocX) / _rectWidth) * _rectWidth + ((origLocX-props.cropPosition.x) % _rectWidth);
     //const blockY = Math.floor((origLocY) / _rectHeight) * _rectHeight + ((origLocY- props.cropPosition.y) % _rectHeight);
 
@@ -271,6 +289,7 @@ import groupBy from 'lodash.groupby'
 
     if(props.isEyeDrop){
       console.log(position, props.imageRatio);
+      console.log(position.locationX / props.imageRatio, position.locationY / props.imageRatio, props.cropPosition.x, props.cropPosition.y);
       getImageColor(props, position.locationX / props.imageRatio, position.locationY / props.imageRatio);
       return;
     }
@@ -292,6 +311,9 @@ import groupBy from 'lodash.groupby'
       if(found == false){
         _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
       }
+      //let opt_rects = optimizeBlocks(_rect);
+      //console.log(opt_rects);
+      //props.setAnnoRect(opt_rects);
       props.setAnnoRect(_rect);
 
     }else if(props.curAnnoMode == 'dots') {
@@ -475,14 +497,26 @@ import groupBy from 'lodash.groupby'
     image.src = blob;
     image.addEventListener('load', () => {
       //assume current drawingpan is landcape
-      const width_ratio =  props.frameDimension.width/image.width;
+      const width_ratio =  props.frameDimension.width / image.width;
+      const height_ratio = props.frameDimension.height / image.height;
+     
       var image_ratio = width_ratio;
+
+      var inWidthBase = true;
+      //the smaller is the base
+      if(width_ratio < height_ratio){
+        inWidthBase = true;
+      }
+      else {
+        inWidthBase= false;
+      }
       var width = props.frameDimension.width;
       var height = image.height * image_ratio;
       props.canvas.width = width;
       props.canvas.height = height;
       context.drawImage(image, 0, 0, width, height);
       props.setFrameDimension({width: width, height: height});
+      props.setImageDimension({width: width, height: height});
       props.setImageRatio(image_ratio);
     });
   }

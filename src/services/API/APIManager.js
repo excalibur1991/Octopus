@@ -111,20 +111,11 @@ export const getNounce = async (public_address)=> {
  * 
  */
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
-export const queryMetadata = async(
-  page, 
-  status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"],
-  type="Anonymization",
-  tags=[]
-  ) => {
+export const queryMetadata = async(data) => {
 
-    const data = {page: page, status: status, fields: fields, type: type};
+    //const data = {page: page, status: status, fields: fields, type: type};
     //check if tags empty, then what result?
-    if(tags){
-      data.tags = tags;
-    }
-
+    
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);
       return response;

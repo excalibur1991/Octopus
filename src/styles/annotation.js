@@ -92,6 +92,7 @@ export const styles = StyleSheet.create({
       borderRadius: 5,
       paddingVertical: 10,
       paddingLeft: 10,
+      alignItems: 'center',
       flexDirection: 'row',
     },
     colorPickerView: {

@@ -247,7 +247,12 @@ const VeriPage = (props) => {
           show: true,
         });
         setIsLoading(true);
-        const response = await queryMetadata(curPage);
+        const response = await queryMetadata({page: curPage, 
+          status:"VERIFIABLE", 
+          fields:["image_id", "tag_data", "descriptions"],
+          type:"TextTag",
+          tags:[]});
+          console.log(response);
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);

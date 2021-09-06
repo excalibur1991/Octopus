@@ -1,11 +1,10 @@
 import {
   View,
-  Image,
   ScrollView,
   Pressable,
   Text,
   Dimensions,
-  TextInput
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import MultiSelect from '../components/Multiselect'
@@ -13,6 +12,7 @@ import {useStateValue} from '../services/State/State';
 import {
   Chip,
   Button,
+  IconButton
 } from 'react-native-paper';
 import ImageZoom from 'react-native-image-pan-zoom';
 import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
@@ -34,7 +34,6 @@ import ColorPicker from 'react-native-wheel-color-picker';
 import {styles} from '../styles/annotation';
 import {withTranslation} from 'react-i18next';
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
-
 
 const Annotation = ({navigation, t}) => {
   const [, dispatch] = useStateValue();
@@ -60,7 +59,11 @@ const Annotation = ({navigation, t}) => {
   //type: 'dots', dots: [{x: 0, y: 0}]
   const [annoDot, setAnnoDot] = useState([]);
 
-  const [annoMode, setAnnoMode] = useState([{type:'box', checked: true}, {type: 'dots', checked: false}]); // 'dots'
+  const [annoMode, setAnnoMode] = useState([
+    {type:'box', checked: true}, 
+    {type: 'anonymization', checked: true},
+    {type: 'dots', checked: false}
+  ]); // 'dots'
   const [curAnnoMode, setCurAnnoMode] = useState(['box']);
 
   const [curTag, setCurTag] = useState("");
@@ -68,54 +71,52 @@ const Annotation = ({navigation, t}) => {
   const [zoomView,setZoomView] = useState(null);
   const [cropPosition, setCropPosition] = useState({x:0, y:0});
   const [isAnonymization, setIsAnonymization] = useState(false);
-  const [age, setAge] = useState(25);
-  const [gender, setGender] = useState(['Male']);
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState([]);
   const [skinColor, setSkinColor] = useState(null);
-  const [modalVisible, setModalVisible] = useState(true);
   const [anonymizationBounties, setAnonymizationBounties] = useState([]);
   const [imageRatio, setImageRatio] = useState(1.0);
   const [isEyeDrop, setEyeDrop]= useState(false);
   const [canvas, setCanvas]= useState(null);
- 
-  
+
   const canvasRef = useRef(null);
 
   const props = {
-    dispatch: dispatch,
-    bounties: bounties,
-    setBounties: setBounties,
-    selectedBounties: selectedBounties, 
-    setSelectedBounties: setSelectedBounties,
-    annotationTags:annotationTags, 
-    setAnnotationTags: setAnnotationTags,
-    metadata: metadata, 
-    setMetadata:setMetadata,
-    curPage:curPage, 
-    setCurPage:setCurPage,
-    maxPage:maxPage, 
-    setMaxPage:setMaxPage,
-    curImageIndex:curImageIndex, 
-    setCurImageIndex:setCurImageIndex,
-    curMetadata:curMetadata, 
-    setCurMetadata:setCurMetadata,
-    frameDimension:frameDimension, 
-    setFrameDimension:setFrameDimension,
-    imageBlob:imageBlob, 
-    setImageBlob:setImageBlob,
-    annoRect:annoRect, 
-    setAnnoRect:setAnnoRect,
-    curTag:curTag, 
-    setCurTag:setCurTag,
-    rectScale:rectScale, 
-    setRectScale:setRectScale,
-    zoomView:zoomView,
-    setZoomView:setZoomView,
-    cropPosition:cropPosition, 
-    setCropPosition:setCropPosition,
-    curAnnoMode: curAnnoMode, 
-    setCurAnnoMode: setCurAnnoMode,
-    annoDot:annoDot, 
-    setAnnoDot:setAnnoDot,
+    dispatch,
+    bounties,
+    setBounties,
+    selectedBounties, 
+    setSelectedBounties,
+    annotationTags, 
+    setAnnotationTags,
+    metadata, 
+    setMetadata,
+    curPage, 
+    setCurPage,
+    maxPage, 
+    setMaxPage,
+    curImageIndex, 
+    setCurImageIndex,
+    curMetadata, 
+    setCurMetadata,
+    frameDimension, 
+    setFrameDimension,
+    imageBlob, 
+    setImageBlob,
+    annoRect, 
+    setAnnoRect,
+    curTag, 
+    setCurTag,
+    rectScale, 
+    setRectScale,
+    zoomView,
+    setZoomView,
+    cropPosition, 
+    setCropPosition,
+    curAnnoMode, 
+    setCurAnnoMode,
+    annoDot, 
+    setAnnoDot,
     isAnonymization,
     setIsAnonymization,
     anonymizationBounties,
@@ -128,9 +129,8 @@ const Annotation = ({navigation, t}) => {
     isEyeDrop,
     setEyeDrop,
     setSkinColor,
-    skinColor
+    skinColor,
   };
-
   
   const handleAnnoModeSelection = (items)=>{
     setCurAnnoMode(items);
@@ -139,11 +139,9 @@ const Annotation = ({navigation, t}) => {
   useEffect(() => {
     setCurImageIndex(0);
   }, []);
-
  
   useEffect(()=>{
     try{
-
       updateMetadata(props);
     }catch(err){
     }
@@ -151,22 +149,27 @@ const Annotation = ({navigation, t}) => {
   [curImageIndex]);
 
   useEffect(()=>{
+    if(curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
+      setIsAnonymization(true);
+    }else{
+      setIsAnonymization(false);
+    }
+  }, [curTag]);
+
+  useEffect(()=>{
     drawCanvas(props, imageBlob);
   },
   [imageBlob]);
 
   useEffect(()=>{
-    console.log('setcanvas');
     setCanvas(canvasRef.current);
   }, [canvasRef]);
-
-
   
   return (
     <View style={styles.container}>
     <ScrollView 
-    style={ {width: '100%', paddingHorizontal: 25}}
-    showsVerticalScrollIndicator={false}>
+      style={ {width: '100%', paddingHorizontal: 25}}
+      showsVerticalScrollIndicator={false}>
       <View style={styles.column}>
         <MultiSelect 
           hideTags
@@ -181,67 +184,57 @@ const Annotation = ({navigation, t}) => {
           canAddItems={false}
           selectedItems={selectedBounties}
           onSelectedItemsChange={(items)=>{handleBountySelection(props, items) }}
-          textInputProps={{
-            editable:false
-          }}
+          textInputProps={{ editable:false }}
           searchInputPlaceholderText={bountyPlaceholder}
           selectedItemTextColor={'#00A5FF'}
-          styleDropdownMenu={{
-            height:56,
-          }}
+          styleDropdownMenu={{ height:56 }}
           styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
           styleInputGroup={styles.styleInputGroup}
         />
         {
-               (annotationTags.length > 0) && (
-               <View style={styles.tagWrapper}>
-                {
-                  annotationTags.map((annoTag)=>(
-                    <Chip
-                      key={annoTag.tag}
-                      style={{
-                        margin:2                   
-                      }}
-                      title={annoTag.tag}
-                      icon={()=>null}
-                      onLongPress={()=>{}}
-                      onPress={()=>{handlePressAnnoTag(props, annoTag)}}
-                      selected={annoTag.checked}
-                      closeIconAccessibilityLabel={'Close'}
-                    >{annoTag.tag}</Chip>
-                  ))
-                }
-                </View>)
-
+          (annotationTags.length > 0) && (
+          <View style={styles.tagWrapper}>
+          {
+            annotationTags.map((annoTag)=>(
+              <Chip
+                key={annoTag.tag}
+                style={{ margin:2 }}
+                title={annoTag.tag}
+                icon={()=>null}
+                onLongPress={()=>{}}
+                onPress={()=>{handlePressAnnoTag(props, annoTag)}}
+                selected={annoTag.checked}
+                closeIconAccessibilityLabel={'Close'}
+              >{annoTag.tag}</Chip>
+            ))
+          }
+          </View>)
         }
         {/**
-         * comment this part in current release
-         * <MultiSelect 
-          hideTags
-          hideSubmitButton
-          hideDropdown        
-          items={annoMode}
-          uniqueKey="type"
-          selectText={t('Annotations.Type')}
-          displayKey="type"
-          single={true}
-          showFilter={false}
-          canAddItems={false}
-          selectedItems={curAnnoMode}
-          onSelectedItemsChange={(items)=>{handleAnnoModeSelection(items) }}
-          textInputProps={{
-            editable:false
-          }}
-          searchInputPlaceholderText={bountyPlaceholder}
-          selectedItemTextColor={'#00A5FF'}
-          styleDropdownMenu={{
-            height:56,
-          }}
-          styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
-          styleInputGroup={styles.styleInputGroup}
-        /> 
-         */}
-          
+          <MultiSelect 
+            hideTags
+            hideSubmitButton
+            hideDropdown        
+            items={annoMode}
+            uniqueKey="type"
+            selectText={t('Annotations.Type')}
+            displayKey="type"
+            single={true}
+            showFilter={false}
+            canAddItems={false}
+            selectedItems={curAnnoMode}
+            onSelectedItemsChange={(items)=>{handleAnnoModeSelection(items) }}
+            textInputProps={{
+              editable:false
+            }}
+            searchInputPlaceholderText={bountyPlaceholder}
+            selectedItemTextColor={'#00A5FF'}
+            styleDropdownMenu={{
+              height:56,
+            }}
+            styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
+            styleInputGroup={styles.styleInputGroup} /> 
+        */}
 
         <View
           onLayout={(event) => {find_dimesions(props, event.nativeEvent.layout) }}
@@ -252,18 +245,12 @@ const Annotation = ({navigation, t}) => {
             cropHeight={frameDimension.height}
             imageWidth={frameDimension.width}
             imageHeight={frameDimension.height}
+            
             style={styles.imageZoom}
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}
           >
-            {/**
-            <Image
-            style={styles.imageContainer}
-            source={{uri:imageBlob}}
-            />
-            */}
-            <Canvas
-            ref={canvasRef} />
+            <Canvas ref={canvasRef} />
           </ImageZoom>
           <View 
             style={styles.overlay}
@@ -284,7 +271,6 @@ const Annotation = ({navigation, t}) => {
                 <Rect width="100%" height="100%" fill="url(#grid)" />
               </G>}
               <G>
-            
               {
                 annoRect.filter((_rect)=>(_rect.tag == curTag)).map((rect,index)=>(
                   <Rect
@@ -313,20 +299,18 @@ const Annotation = ({navigation, t}) => {
                     />
                   ))
                 ))
-
               }
               </G>
            </Svg>
           </View>
-          
         </View>
-          {isAnonymization && annoRect.find((value)=>(value.tag.toLowerCase() == 'anonymization bounty')) &&
+          {isAnonymization && annoRect.find((value)=>(value.tag.toLocaleLowerCase() == curTag.toLocaleLowerCase())) &&
           (
-            <View>
+        <View>
           <TextInput
             style={styles.ageInput}
             keyboardType={'numeric'}
-            value={age}
+            value={age.toString()}
             placeholder={t('Annotations.age')}
             placeholderTextColor={'#A9A9A9'}
             onChangeText={setAge}
@@ -356,14 +340,9 @@ const Annotation = ({navigation, t}) => {
             styleMainWrapper={{
               marginTop: 10
             }}/>
-            <Pressable
-            style={styles.skinButton}
-            onPress={()=>{
-              //setModalVisible(!modalVisible);
-              setEyeDrop(!isEyeDrop);
-            }}>
+            <View style={styles.skinButton}>
             <Text style={{
-              alignSelf: 'center'
+              alignSelf: 'center',
             }} color={'#A9A9A9'}>{t('Annotations.skinColor')}</Text>
             <View
               style={{
@@ -372,12 +351,28 @@ const Annotation = ({navigation, t}) => {
                 paddingHorizontal: 10,
                 paddingVertical: 3,
                 borderColor: '#ADADAD',
-                borderWidth: 1
+                borderWidth: 1,
+                width: 100
               }}>
-              <Text>{skinColor}</Text>
+                <TextInput
+                  style={{
+                    height: 30,
+                    paddingVertical: 0
+                  }}
+                  onChangeText={setSkinColor}
+                  value={skinColor}
+                  placeholder={'#FFFFFF'}
+                />
             </View>
-            <MaterialIcon size={25} name="color-lens" color={isEyeDrop ? theme.APP_COLOR: '#333333'} />
-          </Pressable>
+            <IconButton 
+              size={25} 
+              icon="eyedropper-variant" 
+              color={isEyeDrop ? theme.APP_COLOR: '#333333'}
+              onPress={()=>{
+                setEyeDrop(!isEyeDrop);
+              }}
+             />
+          </View>
           {isEyeDrop && (
           <View
             style={styles.colorPickerView}>
@@ -403,9 +398,10 @@ const Annotation = ({navigation, t}) => {
           </View>
           )}
         <Button 
-        mode={'contained'}
-        style={styles.button}
-        onPress={()=>saveAnnotation(props)} >{t('Annotations.save')}</Button>
+          mode={'contained'}
+          style={styles.button}
+          uppercase={false}
+          onPress={()=>saveAnnotation(props)} >{t('Annotations.save')}</Button>
       </View>
       </ScrollView>
     </View>
