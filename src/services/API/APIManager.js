@@ -116,9 +116,10 @@ export const userLogout = async () => {
 export const queryMetadata = async(
   page, 
   status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"]) => {
+  fields=["image_id", "tag_data", "descriptions"],
+  bounty=["general"]) => {
 
-    const data = {page: page, status: status, fields: fields}
+    const data = {page: page, status: status, fields: fields, bounty : bounty}
 
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);
@@ -166,8 +167,9 @@ export const verifyImage = async(image_id, annotation, verification) => {
 
 export const uploadImage = async (data) => {
   try {
+    console.log('data', data);
     const response = await postUserData(s.taxonomy.uploadImage, data, true);
-    console.log('error uploadImage', response)
+    console.log('error uploadImage', response);
     return response;
   } catch (err) {
     console.log('error uploadImage', err)

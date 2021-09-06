@@ -1,8 +1,8 @@
 export const settings = {
   // development
-  baseUrl: 'https://dev.dataunion.app:8082/',
+  // baseUrl: 'https://dev.dataunion.app:8082/',
   //production
-  // baseUrl: 'https://alpha.dataunion.app:4430',
+  baseUrl: 'https://alpha.dataunion.app:4430/',
   taxonomy: {
     getImages: '/api/v1/taxonomy/data',
     storeUserResponse: '/api/v1/taxonomy/store',
@@ -20,7 +20,7 @@ export const settings = {
   },
 
   metadata: {
-    queryMetadata: '/api/v1/query-metadata',
+    queryMetadata: "/api/v1/query-metadata",
     getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',
     annotate: 'api/v1/metadata/annotation',

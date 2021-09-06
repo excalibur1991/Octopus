@@ -134,21 +134,7 @@ const Header = (
         </Ripple>
       )
     : null,
-  headerRight: showRightButton
-    ? () => (
-        <Ripple
-          onPress={() =>
-            Alert.alert(i18n.t('messages.alert'), i18n.t('messages.pressed'))
-          }
-          outerStyle={styles.rightButtonOuter}
-          innerStyle={styles.rightButtonInner}>
-          <Image
-            style={styles.rightIcon}
-            resizeMode="stretch"
-            source={require('./assets/menu.png')}
-          />
-        </Ripple>
-      )
+  headerRight
     : showLanguageDropdown
     ? () => (
         <Menu renderer={renderers.Popover}>
@@ -212,7 +198,7 @@ const LandingPageStack = () => {
       label: i18n.t('landing.english'),
       value: 'en',
     },
-    {
+    /*{
       icon: Chinese,
       label: i18n.t('landing.chinese'),
       value: 'zh',
@@ -231,7 +217,7 @@ const LandingPageStack = () => {
       icon: Spanish,
       label: i18n.t('landing.spanish'),
       value: 'es',
-    },
+    }, */
   ];
   const [{selectedLanguage}, dispatch] = useStateValue();
   const language = languageOptions.find((l) => l.value === selectedLanguage);
@@ -615,6 +601,16 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelinesStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
+      name="UploadImage"
+      component={UploadImageStack}
+      options={{unmountOnBlur: true, tabBarButton: () => null}}
+    />
+    <Tab.Screen
       name="Verification"
       component={VerificationStack}
       options={{
@@ -626,12 +622,11 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="Annotation"
-      component={AnnotationStack}
+      name="MyStats"
+      component={MyStatsStack}
       options={{
         unmountOnBlur: true,
-        tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Annotation" {...props} />,
+        tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
       }}
     />
     <Tab.Screen
@@ -643,37 +638,11 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="SwipeAI"
-      component={SwipeAIStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarVisible: false,
-        tabBarButton: (props) => <TabComponent label="SwipeAI" {...props} />,
-      }}
-    />
-    <Tab.Screen
-      name="Learn"
-      component={LearnStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarButton: (props) => <TabComponent label="Learn" {...props} />,
-      }}
-    />
-
-    <Tab.Screen
       name="Wallet"
       component={WalletStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
-      }}
-    />
-    <Tab.Screen
-      name="MyStats"
-      component={MyStatsStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
       }}
     />
     <Tab.Screen
@@ -684,26 +653,6 @@ const BottomTabs = () => (
         tabBarVisible: false,
         tabBarButton: props => <TabComponent label="Legal" {...props} />,
       }}
-    />
-    <Tab.Screen
-      name="UploadGuidelines"
-      component={UploadGuidelinesStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
-    />
-    <Tab.Screen
-      name="UploadImage"
-      component={UploadImageStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
-    />
-    <Tab.Screen
-      name="RomanNumberUpload"
-      component={RomanNumberUploadStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
-    />
-    <Tab.Screen
-      name="RomanNumberStats"
-      component={RomanNumberStatsStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
   </Tab.Navigator>
 );

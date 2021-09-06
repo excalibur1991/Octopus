@@ -14,12 +14,12 @@ const Upload = ({navigation}) => {
         showsVerticalScrollIndicator={false}>
         <Text style={styles.header}>Upload Data</Text>
         <Text style={styles.subHeader}>
-          Upload, Describe & Tag Data for the DataUnion.app image dataset &
+          Upload, Describe & Tag Data for the DataUnion image dataset &
           receive rewards.
         </Text>
         <Panel title="Read the Terms and Upload Guidelines">
           <Text style={[styles.marginBottom3p, styles.text]}>
-            We at DataUnion.app respect the privacy and intellectual property of
+            We at DataUnion respect the privacy and intellectual property of
             our users. We expect that you do the same.
           </Text>
           <Text style={[styles.marginBottom3p, styles.text]}>
@@ -54,7 +54,7 @@ const Upload = ({navigation}) => {
             violations or violations of our
             <Text
               style={styles.linkText}
-              onPress={() => Linking.openURL('https://dataunion.app/')}>
+              onPress={() => Linking.openURL('https://alpha.dataunion.app/terms')}>
               {' Terms of service.'}
             </Text>
           </Text>
