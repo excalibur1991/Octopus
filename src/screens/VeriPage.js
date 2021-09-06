@@ -29,8 +29,7 @@ import {
   Checkbox
 } from 'react-native-paper';
 
-import MultiSelect from 'react-native-multiple-select'
-//import SelectDropdown from "react-native-select-dropdown";
+import MultiSelect from '../components/Multiselect'
 
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
 import TagInput from '../components/TagInput'
@@ -248,7 +247,12 @@ const VeriPage = (props) => {
           show: true,
         });
         setIsLoading(true);
-        const response = await queryMetadata(curPage);
+        const response = await queryMetadata({page: curPage, 
+          status:"VERIFIABLE", 
+          fields:["image_id", "tag_data", "descriptions"],
+          type:"TextTag",
+          tags:[]});
+          console.log(response);
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);
@@ -717,6 +721,7 @@ const VeriPage = (props) => {
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={piis}
               uniqueKey="tag"
               selectText="PII"
@@ -737,10 +742,10 @@ const VeriPage = (props) => {
                 height:56,
               }}
             />
-            <Divider />
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={bounties}
               uniqueKey="tag"
               selectText="Bounty"

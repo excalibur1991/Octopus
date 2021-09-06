@@ -868,4 +868,3 @@ export default class MultiSelect extends Component {
     PropTypes.bool,
     PropTypes.func
   ]);
-  

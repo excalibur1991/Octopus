@@ -125,9 +125,15 @@ export default {
       failedToClearAsyncStorage: 'Failed to clear the async storage.',
     },
     Annotations: {
-      save: 'Save',
+      save: 'Annotate',
       Bounty: 'Bounty',
-      Type: 'Type'
+      Type: 'Type',
+      age: 'Age',
+      gender:'Gender',
+      skinColor: 'SkinColor:',
+      male: 'Male',
+      female:'Female',
+      other: 'Other'
     },
     tos: {
       header: 'Copyright - TOS',
@@ -373,7 +379,8 @@ export default {
       male: 'Male',
       female: 'Female',
       other: 'Other',
-      age: 'Age'
+      age: 'Age',
+      apply: 'Save Changes'
     }
   },
 };

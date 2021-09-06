@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
       flex: 1,
       marginTop: '2%',
       paddingTop: '5%',
-      paddingHorizontal: 25,
+      paddingHorizontal: 0,
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     imageView: {
       marginTop: 10,
       width: '100%',
-      aspectRatio: 1.2
     },
     imageZoom: {
       backgroundColor: '#ffffff',
@@ -79,5 +78,36 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         top: 0
-    }
+    },
+    ageInput: {
+      borderColor: '#e9e9e9',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingLeft: 10,
+      marginTop: 10,
+    },
+    skinButton: {
+      borderColor: '#e9e9e9',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingVertical: 10,
+      paddingLeft: 10,
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    colorPickerView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+      borderColor: '#e9e9e9',
+      borderRadius: 5,
+      borderWidth: 1,
+      padding: 10,
+      marginTop: 10,
+    },
+    colorPicker:  {
+      height: 200,
+      marginVertical: 10,
+    },
 });
