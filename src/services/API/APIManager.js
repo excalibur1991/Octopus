@@ -116,10 +116,9 @@ export const userLogout = async () => {
 export const queryMetadata = async(
   page, 
   status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"],
-  bounty=["general"]) => {
+  fields=["image_id", "tag_data", "descriptions"]) => {
 
-    const data = {page: page, status: status, fields: fields, bounty : bounty}
+    const data = {page: page, status: status, fields: fields}
 
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);

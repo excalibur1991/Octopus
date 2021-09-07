@@ -385,7 +385,6 @@ const VeriPage = (props) => {
       setBEditEnabled(true);
       setTagEditValue("");
       textEditor.focus();
-  
     }catch(err){
     }
     
@@ -419,7 +418,7 @@ const VeriPage = (props) => {
       setAnnotationTags(_tags);
     }
     else {
-      setTags(_tags);
+      setTags(_tags.toLowerCase());
     }
 
   }
@@ -464,11 +463,11 @@ const VeriPage = (props) => {
 
         if(tagEditIndex >= _tags.length) {
           //new addition
-          _tags.push(tagEditValue);
+          _tags.push(tagEditValue.toLowerCase());
           setTagsValue(_tags, editorType);
         }else {
           // modification
-          _tags[tagEditIndex] = tagEditValue;
+          _tags[tagEditIndex] = tagEditValue.toLowerCase();
           setTagsValue(_tags, editorType);
         }
       }

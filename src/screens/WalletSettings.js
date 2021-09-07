@@ -129,31 +129,47 @@ class WalletSettings extends Component {
               <CButton text={this.state.publicKey}/>
             </View>
             <Text style={styles.bigTextView}>
+              {t('walletSettings.warning')}
+            </Text>
+            <Text />
+            <Text style={styles.bigTextView}>
               {t('walletSettings.mnemonicPhrase')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.mnemonics}
-              </Text>
+            <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.mnemonics}
+               editable={false}         
+               secureTextEntry={this.state.mnemonics? true:false}   
+              />
               <CButton text={this.state.mnemonics}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.privateKey')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.privateKey}
-              </Text>
+            <TextInput
+               numberOfLines={1} 
+               style={styles.boxText}
+               value={this.state.privateKey}
+               editable={false}         
+               secureTextEntry={this.state.privateKey? true:false}   
+              />
               <CButton text={this.state.privateKey}/>
             </View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.password')}
             </Text>
             <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.pword}
-              </Text>
-              <CButton text={this.state.pword}/>
+            <TextInput
+              numberOfLines={1} 
+              style={styles.boxText}
+              value={this.state.pword}
+              editable={false}          
+              secureTextEntry={this.state.pword? true:false}        
+             /> 
+             <CButton text={this.state.pword}/>
             </View>
           </View>
         </View>

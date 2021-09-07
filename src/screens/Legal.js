@@ -2,6 +2,7 @@ import {
     View,
     StyleSheet,
     Text,
+    Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';

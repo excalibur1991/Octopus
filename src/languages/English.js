@@ -89,6 +89,7 @@ export default {
       unStake: 'UnStake',
     },
     walletSettings: {
+      warning: 'Please do not share this private information or you risk losing your rewards.',
       title: 'Wallet Settings',
       mainnet: 'mainnet',
       rinkeby: 'rinkeby',
@@ -335,7 +336,7 @@ export default {
         <p>The images show faces that are difficult to recognize, shown from a distant point of view, and in a size or manner that do not fulfill biometric properties. We categorize this as “<b>PII</b>”. Please be aware that the distinction between biometric and non-biometric also depends on the resolution of the image. Hence, if you see distant faces on a  high-resolution image, they could be considered biometric if the face is clearly recognizable. If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
         `
     },
-    noFaces: {
+    nonFaces: {
         tag: 'nonFaces',
         content:
         `
@@ -348,18 +349,9 @@ export default {
         content: 
         `
         <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize anything of the items described before, you don’t have to do anything.</p>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize any of the items described before, you don't have to add one of these tags.</p>
         `
     },
-    notSure:{
-        tag: 'notSure',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">Not sure about your image?</h2><p>Contact us via <a target="_blank" href="mailto:help@dataunion.app">mail</a> or via social media (the links are in the footer).</p>
-        <hr>
-        `
-    }
   }
   },
 };

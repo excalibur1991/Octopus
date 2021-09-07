@@ -3,7 +3,6 @@ import {
     StyleSheet,
     Dimensions,
     VirtualizedList,
-    Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -65,11 +64,6 @@ const image_categorization = [
         content: t('ImageCategorization.nonPII.content')
 
     },
-    {
-        tag: 'notSure',
-        content: t('ImageCategorization.notSure.content')
-
-    }
 ];
    
     useEffect(()=>{
