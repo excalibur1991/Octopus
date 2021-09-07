@@ -36,6 +36,8 @@ import { TextPropTypes } from 'react-native';
     props.setAnnoRect([]);
     props.setAnnoDot([]);
     props.setSelectedBounties([]);
+    props.setTempAnnoRect({rects:[]});
+    props.setCurRectIndex(-1);
 
     if (props.zoomView){
         props.zoomView.reset();
@@ -135,9 +137,21 @@ import { TextPropTypes } from 'react-native';
   
   //bounty selection handler
   export const handleBountySelection = (props, items)=>{
-    props.annotationTags.map((value,index)=>{
-      value.checked = false;
-    });
+    if(props.isInEdit){
+      props.dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error',
+          message:
+            'Please save current change first.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },});
+        return;
+    }
+
     props.setSelectedBounties(items);
     props.setEyeDrop(false);
     if(items.length > 0){
@@ -147,6 +161,30 @@ import { TextPropTypes } from 'react-native';
       props.setCurTag('');
     }
   };
+
+  //save tempChange
+  export const saveChange = (props)=>{
+    let _annoRect = [...props.annoRect];
+    console.log(props.curRectIndex);
+    if(props.curRectIndex != -1) {
+      //modify
+      if(props.tempAnnoRect.rects.length > 0){
+        _annoRect[props.curRectIndex] = props.tempAnnoRect;
+      }else{
+        //deletion
+        _annoRect.splice(props.curRectIndex, 1);
+      }
+    }
+    else{
+      if(props.tempAnnoRect.rects.length > 0){
+        _annoRect.push(props.tempAnnoRect);
+      }
+    }
+    props.setAnnoRect(_annoRect);
+    props.setTempAnnoRect({rects:[]});
+    props.setCurRectIndex(-1);
+    props.setIsInEdit(false);
+  }
   
   // save annotation handler
   export const saveAnnotation = async (props)=>{
@@ -273,6 +311,8 @@ import { TextPropTypes } from 'react-native';
   };
 
   export const handleOnClick = (props, position)=>{
+    console.log(JSON.stringify(props.annoRect));
+    console.log(JSON.stringify(props.tempAnnoRect));
     if(props.curTag == "") return;
 
     var found = false;
@@ -287,6 +327,29 @@ import { TextPropTypes } from 'react-native';
     const blockX = props.cropPosition.x + Math.floor((origLocX-props.cropPosition.x) / _rectWidth) * _rectWidth;
     const blockY = props.cropPosition.y + Math.floor((origLocY-props.cropPosition.y) / _rectHeight) * _rectHeight;
 
+    if(props.isInEdit == false){
+      props.setIsInEdit(true);
+      //check if user select prev bounding box
+      var selected = false;
+      var selected_index = -1;
+      props.annoRect.map((data, data_index)=>{
+        data.rects.map((rect, index)=>{
+          if(intersect(rect.x, rect.y, rect.width, rect.height, _rectX, _rectY)){
+            selected = true;
+            selected_index = data_index;
+          }
+        });
+      });
+      if(selected){
+        let _tempAnnoRect = {...props.annoRect[selected_index]};
+        props.setTempAnnoRect(_tempAnnoRect);
+        props.setCurRectIndex(selected_index);
+        props.setCurTag(_tempAnnoRect.tag);
+        return;
+      }
+    }
+
+
     if(props.isEyeDrop){
       console.log(position, props.imageRatio);
       console.log(position.locationX / props.imageRatio, position.locationY / props.imageRatio, props.cropPosition.x, props.cropPosition.y);
@@ -295,7 +358,7 @@ import { TextPropTypes } from 'react-native';
     }
 
     if(props.curAnnoMode == 'box'){
-      props.annoRect.map((value, index)=>{
+      props.tempAnnoRect.rects.map((value, index)=>{
         if(value.tag == props.curTag) {
           if(intersect(value.x, value.y, value.width, value.height, _rectX, _rectY)){
             //found
@@ -314,7 +377,11 @@ import { TextPropTypes } from 'react-native';
       //let opt_rects = optimizeBlocks(_rect);
       //console.log(opt_rects);
       //props.setAnnoRect(opt_rects);
-      props.setAnnoRect(_rect);
+      //props.setAnnoRect(_rect);
+      let _tempAnnoRect = {...props.tempAnnoRect};
+      _tempAnnoRect.rects = [..._rect];
+      _tempAnnoRect.tag = props.curTag;
+      props.setTempAnnoRect(_tempAnnoRect);
 
     }else if(props.curAnnoMode == 'dots') {
       //find tag
@@ -344,14 +411,30 @@ import { TextPropTypes } from 'react-native';
 
   
   export const handlePressAnnoTag = (props, _annoTag)=>{
-    props.setSelectedBounties([]);
+    if(props.isInEdit){
+      props.dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error',
+          message:
+            'Please save current change first.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },});
+        return;
+    }
 
+
+
+    props.setSelectedBounties([]);
     if(_annoTag.checked){
         props.setCurTag("");
     }else{
         props.setCurTag(_annoTag.tag);
     }
-
+    /*
     var _tags = [];
     props.annotationTags.map((value,index)=>{
       if(_annoTag.tag == value.tag){
@@ -361,7 +444,8 @@ import { TextPropTypes } from 'react-native';
       }
       _tags.push(value);
     });
-    props.setAnnotationTags(_tags);
+    */
+    //props.setAnnotationTags(_tags);
   };
 
   const isOverlaps = (x,y, width, height, x2, y2, width2, height2) => {
