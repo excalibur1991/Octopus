@@ -118,6 +118,10 @@ class WalletSettings extends Component {
               <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
             </View>
           </View>
+          <Text style={styles.bigTextView}>
+            {t('walletSettings.info')}
+          </Text>
+          <Text />
           <View>
             <Text style={styles.bigTextView}>
               {t('walletSettings.publicKey')}

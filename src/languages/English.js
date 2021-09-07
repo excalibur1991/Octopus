@@ -89,6 +89,7 @@ export default {
       unStake: 'UnStake',
     },
     walletSettings: {
+      info: 'Your contributions are connected to this wallet - rewards are sent to it. You can copy the private key to access this wallet in other wallet softwares.',
       warning: 'Please do not share this private information or you risk losing your rewards.',
       title: 'Wallet Settings',
       mainnet: 'mainnet',
@@ -132,7 +133,7 @@ export default {
     },
     tos: {
       header: 'Copyright - TOS',
-      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, DataUnion.app reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, DataUnion.app may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. DataUnion.app will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
+      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, DataUnion reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, DataUnion may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. DataUnion will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
       contactHeader: 'Contact for copyright violations (Designated Agent):',
       copyrightMail: 'copyright@dataunion.app' 
     },
@@ -140,11 +141,12 @@ export default {
       content: 
       `
       <h1>General Privacy Policy</h1>
-      <p>We at Dataunion.app care about your privacy and believe your personal information belongs to you. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. If you have questions about the Privacy Policy, want to know what data we store about you, or if you want to withdraw your consent to any data processing, let us know by emailing at <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>We at Dataunion care about your privacy and believe your personal information belongs to you. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. If you have questions about the Privacy Policy, want to know what data we store about you, or if you want to withdraw your consent to any data processing, let us know by emailing at privacy@dataunion.app</p>
       <h2>Contact details of the controller</h2>
-      <p><a href="https://dataunion.app" target="_blank">DataUnion.app</a><br>
-      Robin Lehmann<br>
-      Email: <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>DataUnion Foundation PTE. LTD.<br>
+      160 Robinson Road, #14-04 Singapore Business Federation Centre<br>
+      Singapore (068914)<br>
+      Email: privacy@dataunion.app</p>
       <h2>What data do we collect?</h2>
       <p>We do not collect any personal data when you use our website. We do not have any advertising, tracking or analytics on our site. We do not process or collect IP addresses. We do not use cookies.</p>
       <h2>How do we collect your data, how will we use your data, how do we store your data?</h2>
@@ -160,7 +162,7 @@ export default {
       <h2>Changes to our privacy policy</h2>
       <p>Dataunion.app keeps its privacy policy under regular review and places any updates on this web page. This privacy policy was last updated on 08 February 2021.</p>
       <h2>How to contact us</h2>
-      <p>If you have any questions about our privacy policy, the data we store about you, or you would like to exercise one of your data protection rights, please email us at: <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>If you have any questions about our privacy policy, the data we store about you, or you would like to exercise one of your data protection rights, please email us at: privacy@dataunion.app</p>
       <h2>How to contact the appropriate authority</h2>
       <p>Should you wish to report a complaint or if you feel that Dataunion.app has not addressed your concern in a satisfactory manner, you may contact the Information Commissioner’s Office.</p>
       `
