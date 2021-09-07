@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
       flex: 1,
       marginTop: '2%',
       paddingTop: '8%',
-      paddingHorizontal: '8%',
+      paddingHorizontal: 0,
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
       backgroundColor: theme.COLORS.WHITE,
@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     uploadScrollContainer: {
       paddingBottom: '15%',
       flexGrow: 1,
+      paddingHorizontal: '8%'
     },
     readOnlyContainer: {
       borderRadius: 15,
@@ -119,6 +120,9 @@ export const styles = StyleSheet.create({
       paddingVertical: 10,
       paddingLeft: 10,
       flexDirection: 'row',
+      alignItems: 'center',
+      height: 53
+
     },
     ageInput: {
       borderColor: '#e9e9e9',

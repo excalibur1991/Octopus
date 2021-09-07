@@ -2,7 +2,7 @@ import {
     View, 
     Image, 
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import ImageZoom from 'react-native-image-pan-zoom';
 import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import PropTypes from 'prop-types';
@@ -11,11 +11,13 @@ import {theme} from '../services/Common/theme';
 import {DragResizeBlock} from '../components/DragResizeBlock';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 const DrawingPan = (props) => {
     const {
         setAnnoRect = () => {},
         annoRect = [],
+        annoDot = [],
         imageSource ={},
         rectHeight = 30,
         rectWidth = 30,
@@ -26,7 +28,8 @@ const DrawingPan = (props) => {
         onDeleteRect=()=>{},
         onSelectRect=()=>{},
         curRectIndex = -1,
-        setCurRectIndex= ()=>{}
+        setCurRectIndex= ()=>{},
+        curTag = '',
       } = props || {};
 
     const [, dispatch] = useStateValue();
@@ -34,6 +37,9 @@ const DrawingPan = (props) => {
     const [rectScale, setRectScale] = useState(1.0);
     const [zoomView, setZoomView] = useState(null);
     const [frameDimension, setFrameDimension] = useState({width: 400, height: 300});
+    const [canvas, setCanvas]= useState(null);
+
+    const canvasRef = useRef(null);
 
 
     const find_dimensions = (props, layout)=> {
@@ -118,6 +124,58 @@ const DrawingPan = (props) => {
         props.setAnnoRect(rects);
         props.setCurRectIndex(index);
       };
+
+      
+  const rgbToHex = (r, g, b)=> {
+    if (r > 255 || g > 255 || b > 255)
+        throw "Invalid color component";
+    return ((r << 16) | (g << 8) | b).toString(16);
+  }
+
+  const getImageColor = (x, y)=>{
+    const context = canvas.getContext('2d');
+    context.getImageData(x, y, 1, 1).then(
+      (imageData)=>{
+        if(imageData){
+          const p = imageData.data;
+          var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+          setSkinColor(hex);  
+        }
+      }
+    );
+  }
+
+  const drawCanvas = (blob)=>{
+    if(canvas == null) return;
+    const image = new CanvasImage(canvas);
+    const context = canvas.getContext('2d');
+    image.src = blob;
+    image.addEventListener('load', () => {
+      //assume current drawingpan is landcape
+      const width_ratio =  frameDimension.width / image.width;
+      const height_ratio = frameDimension.height / image.height;
+     
+      var image_ratio = width_ratio;
+
+      var inWidthBase = true;
+      //the smaller is the base
+      if(width_ratio < height_ratio){
+        inWidthBase = true;
+      }
+      else {
+        inWidthBase= false;
+      }
+      var width = frameDimension.width;
+      var height = image.height * image_ratio;
+      canvas.width = width;
+      canvas.height = height;
+      context.drawImage(image, 0, 0, width, height);
+      setFrameDimension({width: width, height: height});
+      setImageDimension({width: width, height: height});
+      setImageRatio(image_ratio);
+    });
+  }
+
     
 
       useEffect(()=>{
@@ -135,6 +193,9 @@ const DrawingPan = (props) => {
         props.setCurRectIndex(-1);
       }
     
+      useEffect(()=>{
+        setCanvas(canvasRef.current);
+      }, [canvasRef]);
 
     return (
         <View
@@ -150,63 +211,60 @@ const DrawingPan = (props) => {
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}
           >
-            <Image
-            style={styles.imageContainer}
-            source={props.imageSource}
-            />
-
-            {props.annoRect.map((rect, index)=>(
-             <DragResizeBlock
-              key={'annoRect' + index}
-              index={index}
-              curRectIndex={props.curRectIndex}
-              x={(rect.x - cropPosition.x) * rectScale}
-              y={(rect.y - cropPosition.y) * rectScale}
-              w={rect.width * rectScale}
-              h={rect.height * rectScale}
-              onPress={(event)=>{console.log(event)}}
-              onLongPress={(event)=>{
-                if(props.onLongPressRect){
-                  //delete operation
-                  props.onLongPressRect(event, index);
-                }}
-              }
-              onResizeEnd={(event)=>{
-                handleRectMove(event, index);
-              }}
-              onDragEnd={(event)=>{
-                handleRectMove(event, index);
-              }}
-              onClose={(event)=>{
-                //if(props.onClose){
-                //  props.onClose(event, index);
-                //}
-                dispatch({
-                  type: actions.SET_ALERT_SETTINGS,
-                  alertSettings: {
-                    show: true,
-                    type: 'alert',
-                    tile: 'Notice',
-                    message: 'Do you really delete this bounding box?',
-                    showConfirmButton: true,
-                    confirmText: 'Ok',
-                    onConfirmPressed: ()=>{
-                      removeRect(index);
-                    }
-                  }
-                });
-          
-              }}
-              >
-             <View
-               style={{
-                 width: '100%',
-                 height: '100%',
-               }}
-             />
-            </DragResizeBlock>
-            ))}
+            <Canvas ref={canvasRef} />
           </ImageZoom>
+            <View 
+              style={styles.overlay}
+              pointerEvents={'none'}
+            >
+
+              <Svg
+                width={'100%'}
+                height={'100%'}
+                style={styles.svgRect}
+                >
+                <G>
+                  <Defs>
+                    <Pattern id="grid" width={rectWidth} height={rectHeight} patternUnits="userSpaceOnUse">
+                      <Path d="M 30 0 L 0 0 0 30" fill="none" stroke="gray" stroke-width="1"/>
+                    </Pattern>
+                  </Defs>
+                  <Rect width="100%" height="100%" fill="url(#grid)" />
+                </G>
+                <G>
+                {
+                  annoRect.map((rect,index)=>(
+                    <Rect
+                    key={'annoRect' + index}
+                    x={(rect.x - cropPosition.x) * rectScale}
+                    y={(rect.y - cropPosition.y) * rectScale}
+                    width={rect.width * rectScale}
+                    height={rect.height * rectScale}
+                    fill="#00ff0030"
+                    stroke="none"
+                    strokeWidth="0"
+                  />
+                  ))
+                }
+                {
+                  annoDot.map((rect, index)=>(
+                    rect.dots.map((dot, index)=>(
+                      <Circle
+                      key={'annoDot' + rect.tag + index}
+                      cx={(dot.x - cropPosition.x) * rectScale}
+                      cy={(dot.y - cropPosition.y) * rectScale}
+                      r={3*rectScale}
+                      fill="#FF000080"
+                      stroke="none"
+                      strokeWidth="0"
+                      />
+                    ))
+                  ))
+                }
+                </G>
+            </Svg>
+          </View>
+                    
         </View>
     );
 };
@@ -223,6 +281,8 @@ DrawingPan.propTypes = {
     onDragEnd: PropTypes.func,
     curRectIndex: PropTypes.number,
     setCurRectIndex: PropTypes.func,
+    curTag: PropTypes.string,
+    annoDot: PropTypes.array,
 };
   
 export default DrawingPan;

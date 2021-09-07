@@ -29,8 +29,9 @@ import DocumentPicker from 'react-native-document-picker';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {styles} from '../styles/playai';
 import {withTranslation} from 'react-i18next';
-
-import AnonymModal from '../components/AnonymModal';
+import {
+  IconButton
+} from 'react-native-paper';
 
 /**
  * play AI
@@ -57,10 +58,11 @@ const PlayAI = ({navigation, t}) => {
   const [imageData, setImageData] = useState(null);
   const [age, setAge] = useState(1);
   const [gender, setGender] = useState(['Male']);
-  const [skinColor, setSkinColor] = useState('#FFFFFF');
+  const [skinColor, setSkinColor] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [curRectIndex, setCurRectIndex] = useState(-1);
   const [anonymVisible, setAnonymVisible] = useState(false);
+  const [isEyeDrop, setEyeDrop] = useState(false);
 
   const uploadFile = async(file)=>{
     try{
@@ -264,6 +266,7 @@ const PlayAI = ({navigation, t}) => {
     fetchImage();
   }, [imageId]);
 
+/*
   useEffect(()=>{
     if(curRectIndex == -1){
       setAnonymVisible(false);
@@ -285,10 +288,10 @@ const PlayAI = ({navigation, t}) => {
       setGender([...(bounds[curRectIndex].gender)]);
     }
   }, [curRectIndex]);
-
+*/
   return (
     <View style={styles.container}>
-      {readOnly? (
+      {!readOnly? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.uploadScrollContainer}>
@@ -298,7 +301,7 @@ const PlayAI = ({navigation, t}) => {
             setCurRectIndex={setCurRectIndex}
             curRectIndex={curRectIndex}
             annoRect={bounds}
-            imageSource={{uri: imageData}}
+            imageSource={{imageData}}
             onDragEnd={
               (event, index)=>{console.log('onDragEnd', event, index)}
             }
@@ -310,7 +313,6 @@ const PlayAI = ({navigation, t}) => {
             }
           />
         </View>
-        {anonymVisible && (
         <View>
         <TextInput
           style={styles.ageInput}
@@ -319,9 +321,6 @@ const PlayAI = ({navigation, t}) => {
           placeholder={t('playAI.age')}
           placeholderTextColor={'#A9A9A9'}
           onChangeText={(txt)=>{
-            let _bounds= [...bounds];
-            _bounds[curRectIndex].age = parseInt(txt);
-            setBounds(_bounds);
             setAge(parseInt(txt));
           }
           }
@@ -342,9 +341,6 @@ const PlayAI = ({navigation, t}) => {
           canAddItems={false}
           selectedItems={gender}
           onSelectedItemsChange={(items)=>{ 
-            let _bounds= [...bounds];
-            _bounds[curRectIndex].gender = items[0];
-            setBounds(_bounds);
             setGender(items) 
           }}
           textInputProps={{
@@ -356,27 +352,41 @@ const PlayAI = ({navigation, t}) => {
           styleMainWrapper={{
             marginTop: 10
           }}/>
-        <Pressable
-          style={styles.skinButton}
-          onPress={()=>{
-            setModalVisible(!modalVisible);
-          }}>
-          <Text style={{
-            alignSelf: 'center'
-          }} color={'#A9A9A9'}>{t('playAI.skinColor')}</Text>
-          <View
-            style={{
-              marginLeft: 10,
-              backgroundColor: skinColor,
-              paddingHorizontal: 10,
-              paddingVertical: 3,
-              borderColor: '#ADADAD',
-              borderWidth: 1
-            }}>
-            <Text>{skinColor}</Text>
+
+          <View style={styles.skinButton}>
+            <Text style={{
+              alignSelf: 'center',
+            }} color={'#A9A9A9'}>{t('Annotations.skinColor')}</Text>
+            <View
+              style={{
+                marginLeft: 10,
+                backgroundColor: skinColor,
+                paddingHorizontal: 10,
+                borderColor: '#ADADAD',
+                borderWidth: 1,
+                width: 100,
+                height: 35
+              }}>
+                <TextInput
+                  style={{
+                    height: 30,
+                    paddingVertical: 0
+                  }}
+                  onChangeText={setSkinColor}
+                  value={skinColor}
+                  placeholder={'#FFFFFF'}
+                />
+            </View>
+            <IconButton 
+              size={25} 
+              icon="eyedropper-variant" 
+              color={isEyeDrop ? theme.APP_COLOR: '#333333'}
+              onPress={()=>{
+                setEyeDrop(!isEyeDrop);
+              }}
+             />
           </View>
-        </Pressable>
-        {modalVisible && (
+        {isEyeDrop && (
         <View
           style={styles.colorPickerView}>
           <ColorPicker
@@ -386,9 +396,6 @@ const PlayAI = ({navigation, t}) => {
             onColorChange={(color)=>{
             }}
             onColorChangeComplete={(color)=>{
-              let _bounds= [...bounds];
-              _bounds[curRectIndex].skinColor = color;
-              setBounds(_bounds);
               setSkinColor(color)
             }}
             thumbSize={15}
@@ -402,7 +409,6 @@ const PlayAI = ({navigation, t}) => {
           </View>
         )}
         </View>
-        )}
         <Button
           color={theme.APP_COLOR}
           title={t('playAI.submit')}
