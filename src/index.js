@@ -342,6 +342,21 @@ const UploadGuidelinesStack = () => (
         );
       }}
     />
+    <Stack.Screen
+      name="TOS"
+      component={TOS}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
   </Stack.Navigator>
 );
 
@@ -354,6 +369,36 @@ const UploadImageStack = () => (
         return Header(
           {
             showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="Bounty"
+      component={Bounty}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageCategorization"
+      component={ImageCategorization}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: true,
             showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
@@ -510,7 +555,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -525,7 +570,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -540,7 +585,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -555,7 +600,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -603,12 +648,15 @@ const BottomTabs = () => (
     <Tab.Screen
       name="UploadGuidelines"
       component={UploadGuidelinesStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: props => <TabComponent label="UploadImage" {...props} />,
+      }}
     />
     <Tab.Screen
       name="UploadImage"
       component={UploadImageStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
+      options={{unmountOnBlur: true, tabBarVisible: false, tabBarButton: () => null}}
     />
     <Tab.Screen
       name="Verification"

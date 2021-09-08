@@ -4,130 +4,145 @@ import {theme} from '../services/Common/theme';
 import {Transition, Transitioning} from 'react-native-reanimated';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+const iconSize = 22;
 const icons = {
   About: (
     <MaterialIcon
       name="info"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   AboutFocused: (
     <MaterialIcon
       name="info"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Stats: (
     <MaterialIcon
       name="analytics"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   StatsFocused: (
     <MaterialIcon
       name="analytics"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   SwipeAI: (
     <MaterialIcon
       name="swipe"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   SwipeAIFocused: (
     <MaterialIcon
       name="swipe"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Learn: (
     <MaterialIcon
       name="subscriptions"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   LearnFocused: (
     <MaterialIcon
       name="subscriptions"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Wallet: (
     <MaterialIcon
       name="account-balance-wallet"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   WalletFocused: (
     <MaterialIcon
       name="account-balance-wallet"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   MyStats: (
     <IonIcon
       name="analytics-sharp"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   MyStatsFocused: (
     <IonIcon
       name="analytics-sharp"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Verification: (
     <MaterialIcon
       name="fingerprint"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   VerificationFocused: (
     <MaterialIcon
       name="fingerprint"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Annotation: (
     <MaterialIcon
       name="note-add"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   AnnotationFocused: (
     <MaterialIcon
       name="note-add"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
   Legal: (
     <MaterialIcon
       name="privacy-tip"
-      size={24}
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
     />
   ),
   LegalFocused: (
     <MaterialIcon
       name="privacy-tip"
-      size={24}
+      size={iconSize}
+      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
+    />
+  ),
+  UploadImage: (
+    <MaterialIcon
+      name="cloud-upload"
+      size={iconSize}
+      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
+    />
+  ),
+  UploadImageFocused: (
+    <MaterialIcon
+      name="cloud-upload"
+      size={iconSize}
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),

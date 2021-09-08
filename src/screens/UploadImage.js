@@ -332,7 +332,9 @@ const Upload = ({navigation}) => {
               style={styles.imageIcon}
             />
             <Text style={[styles.uploadText, styles.marginBottom3p]}>
-              Personal Information, Tutorial, Data Bounties
+              <Text onPress={() => navigation.navigate('ImageCategorization')}>Personal Information, </Text>
+              <Text onPress={() => navigation.navigate('About')}>Tutorial, </Text>
+              <Text onPress={() => navigation.navigate('Bounty')}>Data Bounties</Text>
             </Text>
             <Button
               title="Upload"

@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {ScrollView, Text, View, Linking} from 'react-native';
 import Panel from '../components/Panel';
 import CheckBox from '../components/CheckBox';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import styles from '../styles/uploadguidelines';
 import {saveUsageFlag} from '../services/API/APIManager';
+import {getUsageFlag} from '../services/API/APIManager';
 
 const Upload = ({navigation}) => {
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const setup = async () => {
+      const res = await getUsageFlag();
+      if (
+        res &&
+        res.usage_flag &&
+        res.usage_flag.toLowerCase() === 'accepted'
+      ) {
+        navigation.goBack();
+        navigation.navigate('UploadImage');
+      }
+      setLoading(false);
+    };
+    setup();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ScrollView
+      {
+        loading ? null :
+      (<ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}>
         <Text style={styles.header}>Upload Data</Text>
@@ -54,7 +75,7 @@ const Upload = ({navigation}) => {
             violations or violations of our
             <Text
               style={styles.linkText}
-              onPress={() => Linking.openURL('https://alpha.dataunion.app/terms')}>
+              onPress={() => navigation.navigate('TOS')}>
               {' Terms of service.'}
             </Text>
           </Text>
@@ -76,7 +97,7 @@ const Upload = ({navigation}) => {
             />
           </View>
         </Panel>
-      </ScrollView>
+      </ScrollView>)}
     </View>
   );
 };

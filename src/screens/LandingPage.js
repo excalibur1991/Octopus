@@ -81,7 +81,7 @@ const LandingPage = ({navigation, t}) => {
       const item = {
         title: t('landing.upload'),
         screen: 'UploadGuidelines',
-        icon: 'analytics',
+        icon: 'cloud-upload',
         Icon: MaterialIcon,
       };
       if (
