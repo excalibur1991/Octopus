@@ -37,7 +37,7 @@ const Verification = () => {
   return (
     <View style={styles.container}>
       {
-        (isTOCChecked == false) &&
+       (isTOCChecked == false) &&
        <TOC 
         isTOCChecked={isTOCChecked}
         setTOCChecked={()=>{setTOCChecked(true)}} 

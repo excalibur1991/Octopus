@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
       marginTop: 10,
     },
     colorPicker:  {
-      height: 200,
+      height: 300,
       marginVertical: 10,
     },
 });

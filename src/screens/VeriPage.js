@@ -10,6 +10,7 @@ import {
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
     Platform,
+    ImageBackground,
 } from 'react-native';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
@@ -252,7 +253,6 @@ const VeriPage = (props) => {
           fields:["image_id", "tag_data", "descriptions"],
           type:"TextTag",
           tags:[]});
-          console.log(response);
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);
@@ -391,7 +391,6 @@ const VeriPage = (props) => {
       textEditor.focus();
   
     }catch(err){
-      console.log(err);
     }
     
   };
@@ -661,6 +660,7 @@ const VeriPage = (props) => {
         <View style={styles.container}>
           <View style={styles.CardWrapper}>
             <Image
+              resizeMode='stretch'
               style={styles.leftbar}
               source={require('../assets/left.png')}
             />
@@ -685,6 +685,7 @@ const VeriPage = (props) => {
                 />
             </View>
             <Image
+              resizeMode='stretch'
               style={styles.rightbar}
               source={require('../assets/right.png')}
               />
@@ -795,16 +796,18 @@ const styles = StyleSheet.create({
   },
  
   leftbar: {
-      zIndex: 0,
-      left: 0
+    height: '100%',
+    zIndex: 0,
+    left: 0
   },
   rightbar: {
+    height: '100%',
     zIndex: 0,  
-    right: 0
+    right: 0,
   },
   
   CardWrapper: {
-    height: 350,
+    height: '40%',
     zIndex: 1000,
     justifyContent: 'space-between',
     flexDirection: 'row'

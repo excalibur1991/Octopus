@@ -163,15 +163,18 @@ const Annotation = ({navigation, t}) => {
 
   useEffect(()=>{
     //check anonymization
+    console.log(curTag);
+    
     if(curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
       setIsAnonymization(true);
+      console.log('isAnonymizataion');
     }else{
       setIsAnonymization(false);
     }
+    console.log(curTag);
+
     //annotation
     let _annotationTags = [...annotationTags];
-    console.log(_annotationTags);
-    console.log(curTag);
     _annotationTags.map((value,index)=>{
       if(value.tag == curTag){
         _annotationTags[index].checked = true;
@@ -179,7 +182,6 @@ const Annotation = ({navigation, t}) => {
         _annotationTags[index].checked = false;
       }
     });
-    console.log(_annotationTags);
     setAnnotationTags(_annotationTags);
     //selectedBounties
     let bounty_found = false;
@@ -201,7 +203,6 @@ const Annotation = ({navigation, t}) => {
   [imageBlob]);
 
   useEffect(()=>{
-    console.log(isInEdit);
   }, [isInEdit]);
 
   useEffect(()=>{
@@ -376,7 +377,7 @@ const Annotation = ({navigation, t}) => {
               onPress={()=>saveChange(props)}>Save</Button>
           }
         </View>
-        {isAnonymization && annoRect.find((value)=>(value.tag.toLocaleLowerCase() == curTag.toLocaleLowerCase())) &&
+        {isAnonymization &&
         (
           <View>
             <TextInput

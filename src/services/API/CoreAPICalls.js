@@ -74,6 +74,7 @@ export const postData = async (
 ) => {
   setLastActivity();
   const url = getEndpointUrl(relativeUrl);
+  console.log(url);
   const config = {
     method: 'post',
     headers: {
@@ -90,6 +91,7 @@ export const postData = async (
       .catch(error => error);
     return response;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

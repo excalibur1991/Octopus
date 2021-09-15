@@ -165,7 +165,6 @@ import { TextPropTypes } from 'react-native';
   //save tempChange
   export const saveChange = (props)=>{
     let _annoRect = [...props.annoRect];
-    console.log(props.curRectIndex);
     if(props.curRectIndex != -1) {
       //modify
       if(props.tempAnnoRect.rects.length > 0){
@@ -184,6 +183,8 @@ import { TextPropTypes } from 'react-native';
     props.setTempAnnoRect({rects:[]});
     props.setCurRectIndex(-1);
     props.setIsInEdit(false);
+    props.setIsAnonymization(false);
+    props.setCurTag('');
   }
   
   // save annotation handler
@@ -311,10 +312,7 @@ import { TextPropTypes } from 'react-native';
   };
 
   export const handleOnClick = (props, position)=>{
-    console.log(JSON.stringify(props.annoRect));
-    console.log(JSON.stringify(props.tempAnnoRect));
-    if(props.curTag == "") return;
-
+    
     var found = false;
     var _rect = [];
     const origLocX = Math.floor(position.locationX);
@@ -328,7 +326,9 @@ import { TextPropTypes } from 'react-native';
     const blockY = props.cropPosition.y + Math.floor((origLocY-props.cropPosition.y) / _rectHeight) * _rectHeight;
 
     if(props.isInEdit == false){
-      props.setIsInEdit(true);
+      if(props.curTag != ""){
+        props.setIsInEdit(true);
+      }
       //check if user select prev bounding box
       var selected = false;
       var selected_index = -1;
@@ -341,18 +341,20 @@ import { TextPropTypes } from 'react-native';
         });
       });
       if(selected){
+        console.log('rect selected');
         let _tempAnnoRect = {...props.annoRect[selected_index]};
+        props.setIsInEdit(true);
         props.setTempAnnoRect(_tempAnnoRect);
         props.setCurRectIndex(selected_index);
+        props.setCurTag('');
         props.setCurTag(_tempAnnoRect.tag);
         return;
       }
     }
+    if(props.curTag == "") return;
 
 
     if(props.isEyeDrop){
-      console.log(position, props.imageRatio);
-      console.log(position.locationX / props.imageRatio, position.locationY / props.imageRatio, props.cropPosition.x, props.cropPosition.y);
       getImageColor(props, position.locationX / props.imageRatio, position.locationY / props.imageRatio);
       return;
     }
@@ -375,7 +377,6 @@ import { TextPropTypes } from 'react-native';
         _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
       }
       //let opt_rects = optimizeBlocks(_rect);
-      //console.log(opt_rects);
       //props.setAnnoRect(opt_rects);
       //props.setAnnoRect(_rect);
       let _tempAnnoRect = {...props.tempAnnoRect};
