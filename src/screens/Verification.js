@@ -49,7 +49,7 @@ const Verification = ({navigation}) => {
       )}
       {isTOCChecked == true ? (
         bounties && bounties.length > 0 ? (
-          <VeriPage />
+          <VeriPage bounty={bounties[0]} />
         ) : (
           <VerifyData navigation={navigation} setBounties={setBounties} />
         )

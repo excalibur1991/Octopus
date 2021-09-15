@@ -8,61 +8,61 @@ import {useStateValue} from '../services/State/State';
 const TOC = ({ navigation, ...props }) => {
   const initial_bounties = [
     {
-      tag: "Roman Letter Bounty",
+      tag: "roman letter bounty",
       desc: "Roman Letter Bounty",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Normal",
+      tag: "normal",
       desc: "Normal",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Anonymization bounty",
+      tag: "anonymization bounty",
       desc: "Anonymization Bounty (photos of faces)",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Traffic Sign bounty",
+      tag: "traffic sign bounty",
       desc: "Traffiic Sign Bounty",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Food bounty",
+      tag: "food bounty",
       desc: "Food Bounty",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Project.bb bounty",
+      tag: "project.bb bounty",
       desc: "project.bb bounty(cigarette butt on the beach)",
       checked: false,
       disabled: false,
     },
     {
-      tag: "NFT+art bounty",
+      tag: "nft+art bounty",
       desc: "NFT Bounty(photos of NFTs)",
       checked: false,
       disabled: false,
     },
     {
-      tag: "OCR bounty",
+      tag: "ocr bounty",
       desc: "OCR Bounty(photos with text in them)",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Meme bounty",
+      tag: "meme bounty",
       desc: "Meme Bounty",
       checked: false,
       disabled: false,
     },
     {
-      tag: "Product bounty",
+      tag: "product bounty",
       desc: "Product Bounty(photos of products)",
       checked: false,
       disabled: false,
@@ -181,7 +181,7 @@ const TOC = ({ navigation, ...props }) => {
         uniqueKey="tag"
         selectText="Bounty"
         displayKey="tag"
-        single={false}
+        single={true}
         showFilter={false}
         canAddItems={false}
         selectedItems={selectedBounties}
@@ -207,7 +207,7 @@ const TOC = ({ navigation, ...props }) => {
               alertSettings: {
                 show: true,
                 type: "error",
-                title: "Select atleast one bounty",
+                title: "Please select bounty",
                 showConfirmButton: true,
                 confirmText: "Ok",
               },

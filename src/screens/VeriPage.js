@@ -61,7 +61,7 @@ const initial_bounties = [
 
 var _bEditEnabled = false;
 
-const VeriPage = (props) => {
+const VeriPage = ({bounty = '', ...props}) => {
 
 
 
@@ -248,7 +248,7 @@ const VeriPage = (props) => {
           show: true,
         });
         setIsLoading(true);
-        const response = await queryMetadata(curPage);
+        const response = await queryMetadata(curPage, bounty);
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);
