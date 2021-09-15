@@ -22,16 +22,16 @@ export default {
       spanish: 'Spanish',
     },
     about: {
-      heading: 'Kickstart the new data economy',
+      heading: 'Tutorial',
       para1:
-        'Data is the new oil in the 21st century and big cooperations have already realised that to their advantage. In this project we are giving the power and profit of data back to the people that create it.',
+        'Uploading data - upload photos and tag the content in it.',
       para2:
-        'By using a reward system based on datatokens the contributors become immediate co-owners in data unions. Our first Data Vault is for images. It is available on the Ocean Protocol marketplace. The contributors upload images, annotate them and then these contributons are verified. They are rewarded with datatokens so they become co-owners of the dataset.',
+        'Verify data - verify other users photos and tags.',
       para3:
-        'This combination of mechanics creates an intrinsic motivation to contribute positively. We want to give everyone the ability to use their data for a better future and their own profit. The project is powered by Ocean Protocol. They enable us, with their grants from the OceanDAO, to work on the project but without their technology we could never realise our project.',
+        'Stats - checkout the overall stats of the image dataset.',
       para4:
-        'The main technological advantages that they created are datastokens which we use as the economy and price discovery for our data. And compute-to-data which we use to sell our collected dataset to buyers for algorithm training without the risk of our data being copied.',
-      para5: 'For',
+        'My stats - checkout your contribution to the image dataset.',
+      para5: 'Wallet - access your public and private keys.',
     },
     learn: {
       heading: 'Welcome to the learning center',
