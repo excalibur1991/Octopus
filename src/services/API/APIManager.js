@@ -115,10 +115,11 @@ export const userLogout = async () => {
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
 export const queryMetadata = async(
   page, 
+  bounty,
   status="VERIFIABLE", 
   fields=["image_id", "tag_data", "descriptions"]) => {
 
-    const data = {page: page, status: status, fields: fields}
+    const data = {page: page, status: status, fields: fields, bounty: bounty }
 
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);
