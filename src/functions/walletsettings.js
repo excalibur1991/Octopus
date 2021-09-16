@@ -289,8 +289,11 @@ export const readStoredWallet = async (context) => {
       context.setState({mnemonics: userInfo.seedPhrase})
       context.setState({pword:userInfo.password})
       context.setState({oceanERC20TokenBal: userInfo.oceanBal})
-      context.setState({ethTokenBal: userInfo.ethBal})
+      context.setState({ethTokenBal: userInfo.ethTokenBal})
       context.setState({phec0ERC20TokenBal: userInfo.phecorBal})
+      context.setState({celoPublicKey: userInfo.celoPublicKey})
+      context.setState({celoPrivateKey: userInfo.celoPrivateKey})
+  
 
     }
   } catch (e) {

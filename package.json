@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.0.2",
+    "@celo/contractkit": "^1.1.0",
+    "@celo/dappkit": "^1.1.0",
     "@oceanprotocol/lib": "^0.16.0",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/clipboard": "^1.5.1",
@@ -42,6 +44,8 @@
     "i18next": "^20.3.2",
     "immutability-helper": "^3.1.1",
     "lodash.groupby": "^4.6.0",
+    "metro": "0.64.0",
+    "metro-config": "0.64.0",
     "node-libs-browser": "^2.2.1",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",
