@@ -9,14 +9,14 @@ export default StyleSheet.create({
     paddingHorizontal: '8%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: theme.SCREEN_BACK_COLOR_1,
   },
   scrollContainer: {
     flex: 1,
   },
   header: {
     fontSize: 24,
-    color: '#41474E',
+    color: '#6C6C6C',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
     marginBottom: '5%',
     fontFamily: 'Inter-Regular',
@@ -24,7 +24,7 @@ export default StyleSheet.create({
   },
   subHeader: {
     fontSize: 16,
-    color: theme.COLORS.BLACK,
+    color: '#4a4a4a',
     fontWeight: Platform.OS === 'android' ? 'bold' : '500',
     marginBottom: '6%',
     fontFamily: 'Inter-Regular',
@@ -40,13 +40,14 @@ export default StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 12,
     fontWeight: '300',
+    color: '#1b1d1e',
   },
   bulletIcon: {
     paddingTop: Platform.OS === 'ios' ? '1.5%' : '2.3%',
     marginRight: '1%',
   },
   bulletText: {
-    color: '#000',
+    color: '#1b1d1e',
     fontSize: 12,
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
     fontFamily: 'Inter-Regular',

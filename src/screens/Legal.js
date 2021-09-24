@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
+      backgroundColor: theme.SCREEN_BACK_COLOR_1,
     },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 30
-
+        marginBottom: 30,
+        color: '#6C6C6C',
     },
     buttonText: {
         fontSize: 19,

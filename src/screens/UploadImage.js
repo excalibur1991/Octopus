@@ -128,7 +128,7 @@ const Upload = ({navigation}) => {
               <Button
                 disabled={loading}
                 loading={loading}
-                color={theme.APP_COLOR}
+                color={theme.COLORS.WHITE}
                 buttonStyle={styles.button}
                 textStyle={styles.buttonText}
                 title={'Submit Description & Tags'}
@@ -250,7 +250,7 @@ const Upload = ({navigation}) => {
               />
               <View style={styles.rowSpaceBetween}>
                 <Button
-                  color={theme.APP_COLOR}
+                  color={theme.COLORS.WHITE}
                   title="Upload"
                   style={styles.width49p}
                   buttonStyle={styles.button}
@@ -266,7 +266,7 @@ const Upload = ({navigation}) => {
                   textStyle={styles.buttonText}
                 />
                 <Button
-                  color={theme.APP_COLOR}
+                  color={theme.COLORS.WHITE}
                   title="Next"
                   disabled={!canProceed(fileUploadResponses)}
                   style={styles.width49p}
@@ -336,6 +336,7 @@ const Upload = ({navigation}) => {
             </Text>
             <Button
               title="Upload"
+              color={theme.COLORS.WHITE}
               onPress={() =>
                 onPickFile(
                   files,
@@ -345,7 +346,6 @@ const Upload = ({navigation}) => {
                   setUploadingImageIndex,
                 )
               }
-              color={theme.APP_COLOR}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
             />

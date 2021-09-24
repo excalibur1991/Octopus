@@ -103,13 +103,13 @@ const Bounty = ({navigation, t}) => {
       
     const tagsStyles = {
         h1: {
-            color: '#000000',
+            color: '#6C6C6C',
             textAlign: 'center',
-            marginBottom: 10
+            marginBottom: 10,
         },
         h4: {
-            color: '#41474E',
-            fontSize: 16
+            color: '#1b1d1e',
+            fontSize: 16,
         },
         img: {
             marginLeft: 'auto',
@@ -128,7 +128,8 @@ const Bounty = ({navigation, t}) => {
             color: '#ff4092'
         },
         p: {
-            textAlign: 'justify'
+            textAlign: 'justify',
+            color: '#4a4a4a',
         }
     };
 
@@ -167,6 +168,7 @@ const Bounty = ({navigation, t}) => {
                             tagsStyles={tagsStyles}
                             classesStyles={classesStyles}
                             renderersProps={renderersProps}
+                            
                         />
                         )
                     }else{
@@ -176,11 +178,11 @@ const Bounty = ({navigation, t}) => {
                             style={{
                                 borderTopLeftRadius: 15,
                                 borderTopRightRadius: 15,
-                                backgroundColor: '#8b98a9',
+                                backgroundColor: theme.SCREEN_BACK_COLOR_2,
                                 paddingHorizontal: 20,
                                 marginTop: 20,
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
                             }}
                             >
                                 <HTML 
@@ -195,7 +197,7 @@ const Bounty = ({navigation, t}) => {
                             </View>
                             <View 
                             style={{
-                                backgroundColor: '#f2f2f2',
+                                backgroundColor: '#6C6C6C',
                                 paddingHorizontal: 20,
                                 paddingVertical: 10,
                             }}>
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
+      backgroundColor: theme.SCREEN_BACK_COLOR_1,
     },
     header: {
         fontSize: 24,

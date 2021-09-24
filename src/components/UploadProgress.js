@@ -30,9 +30,9 @@ const UploadProgress = ({
             width={300}
             borderWidth={0}
             height={6}
-            color="#4e9cf9"
+            color="#4a4a4a"
             progress={progress}
-            unfilledColor="#e0eeff"
+            unfilledColor="#6C6C6C"
           />
           {!success && (
             <Ripple
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    color: '#41474E',
+    color: '#6C6C6C',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
     fontFamily: 'Inter-Bold',
     textAlign: 'center',

@@ -72,6 +72,7 @@ const Upload = ({navigation}) => {
                   }
                 }
               }}
+              textColor="#1b1d1e"
               title="I accept DataUnion's Guidelines and Terms of Service"
             />
           </View>

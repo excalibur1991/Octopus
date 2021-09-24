@@ -75,9 +75,12 @@ const image_categorization = [
         
     const tagsStyles = {
         h1: {
-            color: '#000000',
+            color: '#6C6C6C',
             textAlign: 'center',
             marginBottom: 10
+        },
+        h2: {
+            color: '#6C6C6C',
         },
         h4: {
             color: '#41474E',
@@ -101,7 +104,7 @@ const image_categorization = [
         },
         p: {
             textAlign: 'justify',
-
+            color: '#4a4a4a',
         }
     };
 
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
+      backgroundColor: theme.SCREEN_BACK_COLOR_1,
     }
 });
 

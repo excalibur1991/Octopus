@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: '4%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: theme.SCREEN_BACK_COLOR_1,
   },
   topContainer: {
     flexDirection: 'row',

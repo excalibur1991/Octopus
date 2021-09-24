@@ -56,25 +56,27 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
+      backgroundColor: theme.SCREEN_BACK_COLOR_1,
     },
     header: {
         fontSize: 24,
-        fontWeight: 'bold'
-
+        fontWeight: 'bold',
+        color: '#6C6C6C',
     },
     body: {
         marginTop: 20,
         fontSize: 16,
         lineHeight: 23,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#4a4a4a',
     },
     contactHeader: {
         fontSize: 14,
-        marginTop: 25
+        marginTop: 25,
+        color: '#4a4a4a',
     },
     contactMail: {
-        color: '#FF4092',
+        color: theme.APP_COLOR,
         fontSize: 16
     }
 });

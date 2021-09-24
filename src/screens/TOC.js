@@ -28,9 +28,9 @@ const TOC = (props) => {
         title: {
             textAlign: 'center',
             fontSize: 24,
-            color: '#41474E',
+            color: '#6C6C6C',
             marginTop: 25,
-            lineHeight: 22,
+            lineHeight: 25,
             fontWeight: "600",
             fontFamily: 'Inter-Regular',
         },
@@ -38,7 +38,7 @@ const TOC = (props) => {
             textAlign: 'center',
             fontSize: 16,
             fontWeight: "400",
-            color: '#41474E',
+            color: '#4a4a4a',
             marginLeft:47,
             marginRight: 47,
             marginTop: 17,
@@ -54,20 +54,20 @@ const TOC = (props) => {
             height: 50,
             borderTopLeftRadius: 16,
             borderTopRightRadius: 16,
-            backgroundColor: "#E3E7FF",
+            backgroundColor: '#fff',
             justifyContent: 'center',
         },
         boxHeaderText: {
             textAlign: 'center',
             fontSize: 13,
-            color: '#000000',
+            color: '#6C6C6C',
             fontWeight: '500',
             fontFamily: 'Inter-Regular',
         },
         boxContent: {
             borderBottomLeftRadius: 16,
             borderBottomRightRadius: 16,
-            backgroundColor: "#F5F6FC",
+            backgroundColor: '#4a4a4a',
             padding: 24,
         },
         textNormal: {
@@ -75,12 +75,14 @@ const TOC = (props) => {
             lineHeight: 20,
             fontWeight: '300',
             fontFamily: 'Inter-Regular',
+            color: '#1b1d1e',
         },
         textBold: {
             fontSize: 12,
             lineHeight: 20,
             fontWeight: '600',
             fontFamily: 'Inter-Regular',
+            color: '#1b1d1e',
         },
         checkTOC: {
             marginTop: 15,
@@ -131,9 +133,10 @@ const TOC = (props) => {
                         onPress={()=>onCheck(!checked)}
                         status={ checked ? 'checked': 'unchecked'}
                         labelStyle={{
-                            fontSize: 10
+                            fontSize: 10,
+                            color:'#1b1d1e'    
                         }}
-                        color='#ccc'
+                        color='#1b1d1e'
                         position='leading'
                         label={'I accept DataUnion\'s Guidelines and Terms of Service'}
                         

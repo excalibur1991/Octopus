@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: '4%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: theme.SCREEN_BACK_COLOR_1,
   },
   header: {
     fontSize: 20,
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     textAlign: 'justify',
-    color: theme.COLORS.BLACK,
+    color: '#4a4a4a',
     fontFamily: 'Inter-Regular',
   },
 });

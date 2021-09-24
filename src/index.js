@@ -137,12 +137,12 @@ const Header = (
   headerRight
     : showLanguageDropdown
     ? () => (
-        <Menu renderer={renderers.Popover}>
+        <Menu renderer={renderers.Popover} rendererProps={{anchorStyle: {backgroundColor: '#1b1d1e'}}}>
           <MenuTrigger
             customStyles={{
               triggerOuterWrapper: {
                 ...styles.rightButtonOuter,
-                backgroundColor: theme.COLORS.WHITE,
+                backgroundColor: '#1b1d1e',
                 overflow: 'hidden',
               },
             }}>
@@ -152,19 +152,20 @@ const Header = (
                 resizeMode="stretch"
                 source={selectedLanguage.icon}
               />
-              <Text style={{color: theme.COLORS.BLACK}}>
+              <Text style={{color: '#4a4a4a'}}>
                 {selectedLanguage.label}
               </Text>
-              <EntypoIcon name="chevron-down" size={20} />
+              <EntypoIcon name="chevron-down" size={20} color='#4a4a4a' />
             </View>
           </MenuTrigger>
-          <MenuOptions>
+          <MenuOptions optionsContainerStyle={{backgroundColor: '#1b1d1e'}}>
             {languageOptions.map((item, index) => (
               <MenuOption
                 key={index}
                 // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   ...styles.languageOption,
+                  
                   borderBottomWidth:
                     index < languageOptions.length - 1 ? 0.3 : 0,
                 }}
@@ -181,7 +182,7 @@ const Header = (
                     resizeMode="stretch"
                     source={item.icon}
                   />
-                  <Text>{item.label}</Text>
+                  <Text style={{color: '#4a4a4a'}}>{item.label}</Text>
                 </View>
               </MenuOption>
             ))}
@@ -572,7 +573,7 @@ const BottomTabs = () => (
     tabBarOptions={{
       style: {
         height: 60,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#4a4a4a',
         elevation: 3,
         shadowColor: theme.APP_COLOR,
         shadowOffset: {

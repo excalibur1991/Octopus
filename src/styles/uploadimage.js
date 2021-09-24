@@ -9,7 +9,7 @@ export default StyleSheet.create({
     paddingHorizontal: '8%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: theme.SCREEN_BACK_COLOR_1,
   },
   marginBottom3p: {
     marginBottom: '3%',
@@ -46,7 +46,7 @@ export default StyleSheet.create({
     borderRadius: 15,
   },
   buttonText: {
-    color: theme.COLORS.WHITE,
+    color: theme.APP_COLOR,
     fontSize: 19,
     textAlign: 'center',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     borderRadius: 15,
     paddingVertical: '8%',
     paddingHorizontal: '4%',
-    backgroundColor: '#F5F6FC',
+    backgroundColor: '#4a4a4a',
     marginBottom: '3%',
   },
   readOnlyTagsContainer: {
@@ -80,6 +80,7 @@ export default StyleSheet.create({
     marginTop: 10,
     fontFamily: 'Inter-Regular',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+    color: '#1b1d1e',
   },
   descriptionContainer: {
     borderColor: 'lightgray',

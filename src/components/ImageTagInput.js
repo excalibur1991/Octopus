@@ -44,6 +44,7 @@ const ImageTagInput = ({
           style={[styles.inputSingleline, {minWidth: 100}]}
           returnKeyType="default"
           autoCapitalize="none"
+          placeholderTextColor="#4a4a4a"
           onSubmitEditing={(e) => {
             const newTag = tag.trim().toLowerCase();
             if (
@@ -87,6 +88,7 @@ const ImageTagInput = ({
           style={[styles.inputSingleline, {minWidth: 145}]}
           returnKeyType="default"
           autoCapitalize="none"
+          placeholderTextColor="#4a4a4a"
           onSubmitEditing={(e) => {
             const newCommonTag = commonTag.trim().toLowerCase();
             if (
@@ -136,6 +138,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     padding: 5,
-    color: theme.COLORS.BLACK,
+    color: '#6C6C6C',
   },
 });

@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   boxText: {
     marginTop: '4%',
     width: 250,
+    color: '#4a4a4a',
   },
   container_: {
     flex: 2,
@@ -37,6 +38,7 @@ export const styles = StyleSheet.create({
     fontFamily: "Cochin",
     fontSize: 15,
     fontWeight: "bold",
+    color: '#4a4a4a',
    // position:'relative',
     //left:10,
     //top:'-5%'
@@ -48,7 +50,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: '4%',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: theme.SCREEN_BACK_COLOR_1,
   },
   rows: {
     flexDirection: 'row',

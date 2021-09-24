@@ -16,6 +16,7 @@ const TextInput = ({
           value={value}
           style={styles.inputSingleline}
           placeholder={placeholder}
+          placeholderTextColor="#4a4a4a"
           onChangeText={onChangeText}
           {...props}
         />
@@ -25,6 +26,7 @@ const TextInput = ({
           value={value}
           style={styles.inputMultiline}
           placeholder={placeholder}
+          placeholderTextColor="#4a4a4a"
           onChangeText={onChangeText}
           {...props}
         />
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
   inputSingleline: {
     paddingVertical: 10,
     paddingHorizontal: 10,
-    color: theme.COLORS.BLACK,
+    color: '#6C6C6C',
   },
   inputMultiline: {
     minHeight: 120,
@@ -53,6 +55,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
-    color: theme.COLORS.BLACK,
+    color: '#6C6C6C',
   },
 });

@@ -731,10 +731,15 @@ const VeriPage = (props) => {
                 editable:false
               }}
               searchInputPlaceholderText="PII ..."
-              selectedItemTextColor={'#00A5FF'}
+              selectedItemTextColor={'#1b1d1e'}
               styleDropdownMenu={{
                 height:56,
               }}
+              hideDropdown
+              searchIcon={null}
+              textColor="#6C6C6C"
+              styleDropdownMenuSubsection={{paddingLeft:10}}
+              styleItemsContainer={{backgroundColor: "#4a4a4a"}}
             />
             <Divider />
             <MultiSelect 
@@ -755,10 +760,15 @@ const VeriPage = (props) => {
                 editable:false
               }}
               searchInputPlaceholderText="Bounties ..."
-              selectedItemTextColor={'#00A5FF'}
+              selectedItemTextColor={'#1b1d1e'}
               styleDropdownMenu={{
                 height:56,
               }}
+              hideDropdown
+              searchIcon={null}
+              textColor="#6C6C6C"
+              styleDropdownMenuSubsection={{paddingLeft:10}}
+              styleItemsContainer={{backgroundColor: "#4a4a4a"}}
             />
           </ScrollView>
         <TagInput
