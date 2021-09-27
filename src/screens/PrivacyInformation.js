@@ -58,7 +58,7 @@ const PrivacyInformation = ({navigation, t}) => {
             color: '#ff4092'
         },
         p: {
-            textAlign: 'left'
+            textAlign: 'justify'
         }
     };
 

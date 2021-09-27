@@ -77,7 +77,7 @@ const image_categorization = [
         h1: {
             color: '#000000',
             textAlign: 'center',
-            marginBottom: 10
+            marginBottom: '2%'
         },
         h4: {
             color: '#41474E',
@@ -87,7 +87,7 @@ const image_categorization = [
         img: {
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginTop: 20,
+            marginTop: '4%',
             width: Dimensions.get('window').width * .85,
         },
         label: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
       width: '100%',
       marginTop: '2%',
       paddingTop: '5%',
-      paddingHorizontal: 25,
+      paddingHorizontal: '6%',
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,

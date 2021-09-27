@@ -10,8 +10,9 @@ const Upload = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.scrollContainer}
+        style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}>
+        
         <Text style={styles.header}>Upload Data</Text>
         <Text style={styles.subHeader}>
           Upload, Describe & Tag Data for the DataUnion image dataset &
@@ -76,7 +77,8 @@ const Upload = ({navigation}) => {
             />
           </View>
         </Panel>
-      </ScrollView>
+ 
+     </ScrollView>
     </View>
   );
 };

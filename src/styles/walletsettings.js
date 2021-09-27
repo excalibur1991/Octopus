@@ -10,13 +10,10 @@ export const styles = StyleSheet.create({
   },
   boxText: {
     marginTop: '4%',
-    width: 250,
+    flex: 0.8,
+    height: 30
   },
-  container_: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  
   wrapperStyle :{
     backgroundColor: '#00000000',
     borderBottomColor: '#000000',
@@ -43,11 +40,8 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: '2%',
     paddingTop: '5%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    width: '100%',
     backgroundColor: theme.COLORS.WHITE,
   },
   rows: {
@@ -130,34 +124,31 @@ export const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
-  Ccontainer: {
-    flex: 1,
-  },
   parent: {
     //flex: 1,
     flexDirection: 'row',
+    flex: 1,
     borderWidth: 1,
     borderColor: theme.APP_COLOR,
     borderRadius: 8,
     marginBottom: 20,
-    width: 300
    // justifyContent: 'flex-start'
   },
   buttonStyle: {
-      borderRadius: 25,
-      width: '70%',
-      alignSelf: 'center',
-    },
-    buttonText: {
-      fontSize: 19,
-      fontWeight: '600',
-      color: theme.APP_COLOR,
-      fontFamily: 'Inter-Bold',
-    },
-    deleteButtonText: {
-      fontSize: 19,
-      fontWeight: '600',
-      color: '#FF1493',
-      fontFamily: 'Inter-Bold',
-    },
+    borderRadius: 25,
+    width: '70%',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontSize: 19,
+    fontWeight: '600',
+    color: theme.APP_COLOR,
+    fontFamily: 'Inter-Bold',
+  },
+  deleteButtonText: {
+    fontSize: 19,
+    fontWeight: '600',
+    color: '#FF1493',
+    fontFamily: 'Inter-Bold',
+  },
 });

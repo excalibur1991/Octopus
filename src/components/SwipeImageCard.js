@@ -4,6 +4,7 @@ import {
     Image,
     Text,
     StyleSheet,
+    Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -55,14 +56,14 @@ const styles = StyleSheet.create({
       borderColor: 'grey',
       backgroundColor: 'white',
       borderRadius: 43,
-      width: 302,
-      height: 307,
+      width:  Dimensions.get('window').height * 0.3,
+      height: Dimensions.get('window').height * 0.3,
       borderWidth: 0,  
       elevation: 1
     },
     thumbnail: {
-        width: 302,
-        height: 307,
+        width: Dimensions.get('window').height * 0.8,
+        height: Dimensions.get('window').height * 0.3,
     }
   })
 

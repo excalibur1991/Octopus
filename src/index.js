@@ -510,7 +510,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -525,7 +525,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -540,7 +540,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -555,7 +555,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },

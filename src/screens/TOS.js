@@ -3,6 +3,7 @@ import {
     StyleSheet,
     Text,
     Linking,
+    ScrollView
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -28,19 +29,21 @@ const TOS = ({navigation, t}) => {
      
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>
-                {t('tos.header')}
-            </Text>
-            <Text style={styles.body}>
-                {t('tos.body')}
-            </Text>
-            <Text style={styles.contactHeader}>
-                {t('tos.contactHeader')}
-            </Text>
-            <Text onPress={()=>{Linking.openURL('mailto:copyright@dataunion.app')}}
-            style={styles.contactMail}>
-                {t('tos.copyrightMail')}
-            </Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Text style={styles.header}>
+                    {t('tos.header')}
+                </Text>
+                <Text style={styles.body}>
+                    {t('tos.body')}
+                </Text>
+                <Text style={styles.contactHeader}>
+                    {t('tos.contactHeader')}
+                </Text>
+                <Text onPress={() => { Linking.openURL('mailto:copyright@dataunion.app') }}
+                    style={styles.contactMail}>
+                    {t('tos.copyrightMail')}
+                </Text>
+            </ScrollView>
         </View>
     );
 };
@@ -52,11 +55,14 @@ const styles = StyleSheet.create({
       width: '100%',
       marginTop: '2%',
       paddingTop: '5%',
-      paddingHorizontal: 25,
-      alignItems: 'center',
+      paddingBottom: '5%',
+      paddingHorizontal: '5%',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
       backgroundColor: theme.COLORS.WHITE,
+    },
+    content: {
+
     },
     header: {
         fontSize: 24,
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 16,
         lineHeight: 23,
-        textAlign: 'center'
+        textAlign: 'justify',
     },
     contactHeader: {
         fontSize: 14,

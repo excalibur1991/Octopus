@@ -41,9 +41,6 @@ export const LoginProc = async (web3) => {
         seedPhrase: seedPhrase,
         password: password
       });
-      console.log("wallet created");
-      console.log('pubkey', publicKey);
-      console.log('privkey', privateKey);
     } else
     {
       privateKey = walletInfo.privateKey;

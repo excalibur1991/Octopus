@@ -9,6 +9,7 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
+    ImageBackground,
     Platform,
 } from 'react-native';
 import {actions} from '../services/State/Reducer';
@@ -655,6 +656,7 @@ const VeriPage = (props) => {
         <View style={styles.container}>
           <View style={styles.CardWrapper}>
             <Image
+              resizeMode='stretch'
               style={styles.leftbar}
               source={require('../assets/left.png')}
             />
@@ -680,6 +682,7 @@ const VeriPage = (props) => {
             </View>
             <Image
               style={styles.rightbar}
+              resizeMode='stretch'
               source={require('../assets/right.png')}
               />
           </View>
@@ -789,15 +792,18 @@ const styles = StyleSheet.create({
  
   leftbar: {
       zIndex: 0,
+      height: '100%',
       left: 0
   },
   rightbar: {
     zIndex: 0,  
-    right: 0
+    right: 0,
+    height: '100%'
   },
   
   CardWrapper: {
-    height: 350,
+    marginTop: '5%',
+    height: '30%',
     zIndex: 1000,
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -812,6 +818,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   ScrollView: {
+    marginTop: '2%',
     padding: 10,
   },
 });

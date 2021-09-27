@@ -77,7 +77,7 @@ class WalletSettings extends Component {
   render() {
     const {t} = this.props;
     return (
-      <ScrollView  style={styles.container} showsVerticalScrollIndicator={true}>
+      <ScrollView  style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={{display: 'none'}}>
           <Picker
             selectedValue={this.state.networktype}
