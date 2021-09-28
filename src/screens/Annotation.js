@@ -162,9 +162,14 @@ const Annotation = ({navigation, t}) => {
   }, 
   [curImageIndex]);
 
+  const checkAnonymization = ()=> {
+    return curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1;
+  };
+
   useEffect(()=>{
     //check anonymization
-    
+    /*
+    console.log('curTag', curTag);
     if(curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
       setIsAnonymization(true);
     }else{
@@ -193,6 +198,7 @@ const Annotation = ({navigation, t}) => {
     }else{
       setSelectedBounties([]);
     }
+    */
   }, [curTag]);
 
   useEffect(()=>{
@@ -288,9 +294,10 @@ const Annotation = ({navigation, t}) => {
             ref={zoomViewRef}
             cropWidth={frameDimension.width}
             cropHeight={frameDimension.height}
-            imageWidth={frameDimension.width}
-            imageHeight={frameDimension.height}
+            imageWidth={imageDimension.width}
+            imageHeight={imageDimension.height}
             style={styles.imageZoom}
+            enableCenterFocus={false}
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}
           >
@@ -383,6 +390,7 @@ const Annotation = ({navigation, t}) => {
           }
         </View>
         {isAnonymization &&
+        //checkAnonymization() &&
         (
           <View>
             <TextInput

@@ -158,11 +158,45 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setEyeDrop(false);
     if(items.length > 0){
       props.setCurTag(items[0]);
+      tagChanges(props, items[0]);
     }
     else {
       props.setCurTag('');
+      tagChanges(props, '');
     }
   };
+
+  export const tagChanges = (props, _curTag)=>{
+    console.log('curTag', _curTag);
+    if(_curTag && _curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
+      props.setIsAnonymization(true);
+    }else{
+      props.setIsAnonymization(false);
+    }
+
+    //annotation
+    let _annotationTags = [...props.annotationTags];
+    _annotationTags.map((value,index)=>{
+      if(value.tag == _curTag){
+        _annotationTags[index].checked = true;
+      }else{
+        _annotationTags[index].checked = false;
+      }
+    });
+    props.setAnnotationTags(_annotationTags);
+    //selectedBounties
+    let bounty_found = false;
+    props.bounties.map((value, index)=>{
+      if(value.tag == _curTag){
+        bounty_found = true;
+      }
+    })
+    if(bounty_found){
+      props.setSelectedBounties([_curTag]);
+    }else{
+      props.setSelectedBounties([]);
+    }
+  }
 
   //save tempChange
   export const saveChange = (props)=>{
@@ -186,7 +220,10 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setCurRectIndex(-1);
     props.setIsInEdit(false);
     props.setIsAnonymization(false);
-    //props.setCurTag('');
+    let currentTag = props.curTag;
+    props.setCurTag(currentTag);
+    tagChanges(props, currentTag);
+
   }
   
   // save annotation handler
@@ -261,7 +298,7 @@ import { PROPERTY_TYPES } from '@babel/types';
   
   export const find_dimesions = (props, layout)=> {
     const {x, y, width, height} = layout;
-    props.setFrameDimension({width: width, height: height});
+    props.setFrameDimension({width: width, height: Dimensions.get('window').height * 0.5});
     //props.setImageDimension({width:width, height: height});
     
     /*console.log(width, Dimensions.get('window').height * 0.5);
@@ -319,6 +356,7 @@ import { PROPERTY_TYPES } from '@babel/types';
   };
 
   export const handleOnClick = (props, position)=>{
+    console.log(position);
     
     var found = false;
     var _rect = [];
@@ -352,7 +390,9 @@ import { PROPERTY_TYPES } from '@babel/types';
         props.setIsInEdit(true);
         props.setTempAnnoRect(_tempAnnoRect);
         props.setCurRectIndex(selected_index);
-        props.setCurTag('');
+        props.setCurTag(_tempAnnoRect.tag);
+        tagChanges(props, _tempAnnoRect.tag);
+
         return;
       }
     }
@@ -360,7 +400,8 @@ import { PROPERTY_TYPES } from '@babel/types';
 
 
     if(props.isEyeDrop){
-      getImageColor(props, position.locationX / props.imageRatio, position.locationY / props.imageRatio);
+      console.log(props.imageRatio);
+      getImageColor(props, position.locationX, position.locationY);
       return;
     }
 
@@ -437,8 +478,12 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setSelectedBounties([]);
     if(_annoTag.checked){
         props.setCurTag("");
+        tagChanges(props, '');
+
     }else{
         props.setCurTag(_annoTag.tag);
+        tagChanges(props, _annoTag.tag);
+
     }
     /*
     var _tags = [];
@@ -663,7 +708,10 @@ import { PROPERTY_TYPES } from '@babel/types';
       props.canvas.width = width;
       props.canvas.height = height;
       context.drawImage(image, 0, 0, width, height);
-      props.setFrameDimension({width: width, height: height});
+      props.zoomView.positionX= 0;
+      props.zoomView.positionY = 0;
+      //props.setFrameDimension({width: width, height: Dimensions.get('window').height *0.5});
+
       props.setImageDimension({width: width, height: height});
       props.setImageRatio(image_ratio);
     });
