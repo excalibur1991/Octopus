@@ -87,6 +87,7 @@ const Annotation = ({navigation, t}) => {
 
 
   const canvasRef = useRef(null);
+  const zoomViewRef = useRef(null);
 
   const props = {
     dispatch,
@@ -163,15 +164,12 @@ const Annotation = ({navigation, t}) => {
 
   useEffect(()=>{
     //check anonymization
-    console.log(curTag);
     
     if(curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
       setIsAnonymization(true);
-      console.log('isAnonymizataion');
     }else{
       setIsAnonymization(false);
     }
-    console.log(curTag);
 
     //annotation
     let _annotationTags = [...annotationTags];
@@ -208,6 +206,10 @@ const Annotation = ({navigation, t}) => {
   useEffect(()=>{
     setCanvas(canvasRef.current);
   }, [canvasRef]);
+
+  useEffect(()=>{
+    setZoomView(zoomViewRef.current);
+  }, [zoomViewRef]);
 
   useEffect(()=>{
     let _tempAnnoRect = {...tempAnnoRect || {}};
@@ -276,15 +278,18 @@ const Annotation = ({navigation, t}) => {
           </View>)
         }
         <View
-          onLayout={(event) => {find_dimesions(props, event.nativeEvent.layout) }}
+          onLayout={(event) => {
+            find_dimesions(props, event.nativeEvent.layout);
+            
+          }}
           style={styles.imageView}>
           <ImageZoom 
-            ref={(view)=>{setZoomView(view)}}
+            //ref={(view)=>{setZoomView(view)}}
+            ref={zoomViewRef}
             cropWidth={frameDimension.width}
             cropHeight={frameDimension.height}
             imageWidth={frameDimension.width}
             imageHeight={frameDimension.height}
-            
             style={styles.imageZoom}
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}

@@ -49,7 +49,8 @@ export const styles = StyleSheet.create({
       backgroundColor: '#ffffff',
       borderRadius: 8,
       borderColor: '#DADADA',
-      borderWidth: 1
+      borderWidth: 1,
+      height: 200
     },
     imageContainer: {
       width: '100%',

@@ -1,4 +1,5 @@
 
+import {Dimensions} from 'react-native';
 import {actions} from '../services/State/Reducer';
 import {
     queryMetadata,
@@ -10,6 +11,7 @@ import { block } from 'react-native-reanimated';
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 import groupBy from 'lodash.groupby'
 import { TextPropTypes } from 'react-native';
+import { PROPERTY_TYPES } from '@babel/types';
 
   export const initial_bounties = [
     {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
@@ -184,7 +186,7 @@ import { TextPropTypes } from 'react-native';
     props.setCurRectIndex(-1);
     props.setIsInEdit(false);
     props.setIsAnonymization(false);
-    props.setCurTag('');
+    //props.setCurTag('');
   }
   
   // save annotation handler
@@ -201,8 +203,6 @@ import { TextPropTypes } from 'react-native';
     const originalImageWidth = props.zoomView.props.imageWidth;
     const originalImageHeight = props.zoomView.props.imageHeight;
     const optBlocks = optimizeBlocks(props.annoRect);
-    console.log(optBlocks);
-
     var _rects = [];
     //props.annoRect.map((value)=>{
     optBlocks.map((value)=>{  
@@ -262,7 +262,14 @@ import { TextPropTypes } from 'react-native';
   export const find_dimesions = (props, layout)=> {
     const {x, y, width, height} = layout;
     props.setFrameDimension({width: width, height: height});
-    props.setImageDimension({width:width, height: height});
+    //props.setImageDimension({width:width, height: height});
+    
+    /*console.log(width, Dimensions.get('window').height * 0.5);
+    props.setFrameDimension({
+      width: width,
+      height: Dimensions.get('window').height * 0.3
+
+    });*/
   };
 
 
@@ -341,13 +348,11 @@ import { TextPropTypes } from 'react-native';
         });
       });
       if(selected){
-        console.log('rect selected');
         let _tempAnnoRect = {...props.annoRect[selected_index]};
         props.setIsInEdit(true);
         props.setTempAnnoRect(_tempAnnoRect);
         props.setCurRectIndex(selected_index);
         props.setCurTag('');
-        props.setCurTag(_tempAnnoRect.tag);
         return;
       }
     }
@@ -502,7 +507,7 @@ import { TextPropTypes } from 'react-native';
     return {max_width, max_height}
   };
 
-  export const optimizeBlocks = (blocks)=>{
+  export const _optimizeBlocks = (blocks)=>{
     //group by tag
     var optBlocks = [];
     const tag_group = groupBy(blocks, (block)=>(block.tag));
@@ -553,7 +558,64 @@ import { TextPropTypes } from 'react-native';
     });
     return optBlocks;
   };
+  export const optimizeBlocks = (blocks)=>{
+    //group by tag
+    var optBlocks = [];
+    //const tag_group = groupBy(blocks, (block)=>(block.tag));
+    //const tag_keys = Object.keys(tag_group);
 
+    //tag_keys.map((tag_key)=>{
+      blocks.map((item, index)=>{
+      
+        
+      var _blocks = [];
+      var tblocks = [];
+      //group by width| hieght
+      const group = groupBy(item.rects, (block)=>(block.width));
+      //retrieve rect size
+      const group_keys = Object.keys(group);
+      
+      group_keys.map((key)=>{
+        const grouped_blocks = group[key];
+        var blocks_per_width = [];
+        
+        grouped_blocks.map((block)=>{
+          const {max_width, max_height} = get_box_size(block, grouped_blocks);
+          //add lists
+          blocks_per_width.push({
+            x: block.x,
+            y: block.y,
+            type: 'box',
+            tag: block.tag,
+            width: max_width * block.width, 
+            height: max_height * block.height});
+        });
+        //sort rect by area size
+        blocks_per_width.sort((b1, b2)=>(b2.width * b2.height - b1.width * b1.height));
+        if(blocks_per_width.length > 0){
+          _blocks.push(blocks_per_width[0]);
+        }
+        //filter out overlaps
+        blocks_per_width.map((block, index)=>{
+
+          const found = _blocks.find((t_block, t_index)=>{
+            //skip self compare
+            return isOverlaps(block.x, block.y, block.width, block.height, t_block.x, t_block.y, t_block.width, t_block.height)
+          })
+
+          if(!found){
+            //final block
+            _blocks.push(block);
+          }
+        });
+        tblocks = [..._blocks];
+
+      });
+      optBlocks = [...optBlocks, ...tblocks];
+
+    });
+    return optBlocks;
+  };
 
   
   const rgbToHex = (r, g, b)=> {
@@ -575,6 +637,7 @@ import { TextPropTypes } from 'react-native';
     );
   }
 
+  //calc image dimension based on max height
   export const drawCanvas = (props, blob)=>{
     if(props.canvas == null) return;
     const image = new CanvasImage(props.canvas);
@@ -601,6 +664,44 @@ import { TextPropTypes } from 'react-native';
       props.canvas.height = height;
       context.drawImage(image, 0, 0, width, height);
       props.setFrameDimension({width: width, height: height});
+      props.setImageDimension({width: width, height: height});
+      props.setImageRatio(image_ratio);
+    });
+  }
+
+  //fixed height, dynamic width
+  export const _drawCanvas = (props, blob)=>{
+    if(props.canvas == null) return;
+    const image = new CanvasImage(props.canvas);
+    const context = props.canvas.getContext('2d');
+    image.src = blob;
+    image.addEventListener('load', () => {
+      //assume current drawingpan is landcape
+      const maxHeight = props.frameDimension.width; //Dimensions.get('window').height * 0.5;
+      const maxWidth = props.frameDimension.height; //Dimensions.get('window').width * 0.8;
+      const width_ratio = maxWidth / image.width;
+      const height_ratio = maxHeight / image.height;
+
+      var width = 0;
+      var height = 0;
+      var image_ratio = 1.0;
+
+      if(height_ratio < width_ratio){
+        height = image.height * height_ratio;
+        width = image.width * height_ratio; 
+        image_ratio = height_ratio;
+      }else {
+        width = image.width * width_ratio;
+        height = image.height * width_ratio;
+        image_ratio = width_ratio;
+      }
+
+      props.canvas.width = width;
+      props.canvas.height = height;
+      props.zoomView.set
+      
+      context.drawImage(image, 0, 0, width, height);
+      //props.setFrameDimension({width: width, height: height});
       props.setImageDimension({width: width, height: height});
       props.setImageRatio(image_ratio);
     });
