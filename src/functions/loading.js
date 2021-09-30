@@ -20,7 +20,6 @@ export const LoginProc = async (web3) => {
     var publicKey = ""
     var privateKey = ""
     var seedPhrase = ""
-    console.log('walletInfo ', walletInfo);
     if(walletInfo == null) {
       //create new wallet
 
@@ -46,9 +45,7 @@ export const LoginProc = async (web3) => {
       privateKey = walletInfo.privateKey;
       publicKey = walletInfo.publicKey;
     }
-    console.log(privateKey, publicKey);
     let registerResponse = await userRegister(publicKey);
-    console.log('userRegister ', registerResponse);
     if (registerResponse && registerResponse.status == 'success') {
       //first time register
       nounce = registerResponse.nonce;
@@ -56,7 +53,6 @@ export const LoginProc = async (web3) => {
       //already registered
       let nonceResponse = await getNounce(publicKey);
       nounce = nonceResponse.nonce;
-      console.log('getnouce ', nonceResponse);
     }
 
     let sign = await Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)

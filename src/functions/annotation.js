@@ -40,6 +40,12 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setSelectedBounties([]);
     props.setTempAnnoRect({rects:[]});
     props.setCurRectIndex(-1);
+    props.setIsInEdit(false);
+    props.setIsAnonymization(false);
+    props.setAge('');
+    props.setGender([]);
+    props.setSkinColor(null);
+    props.setEyeDrop(false);
 
     if (props.zoomView){
         props.zoomView.reset();
@@ -167,7 +173,6 @@ import { PROPERTY_TYPES } from '@babel/types';
   };
 
   export const tagChanges = (props, _curTag)=>{
-    console.log('curTag', _curTag);
     if(_curTag && _curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
       props.setIsAnonymization(true);
     }else{
@@ -219,6 +224,8 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setTempAnnoRect({rects:[]});
     props.setCurRectIndex(-1);
     props.setIsInEdit(false);
+    props.setEyeDrop(false);
+
     props.setIsAnonymization(false);
     let currentTag = props.curTag;
     props.setCurTag(currentTag);
@@ -335,6 +342,24 @@ import { PROPERTY_TYPES } from '@babel/types';
     props.setRectScale(position.scale);
   };
 
+  export const handleCentering = (props, imageWidth, imageHeight, cropWidth, cropHeight, rectScale)=>{
+    const originalImageWidth = imageWidth;
+    const originalImageHeight = imageHeight;
+    const scaledImageWidth = originalImageWidth * rectScale;
+    const scaledImageHeight = originalImageHeight * rectScale;
+    const scaledCropWidth = cropWidth; // rectScale;
+    const scaledCropHeight = cropHeight; // rectScale;
+
+    const originX = (scaledImageWidth - scaledCropWidth) / 2;
+    const originY = (scaledImageHeight - scaledCropHeight) / 2;
+
+    const cropPosX = originX;
+    const cropPosY = originY;
+    
+    props.setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
+    props.setRectScale(1.0);
+  }
+
   
   export const intersect = (x,y,width, height, ptX,ptY)=>{
     if((ptX >= x && ptX <= (x + width)) 
@@ -356,8 +381,6 @@ import { PROPERTY_TYPES } from '@babel/types';
   };
 
   export const handleOnClick = (props, position)=>{
-    console.log(position);
-    
     var found = false;
     var _rect = [];
     const origLocX = Math.floor(position.locationX);
@@ -400,8 +423,7 @@ import { PROPERTY_TYPES } from '@babel/types';
 
 
     if(props.isEyeDrop){
-      console.log(props.imageRatio);
-      getImageColor(props, position.locationX, position.locationY);
+      getImageColor(props, (position.locationX / props.imageRatio), (position.locationY / props.imageRatio));
       return;
     }
 
@@ -552,57 +574,6 @@ import { PROPERTY_TYPES } from '@babel/types';
     return {max_width, max_height}
   };
 
-  export const _optimizeBlocks = (blocks)=>{
-    //group by tag
-    var optBlocks = [];
-    const tag_group = groupBy(blocks, (block)=>(block.tag));
-    const tag_keys = Object.keys(tag_group);
-
-    tag_keys.map((tag_key)=>{
-      var _blocks = [];
-          //group by width| hieght
-      const group = groupBy(tag_group[tag_key], (block)=>(block.width));
-      //retrieve rect size
-      const group_keys = Object.keys(group);
-      
-      group_keys.map((key)=>{
-        const grouped_blocks = group[key];
-        var blocks_per_width = [];
-        grouped_blocks.map((block)=>{
-          const {max_width, max_height} = get_box_size(block, grouped_blocks);
-          //add lists
-          blocks_per_width.push({
-            x: block.x,
-            y: block.y,
-            type: 'box',
-            tag: block.tag,
-            width: max_width * block.width, 
-            height: max_height * block.height});
-        });
-        //sort rect by area size
-        blocks_per_width.sort((b1, b2)=>(b2.width * b2.height - b1.width * b1.height));
-        if(blocks_per_width.length > 0){
-          _blocks.push(blocks_per_width[0]);
-        }
-        //filter out overlaps
-        blocks_per_width.map((block, index)=>{
-
-          const found = _blocks.find((t_block, t_index)=>{
-            //skip self compare
-            return isOverlaps(block.x, block.y, block.width, block.height, t_block.x, t_block.y, t_block.width, t_block.height)
-          })
-
-          if(!found){
-            //final block
-            _blocks.push(block);
-          }
-        });
-        optBlocks = [..._blocks];
-      });
-
-    });
-    return optBlocks;
-  };
   export const optimizeBlocks = (blocks)=>{
     //group by tag
     var optBlocks = [];
@@ -671,7 +642,8 @@ import { PROPERTY_TYPES } from '@babel/types';
 
   export const getImageColor = (props, x, y)=>{
     const context = props.canvas.getContext('2d');
-    context.getImageData(x, y, 1, 1).then(
+ 
+    context.getImageData(Math.floor(x), Math.floor(y), 1, 1).then(
       (imageData)=>{
         if(imageData){
           const p = imageData.data;
@@ -685,14 +657,15 @@ import { PROPERTY_TYPES } from '@babel/types';
   //calc image dimension based on max height
   export const drawCanvas = (props, blob)=>{
     if(props.canvas == null) return;
+      
     const image = new CanvasImage(props.canvas);
-    const context = props.canvas.getContext('2d');
+    //const context = props.canvas.getContext('2d');
     image.src = blob;
     image.addEventListener('load', () => {
       //assume current drawingpan is landcape
       const width_ratio =  props.frameDimension.width / image.width;
       const height_ratio = props.frameDimension.height / image.height;
-     
+
       var image_ratio = width_ratio;
 
       var inWidthBase = true;
@@ -703,55 +676,27 @@ import { PROPERTY_TYPES } from '@babel/types';
       else {
         inWidthBase= false;
       }
-      var width = props.frameDimension.width;
-      var height = image.height * image_ratio;
-      props.canvas.width = width;
-      props.canvas.height = height;
-      context.drawImage(image, 0, 0, width, height);
-      props.zoomView.positionX= 0;
+      var width = Math.floor(props.frameDimension.width);
+      var height = Math.floor(image.height * image_ratio);
+      props.canvas.width = image.width;
+      props.canvas.height = image.height;
+
+      const context = props.canvas.getContext('2d');
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.drawImage(image, 0, 0);
+      //context.getImageData(image.width / 10 * 9, 0, image.width/10, image.height / 10).then(
+      //context.getImageData(image.width-1, image.height-1, 1, 1).then((data)=>{
+      //  console.log(data.data);
+      //});
+
+
+      props.zoomView.positionX = 0;
       props.zoomView.positionY = 0;
       //props.setFrameDimension({width: width, height: Dimensions.get('window').height *0.5});
 
       props.setImageDimension({width: width, height: height});
       props.setImageRatio(image_ratio);
-    });
-  }
-
-  //fixed height, dynamic width
-  export const _drawCanvas = (props, blob)=>{
-    if(props.canvas == null) return;
-    const image = new CanvasImage(props.canvas);
-    const context = props.canvas.getContext('2d');
-    image.src = blob;
-    image.addEventListener('load', () => {
-      //assume current drawingpan is landcape
-      const maxHeight = props.frameDimension.width; //Dimensions.get('window').height * 0.5;
-      const maxWidth = props.frameDimension.height; //Dimensions.get('window').width * 0.8;
-      const width_ratio = maxWidth / image.width;
-      const height_ratio = maxHeight / image.height;
-
-      var width = 0;
-      var height = 0;
-      var image_ratio = 1.0;
-
-      if(height_ratio < width_ratio){
-        height = image.height * height_ratio;
-        width = image.width * height_ratio; 
-        image_ratio = height_ratio;
-      }else {
-        width = image.width * width_ratio;
-        height = image.height * width_ratio;
-        image_ratio = width_ratio;
-      }
-
-      props.canvas.width = width;
-      props.canvas.height = height;
-      props.zoomView.set
-      
-      context.drawImage(image, 0, 0, width, height);
-      //props.setFrameDimension({width: width, height: height});
-      props.setImageDimension({width: width, height: height});
-      props.setImageRatio(image_ratio);
+      handleCentering(props, width, height, props.frameDimension.width, props.frameDimension.height, 1.0);
     });
   }
 

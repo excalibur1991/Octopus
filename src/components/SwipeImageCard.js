@@ -40,6 +40,7 @@ export const SwipeImageCard = (props) => {
     return (
     <View style={styles.card}>
         <Image 
+        resizeMode='center'
             style={styles.thumbnail}
             source={ 
                 findImage(props)

@@ -52,7 +52,7 @@ const Annotation = ({navigation, t}) => {
   const [curMetadata, setCurMetadata] = useState({});
 
   const [frameDimension, setFrameDimension] = useState({width: Dimensions.get('window').width - 50, height: 300});
-  const [imageDimension, setImageDimension] = useState({widt: 400, height: 300});
+  const [imageDimension, setImageDimension] = useState({width: 400, height: 300});
   
   const [imageBlob, setImageBlob] = useState(null);
 
@@ -84,6 +84,7 @@ const Annotation = ({navigation, t}) => {
   const [canvas, setCanvas]= useState(null);
   const [isInEdit, setIsInEdit] = useState(false);
   const [curRectIndex, setCurRectIndex] = useState(-1);
+  const [imageData, setImageData] = useState(null);
 
 
   const canvasRef = useRef(null);
@@ -136,6 +137,10 @@ const Annotation = ({navigation, t}) => {
     setImageRatio,
     isEyeDrop,
     setEyeDrop,
+    gender, 
+    setGender,
+    age, 
+    setAge,
     setSkinColor,
     skinColor,
     tempAnnoRect,
@@ -143,7 +148,9 @@ const Annotation = ({navigation, t}) => {
     curRectIndex,
     setCurRectIndex,
     isInEdit,
-    setIsInEdit
+    setIsInEdit,
+    imageData, 
+    setImageData
   };
   
   const handleAnnoModeSelection = (items)=>{
@@ -161,45 +168,6 @@ const Annotation = ({navigation, t}) => {
     }
   }, 
   [curImageIndex]);
-
-  const checkAnonymization = ()=> {
-    return curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1;
-  };
-
-  useEffect(()=>{
-    //check anonymization
-    /*
-    console.log('curTag', curTag);
-    if(curTag && curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
-      setIsAnonymization(true);
-    }else{
-      setIsAnonymization(false);
-    }
-
-    //annotation
-    let _annotationTags = [...annotationTags];
-    _annotationTags.map((value,index)=>{
-      if(value.tag == curTag){
-        _annotationTags[index].checked = true;
-      }else{
-        _annotationTags[index].checked = false;
-      }
-    });
-    setAnnotationTags(_annotationTags);
-    //selectedBounties
-    let bounty_found = false;
-    bounties.map((value, index)=>{
-      if(value.tag == curTag){
-        bounty_found = true;
-      }
-    })
-    if(bounty_found){
-      setSelectedBounties([curTag]);
-    }else{
-      setSelectedBounties([]);
-    }
-    */
-  }, [curTag]);
 
   useEffect(()=>{
     drawCanvas(props, imageBlob);
@@ -290,7 +258,6 @@ const Annotation = ({navigation, t}) => {
           }}
           style={styles.imageView}>
           <ImageZoom 
-            //ref={(view)=>{setZoomView(view)}}
             ref={zoomViewRef}
             cropWidth={frameDimension.width}
             cropHeight={frameDimension.height}
@@ -301,7 +268,7 @@ const Annotation = ({navigation, t}) => {
             onMove={(position)=>{handleOnMove(props, position)}}
             onClick={(position)=>{handleOnClick(props, position)}}
           >
-            <Canvas ref={canvasRef} />
+            <Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/>
           </ImageZoom>
           <View 
             style={styles.overlay}
@@ -377,20 +344,20 @@ const Annotation = ({navigation, t}) => {
               mode={'contained'}
               style={{
                 ...styles.button,
-                width: 100,
+                width: 80,
                 backgroundColor: '#4E9CF990',
                 right: 5,
                 bottom: 5,
                 position: 'absolute',
                 borderWidth: 0,
-                borderRadius: 0
+                borderRadius: 0,
+                height: 35,
                }}
               uppercase={false}
               onPress={()=>saveChange(props)}>Save</Button>
           }
         </View>
         {isAnonymization &&
-        //checkAnonymization() &&
         (
           <View>
             <TextInput
