@@ -129,7 +129,11 @@ const TOC = (props) => {
                 </Text>
                 <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center'}}>
                 <Checkbox.Item
-                    onPress={()=>onCheck(!checked)}
+                    mode='android'
+                    onPress={()=>{
+                        setChecked(!checked);
+                        onCheck(!checked);
+                    }}
                     status={ checked ? 'checked': 'unchecked'}
                     labelStyle={{
                         fontSize: 10, textAlign: 'left'

@@ -423,7 +423,7 @@ import { PROPERTY_TYPES } from '@babel/types';
 
 
     if(props.isEyeDrop){
-      getImageColor(props, (position.locationX / props.imageRatio), (position.locationY / props.imageRatio));
+      getImageColor(props, (position.locationX), (position.locationY));
       return;
     }
 
@@ -678,12 +678,14 @@ import { PROPERTY_TYPES } from '@babel/types';
       }
       var width = Math.floor(props.frameDimension.width);
       var height = Math.floor(image.height * image_ratio);
-      props.canvas.width = image.width;
-      props.canvas.height = image.height;
+      //props.canvas.width = image.width;
+      //props.canvas.height = image.height;
+      props.canvas.width = width;
+      props.canvas.height = height;
 
       const context = props.canvas.getContext('2d');
-      context.setTransform(1, 0, 0, 1, 0, 0);
-      context.drawImage(image, 0, 0);
+      //context.setTransform(1, 0, 0, 1, 0, 0);
+      context.drawImage(image, 0, 0, width, height);
       //context.getImageData(image.width / 10 * 9, 0, image.width/10, image.height / 10).then(
       //context.getImageData(image.width-1, image.height-1, 1, 1).then((data)=>{
       //  console.log(data.data);
