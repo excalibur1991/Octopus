@@ -52,7 +52,7 @@ const About = ({navigation, t}) => {
            */
         }
         <Text style={styles.header}>Tutorials & FAQ</Text>
-        <Text style={styles.text}>For people who are new to cryptocurrency, unsure how our site works, or simply curious.</Text>
+        <Text style={styles.text}>For people who are new to cryptocurrency, unsure how our app works, or simply curious.</Text>
         <Panel 
         header={
           <Text>Why are we rewarding you to upload photos?</Text>
@@ -84,7 +84,7 @@ Some examples of problems you can help solve by contributing data:{'\n'}</Text>
             <Text style={{flex: 1, paddingLeft: 5}}>Improving the Food Supply Chain </Text>
             <Text style={styles.link} onPress={()=>Linking.openURL('https://apfoodonline.com/industry/food-thought-machine-vision-revolutionising-food-beverage-industry/')}>[x]</Text>
           </View>
-          <Text>{'\n'}To read more about DataUnion.app's mission and technical goals, visit <Text style={styles.link} onPress={()=>Linking.openURL('https://dataunion.app/')}>our website.</Text> </Text>
+          <Text>{'\n'}To read more about DataUnion's mission and technical goals, visit <Text style={styles.link} onPress={()=>Linking.openURL('https://dataunion.app/')}>our website.</Text> </Text>
         </Panel>
         <Panel
           header={
@@ -92,8 +92,7 @@ Some examples of problems you can help solve by contributing data:{'\n'}</Text>
           }
         >
           <Text>Your photos, annotations and verifications are contributing to the <Text style={styles.link} onPress={()=>Linking.openURL('https://market.oceanprotocol.com/asset/did:op:7Bce67697eD2858d0683c631DdE7Af823b7eea38')}>DataUnion.app Image Data Vault</Text> which is being sold on the Ocean Marketplace.{'\n'}</Text>
-          <Text>QUICRA-0 Tokens (short for Quiescient Crab Tokens) The QUICRA-0 datatokens you earn for contributing, are shares in this dataset. These can either be traded for Ocean Protocol tokens ($OCEAN) and from there to many other tokens. They can be also staked in the liquidity pool and generate rewards for the usage of the dataset that you contributed to.{'\n\n'}</Text>
-          <Text>To read more about DataUnion.app's mission and technical goals, visit <Text style={styles.link} onPress={()=>Linking.openURL('https://dataunion.app/')} >our website.</Text></Text>
+          <Text>QUICRA-0 Tokens (short for Quiescient Crab Tokens) The QUICRA-0 datatokens you earn for contributing, are shares in this dataset. These can either be traded for Ocean Protocol tokens ($OCEAN) and from there to many other tokens. They can be also staked in the liquidity pool and generate rewards for the usage of the dataset that you contributed to.</Text>
         </Panel>
         <Panel
           header={
@@ -101,32 +100,8 @@ Some examples of problems you can help solve by contributing data:{'\n'}</Text>
           }
         >
           <Text><Text style={styles.bold}>Uploading Images:</Text> The first option to gain rewards is to upload images. This is called <Text style={styles.italic}>Images Uploaded</Text> in the statistics. Uploading images is straightforward except you are not allowed to upload similar images - your image is checked on the server for duplicates (hence why uploads take time). Uploading Images gives the most rewards. You can do this in the <Text style={styles.link} onPress={()=>{navigation.navigate('Upload')}}>upload section.</Text></Text>
-          <Text><Text style={styles.bold}>Annotating Images:</Text> The second option is to add descriptions and tags - collectively known as <Text style={styles.italic} >Annotations</Text> - to the images. Annotations let us group similar images together and they increase the usefulness of algorithms trained on the dataset. When buyers of the data later look for images they are interested in, they will search for the tags. Individual tags and descriptions give the second highest amount of rewards, as adding a tag or description is easier than finding images. You can annotate images whilst <Text style={styles.link} onPress={()=>{navigation.navigate('Upload')}}>uploading</Text> or <Text style={styles.link} onPress={()=>navigation.navigate('Verification')}>verifying</Text> images.</Text>
+          <Text><Text style={styles.bold}>Annotating Images:</Text> The second option is to add descriptions, tags and mark objects in images - collectively known as <Text style={styles.italic} >Annotations</Text> - to the images. Annotations let us group similar images together and they increase the usefulness of algorithms trained on the dataset. When buyers of the data later look for images they are interested in, they will search for the tags. Individual tags and descriptions give the second highest amount of rewards, as adding a tag or description is easier than finding images. You can annotate images whilst <Text style={styles.link} onPress={()=>{navigation.navigate('Upload')}}>uploading</Text> or <Text style={styles.link} onPress={()=>navigation.navigate('Verification')}>verifying</Text> images.</Text>
           <Text><Text style={styles.bold}>Verifying Images:</Text> The third option is to verify the descriptions - this is called <Text style={styles.italic}>Verifications</Text> in the statistics - and tags that other people added to images as well as to filter out images that should not be in the dataset. This is done by up or downvoting the descriptions and tags. This is rewarded the least amount as it is the easiest way to contribute. You can do this in the <Text style={styles.link} onPress={()=>navigation.navigate('Verification')}>verification section.</Text></Text>
-        </Panel>
-        <Panel
-          header={
-            <Text>Uploading your first image</Text>
-          }
-        >
-          <Text style={styles.bold}>Uploading your first image</Text>
-          <Text>If you wonder how to Upload your first image - this video is the answer.</Text>
-        </Panel>
-        <Panel
-          header={
-            <Text>Verifying Image</Text>
-          }
-        >
-          <Text style={styles.bold}>Verifying Images</Text>
-          <Text>How do you verify your first image? Check out this video!</Text>
-        </Panel>
-        <Panel
-          header={
-            <Text>What is QUICRA-0?</Text>
-          }
-        >
-          <Text style={styles.bold}>What is QUICRA-0?</Text>
-          <Text>This video explains what the QUICRA-0 token is, where it derives its value, and how you can transfer it into real money.</Text>
         </Panel>
       </ScrollView>
     </View>

@@ -13,7 +13,7 @@ const Upload = ({navigation, ...props}) => {
   return (
     <View style={styles.container}>
       <ScrollView
-        style={styles.scrollContainer}
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
         
         <Text style={styles.header}>Upload Data</Text>

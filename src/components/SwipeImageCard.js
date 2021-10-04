@@ -33,7 +33,7 @@ export const SwipeImageCard = (props) => {
             card = data;
           }
         })
-        return card ? {uri:card.image} : require('../assets/top_image.png')
+        return card ? {uri:card.image} : require('../assets/loading.gif')
       }
     
 

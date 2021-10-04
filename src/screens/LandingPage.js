@@ -25,17 +25,16 @@ const LandingPage = ({navigation, t}) => {
       icon: 'cloud-upload',
       Icon: MaterialIcon,
     },
-
-    {
-      title: t('landing.verification'),
-      screen: 'Verification',
-      icon: 'fingerprint',
-      Icon: MaterialIcon,
-    },
     {
       title: t('landing.annotation'),
       screen: 'Annotation',
       icon: 'note-add',
+      Icon: MaterialIcon,
+    },
+    {
+      title: t('landing.verification'),
+      screen: 'Verification',
+      icon: 'fingerprint',
       Icon: MaterialIcon,
     },
     {

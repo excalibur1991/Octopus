@@ -108,14 +108,14 @@ const TOC = (props) => {
         <Text style={styles.title}>Verify data</Text>
         <Text 
             style={styles.description}
-        >Improve the DataUnion.app image dataset &nbsp; receive rewards. Flag inappropriate images, check that tags &nbsp; descriptions are fitting, and add missing tags. If a description is not fitting you can add another one. Bad actors will be weeded out by the democratic system.</Text>
+        >Improve the DataUnion image dataset &nbsp; receive rewards. Flag inappropriate images, check that tags &nbsp; descriptions are fitting, and add missing tags. If a description is not fitting you can add another one. Bad actors will be weeded out by the democratic system.</Text>
 
         <View style={styles.boxContainer}>
             <View style={styles.boxHeader}>
                 <Text style={styles.boxHeaderText}>▼ Read the Terms and Upload Guidelines</Text>
             </View>
             <View style={styles.boxContent}>
-                <Text style={styles.textNormal}>We at DataUnion.app respect the privacy and intellectual property of our users. We expect that you do the same.</Text>
+                <Text style={styles.textNormal}>We at DataUnion respect the privacy and intellectual property of our users. We expect that you do the same.</Text>
                 <Text style={styles.textNormal}>We expect that you do not upload images:</Text>
                 <Text style={styles.textBold}>
                     • Where you do not own the rights to{'\n'}
