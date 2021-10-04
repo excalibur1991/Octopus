@@ -7,7 +7,7 @@ import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 import {actions} from '../services/State/Reducer';
 
 
-const Upload = ({}) => {
+const Upload = (props) => {
   //set this true cause TOC first show always
   const [{dataUsageSettings }, dispatch] = useStateValue();
 
@@ -28,7 +28,7 @@ const Upload = ({}) => {
           });
         }} 
        />) : (
-        <UploadImage />
+        <UploadImage {...props} />
        )
       }
       </>

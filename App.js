@@ -49,7 +49,6 @@ const RootNavigator = () => {
 
   const checkVerifySettings = async ()=>{
     let verifyAvailable = await isPrivacyAndTermsAccepted();
-    console.log('aaaaaaaaaaaa', verifyAvailable);
     dispatch({
       type: actions.SET_VERIFYSETTING,
       verifySettings: verifyAvailable
