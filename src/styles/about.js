@@ -25,4 +25,14 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.BLACK,
     fontFamily: 'Inter-Regular',
   },
+  link: {
+    color: '#FF4092'
+  },
+  bold: {
+    fontWeight: 'bold'
+  },
+  italic: {
+    fontStyle: 'italic',
+    fontWeight: 'bold'
+  }
 });

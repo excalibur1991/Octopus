@@ -13,14 +13,6 @@ const LandingPage = ({navigation, t}) => {
   const [options, setOptions] = useState([
     /*
     {
-      title: t('landing.annotation'),
-      screen: 'Annotation',
-      icon: 'note-add',
-      Icon: MaterialIcon,
-    },
-    */
-    /*
-    {
       title: 'Roman Number Upload',
       screen: 'RomanNumberUpload',
       icon: 'analytics',
@@ -28,9 +20,22 @@ const LandingPage = ({navigation, t}) => {
     },
     */
     {
+      title: t('landing.upload'),
+      screen: 'Upload',
+      icon: 'cloud-upload',
+      Icon: MaterialIcon,
+    },
+
+    {
       title: t('landing.verification'),
       screen: 'Verification',
       icon: 'fingerprint',
+      Icon: MaterialIcon,
+    },
+    {
+      title: t('landing.annotation'),
+      screen: 'Annotation',
+      icon: 'note-add',
       Icon: MaterialIcon,
     },
     {
@@ -95,7 +100,7 @@ const LandingPage = ({navigation, t}) => {
       allOptions.splice(0, 0, item);
       setOptions(allOptions);
     };
-    setup();
+    //setup();
   }, []);
 
   return (

@@ -40,6 +40,7 @@ export const SwipeImageCard = (props) => {
     return (
     <View style={styles.card}>
         <Image 
+        resizeMode='stretch'
             style={styles.thumbnail}
             source={ 
                 findImage(props)
@@ -56,13 +57,13 @@ const styles = StyleSheet.create({
       borderColor: 'grey',
       backgroundColor: 'white',
       borderRadius: 43,
-      width:  Dimensions.get('window').height * 0.3,
+      width: Dimensions.get('window').height * 0.3,
       height: Dimensions.get('window').height * 0.3,
       borderWidth: 0,  
       elevation: 1
     },
     thumbnail: {
-        width: Dimensions.get('window').height * 0.8,
+        width: Dimensions.get('window').height * 0.3,
         height: Dimensions.get('window').height * 0.3,
     }
   })

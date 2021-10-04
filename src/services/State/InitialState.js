@@ -15,4 +15,6 @@ export const initialState = {
   newMessage: null,
   isTOCApproved: false,
   selectedLanguage: 'en',
+  dataUsageSettings: false,
+  verifySettings: false,
 };

@@ -30,11 +30,11 @@ import {
   Checkbox
 } from 'react-native-paper';
 
-import MultiSelect from 'react-native-multiple-select'
+import MultiSelect from '../components/BountyMultiselect';
 //import SelectDropdown from "react-native-select-dropdown";
 
-import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
-import TagInput from '../components/TagInput'
+import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
+import TagInput from '../components/TagInput';
 import AddTag from '../components/AddTag';
 import Tags from '../components/Tags';
 import BountyView from '../components/BountyView';
@@ -249,7 +249,11 @@ const VeriPage = (props) => {
           show: true,
         });
         setIsLoading(true);
-        const response = await queryMetadata(curPage);
+        const response = await queryMetadata({page: curPage, 
+          status:"VERIFIABLE", 
+          fields:["image_id", "tag_data", "descriptions"],
+          type:"TextTag",
+          tags:[]});
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);
@@ -713,12 +717,11 @@ const VeriPage = (props) => {
                 bIndent={tags.length == 0}
               />
             </View>
-            <Divider style={
-              {marginTop: 10}
-            }/>
+            
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={piis}
               uniqueKey="tag"
               selectText="PII"
@@ -739,10 +742,10 @@ const VeriPage = (props) => {
                 height:56,
               }}
             />
-            <Divider />
             <MultiSelect 
               hideTags
               hideSubmitButton
+              hideDropdown
               items={bounties}
               uniqueKey="tag"
               selectText="Bounty"
@@ -816,9 +819,10 @@ const styles = StyleSheet.create({
     zIndex: 0,
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginBottom: '5%'
   },
   ScrollView: {
-    marginTop: '2%',
+    marginTop: '5%',
     padding: 10,
   },
 });

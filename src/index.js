@@ -16,8 +16,9 @@ import Learn from './screens/Learn';
 import Verification from './screens/Verification'
 import Annotation from './screens/Annotation'
 import Wallet from './screens/Wallet';
-import UploadGuidelines from './screens/UploadGuidelines';
-import UploadImage from './screens/UploadImage';
+//import UploadGuidelines from './screens/UploadGuidelines';
+//import UploadImage from './screens/UploadImage';
+import Upload from './screens/Upload';
 import RomanNumberUpload from './screens/RomanNumberUpload';
 import RomanNumberStats from './screens/RomanNumberStats';
 //import Wallets from './screens/Wallets';
@@ -325,6 +326,27 @@ const StatsStack = () => (
   </Stack.Navigator>
 );
 
+const UploadStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Upload"
+      component={Upload}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+/*
 const UploadGuidelinesStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -364,6 +386,7 @@ const UploadImageStack = () => (
     />
   </Stack.Navigator>
 );
+*/
 
 const RomanNumberUploadStack = () => (
   <Stack.Navigator>
@@ -601,14 +624,12 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="UploadGuidelines"
-      component={UploadGuidelinesStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
-    />
-    <Tab.Screen
-      name="UploadImage"
-      component={UploadImageStack}
-      options={{unmountOnBlur: true, tabBarButton: () => null}}
+      name="Upload"
+      component={UploadStack}
+      options={{
+        unmountOnBlur: true, 
+        tabBarButton: (props) => <TabComponent label="Upload" {...props} />
+      }}
     />
     <Tab.Screen
       name="Verification"
@@ -619,6 +640,15 @@ const BottomTabs = () => (
         tabBarButton: (props) => (
           <TabComponent label="Verification" {...props} />
         ),
+      }}
+    />
+     <Tab.Screen
+      name="Annotation"
+      component={AnnotationStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarVisible: false,
+        tabBarButton: props => <TabComponent label="Annotation" {...props} />,
       }}
     />
     <Tab.Screen

@@ -5,8 +5,11 @@ import CheckBox from '../components/CheckBox';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import styles from '../styles/uploadguidelines';
 import {saveUsageFlag} from '../services/API/APIManager';
+import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 
-const Upload = ({navigation}) => {
+const Upload = ({navigation, ...props}) => {
+  const {isDataUsageAvailable, setDataUsageAvailable} = props;
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -61,6 +64,7 @@ const Upload = ({navigation}) => {
           </Text>
           <View style={styles.checkBoxContainer}>
             <CheckBox
+
               onChange={async (e) => {
                 if (e) {
                   const res = await saveUsageFlag({flag: 'ACCEPTED'});
@@ -69,7 +73,8 @@ const Upload = ({navigation}) => {
                     res.status &&
                     res.status.toLowerCase() === 'success'
                   ) {
-                    navigation.navigate('UploadImage');
+                    //navigation.navigate('UploadImage');
+                    setDataUsageAvailable();
                   }
                 }
               }}

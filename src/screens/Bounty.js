@@ -13,9 +13,6 @@ import {theme} from '../services/Common/theme';
 import {withTranslation} from 'react-i18next';
 import HTML from 'react-native-render-html';
 
-import MultiSelect from '../components/Multiselect'
-
-
 
 const Bounty = ({navigation, t}) => {
 

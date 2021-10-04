@@ -14,7 +14,7 @@ import {useStateValue} from './src/services/State/State';
 import ModalActivityIndicator from './src/components/ModalActivityIndicator';
 import AppAlert from './src/components/AppAlert';
 import {theme} from './src/services/Common/theme';
-import {getLanguage, getUserInfo} from './src/services/DataManager';
+import {getLanguage, getUserInfo, getDataUsageFlag, isPrivacyAndTermsAccepted} from './src/services/DataManager';
 import {store} from './src/store/store.js';
 import {getWeb3_} from './src/web3/getWeb3';
 import {Provider} from 'react-redux';
@@ -31,11 +31,31 @@ const RootNavigator = () => {
   useEffect(() => {
     checkLanguage();
     checkStatus();
+    checkDataUsageSettings();
+    checkVerifySettings();
   }, []);
 
-  const [{progressSettings, alertSettings}, dispatch] = useStateValue();
+  const [{progressSettings, alertSettings, }, dispatch] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
+
+  const checkDataUsageSettings = async () => {
+    let isDataUsageAvailable = await getDataUsageFlag();
+    dispatch({
+      type: actions.SET_DATAUSAGE,
+      dataUsageSettings: isDataUsageAvailable
+    });
+  };
+
+  const checkVerifySettings = async ()=>{
+    let verifyAvailable = await isPrivacyAndTermsAccepted();
+    console.log('aaaaaaaaaaaa', verifyAvailable);
+    dispatch({
+      type: actions.SET_VERIFYSETTING,
+      verifySettings: verifyAvailable
+    });
+
+  };
 
   const checkLanguage = async () => {
     let language = await getLanguage();

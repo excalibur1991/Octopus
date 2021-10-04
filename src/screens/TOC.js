@@ -20,10 +20,9 @@ const TOC = (props) => {
     const styles = StyleSheet.create({
         mainContainer: {
             flex: 1,
-            alignItems: 'center',
             width: '100%',
-            paddingHorizontal: '2%',
-            paddingVertical: '2%'
+            paddingHorizontal: '5%',
+            paddingVertical: '2%',
         },
         title: {
             textAlign: 'center',
@@ -104,7 +103,7 @@ const TOC = (props) => {
 
     return (
     <ScrollView 
-        style={styles.mainCotainer}
+        style={styles.mainContainer}
         showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Verify data</Text>
         <Text 
@@ -138,10 +137,11 @@ const TOC = (props) => {
                     style={{
                         flex: 1,
                         flexWrap: 'wrap',
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         paddingLeft: 0,
-                        marginLeft: 0
+                        marginLeft: 0,
+                        marginRight: 16,
                     }}
                     color='#ccc'
                     position='leading'

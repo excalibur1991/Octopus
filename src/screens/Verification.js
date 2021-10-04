@@ -1,10 +1,10 @@
-import {View,Text, Image} from 'react-native';
-import Ripple from '../components/Ripple';
-import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import React, {useEffect} from 'react';
 import {useStateValue} from '../services/State/State';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import TOC from './TOC'
 import VeriPage from './VeriPage';
+import {actions} from '../services/State/Reducer';
+
 
 import {
   getAllImages,
@@ -21,31 +21,28 @@ import {isPrivacyAndTermsAccepted, setPrivacyAndTermsAccepted} from '../services
 
 const Verification = () => {
   
-  const initScreen = async ()=>{
-    const _checked = await isPrivacyAndTermsAccepted();
-    setTOCChecked(_checked);
-  }
-
   useEffect(() => {
-    initScreen();
+ 
   }, []);
 
   //set this true cause TOC first show always
-  const [isTOCChecked, setTOCChecked] = useState(true);
-
-  const [, dispatch] = useStateValue();
+  const [{verifySettings}, dispatch] = useStateValue();
   return (
     <View style={styles.container}>
       {
-        (isTOCChecked == false) &&
+       (verifySettings == false) ? (
        <TOC 
-        isTOCChecked={isTOCChecked}
-        setTOCChecked={()=>{setTOCChecked(true)}} 
+        isTOCChecked={verifySettings}
+        setTOCChecked={()=>{
+          dispatch({
+            type: actions.SET_VERIFYSETTING,
+            dataUsageSettings: true
+          });
+        }} 
        />
-      }
-      {
-        (isTOCChecked == true) &&
+       ) : (
         <VeriPage />
+       )
       }
     </View>
   );

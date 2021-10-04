@@ -131,6 +131,21 @@ const icons = {
       color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
     />
   ),
+  Upload: (
+    <MaterialIcon
+      name="cloud-upload"
+      size={24}
+      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
+    />
+  ),
+  UploadFocused: (
+    <MaterialIcon
+      name="cloud-upload"
+      size={24}
+      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
+    />
+  ),
+
 };
 
 const Container = styled.TouchableWithoutFeedback``;

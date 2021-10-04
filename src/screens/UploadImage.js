@@ -7,7 +7,7 @@ import React, {useState} from 'react';
 import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import UploadProgress from '../components/UploadProgress';
 const CloudUpload = require('../assets/cloud_upload.png');
-import {ScrollView, Text, View, Image} from 'react-native';
+import {ScrollView, Text, View, Image, Link} from 'react-native';
 import DotNavigation from '../components/DotNavigation';
 import styles from '../styles/uploadimage';
 import {
@@ -332,7 +332,21 @@ const Upload = ({navigation}) => {
               style={styles.imageIcon}
             />
             <Text style={[styles.uploadText, styles.marginBottom3p]}>
-              Personal Information, Tutorial, Data Bounties
+             <Text
+              onPress={()=>{
+                navigation.navigate('Legal', {screen: 'ImageCategorization'});
+              }}
+             >Personal Information, </Text>
+             <Text
+             onPress={()=>{
+               navigation.navigate('About');
+             }}
+             >Tutorial, </Text>
+             <Text
+             onPress={()=>{
+               navigation.navigate('Legal', {screen: 'Bounty'});
+             }}
+             >Data Bounties</Text>
             </Text>
             <Button
               title="Upload"
