@@ -26,10 +26,12 @@ async function JoinswapExternAmountIn (
     const encodedABI = tx.encodeABI();
     let count = await web3.eth.getTransactionCount(account);
 
-      web3.eth.getBlock("latest").then(res => {console.log('gasLimit:', res.gasLimit)});
+      web3.eth.getBlock("latest").then(res => {
+        //console.log('gasLimit:', res.gasLimit)
+      });
 
-      console.log({account: account, poolAddress:poolAddress, tokenIn:tokenIn,
-         encodedABI: encodedABI,tokenAmountIn:tokenAmountIn, minPoolAmountOut:minPoolAmountOut})
+      //console.log({account: account, poolAddress:poolAddress, tokenIn:tokenIn,
+      //   encodedABI: encodedABI,tokenAmountIn:tokenAmountIn, minPoolAmountOut:minPoolAmountOut})
 
          contractInstance.handleRevert
 

@@ -35,7 +35,9 @@ async function ApproveLiquidity(
         }
       }
 
-      web3.eth.getBlock("latest").then(res => {console.log('gasLimit:', res.gasLimit)});
+      web3.eth.getBlock("latest").then(res => {
+        //console.log('gasLimit:', res.gasLimit)
+      });
 
       web3.eth.estimateGas({
         from: account,
@@ -45,7 +47,9 @@ async function ApproveLiquidity(
         'nonce': web3.utils.toHex(count),
         'data': contractInstance.methods.approve(spender, amount).encodeABI() 
     })
-    .then(res => {console.log('gasEst:', res)});
+    .then(res => {
+      //console.log('gasEst:', res)
+    });
 
     let rawTransaction = {
         "from":account,
@@ -60,7 +64,7 @@ async function ApproveLiquidity(
     transaction.sign(privateKey)
 
     let result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-    console.log({Approval: result.status})
+    //console.log({Approval: result.status})
     return result;
 }
 

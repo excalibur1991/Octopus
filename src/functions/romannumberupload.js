@@ -57,7 +57,7 @@ export const saveCanvasImage = (canvasRef = null) => {
       );
     }
   } catch (err) {
-    console.log('SaveCanvasError:' , err)
+    //console.log('SaveCanvasError:' , err)
   }
 };
 

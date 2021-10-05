@@ -20,30 +20,30 @@ export const handleSendSignedTx = async (
     transaction,
     newPKey,
   );
-  console.log({
-    signedTx: signedTx,
-    nonce: nonce,
-    tokenBal: tokenBal,
-    destination: destination,
-    PKey: newPKey,
-  });
+  //console.log({
+  //  signedTx: signedTx,
+  //  nonce: nonce,
+  //  tokenBal: tokenBal,
+  //  destination: destination,
+  //  PKey: newPKey,
+  //});
 
   web3.eth.sendSignedTransaction(
     signedTx.rawTransaction,
     function (error, hash) {
       //this.hash = hash
       if (!error) {
-        console.log(
-          '🎉 The hash of your transaction is: ',
-          hash,
-          "\n Check Alchemy's Mempool to view the status of your transaction!",
-        );
-        console.log('SignedTx: m', signedTx);
+        //console.log(
+        //  '🎉 The hash of your transaction is: ',
+        //  hash,
+        // "\n Check Alchemy's Mempool to view the status of your transaction!",
+        //);
+        //console.log('SignedTx: m', signedTx);
       } else {
-        console.log(
-          '❗Something went wrong while submitting your transaction:',
-          error,
-        );
+        //console.log(
+        //  '❗Something went wrong while submitting your transaction:',
+        //  error,
+        //);
       }
     },
   );

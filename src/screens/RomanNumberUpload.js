@@ -83,7 +83,7 @@ const Upload = ({navigation}) => {
               strokeWidth={10}
               style={{flex: 1}}
               onSketchSaved={(success, path) => {
-                console.log('onSketchSaved: ',success, path);
+                //console.log('onSketchSaved: ',success, path);
                 if (success) {
                   const uploadFile = {
                     uri: 'file://' + path,
