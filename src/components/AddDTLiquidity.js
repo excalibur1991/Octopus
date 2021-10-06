@@ -36,7 +36,7 @@ export async function getTokenBalance(poolAddress) {
     })
    
   } catch (e) {
-    console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
+    //console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
   }
   return result
 }
@@ -45,7 +45,9 @@ export async function getTokenBalance(poolAddress) {
 export async function estimateGas(account, tokenAddress) {
   const nonce = await web3.eth.getTransactionCount(account, 'latest');
   const datatoken = new web3.eth.Contract(jsonpoolABI.abi, tokenAddress)
-   web3.eth.getBlock("latest").then(res => {console.log('gasLimit:', res.gasLimit)});
+   web3.eth.getBlock("latest").then(res => {
+     //console.log('gasLimit:', res.gasLimit)
+    });
   
   web3.eth.estimateGas({
 
@@ -56,7 +58,9 @@ export async function estimateGas(account, tokenAddress) {
     'nonce': web3.utils.toHex(nonce),
     'data': datatoken.methods.approve(tokenAddress, web3.utils.toBN(2)).encodeABI(), 
 })
-.then(res => {console.log('gasEst:', res)});
+.then(res => {
+  //console.log('gasEst:', res)
+});
 
 }
 
@@ -83,7 +87,7 @@ export async function allowance(
       from: spender
     })
     const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-    console.log('spender is allowed to spend:', web3.utils.fromWei(trxReceipt) + ' tokens on behalf of owner')
+    //console.log('spender is allowed to spend:', web3.utils.fromWei(trxReceipt) + ' tokens on behalf of owner')
     
     return web3.utils.fromWei(trxReceipt)
   }
@@ -125,10 +129,10 @@ export async function allowance(
     ]
 
     const token = new web3.eth.Contract(minABI, tokenAddress, { from: account})
-    console.log('approved Tokens Contract:', token)
+    //console.log('approved Tokens Contract:', token)
     if (!force) {
       const currentAllowence = await allowance(tokenAddress, account, spender)
-      console.log('currentAllowance:', currentAllowence)
+      //console.log('currentAllowance:', currentAllowence)
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
         return null
@@ -143,7 +147,7 @@ export async function allowance(
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log('estGas:', estGas)
+        //console.log('estGas:', estGas)
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -163,7 +167,7 @@ export async function allowance(
       // console.log({approval:`: approval for ${spender}:`+ result})
       
     } catch (e) {
-     console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+     //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
     }
     return result
   }
@@ -182,9 +186,9 @@ export async function getCurrentTokens(poolAddress) {
       // result = await pool.methods.getBalance(poolAddress).call() // error: reverted
       result = await pool.methods.balanceOf(poolAddress).call() // returns a value
 
-      console.log("Pool currentTokens:", result)
+      //console.log("Pool currentTokens:", result)
     } catch (e) {
-      console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
+     // console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
     }
     return result
   }
@@ -207,7 +211,7 @@ export async function getDTAddress(poolAddress){
       if (token !== oceanAddress) 
       dtAddress = token
     }
-    console.log("DTAddress:", dtAddress)
+    //console.log("DTAddress:", dtAddress)
   return dtAddress
 }  
 
@@ -224,10 +228,10 @@ export async function getReserve(poolAddress, tokenAddress) {
     //const result = await pool.methods.getBalance(tokenAddress).call()
     const result = await pool.methods.balanceOf(tokenAddress).call()
     amount = web3.utils.fromWei(result)
-    console.log("Reserve:", amount)
+    //console.log("Reserve:", amount)
   } catch (e) {
-    console.log(`ERROR: Failed to get how many tokens \
-    are in the pool: ${e.message}`)
+    //console.log(`ERROR: Failed to get how many tokens \
+    //are in the pool: ${e.message}`)
   }
   return amount
 }
@@ -243,9 +247,12 @@ export async function getMaxAddLiquidity( poolAddress, tokenAddress) {
   const balance = await getCurrentTokens(poolAddress)
   if (parseFloat(balance) > 0) {
     maxLiq = new Decimal(balance).mul(POOL_MAX_AMOUNT_IN_LIMIT).toString()
-    console.log('Max liq that can be added:',  maxLiq)
+    //console.log('Max liq that can be added:',  maxLiq)
     return maxLiq
-  } else  console.log('Max liq that can be added:',  '0')
+  } else{
+    //console.log('Max liq that can be added:',  '0')
+  
+  } 
   return '0'
  
 
@@ -276,7 +283,7 @@ export async function getMaxAddLiquidity( poolAddress, tokenAddress) {
           web3.utils.toWei(minPoolAmountOut)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log('estGas:', estGas)
+        //console.log('estGas:', estGas)
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -294,8 +301,8 @@ export async function getMaxAddLiquidity( poolAddress, tokenAddress) {
           gasPrice: web3.utils.toHex(5000000000)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to pay tokens in order to \
-      join the pool: ${e.message}`)
+      //console.log(`ERROR: Failed to pay tokens in order to \
+      //join the pool: ${e.message}`)
     }
     return result
   }
@@ -328,10 +335,10 @@ export async function AddDTLiquidity(account, poolAddress, amount) {
     ApproveLiquidity(account, poolAddress, contracts.phecorRinkeby, amount).then(receipt => {
       if (receipt.status == true) {
         //result = receipt.hash
-        console.log({myResult: receipt})
+        //console.log({myResult: receipt})
       }
        else {
-        console.log('ERROR: DT approve failed')
+        //console.log('ERROR: DT approve failed')
          return null
       }
   })

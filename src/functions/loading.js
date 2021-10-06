@@ -76,7 +76,7 @@ export const LoginProc = async (web3) => {
       }
     }
   } catch (err) {
-    console.log('err LoginProc', err);
+    //console.log('err LoginProc', err);
   }
   return null;
 };
