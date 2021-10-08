@@ -176,6 +176,18 @@ export const uploadImage = async (data) => {
   }
 };
 
+export const uploadVideo = async (data) => {
+  try {
+    console.log('data', data);
+    const response = await postUserData(s.taxonomy.uploadVideo, data, true);
+    console.log('error uploadImage', response);
+    return response;
+  } catch (err) {
+    console.log('error uploadImage', err)
+    return null;
+  }
+};
+
 export const annotateImage = async (data) => {
   try {
     const response = await postUserData(s.taxonomy.annotateImage, data); 

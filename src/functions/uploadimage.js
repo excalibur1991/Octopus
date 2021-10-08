@@ -1,5 +1,5 @@
 import {actions} from '../services/State/Reducer';
-import {uploadImage, annotateImage} from '../services/API/APIManager';
+import {uploadImage, uploadVideo, annotateImage} from '../services/API/APIManager';
 import DocumentPicker from 'react-native-document-picker';
 
 export const onPickFile = async (
@@ -11,7 +11,7 @@ export const onPickFile = async (
 ) => {
   try {
     const pickedFiles = await DocumentPicker.pickMultiple({
-      type: [DocumentPicker.types.images],
+      type: [DocumentPicker.types.images, DocumentPicker.types.video],
     });
     if (pickedFiles && pickedFiles.length > 0) {
       const allFiles = files.slice();
@@ -126,7 +126,14 @@ export const uploadSingleFile = async (file = {}) => {
   try {
     const filedata = new FormData();
     filedata.append('file', file);
-    const result = await uploadImage(filedata);
+    let result = null;
+    if (file && file.type) {
+      if (file.type.includes("image")) {
+        result = await uploadImage(filedata);
+      } else if (file.type.includes("video")) {
+        result = await uploadVideo(filedata);
+      }
+    }
     if (result) {
       return result;
     } else {

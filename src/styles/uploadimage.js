@@ -71,6 +71,7 @@ export default StyleSheet.create({
   image: {
     height: 200,
     width: '100%',
+    borderRadius: 10,
   },
   space: {
     marginBottom: 15,
@@ -104,6 +105,15 @@ export default StyleSheet.create({
     alignSelf: 'center',
     marginBottom: '2%',
     marginRight: 5,
+    borderRadius: 10
+  },
+  uploadVideo: {
+    width: '100%',
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: '2%',
+    marginRight: 5,
+    borderRadius: 10
   },
   descriptionTextInput: {
     flex: 1,

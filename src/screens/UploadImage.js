@@ -10,6 +10,7 @@ const CloudUpload = require('../assets/cloud_upload.png');
 import {ScrollView, Text, View, Image} from 'react-native';
 import DotNavigation from '../components/DotNavigation';
 import styles from '../styles/uploadimage';
+import Video from 'react-native-video';
 import {
   onPickFile,
   handlePiiSelect,
@@ -65,12 +66,24 @@ const Upload = ({navigation}) => {
           {readOnly ? (
             <>
               <View style={styles.readOnlyContainer}>
-                <Image
-                  borderRadius={10}
-                  resizeMode="stretch"
-                  style={[styles.image, styles.space]}
-                  source={{uri: files[selectedIndex].uri}}
-                />
+              {files[selectedIndex] &&
+                files[selectedIndex].uri &&
+                files[selectedIndex].type ? (
+                  files[selectedIndex].type.includes('image') ? (
+                    <Image
+                      resizeMode="stretch"
+                      style={[styles.image, styles.space]}
+                      source={{uri: files[selectedIndex].uri}}
+                    />
+                  ) : (
+                    <Video
+                      controls
+                      resizeMode="stretch"
+                      style={[styles.image, styles.space]}
+                      source={{uri: files[selectedIndex].uri}}
+                    />
+                  )
+                ) : null}
                 <Text style={styles.textFieldHeader}>Description</Text>
                 <View style={styles.descriptionContainer}>
                   <ScrollView
@@ -195,15 +208,37 @@ const Upload = ({navigation}) => {
                   )
                 }
               />
-              <View style={styles.imageDescriptionBox}>
-                {files[selectedIndex] && files[selectedIndex].uri && (
-                  <Image
-                    borderRadius={10}
-                    resizeMode="stretch"
-                    style={styles.uploadImage}
-                    source={{uri: files[selectedIndex].uri}}
-                  />
-                )}
+              <View
+                style={[
+                  styles.imageDescriptionBox,
+                  {
+                    flexDirection:
+                      files[selectedIndex] &&
+                      files[selectedIndex].uri &&
+                      files[selectedIndex].type &&
+                      files[selectedIndex].type.includes('image')
+                        ? 'row'
+                        : 'column',
+                  },
+                ]}>
+                  {files[selectedIndex] &&
+                  files[selectedIndex].uri &&
+                  files[selectedIndex].type ? (
+                    files[selectedIndex].type.includes('image') ? (
+                      <Image
+                        resizeMode="stretch"
+                        style={styles.uploadImage}
+                        source={{uri: files[selectedIndex].uri}}
+                      />
+                    ) : files[selectedIndex].type.includes('video') ? (
+                      <Video
+                        controls
+                        resizeMode="stretch"
+                        style={styles.uploadVideo}
+                        source={{uri: files[selectedIndex].uri}}
+                      />
+                    ) : null
+                  ) : null}
                 <View style={styles.descriptionTextInput}>
                   <TextInput
                     isTextArea
