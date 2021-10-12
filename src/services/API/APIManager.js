@@ -116,13 +116,15 @@ export const userLogout = async () => {
 export const queryMetadata = async(
   page, 
   status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"]) => {
+  fields=["image_id", "tag_data", "descriptions"],
+  entityType="video") => {
 
-    const data = {page: page, status: status, fields: fields}
+    const data = {page: page, status: status, fields: fields, 'entity-type': entityType}
 
     try {
       const response = await postUserData(s.metadata.queryMetadata, data);
       return response;
+      // return {"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"UriYPTGhmj","tag_data":[]}]}
     } catch (err) {
       return null;
     }
