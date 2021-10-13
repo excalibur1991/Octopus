@@ -49,7 +49,8 @@ export const styles = StyleSheet.create({
       backgroundColor: '#ffffff',
       borderRadius: 8,
       borderColor: '#DADADA',
-      borderWidth: 1
+      borderWidth: 1,
+      height: 200
     },
     imageContainer: {
       width: '100%',
@@ -107,7 +108,7 @@ export const styles = StyleSheet.create({
       marginTop: 10,
     },
     colorPicker:  {
-      height: 200,
+      height: 300,
       marginVertical: 10,
     },
 });

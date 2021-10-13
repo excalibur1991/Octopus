@@ -1,4 +1,10 @@
-import {getData, getFile, postData, getUserData, postUserData} from './CoreAPICalls';
+import {
+  getData,
+  getFile,
+  postData,
+  getUserData,
+  postUserData,
+} from './CoreAPICalls';
 import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
@@ -12,7 +18,11 @@ export const getAllImages = async () => {
 
 export const getOverall = async (start, end) => {
   try {
-    const response = await getData(s.taxonomy.overall.replace('$[start_date]', start).replace('$[end_date]', end));
+    const response = await getData(
+      s.taxonomy.overall
+        .replace('$[start_date]', start)
+        .replace('$[end_date]', end),
+    );
     return response;
   } catch (err) {
     return null;
@@ -21,14 +31,18 @@ export const getOverall = async (start, end) => {
 
 export const getUserStats = async (start, end) => {
   try {
-    const response = await getUserData(s.taxonomy.userStats.replace('$[start_date]', start).replace('$[end_date]', end));
+    const response = await getUserData(
+      s.taxonomy.userStats
+        .replace('$[start_date]', start)
+        .replace('$[end_date]', end),
+    );
     return response;
   } catch (err) {
     return null;
   }
 };
 
-export const getImage = async imageId => {
+export const getImage = async (imageId) => {
   try {
     const response = await getFile(
       s.taxonomy.getImage.replace('$[image_id]', imageId),
@@ -39,7 +53,7 @@ export const getImage = async imageId => {
   }
 };
 
-export const getLabelImage = async label => {
+export const getLabelImage = async (label) => {
   try {
     const response = await getFile(
       s.taxonomy.getLabelImage.replace('$[label_id]', label),
@@ -50,7 +64,7 @@ export const getLabelImage = async label => {
   }
 };
 
-export const storeUserResponse = async data => {
+export const storeUserResponse = async (data) => {
   try {
     const response = await postUserData(s.taxonomy.storeUserResponse, data);
     return response;
@@ -64,10 +78,10 @@ export const userLogin = async (public_address, signature) => {
     let data = {public_address: public_address, signature: signature};
     const response = await postData(s.auth.login, data);
     return response;
-  } catch(err) {
+  } catch (err) {
     return null;
   }
-}
+};
 
 export const userRegister = async (public_address) => {
   try {
@@ -78,7 +92,7 @@ export const userRegister = async (public_address) => {
     console.log(err);
     return null;
   }
-}
+};
 
 export const userLogout = async () => {
   try {
@@ -87,16 +101,7 @@ export const userLogout = async () => {
   } catch (err) {
     return null;
   }
-}
-
-export const getNounce = async (public_address)=> {
-  try {
-    const response = await getData(s.auth.get_nounce.replace('$[public_address]', public_address));
-    return response;
-  } catch (err) {
-    return null;
-  }
-}
+};
 
 /**
  * Verification APIs
@@ -114,15 +119,15 @@ export const getNounce = async (public_address)=> {
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
 export const queryMetadata = async(data) => {
 
-    //const data = {page: page, status: status, fields: fields, type: type};
-    //check if tags empty, then what result?
-    
-    try {
-      const response = await postUserData(s.metadata.queryMetadata, data);
-      return response;
-    } catch (err) {
-      return null;
-    }
+  //const data = {page: page, status: status, fields: fields, type: type};
+  //check if tags empty, then what result?
+  
+  try {
+    const response = await postUserData(s.metadata.queryMetadata, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
 }
 
 export const getImageById = async(imageId) => {
@@ -133,8 +138,18 @@ export const getImageById = async(imageId) => {
     return response;
   } catch (err) {
     return null;
+  }}
+
+export const getNounce = async (public_address) => {
+  try {
+    const response = await getData(
+      s.auth.get_nounce.replace('$[public_address]', public_address),
+    );
+    return response;
+  } catch (err) {
+    return null;
   }
-}
+};
 
 /**
 * {annotation: {tags: [], description: ""}
@@ -149,7 +164,7 @@ export const verifyImage = async(image_id, annotation, verification) => {
   } catch (err) {
     return null;
   }
-}
+};
 
 
 /**
@@ -246,3 +261,29 @@ export const queryAnnotation =async(data) => {
     return null;
   }
 }
+export const getUsageFlag = async()=>{
+  try {
+    const response = await getUserData(s.auth.usageFlag);
+    return response;
+  } catch(err) {
+    return null;
+  }
+}
+
+export const saveUsageFlag = async(data)=>{
+  try {
+    const response = await postUserData(s.auth.usageFlag, data);
+    return response;
+  } catch(err) {
+    return null;
+  }
+}
+
+export const getRomanNumberStats = async () => {
+  try {
+    const response = await getUserData(s.taxonomy.getRomanNumberStats);
+    return response;
+  } catch(err) {
+    return null;
+  }
+};

@@ -1,870 +1,128 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
+import CheckBox from './CheckBox';
 import {
-  Text,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  FlatList,
-  UIManager,
-  ViewProps,
-  ViewPropTypes,
-  CheckBox,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import reject from 'lodash/reject';
-import find from 'lodash/find';
-import get from 'lodash/get';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  renderers,
+} from 'react-native-popup-menu';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import {theme} from '../services/Common/theme';
 
-
-// set UIManager LayoutAnimationEnabledExperimental
-if (UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
-const colorPack = {
-    primary: '#00A5FF',
-    primaryDark: '#215191',
-    light: '#FFF',
-    textPrimary: '#525966',
-    placeholderTextColor: '#A9A9A9',
-    danger: '#C62828',
-    borderColor: '#e9e9e9',
-    backgroundColor: '#b1b1b1',
-  };
-  
-const defaultSearchIcon = (
-  <Icon
-    name="magnify"
-    size={20}
-    color={colorPack.placeholderTextColor}
-    style={{ marginRight: 10 }}
-  />
-);
-
-export default class MultiSelect extends Component {
-  static propTypes = {
-    single: PropTypes.bool,
-    selectedItems: PropTypes.array,
-    items: PropTypes.array.isRequired,
-    uniqueKey: PropTypes.string,
-    tagBorderColor: PropTypes.string,
-    tagTextColor: PropTypes.string,
-    tagContainerStyle: ViewPropTypes.style,
-    fontFamily: PropTypes.string,
-    tagRemoveIconColor: PropTypes.string,
-    onSelectedItemsChange: PropTypes.func.isRequired,
-    selectedItemFontFamily: PropTypes.string,
-    selectedItemTextColor: PropTypes.string,
-    itemFontFamily: PropTypes.string,
-    itemTextColor: PropTypes.string,
-    itemFontSize: PropTypes.number,
-    selectedItemIconColor: PropTypes.string,
-    searchInputPlaceholderText: PropTypes.string,
-    searchInputStyle: PropTypes.object,
-    selectText: PropTypes.string,
-    styleDropdownMenu: ViewPropTypes.style,
-    styleDropdownMenuSubsection: ViewPropTypes.style,
-    styleInputGroup: ViewPropTypes.style,
-    styleItemsContainer: ViewPropTypes.style,
-    styleListContainer: ViewPropTypes.style,
-    styleMainWrapper: ViewPropTypes.style,
-    styleRowList: ViewPropTypes.style,
-    styleSelectorContainer: ViewPropTypes.style,
-    styleTextDropdown: Text.propTypes.style,
-    styleTextDropdownSelected: Text.propTypes.style,
-    styleTextTag: Text.propTypes.style,
-    altFontFamily: PropTypes.string,
-    hideSubmitButton: PropTypes.bool,
-    hideDropdown: PropTypes.bool,
-    submitButtonColor: PropTypes.string,
-    submitButtonText: PropTypes.string,
-    textColor: PropTypes.string,
-    fontSize: PropTypes.number,
-    fixedHeight: PropTypes.bool,
-    hideTags: PropTypes.bool,
-    canAddItems: PropTypes.bool,
-    onAddItem: PropTypes.func,
-    onChangeInput: PropTypes.func,
-    displayKey: PropTypes.string,
-    textInputProps: PropTypes.object,
-    flatListProps: PropTypes.object,
-    filterMethod: PropTypes.string,
-    onClearSelector: PropTypes.func,
-    onToggleList: PropTypes.func,
-    removeSelected: PropTypes.bool
-  };
-
-  static defaultProps = {
-    single: false,
-    selectedItems: [],
-    uniqueKey: '_id',
-    tagBorderColor: colorPack.primary,
-    tagTextColor: colorPack.primary,
-    fontFamily: '',
-    tagRemoveIconColor: colorPack.danger,
-    selectedItemFontFamily: '',
-    selectedItemTextColor: colorPack.primary,
-    itemFontFamily: '',
-    itemTextColor: colorPack.textPrimary,
-    itemFontSize: 16,
-    selectedItemIconColor: colorPack.primary,
-    searchInputPlaceholderText: 'Search',
-    searchInputStyle: { color: colorPack.textPrimary },
-    textColor: colorPack.textPrimary,
-    selectText: 'Select',
-    altFontFamily: '',
-    hideSubmitButton: false,
-    submitButtonColor: '#CCC',
-    submitButtonText: 'Submit',
-    fontSize: 14,
-    fixedHeight: false,
-    hideTags: false,
-    hideDropdown: false,
-    onChangeInput: () => {},
-    displayKey: 'name',
-    canAddItems: false,
-    onAddItem: () => {},
-    onClearSelector: () => {},
-    onToggleList: () => {},
-    removeSelected: false
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      selector: false,
-      searchTerm: ''
-    };
-  }
-
-  shouldComponentUpdate() {
-    // console.log('Component Updating: ', nextProps.selectedItems);
-    return true;
-  }
-
-  getSelectedItemsExt = optionalSelctedItems => (
-    <View
-      style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-      }}
-    >
-      {this._displaySelectedItems(optionalSelctedItems)}
-    </View>
-  );
-
-  _onChangeInput = value => {
-    const { onChangeInput } = this.props;
-    if (onChangeInput) {
-      onChangeInput(value);
-    }
-    this.setState({ searchTerm: value });
-  };
-
-  _getSelectLabel = () => {
-    const { selectText, single, selectedItems, displayKey } = this.props;
-    if (!selectedItems || selectedItems.length === 0) {
-      return selectText;
-    }
-    if (single) {
-      const item = selectedItems[0];
-      const foundItem = this._findItem(item);
-      return get(foundItem, displayKey) || selectText;
-    }
-    return `${selectText} (${selectedItems.length} selected)`;
-  };
-
-  _findItem = itemKey => {
-    const { items, uniqueKey } = this.props;
-    return find(items, singleItem => singleItem[uniqueKey] === itemKey) || {};
-  };
-
-  _displaySelectedItems = optionalSelectedItems => {
-    const {
-      fontFamily,
-      tagContainerStyle,
-      tagRemoveIconColor,
-      tagBorderColor,
-      uniqueKey,
-      tagTextColor,
-      selectedItems,
-      displayKey,
-      styleTextTag
-    } = this.props;
-    const actualSelectedItems = optionalSelectedItems || selectedItems;
-    return actualSelectedItems.map(singleSelectedItem => {
-      const item = this._findItem(singleSelectedItem);
-      if (!item[displayKey]) return null;
-      return (
-        <View
-          style={[
-            styles.selectedItem,
-            {
-              width: item[displayKey].length * 8 + 60,
-              justifyContent: 'center',
-              height: 40,
-              borderColor: tagBorderColor
-            },
-            tagContainerStyle || {}
-          ]}
-          key={item[uniqueKey]}
-        >
-          <Text
-            style={[
-              {
-                flex: 1,
-                color: tagTextColor,
-                fontSize: 15
-              },
-              styleTextTag && styleTextTag,
-              fontFamily ? { fontFamily } : {}
-            ]}
-            numberOfLines={1}
-          >
-            {item[displayKey]}
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              this._removeItem(item);
-            }}
-          >
-            <Icon
-              name="close-circle"
-              style={{
-                color: tagRemoveIconColor,
-                fontSize: 22,
-                marginLeft: 10
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    });
-  };
-
-  _removeItem = item => {
-    const { uniqueKey, selectedItems, onSelectedItemsChange } = this.props;
-    const newItems = reject(
-      selectedItems,
-      singleItem => item[uniqueKey] === singleItem
-    );
-    // broadcast new selected items state to parent component
-    onSelectedItemsChange(newItems);
-  };
-
-  _removeAllItems = () => {
-    const { onSelectedItemsChange } = this.props;
-    // broadcast new selected items state to parent component
-    onSelectedItemsChange([]);
-  };
-
-  _clearSelector = () => {
-    this.setState({
-      selector: false
-    });
-  };
-
-  _clearSelectorCallback = () => {
-    const { onClearSelector } = this.props;
-    this._clearSelector();
-    if (onClearSelector) {
-      onClearSelector();
-    }
-  };
-
-  _toggleSelector = () => {
-    const { onToggleList } = this.props;
-    this.setState({
-      selector: !this.state.selector
-    });
-    if (onToggleList) {
-      onToggleList();
-    }
-  };
-
-  _clearSearchTerm = () => {
-    this.setState({
-      searchTerm: ''
-    });
-  };
-
-  _submitSelection = () => {
-    this._toggleSelector();
-    // reset searchTerm
-    this._clearSearchTerm();
-  };
-
-  _itemSelected = item => {
-    const { uniqueKey, selectedItems } = this.props;
-    return selectedItems.indexOf(item[uniqueKey]) !== -1;
-  };
-
-  _addItem = () => {
-    const {
-      uniqueKey,
-      items,
-      selectedItems,
-      onSelectedItemsChange,
-      onAddItem
-    } = this.props;
-    let newItems = [];
-    let newSelectedItems = [];
-    const newItemName = this.state.searchTerm;
-    if (newItemName) {
-      const newItemId = newItemName
-        .split(' ')
-        .filter(word => word.length)
-        .join('-');
-      newItems = [...items, { [uniqueKey]: newItemId, name: newItemName }];
-      newSelectedItems = [...selectedItems, newItemId];
-      onAddItem(newItems);
-      onSelectedItemsChange(newSelectedItems);
-      this._clearSearchTerm();
-    }
-  };
-
-  _toggleItem = item => {
-    const {
-      single,
-      uniqueKey,
-      selectedItems,
-      onSelectedItemsChange
-    } = this.props;
-    if (single) {
-      this._submitSelection();
-      onSelectedItemsChange([item[uniqueKey]]);
-    } else {
-      const status = this._itemSelected(item);
-      let newItems = [];
-      if (status) {
-        newItems = reject(
-          selectedItems,
-          singleItem => item[uniqueKey] === singleItem
-        );
-      } else {
-        newItems = [...selectedItems, item[uniqueKey]];
-      }
-      // broadcast new selected items state to parent component
-      onSelectedItemsChange(newItems);
-    }
-  };
-
-  _itemStyle = item => {
-    const {
-      selectedItemFontFamily,
-      selectedItemTextColor,
-      itemFontFamily,
-      itemTextColor,
-      itemFontSize
-    } = this.props;
-    const isSelected = this._itemSelected(item);
-    const fontFamily = {};
-    if (isSelected && selectedItemFontFamily) {
-      fontFamily.fontFamily = selectedItemFontFamily;
-    } else if (!isSelected && itemFontFamily) {
-      fontFamily.fontFamily = itemFontFamily;
-    }
-    const color = isSelected
-      ? { color: selectedItemTextColor }
-      : { color: itemTextColor };
-    return {
-      ...fontFamily,
-      ...color,
-      fontSize: itemFontSize
-    };
-  };
-
-  _getRow = item => {
-    const { selectedItemIconColor, displayKey, styleRowList } = this.props;
-    return (
-      <TouchableOpacity
-        disabled={item.disabled}
-        onPress={() => this._toggleItem(item)}
-        style={[
-          styleRowList && styleRowList,
-          { paddingLeft: 20, paddingRight: 20 }
-        ]}
-      >
-        <View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {this._itemSelected(item) ? (
-              <Icon
-                name="check"
-                style={{
-                  fontSize: 20,
-                  borderWidth: 1,
-                  borderRadius:4,
-                  borderColor:'#DADADA', 
-                  color: selectedItemIconColor
-                }}
-              />
-            ) : (
-                <Icon
-                name="check"
-                style={{
-                  fontSize: 20,
-                  borderWidth: 1,
-                  borderRadius:4,
-                  borderColor:'#DADADA', 
-                  color: '#fff'
-                }}
-              />
-            )}
-            <Text
-              style={[
-                {
-                  flex: 1,
-                  fontSize: 16,
-                  paddingTop: 5,
-                  paddingLeft: 20,
-                  paddingBottom: 5
-                },
-                this._itemStyle(item),
-                item.disabled ? { color: 'grey' } : {}
-              ]}
-            >
-              {item[displayKey]}
+const MultiSelect = ({
+  placeholder = '',
+  options = [],
+  selectedIndices = [],
+  onSelect = () => {},
+  textColor = theme.APP_COLOR,
+}) => {
+  return (
+    <Menu renderer={renderers.ContextMenu}>
+      <MenuTrigger
+        customStyles={{
+          triggerOuterWrapper: {
+            ...styles.container,
+            overflow: 'hidden',
+          },
+        }}>
+        <View style={styles.box}>
+          {selectedIndices && selectedIndices.length > 0 ? (
+            <View style={styles.valueContainer}>
+              <CheckBox isChecked={true} />
+              <Text
+                style={[styles.valueText, {color: textColor}]}
+                numberOfLines={1}>
+                {options &&
+                  options.length > 0 &&
+                  options
+                    .filter((option, index) => selectedIndices.includes(index))
+                    .join(', ')}
+              </Text>
+            </View>
+          ) : (
+            <Text style={[styles.placeholderText, {color: textColor}]}>
+              {placeholder}
             </Text>
-
-          </View>
+          )}
+          <EntypoIcon
+            size={20}
+            color="#A2A2A2"
+            style={styles.icon}
+            name="chevron-down"
+          />
         </View>
-      </TouchableOpacity>
-    );
-  };
-
-  _getRowNew = item => (
-    <TouchableOpacity
-      disabled={item.disabled}
-      onPress={() => this._addItem(item)}
-      style={{ paddingLeft: 20, paddingRight: 20 }}
-    >
-      <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text
-            style={[
-              {
-                flex: 1,
-                fontSize: 16,
-                paddingTop: 5,
-                paddingBottom: 5
-              },
-              this._itemStyle(item),
-              item.disabled ? { color: 'grey' } : {}
-            ]}
-          >
-            Add {item.name} (tap or press return)
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
-  _filterItems = searchTerm => {
-    switch (this.props.filterMethod) {
-      case 'full':
-        return this._filterItemsFull(searchTerm);
-      default:
-        return this._filterItemsPartial(searchTerm);
-    }
-  };
-
-  _filterItemsPartial = searchTerm => {
-    const { items, displayKey } = this.props;
-    const filteredItems = [];
-    items.forEach(item => {
-      const parts = searchTerm.trim().split(/[ \-:]+/);
-      const regex = new RegExp(`(${parts.join('|')})`, 'ig');
-      if (regex.test(get(item, displayKey))) {
-        filteredItems.push(item);
-      }
-    });
-    return filteredItems;
-  };
-
-  _filterItemsFull = searchTerm => {
-    const { items, displayKey } = this.props;
-    const filteredItems = [];
-    items.forEach(item => {
-      if (
-        item[displayKey]
-          .toLowerCase()
-          .indexOf(searchTerm.trim().toLowerCase()) >= 0
-      ) {
-        filteredItems.push(item);
-      }
-    });
-    return filteredItems;
-  };
-
-  _renderItems = () => {
-    const {
-      canAddItems,
-      items,
-      fontFamily,
-      uniqueKey,
-      selectedItems,
-      flatListProps,
-      styleListContainer,
-      removeSelected
-    } = this.props;
-    const { searchTerm } = this.state;
-    let component = null;
-    // If searchTerm matches an item in the list, we should not add a new
-    // element to the list.
-    let searchTermMatch;
-    let itemList;
-    let addItemRow;
-    let renderItems = searchTerm ? this._filterItems(searchTerm) : items;
-    // Filtering already selected items
-    if (removeSelected) {
-      renderItems = renderItems.filter(
-        item => !selectedItems.includes(item[uniqueKey])
-      );
-    }
-    if (renderItems.length) {
-      itemList = (
-        <FlatList
-          data={renderItems}
-          extraData={selectedItems}
-          keyExtractor={item => item[uniqueKey]}
-          listKey={item => item[uniqueKey]}
-          renderItem={rowData => this._getRow(rowData.item)}
-          {...flatListProps}
-          nestedScrollEnabled
-        />
-      );
-      searchTermMatch = renderItems.filter(item => item.name === searchTerm)
-        .length;
-    } else if (!canAddItems) {
-      itemList = (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text
-            style={[
-              {
-                flex: 1,
-                marginTop: 20,
-                textAlign: 'center',
-                color: colorPack.danger
-              },
-              fontFamily ? { fontFamily } : {}
-            ]}
-          >
-            No item to display.
-          </Text>
-        </View>
-      );
-    }
-
-    if (canAddItems && !searchTermMatch && searchTerm.length) {
-      addItemRow = this._getRowNew({ name: searchTerm });
-    }
-    component = (
-      <View style={styleListContainer && styleListContainer}>
-        {itemList}
-        {addItemRow}
-      </View>
-    );
-    return component;
-  };
-
-  render() {
-    const {
-      selectedItems,
-      single,
-      fontFamily,
-      altFontFamily,
-      searchInputPlaceholderText,
-      searchInputStyle,
-      styleDropdownMenu,
-      styleDropdownMenuSubsection,
-      hideSubmitButton,
-      hideDropdown,
-      submitButtonColor,
-      submitButtonText,
-      fontSize,
-      textColor,
-      fixedHeight,
-      hideTags,
-      textInputProps,
-      styleMainWrapper,
-      styleInputGroup,
-      styleItemsContainer,
-      styleSelectorContainer,
-      styleTextDropdown,
-      styleTextDropdownSelected,
-    } = this.props;
-    const { searchTerm, selector } = this.state;
-    return (
-      <View
-        style={[
-          {
-            flexDirection: 'column'
-          } &&
-            styleMainWrapper &&
-            styleMainWrapper
-        ]}
-      >
-        {selector ? (
-          <View
-            style={[
-              styles.selectorView(fixedHeight),
-              styleSelectorContainer && styleSelectorContainer
-            ]}
-          >
-          <TouchableOpacity onPress={this._submitSelection}>
-
-            <View
-              style={[styles.inputGroup, styleInputGroup && styleInputGroup]}
-            >
-                <Text
-                      style={
-                        !selectedItems || selectedItems.length === 0
-                          ? [
-                              {
-                                flex: 1,
-                                fontSize: fontSize || 16,
-                                color:
-                                  textColor || colorPack.placeholderTextColor
-                              },
-                              styleTextDropdown && styleTextDropdown,
-                              altFontFamily
-                                ? { fontFamily: altFontFamily }
-                                : fontFamily
-                                ? { fontFamily }
-                                : {}
-                            ]
-                          : [
-                              {
-                                flex: 1,
-                                fontSize: fontSize || 16,
-                                color:
-                                  textColor || colorPack.placeholderTextColor
-                              },
-                              styleTextDropdownSelected &&
-                                styleTextDropdownSelected
-                            ]
-                      }
-                      numberOfLines={1}
-                    >
-                      {this._getSelectLabel()}
-                    </Text>
-              
-              {hideSubmitButton && (
-                  <Icon
-                    name="chevron-down"
-                    style={[
-                      styles.indicator,
-                      { paddingLeft: 15, paddingRight: 15 }
-                    ]}
-                  />
-              )}
-              {!hideDropdown && (
-                <Icon
-                  name="arrow-left"
-                  size={20}
-                  onPress={this._clearSelectorCallback}
-                  color={colorPack.placeholderTextColor}
-                  style={{ marginLeft: 5 }}
+      </MenuTrigger>
+      <MenuOptions
+        customStyles={{
+          optionsContainer: {
+            width: '85%',
+            borderWidth: 1,
+            borderColor: 'lightgray',
+            borderRadius: 10,
+          },
+        }}>
+        {options &&
+          options.length > 0 &&
+          options.map((item, index) => (
+            <MenuOption
+              disableTouchable={true}
+              onSelect={() => onSelect(index)}>
+              <View style={styles.option}>
+                <CheckBox
+                  title={item}
+                  textColor={
+                    selectedIndices.includes(index) ? textColor : '#8C98A9'
+                  }
+                  fontSize={14}
+                  onChange={() => onSelect(index)}
+                  isChecked={selectedIndices.includes(index)}
                 />
-              )}
-            </View>
-            </TouchableOpacity>
-            <View
-              style={{
-                flexDirection: 'column',
-                backgroundColor: '#fafafa'
-              }}
-            >
-              <View style={styleItemsContainer && styleItemsContainer}>
-                {this._renderItems()}
               </View>
-              {!single && !hideSubmitButton && (
-                <TouchableOpacity
-                  onPress={() => this._submitSelection()}
-                  style={[
-                    styles.button,
-                    { backgroundColor: submitButtonColor }
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      fontFamily ? { fontFamily } : {}
-                    ]}
-                  >
-                    {submitButtonText}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        ) : (
-          <View>
-            <View
-              style={[
-                styles.dropdownView,
-                styleDropdownMenu && styleDropdownMenu
-              ]}
-            >
-              <View
-                style={[
-                  styles.subSection,
-                  { paddingTop: 10, paddingBottom: 10 },
-                  styleDropdownMenuSubsection && styleDropdownMenuSubsection
-                ]}
-              >
-                <TouchableWithoutFeedback onPress={this._toggleSelector}>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text
-                      style={
-                        !selectedItems || selectedItems.length === 0
-                          ? [
-                              {
-                                flex: 1,
-                                fontSize: fontSize || 16,
-                                color:
-                                  textColor || colorPack.placeholderTextColor
-                              },
-                              styleTextDropdown && styleTextDropdown,
-                              altFontFamily
-                                ? { fontFamily: altFontFamily }
-                                : fontFamily
-                                ? { fontFamily }
-                                : {}
-                            ]
-                          : [
-                              {
-                                flex: 1,
-                                fontSize: fontSize || 16,
-                                color:
-                                  textColor || colorPack.placeholderTextColor
-                              },
-                              styleTextDropdownSelected &&
-                                styleTextDropdownSelected
-                            ]
-                      }
-                      numberOfLines={1}
-                    >
-                      {this._getSelectLabel()}
-                    </Text>
-                    <Icon
-                      name={hideSubmitButton ? 'chevron-right' : 'chevron-down'}
-                      style={styles.indicator}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            </View>
-            {!single && !hideTags && selectedItems.length ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap'
-                }}
-              >
-                {this._displaySelectedItems()}
-              </View>
-            ) : null}
-          </View>
-        )}
-      </View>
-    );
-  }
-}
+            </MenuOption>
+          ))}
+      </MenuOptions>
+    </Menu>
+  );
+};
 
-  const styles = {
-    footerWrapper: {
-      flexWrap: 'wrap',
-      alignItems: 'flex-start',
-      flexDirection: 'row',
-    },
-    footerWrapperNC: {
-      width: 320,
-      flexDirection: 'column',
-    },
-    subSection: {
-      backgroundColor: colorPack.light,
-      borderWidth: 1,
-      borderRadius:5,
-      borderColor: colorPack.borderColor,
-      paddingLeft: 10,
-      paddingRight: 20,
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    greyButton: {
-      height: 40,
-      borderRadius: 5,
-      elevation: 0,
-      backgroundColor: colorPack.backgroundColor,
-    },
-    indicator: {
-      fontSize: 30,
-      color: colorPack.placeholderTextColor,
-      marginRight: 0,
-    },
-    selectedItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingLeft: 15,
-      paddingTop: 3,
-      paddingRight: 3,
-      paddingBottom: 3,
-      margin: 3,
-      borderRadius: 20,
-      borderWidth: 2,
-    },
-    button: {
-      height: 40,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    buttonText: {
-      color: colorPack.light,
-      fontSize: 14,
-    },
-    selectorView: (fixedHeight) => {
-      const style = {
-        flexDirection: 'column',
-        marginBottom: 10,
-        elevation: 2,
-      };
-      if (fixedHeight) {
-        style.height = 250;
-      }
-      return style;
-    },
-    inputGroup: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingLeft: 10,
-      height: 53,
-      backgroundColor: colorPack.light,
-      borderColor: colorPack.borderColor,
-      borderRadius: 5,
-      borderWidth: 1
-    },
-    dropdownView: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      height: 56,
-      marginBottom: 10,
-    },
-  };
-  
-  const nodeTypes = PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.object,
-    PropTypes.bool,
-    PropTypes.func
-  ]);
+export default MultiSelect;
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#DADADA',
+  },
+  box: {
+    paddingVertical: 13,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+  },
+  option: {
+    paddingVertical: 5,
+    paddingHorizontal: 3,
+  },
+  placeholderText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#A2A2A2',
+    fontFamily: 'Inter-Regular',
+  },
+  icon: {
+    alignSelf: 'flex-end',
+  },
+  valueText: {
+    flex: 1,
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+  },
+  valueContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});

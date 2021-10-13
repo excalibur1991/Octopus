@@ -1,3 +1,5 @@
+
+import {Dimensions} from 'react-native';
 import {actions} from '../services/State/Reducer';
 import {
     queryMetadata,
@@ -35,6 +37,14 @@ import { TextPropTypes } from 'react-native';
     props.setAnnoRect([]);
     props.setAnnoDot([]);
     props.setSelectedBounties([]);
+    props.setTempAnnoRect({rects:[]});
+    props.setCurRectIndex(-1);
+    props.setIsInEdit(false);
+    props.setIsAnonymization(false);
+    props.setAge('');
+    props.setGender([]);
+    props.setSkinColor(null);
+    props.setEyeDrop(false);
 
     if (props.zoomView){
         props.zoomView.reset();
@@ -134,18 +144,93 @@ import { TextPropTypes } from 'react-native';
   
   //bounty selection handler
   export const handleBountySelection = (props, items)=>{
-    props.annotationTags.map((value,index)=>{
-      value.checked = false;
-    });
+    if(props.isInEdit){
+      props.dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error',
+          message:
+            'Please save current change first.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },});
+        return;
+    }
+
     props.setSelectedBounties(items);
     props.setEyeDrop(false);
     if(items.length > 0){
       props.setCurTag(items[0]);
+      tagChanges(props, items[0]);
     }
     else {
       props.setCurTag('');
+      tagChanges(props, '');
     }
   };
+
+  export const tagChanges = (props, _curTag)=>{
+    if(_curTag && _curTag.toLocaleLowerCase().indexOf('anonymization') != -1){
+      props.setIsAnonymization(true);
+    }else{
+      props.setIsAnonymization(false);
+    }
+
+    //annotation
+    let _annotationTags = [...props.annotationTags];
+    _annotationTags.map((value,index)=>{
+      if(value.tag == _curTag){
+        _annotationTags[index].checked = true;
+      }else{
+        _annotationTags[index].checked = false;
+      }
+    });
+    props.setAnnotationTags(_annotationTags);
+    //selectedBounties
+    let bounty_found = false;
+    props.bounties.map((value, index)=>{
+      if(value.tag == _curTag){
+        bounty_found = true;
+      }
+    })
+    if(bounty_found){
+      props.setSelectedBounties([_curTag]);
+    }else{
+      props.setSelectedBounties([]);
+    }
+  }
+
+  //save tempChange
+  export const saveChange = (props)=>{
+    let _annoRect = [...props.annoRect];
+    if(props.curRectIndex != -1) {
+      //modify
+      if(props.tempAnnoRect.rects.length > 0){
+        _annoRect[props.curRectIndex] = props.tempAnnoRect;
+      }else{
+        //deletion
+        _annoRect.splice(props.curRectIndex, 1);
+      }
+    }
+    else{
+      if(props.tempAnnoRect.rects.length > 0){
+        _annoRect.push(props.tempAnnoRect);
+      }
+    }
+    props.setAnnoRect(_annoRect);
+    props.setTempAnnoRect({rects:[]});
+    props.setCurRectIndex(-1);
+    props.setIsInEdit(false);
+    props.setEyeDrop(false);
+
+    props.setIsAnonymization(false);
+    let currentTag = props.curTag;
+    props.setCurTag(currentTag);
+    tagChanges(props, currentTag);
+
+  }
   
   // save annotation handler
   export const saveAnnotation = async (props)=>{
@@ -161,8 +246,6 @@ import { TextPropTypes } from 'react-native';
     const originalImageWidth = props.zoomView.props.imageWidth;
     const originalImageHeight = props.zoomView.props.imageHeight;
     const optBlocks = optimizeBlocks(props.annoRect);
-    console.log(optBlocks);
-
     var _rects = [];
     //props.annoRect.map((value)=>{
     optBlocks.map((value)=>{  
@@ -221,8 +304,15 @@ import { TextPropTypes } from 'react-native';
   
   export const find_dimesions = (props, layout)=> {
     const {x, y, width, height} = layout;
-    props.setFrameDimension({width: width, height: height});
-    props.setImageDimension({width:width, height: height});
+    props.setFrameDimension({width: width, height: Dimensions.get('window').height * 0.5});
+    //props.setImageDimension({width:width, height: height});
+    
+    /*console.log(width, Dimensions.get('window').height * 0.5);
+    props.setFrameDimension({
+      width: width,
+      height: Dimensions.get('window').height * 0.3
+
+    });*/
   };
 
 
@@ -251,6 +341,24 @@ import { TextPropTypes } from 'react-native';
     props.setRectScale(position.scale);
   };
 
+  export const handleCentering = (props, imageWidth, imageHeight, cropWidth, cropHeight, rectScale)=>{
+    const originalImageWidth = imageWidth;
+    const originalImageHeight = imageHeight;
+    const scaledImageWidth = originalImageWidth * rectScale;
+    const scaledImageHeight = originalImageHeight * rectScale;
+    const scaledCropWidth = cropWidth; // rectScale;
+    const scaledCropHeight = cropHeight; // rectScale;
+
+    const originX = (scaledImageWidth - scaledCropWidth) / 2;
+    const originY = (scaledImageHeight - scaledCropHeight) / 2;
+
+    const cropPosX = originX;
+    const cropPosY = originY;
+    
+    props.setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
+    props.setRectScale(1.0);
+  }
+
   
   export const intersect = (x,y,width, height, ptX,ptY)=>{
     if((ptX >= x && ptX <= (x + width)) 
@@ -272,8 +380,6 @@ import { TextPropTypes } from 'react-native';
   };
 
   export const handleOnClick = (props, position)=>{
-    if(props.curTag == "") return;
-
     var found = false;
     var _rect = [];
     const origLocX = Math.floor(position.locationX);
@@ -286,15 +392,42 @@ import { TextPropTypes } from 'react-native';
     const blockX = props.cropPosition.x + Math.floor((origLocX-props.cropPosition.x) / _rectWidth) * _rectWidth;
     const blockY = props.cropPosition.y + Math.floor((origLocY-props.cropPosition.y) / _rectHeight) * _rectHeight;
 
+    if(props.isInEdit == false){
+      if(props.curTag != ""){
+        props.setIsInEdit(true);
+      }
+      //check if user select prev bounding box
+      var selected = false;
+      var selected_index = -1;
+      props.annoRect.map((data, data_index)=>{
+        data.rects.map((rect, index)=>{
+          if(intersect(rect.x, rect.y, rect.width, rect.height, _rectX, _rectY)){
+            selected = true;
+            selected_index = data_index;
+          }
+        });
+      });
+      if(selected){
+        let _tempAnnoRect = {...props.annoRect[selected_index]};
+        props.setIsInEdit(true);
+        props.setTempAnnoRect(_tempAnnoRect);
+        props.setCurRectIndex(selected_index);
+        props.setCurTag(_tempAnnoRect.tag);
+        tagChanges(props, _tempAnnoRect.tag);
+
+        return;
+      }
+    }
+    if(props.curTag == "") return;
+
+
     if(props.isEyeDrop){
-      console.log(position, props.imageRatio);
-      console.log(position.locationX / props.imageRatio, position.locationY / props.imageRatio, props.cropPosition.x, props.cropPosition.y);
-      getImageColor(props, position.locationX / props.imageRatio, position.locationY / props.imageRatio);
+      getImageColor(props,Math.floor(position.locationX * 2.7), Math.floor(position.locationY * 2.7));
       return;
     }
 
     if(props.curAnnoMode == 'box'){
-      props.annoRect.map((value, index)=>{
+      props.tempAnnoRect.rects.map((value, index)=>{
         if(value.tag == props.curTag) {
           if(intersect(value.x, value.y, value.width, value.height, _rectX, _rectY)){
             //found
@@ -311,9 +444,12 @@ import { TextPropTypes } from 'react-native';
         _rect.push({tag: props.curTag, type: 'box', x: blockX, y: blockY, width: _rectWidth, height: _rectHeight});
       }
       //let opt_rects = optimizeBlocks(_rect);
-      //console.log(opt_rects);
       //props.setAnnoRect(opt_rects);
-      props.setAnnoRect(_rect);
+      //props.setAnnoRect(_rect);
+      let _tempAnnoRect = {...props.tempAnnoRect};
+      _tempAnnoRect.rects = [..._rect];
+      _tempAnnoRect.tag = props.curTag;
+      props.setTempAnnoRect(_tempAnnoRect);
 
     }else if(props.curAnnoMode == 'dots') {
       //find tag
@@ -343,14 +479,34 @@ import { TextPropTypes } from 'react-native';
 
   
   export const handlePressAnnoTag = (props, _annoTag)=>{
-    props.setSelectedBounties([]);
-
-    if(_annoTag.checked){
-        props.setCurTag("");
-    }else{
-        props.setCurTag(_annoTag.tag);
+    if(props.isInEdit){
+      props.dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error',
+          message:
+            'Please save current change first.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },});
+        return;
     }
 
+
+
+    props.setSelectedBounties([]);
+    if(_annoTag.checked){
+        props.setCurTag("");
+        tagChanges(props, '');
+
+    }else{
+        props.setCurTag(_annoTag.tag);
+        tagChanges(props, _annoTag.tag);
+
+    }
+    /*
     var _tags = [];
     props.annotationTags.map((value,index)=>{
       if(_annoTag.tag == value.tag){
@@ -360,7 +516,8 @@ import { TextPropTypes } from 'react-native';
       }
       _tags.push(value);
     });
-    props.setAnnotationTags(_tags);
+    */
+    //props.setAnnotationTags(_tags);
   };
 
   const isOverlaps = (x,y, width, height, x2, y2, width2, height2) => {
@@ -419,19 +576,24 @@ import { TextPropTypes } from 'react-native';
   export const optimizeBlocks = (blocks)=>{
     //group by tag
     var optBlocks = [];
-    const tag_group = groupBy(blocks, (block)=>(block.tag));
-    const tag_keys = Object.keys(tag_group);
+    //const tag_group = groupBy(blocks, (block)=>(block.tag));
+    //const tag_keys = Object.keys(tag_group);
 
-    tag_keys.map((tag_key)=>{
+    //tag_keys.map((tag_key)=>{
+      blocks.map((item, index)=>{
+      
+        
       var _blocks = [];
-          //group by width| hieght
-      const group = groupBy(tag_group[tag_key], (block)=>(block.width));
+      var tblocks = [];
+      //group by width| hieght
+      const group = groupBy(item.rects, (block)=>(block.width));
       //retrieve rect size
       const group_keys = Object.keys(group);
       
       group_keys.map((key)=>{
         const grouped_blocks = group[key];
         var blocks_per_width = [];
+        
         grouped_blocks.map((block)=>{
           const {max_width, max_height} = get_box_size(block, grouped_blocks);
           //add lists
@@ -461,13 +623,14 @@ import { TextPropTypes } from 'react-native';
             _blocks.push(block);
           }
         });
-        optBlocks = [..._blocks];
+        tblocks = [..._blocks];
+
       });
+      optBlocks = [...optBlocks, ...tblocks];
 
     });
     return optBlocks;
   };
-
 
   
   const rgbToHex = (r, g, b)=> {
@@ -478,7 +641,8 @@ import { TextPropTypes } from 'react-native';
 
   export const getImageColor = (props, x, y)=>{
     const context = props.canvas.getContext('2d');
-    context.getImageData(x, y, 1, 1).then(
+ 
+    context.getImageData(Math.floor(x), Math.floor(y), 1, 1).then(
       (imageData)=>{
         if(imageData){
           const p = imageData.data;
@@ -489,16 +653,17 @@ import { TextPropTypes } from 'react-native';
     );
   }
 
+  //calc image dimension based on max height
   export const drawCanvas = (props, blob)=>{
     if(props.canvas == null) return;
+      
     const image = new CanvasImage(props.canvas);
-    const context = props.canvas.getContext('2d');
+    //const context = props.canvas.getContext('2d');
     image.src = blob;
     image.addEventListener('load', () => {
       //assume current drawingpan is landcape
       const width_ratio =  props.frameDimension.width / image.width;
       const height_ratio = props.frameDimension.height / image.height;
-     
       var image_ratio = width_ratio;
 
       var inWidthBase = true;
@@ -509,14 +674,39 @@ import { TextPropTypes } from 'react-native';
       else {
         inWidthBase= false;
       }
-      var width = props.frameDimension.width;
-      var height = image.height * image_ratio;
+      var width = Math.floor(props.frameDimension.width);
+      var height = Math.floor(image.height * image_ratio);
+
+      //props.canvas.width = image.width;
+      //props.canvas.height = image.height;
       props.canvas.width = width;
       props.canvas.height = height;
+
+      const context = props.canvas.getContext('2d');
+      //context.setTransform(1, 0, 0, 1, 0, 0);
       context.drawImage(image, 0, 0, width, height);
-      props.setFrameDimension({width: width, height: height});
+      //context.scale(1, 1);
+
+      //context.getImageData(image.width / 10 * 9, 0, image.width/10, image.height / 10).then(
+      //context.getImageData(0, 0, 100, 100).then((data)=>{
+      //  context.putImageData(data, 100,100);
+      //});
+
+      
+      //context.drawImage(image, 0, 0);
+      //context.getImageData(image.width / 10 * 9, 0, image.width/10, image.height / 10).then(
+      //context.getImageData(image.width-1, image.height-1, 1, 1).then((data)=>{
+      //  console.log(data.data);
+      //});
+
+
+      props.zoomView.positionX = 0;
+      props.zoomView.positionY = 0;
+      //props.setFrameDimension({width: width, height: Dimensions.get('window').height *0.5});
+
       props.setImageDimension({width: width, height: height});
       props.setImageRatio(image_ratio);
+      handleCentering(props, width, height, props.frameDimension.width, props.frameDimension.height, 1.0);
     });
   }
 

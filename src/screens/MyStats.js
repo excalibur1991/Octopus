@@ -84,7 +84,7 @@ const MyStats = ({t}) => {
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{uploadsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -99,7 +99,7 @@ const MyStats = ({t}) => {
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{annotationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             </View>
           </View>
           <View style={styles.boxContainer}>
@@ -114,13 +114,13 @@ const MyStats = ({t}) => {
             </View>
             <View style={styles.boxMini}>
               <Text style={styles.miniBoxValue}>{verificationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             </View>
           </View>
         </View>
         <View style={styles.fullWidthBox}>
           <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
-          <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+          <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
@@ -176,7 +176,7 @@ const MyStats = ({t}) => {
             <Text style={styles.graphTitle}>
               {t('myStats.cumulativeEarnings')}
             </Text>
-            <Text style={styles.miniBoxFooter}>{t('myStats.quicrra')}</Text>
+            <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             <LineChart
               style={styles.chart}
               data={curCumuChartdata}

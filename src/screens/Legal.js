@@ -2,6 +2,7 @@ import {
     View,
     StyleSheet,
     Text,
+    Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -19,7 +20,7 @@ const Legal = ({navigation, t}) => {
             screen: 'Bounty'
         },
         {
-            title: 'Image Categorization',
+            title: 'Personal Information',
             screen: 'ImageCategorization'
         },
         {

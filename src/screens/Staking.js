@@ -28,8 +28,10 @@ const Staking = () => {
   const UnStakeDT = async() => {
     try{
       const ocean = new OceanPool()
-      console.log('Instance:', await ocean.removeDTLiquidity(contracts.walletAddress,contracts.newPool2,
-        '20','0.5'))
+      //console.log('Instance:', 
+      await ocean.removeDTLiquidity(contracts.walletAddress,contracts.newPool2,
+        '20','0.5')
+      //)
         
     }
     catch(error) {
@@ -67,9 +69,10 @@ const Staking = () => {
      * 2: 0xc1d3b57309a066fae7aa170e94c501a4793d01ffe503c437e4a712d719c3483a
      */
     const ocean = new OceanPool()
-    console.log('Instance:', await ocean.addDTLiquidity(
+    //console.log('Instance:', 
+    await ocean.addDTLiquidity(
       contracts.walletAddress,contracts.newPool2,'50')
-    )
+    //)
     } catch (error) {
       
     }

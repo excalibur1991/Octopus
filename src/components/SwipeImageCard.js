@@ -4,6 +4,7 @@ import {
     Image,
     Text,
     StyleSheet,
+    Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -32,13 +33,14 @@ export const SwipeImageCard = (props) => {
             card = data;
           }
         })
-        return card ? {uri:card.image} : require('../assets/top_image.png')
+        return card ? {uri:card.image} : require('../assets/loading.gif')
       }
     
 
     return (
     <View style={styles.card}>
         <Image 
+        resizeMode='stretch'
             style={styles.thumbnail}
             source={ 
                 findImage(props)
@@ -55,14 +57,14 @@ const styles = StyleSheet.create({
       borderColor: 'grey',
       backgroundColor: 'white',
       borderRadius: 43,
-      width: 302,
-      height: 307,
+      width: Dimensions.get('window').height * 0.3,
+      height: Dimensions.get('window').height * 0.3,
       borderWidth: 0,  
       elevation: 1
     },
     thumbnail: {
-        width: 302,
-        height: 307,
+        width: Dimensions.get('window').height * 0.3,
+        height: Dimensions.get('window').height * 0.3,
     }
   })
 

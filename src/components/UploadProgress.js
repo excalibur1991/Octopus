@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, Platform} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 import * as Progress from 'react-native-progress';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {theme} from '../services/Common/theme';
@@ -9,8 +9,6 @@ const UploadProgress = ({
   progress = 0,
   success = false,
   error = false,
-  errorText = '',
-  file = null,
   onCancel = () => {},
 }) => {
   return (
@@ -19,7 +17,7 @@ const UploadProgress = ({
       {error ? (
         <>
           <IonIcon name="close" size={40} color="#D60E18" />
-          <Text style={styles.errorText}>{errorText}</Text>
+          <Text style={styles.errorText}>{error}</Text>
         </>
       ) : success ? (
         <IonIcon name="checkmark-circle" size={40} color="#62B25D" />
@@ -51,14 +49,6 @@ const UploadProgress = ({
           )}
         </>
       )}
-      {file && file.uri && (
-        <Image
-          borderRadius={10}
-          resizeMode="stretch"
-          style={styles.image}
-          source={{uri: file.uri}}
-        />
-      )}
     </View>
   );
 };
@@ -82,13 +72,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Inter-Regular',
     textAlign: 'center',
-  },
-  image: {
-    height: 222,
-    width: '100%',
-    marginTop: '12%',
-    alignSelf: 'center',
-    marginVertical: 10,
   },
   cancelOuterContainer: {
     borderRadius: 10,

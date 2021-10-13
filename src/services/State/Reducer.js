@@ -8,6 +8,8 @@ export const actions = {
   SET_NEW_MESSAGE: 'SET_NEW_MESSAGE',
   SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
   SET_LANGUAGE: 'SET_LANGUAGE',
+  SET_DATAUSAGE: 'SET_DATAUSAGE',
+  SET_VERIFYSETTING: 'SET_VERIFYSETTING'
 };
 
 export const reducer = (state, action) => {
@@ -59,6 +61,18 @@ export const reducer = (state, action) => {
         ...state,
         selectedLanguage: action.selectedLanguage,
       };
+    case actions.SET_DATAUSAGE:
+      return {
+        ...state,
+        dataUsageSettings: action.dataUsageSettings 
+      };
+    case actions.SET_VERIFYSETTING:
+      return {
+        ...state,
+        verifySettings: action.verifySettings
+      };
+    
+    
     default:
       return state;
   }

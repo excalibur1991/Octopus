@@ -55,7 +55,6 @@ export const webThreeReturned = async (context) => {
     context.web3 = context.props.web3.web3Instance;
     // console.log("web3 result:", context.web3)
     Utils.checkNetwork(context.web3).then((res) => {
-      console.log('Network:', res);
       // context.networktype = res
       context.setState({networktype: res});
       if (

@@ -46,7 +46,7 @@ const getAccFunc = async(web3, STPupdateAccounts) => {
     }
     STPupdateAccounts(myAccounts)
   } catch (err) {
-    console.warn(err)
+    //console.warn(err)
   }
 }
 
@@ -59,7 +59,7 @@ export const createAccFunc = async(web3, STPupdateAccounts) => {
       STPupdateAccounts(myAccounts.address)
     }
   } catch (err) {
-    console.warn(err)
+    //console.warn(err)
   }
   return myAccounts;
 }
@@ -70,7 +70,7 @@ export function checkAccount(web3, STPupdateAccounts) {
 
   } catch (err) {
     //console.warn('web3 provider not open');
-    console.warn(err)
+    //console.warn(err)
     return err;
   }
 }
@@ -81,7 +81,7 @@ export function createAccount(web3, STPupdateAccounts) {
 
   } catch (err) {
     //console.warn('web3 provider not open');
-    console.warn(err)
+    //console.warn(err)
     return err;
   }
 }
@@ -92,7 +92,7 @@ export function updateSeedPhrase(seed, STPupdateSeedPhrase) {
 
   } catch (err) {
     //console.warn('web3 provider not open');
-    console.warn(err)
+    //console.warn(err)
     return err;
   }
 }
@@ -103,7 +103,7 @@ export function updateAccts(myAccounts, STPupdateAccounts) {
 
   } catch (err) {
     //console.warn('web3 provider not open');
-    console.warn(err)
+    //console.warn(err)
     return err;
   }
 }
@@ -128,7 +128,7 @@ export async function checkNetwork(web3) {
       })
 
   } catch (err) {
-    console.warn('web3 provider not open');
+    //console.warn('web3 provider not open');
     return "none";
   }
 }

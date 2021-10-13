@@ -12,10 +12,12 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE,
   },
   header: {
-    fontSize: 20,
-    color: '#6C6C6C',
-    fontWeight: '600',
+    fontSize: 22,
+    //color: '#6C6C6C',
+    fontWeight: 'bold',
     fontFamily: 'Inter-Regular',
+    color: '#000000',
+    textAlign: 'center',
   },
   text: {
     fontSize: 16,
@@ -25,4 +27,14 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.BLACK,
     fontFamily: 'Inter-Regular',
   },
+  link: {
+    color: '#FF4092'
+  },
+  bold: {
+    fontWeight: 'bold'
+  },
+  italic: {
+    fontStyle: 'italic',
+    fontWeight: 'bold'
+  }
 });

@@ -5,7 +5,7 @@ export default {
       creatingWallet: 'Creating wallet...',
     },
     landing: {
-      info: 'Info',
+      info: 'Tutorial',
       learn: 'Learn',
       stats: 'Stats',
       wallet: 'Wallet',
@@ -22,16 +22,16 @@ export default {
       spanish: 'Spanish',
     },
     about: {
-      heading: 'Kickstart the new data economy',
+      heading: 'Tutorial',
       para1:
-        'Data is the new oil in the 21st century and big cooperations have already realised that to their advantage. In this project we are giving the power and profit of data back to the people that create it.',
+        'Uploading data - upload photos and tag the content in it.',
       para2:
-        'By using a reward system based on datatokens the contributors become immediate co-owners in data unions. Our first Data Vault is for images. It is available on the Ocean Protocol marketplace. The contributors upload images, annotate them and then these contributons are verified. They are rewarded with datatokens so they become co-owners of the dataset.',
+        'Verify data - verify other users photos and tags.',
       para3:
-        'This combination of mechanics creates an intrinsic motivation to contribute positively. We want to give everyone the ability to use their data for a better future and their own profit. The project is powered by Ocean Protocol. They enable us, with their grants from the OceanDAO, to work on the project but without their technology we could never realise our project.',
+        'Stats - checkout the overall stats of the image dataset.',
       para4:
-        'The main technological advantages that they created are datastokens which we use as the economy and price discovery for our data. And compute-to-data which we use to sell our collected dataset to buyers for algorithm training without the risk of our data being copied.',
-      para5: 'For',
+        'My stats - checkout your contribution to the image dataset.',
+      para5: 'Wallet - access your public and private keys.',
     },
     learn: {
       heading: 'Welcome to the learning center',
@@ -42,12 +42,12 @@ export default {
       annotation: 'ANNOTATION',
       verification: 'VERIFICATION',
       uploads: 'Uploads',
-      quicrra: 'QUICRRA-0',
+      datatoken: 'QUICRA-0',
       annotations: 'Annotations',
       verifications: 'Verifications',
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
-      cumulativeEarnings: 'CUMULATIVE EARNINGS',
+      cumulativeEarnings: 'CUMULATIVE REWARDS',
       noChartDataAvailable: 'No chart data available.',
     },
     stats: {
@@ -55,12 +55,12 @@ export default {
       annotation: 'ANNOTATION',
       verification: 'VERIFICATION',
       uploads: 'Uploads',
-      quicrra: 'QUICRRA-0',
+      datatoken: 'QUICRA-0',
       annotations: 'Annotations',
       verifications: 'Verifications',
       cumulative: 'CUMULATIVE',
       count: 'COUNT',
-      cumulativeEarnings: 'CUMULATIVE EARNINGS',
+      cumulativeEarnings: 'CUMULATIVE REWARDS',
       noChartDataAvailable: 'No chart data available.',
     },
     wallet: {
@@ -69,7 +69,7 @@ export default {
       publicKey: 'Public Key',
       privateKey: 'Private Key',
       quicra: 'QUICRA-0',
-      ocean: 'Ocean',
+      ocean: 'OCEAN',
       portfolio: 'Portfolio',
       deleteWallet: 'Delete Wallet',
     },
@@ -89,6 +89,8 @@ export default {
       unStake: 'UnStake',
     },
     walletSettings: {
+      info: 'Your contributions are connected to this wallet - rewards are sent to it. You can copy the private key to access this wallet in other wallet softwares.',
+      warning: 'Please do not share this private information or you risk losing your rewards.',
       title: 'Wallet Settings',
       mainnet: 'mainnet',
       rinkeby: 'rinkeby',
@@ -128,16 +130,22 @@ export default {
       save: 'Annotate',
       Bounty: 'Bounty',
       Type: 'Type',
-      age: 'Age',
-      gender:'Gender',
-      skinColor: 'SkinColor:',
+      uploadImage: 'Upload Image',
+      upload: 'Upload',
+      next: 'Next',
+      back: 'Back',
+      submit: 'Submit',
+      skinColor: 'Skin Color:',
+      gender: 'Gender',
       male: 'Male',
-      female:'Female',
-      other: 'Other'
+      female: 'Female',
+      other: 'Other',
+      age: 'Age',
+      apply: 'Save Changes'
     },
     tos: {
       header: 'Copyright - TOS',
-      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, DataUnion.app reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, DataUnion.app may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. DataUnion.app will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
+      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, DataUnion reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, DataUnion may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. DataUnion will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
       contactHeader: 'Contact for copyright violations (Designated Agent):',
       copyrightMail: 'copyright@dataunion.app' 
     },
@@ -145,11 +153,12 @@ export default {
       content: 
       `
       <h1>General Privacy Policy</h1>
-      <p>We at Dataunion.app care about your privacy and believe your personal information belongs to you. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. If you have questions about the Privacy Policy, want to know what data we store about you, or if you want to withdraw your consent to any data processing, let us know by emailing at <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>We at Dataunion care about your privacy and believe your personal information belongs to you. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. If you have questions about the Privacy Policy, want to know what data we store about you, or if you want to withdraw your consent to any data processing, let us know by emailing at privacy@dataunion.app</p>
       <h2>Contact details of the controller</h2>
-      <p><a href="https://dataunion.app" target="_blank">DataUnion.app</a><br>
-      Robin Lehmann<br>
-      Email: <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>DataUnion Foundation PTE. LTD.<br>
+      160 Robinson Road, #14-04 Singapore Business Federation Centre<br>
+      Singapore (068914)<br>
+      Email: privacy@dataunion.app</p>
       <h2>What data do we collect?</h2>
       <p>We do not collect any personal data when you use our website. We do not have any advertising, tracking or analytics on our site. We do not process or collect IP addresses. We do not use cookies.</p>
       <h2>How do we collect your data, how will we use your data, how do we store your data?</h2>
@@ -165,7 +174,7 @@ export default {
       <h2>Changes to our privacy policy</h2>
       <p>Dataunion.app keeps its privacy policy under regular review and places any updates on this web page. This privacy policy was last updated on 08 February 2021.</p>
       <h2>How to contact us</h2>
-      <p>If you have any questions about our privacy policy, the data we store about you, or you would like to exercise one of your data protection rights, please email us at: <a href="mailto:privacy@dataunion.app">privacy@dataunion.app</a></p>
+      <p>If you have any questions about our privacy policy, the data we store about you, or you would like to exercise one of your data protection rights, please email us at: privacy@dataunion.app</p>
       <h2>How to contact the appropriate authority</h2>
       <p>Should you wish to report a complaint or if you feel that Dataunion.app has not addressed your concern in a satisfactory manner, you may contact the Information Commissioner’s Office.</p>
       `
@@ -284,103 +293,79 @@ export default {
       }
     },
     
-    ImageCategorization: {
-      mainHeader: {
-          tag: 'header',
-          content: 
-          `
-          <h1 class="PageHeader-module--title--2n3-e">Image Categorization</h1>
-          <p class="PageHeader-module--description--3wPgD">Please read about your security responsibilities when uploading images. If you upload confidential or copyright information without knowing the rules, you could get in trouble.</p>
-          `
-      },
-      info: {
-          tag: 'info',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">What is personal data?</h2>
-          <p>Personal data means any information relating to an identified or identifiable natural person. So if a person is somehow identifiable, we consider the data to be personal. The identifier can be anything, such as a name, an identification number, address, a phone number, a license plate, an email address, and so forth. Of course, because persons are identifiable through their face, this is considered personal data too. If an image of a face fulfills certain properties, we consider it to be <b>biometric</b>.</p></div>
-          `
-      },
-      why:{
-          tag: 'why',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">Why is this important?</h2>
-          <p>We at Dataunion.app care about your privacy. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. However, if you choose to upload images containing personal data, we need to make sure to process and store them securely. To do so, we need your help to categorize images that contain personal data and, even more important, biometric data.</p>
-          `
-      },
-      how: {
-          tag: 'how',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">How do I categorize images?</h2>
-          <p>If you see faces that are clearly recognizable, such as portraits, selfies and faces from a medium distance, or if you think a face recognition software would be able to identify a person based on the image, we consider them biometric. Of course, the distinction isn’t always clear, so we will show you samples you can take as a guide.<br>If you see personal information on a picture, you simply categorize it as “PII”. Things to look for are distant faces that are not immediately recognizable, license plates, names, addresses, computer or smartphone screens (and screenshots) displaying personal information, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data.
-          <br>
-          If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
-          `
-      },
-      biometric: {
-          tag: 'biometric',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Biometric</h2><img src="https://alpha.dataunion.app/samples_PII_biometric.jpg">
-          <p>The images show faces that are clearly recognizable. They are sufficiently large and show faces from a front perspective or with a slight tilt. A face recognition software would be able to identify a person based on the image, which means that we consider them <b>biometric</b>.</p>
-          `
-      },
-      faces: {
-          tag: 'faces',
-          content:
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Faces</h2>
-          <img src="https://alpha.dataunion.app/samples_PII_faces.jpg">
-          <p>The images show faces that are difficult to recognize, shown from a distant point of view, and in a size or manner that do not fulfill biometric properties. We categorize this as “<b>PII</b>”. Please be aware that the distinction between biometric and non-biometric also depends on the resolution of the image. Hence, if you see distant faces on a  high-resolution image, they could be considered biometric if the face is clearly recognizable. If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
-          `
-      },
-      noFaces: {
-          tag: 'nonFaces',
-          content:
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Non-Faces</h2><img src="https://alpha.dataunion.app/samples_PII_no_faces.jpg"><p>The personal data to look for are license plates, names, addresses, computer or smartphone screens displaying personal information, screenshots, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data. We categorize this as “<b>PII</b>”.</p>
-          `
-      },
-      nonPII: {
-          tag: 'nonPII',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize anything of the items described before, you don’t have to do anything.</p>
-          `
-      },
-      notSure:{
-          tag: 'notSure',
-          content: 
-          `
-          <hr>
-          <h2 class="ImageCategorizationView-module--heading--1IcR9">Not sure about your image?</h2><p>Contact us via <a target="_blank" href="mailto:help@dataunion.app">mail</a> or via social media (the links are in the footer).</p>
-          <hr>
-          `
-      }
+  ImageCategorization: {
+    mainHeader: {
+        tag: 'header',
+        content: 
+        `
+        <h1 class="PageHeader-module--title--2n3-e">Image Categorization</h1>
+        <p class="PageHeader-module--description--3wPgD">Please read about your security responsibilities when uploading images. If you upload confidential or copyright information without knowing the rules, you could get in trouble.</p>
+        `
     },
-    playAI: {
-      title: 'PlayAI Anonymization',
-      uploadImage: 'Upload Image',
-      upload: 'Upload',
-      next: 'Next',
-      back: 'Back',
-      submit: 'Submit',
-      skinColor: 'Skin Color:',
-      gender: 'Gender',
-      male: 'Male',
-      female: 'Female',
-      other: 'Other',
-      age: 'Age',
-      apply: 'Save Changes'
-    }
+    info: {
+        tag: 'info',
+        content: 
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">What is personal data?</h2>
+        <p>Personal data means any information relating to an identified or identifiable natural person. So if a person is somehow identifiable, we consider the data to be personal. The identifier can be anything, such as a name, an identification number, address, a phone number, a license plate, an email address, and so forth. Of course, because persons are identifiable through their face, this is considered personal data too. If an image of a face fulfills certain properties, we consider it to be <b>biometric</b>.</p></div>
+        `
+    },
+    why:{
+        tag: 'why',
+        content: 
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">Why is this important?</h2>
+        <p>We at Dataunion.app care about your privacy. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. However, if you choose to upload images containing personal data, we need to make sure to process and store them securely. To do so, we need your help to categorize images that contain personal data and, even more important, biometric data.</p>
+        `
+    },
+    how: {
+        tag: 'how',
+        content: 
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">How do I categorize images?</h2>
+        <p>If you see faces that are clearly recognizable, such as portraits, selfies and faces from a medium distance, or if you think a face recognition software would be able to identify a person based on the image, we consider them biometric. Of course, the distinction isn’t always clear, so we will show you samples you can take as a guide.<br>If you see personal information on a picture, you simply categorize it as “PII”. Things to look for are distant faces that are not immediately recognizable, license plates, names, addresses, computer or smartphone screens (and screenshots) displaying personal information, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data.
+        <br>
+        If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
+        `
+    },
+    biometric: {
+        tag: 'biometric',
+        content: 
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Biometric</h2><img src="https://alpha.dataunion.app/samples_PII_biometric.jpg">
+        <p>The images show faces that are clearly recognizable. They are sufficiently large and show faces from a front perspective or with a slight tilt. A face recognition software would be able to identify a person based on the image, which means that we consider them <b>biometric</b>.</p>
+        `
+    },
+    faces: {
+        tag: 'faces',
+        content:
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Faces</h2>
+        <img src="https://alpha.dataunion.app/samples_PII_faces.jpg">
+        <p>The images show faces that are difficult to recognize, shown from a distant point of view, and in a size or manner that do not fulfill biometric properties. We categorize this as “<b>PII</b>”. Please be aware that the distinction between biometric and non-biometric also depends on the resolution of the image. Hence, if you see distant faces on a  high-resolution image, they could be considered biometric if the face is clearly recognizable. If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
+        `
+    },
+    nonFaces: {
+        tag: 'nonFaces',
+        content:
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Non-Faces</h2><img src="https://alpha.dataunion.app/samples_PII_no_faces.jpg"><p>The personal data to look for are license plates, names, addresses, computer or smartphone screens displaying personal information, screenshots, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data. We categorize this as “<b>PII</b>”.</p>
+        `
+    },
+    nonPII: {
+        tag: 'nonPII',
+        content: 
+        `
+        <hr>
+        <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize any of the items described before, you don't have to add one of these tags.</p>
+        `
+    },
+  }
   },
 };

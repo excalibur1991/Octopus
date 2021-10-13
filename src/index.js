@@ -17,11 +17,16 @@ import Verification from './screens/Verification';
 import Annotation from './screens/Annotation';
 import PlayAI from './screens/PlayAI';
 import Wallet from './screens/Wallet';
+//import UploadGuidelines from './screens/UploadGuidelines';
+//import UploadImage from './screens/UploadImage';
+import Upload from './screens/Upload';
+import RomanNumberUpload from './screens/RomanNumberUpload';
+import RomanNumberStats from './screens/RomanNumberStats';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
-import walletEntry from '../walletEntry'
-import Staking from './screens/Staking'
+import walletEntry from '../walletEntry';
+import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
 import ImageCategorization from './screens/ImageCategorization';
@@ -131,22 +136,7 @@ const Header = (
         </Ripple>
       )
     : null,
-  headerRight: showRightButton
-    ? () => (
-        <Ripple
-          onPress={() =>
-            Alert.alert(i18n.t('messages.alert'), i18n.t('messages.pressed'))
-          }
-          outerStyle={styles.rightButtonOuter}
-          innerStyle={styles.rightButtonInner}>
-
-          <Image
-            style={styles.rightIcon}
-            resizeMode="stretch"
-            source={require('./assets/menu.png')}
-          />
-        </Ripple>
-      )
+  headerRight
     : showLanguageDropdown
     ? () => (
         <Menu renderer={renderers.Popover}>
@@ -210,7 +200,7 @@ const LandingPageStack = () => {
       label: i18n.t('landing.english'),
       value: 'en',
     },
-    {
+    /*{
       icon: Chinese,
       label: i18n.t('landing.chinese'),
       value: 'zh',
@@ -229,7 +219,7 @@ const LandingPageStack = () => {
       icon: Spanish,
       label: i18n.t('landing.spanish'),
       value: 'es',
-    },
+    }, */
   ];
   const [{selectedLanguage}, dispatch] = useStateValue();
   const language = languageOptions.find((l) => l.value === selectedLanguage);
@@ -322,6 +312,108 @@ const StatsStack = () => (
     <Stack.Screen
       name="Stats"
       component={Stats}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const UploadStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Upload"
+      component={Upload}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+/*
+const UploadGuidelinesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadGuidelines"
+      component={UploadGuidelines}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const UploadImageStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="UploadImage"
+      component={UploadImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+*/
+
+const RomanNumberUploadStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="RomanNumberUpload"
+      component={RomanNumberUpload}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const RomanNumberStatsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="RomanNumberStats"
+      component={RomanNumberStats}
       options={({navigation}) => {
         return Header(
           {
@@ -442,7 +534,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -457,7 +549,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -472,7 +564,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -487,7 +579,7 @@ const LegalStack = () => (
         return Header(
           {
             showTitle: true,
-            showAppIcon: false,
+            showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
           },
@@ -554,21 +646,39 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
+      name="Upload"
+      component={UploadStack}
+      options={{
+        unmountOnBlur: true, 
+        tabBarButton: (props) => <TabComponent label="Upload" {...props} />
+      }}
+    />
+    <Tab.Screen
       name="Verification"
       component={VerificationStack}
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Verification" {...props} />,
+        tabBarButton: (props) => (
+          <TabComponent label="Verification" {...props} />
+        ),
       }}
     />
-    <Tab.Screen
+     <Tab.Screen
       name="Annotation"
       component={AnnotationStack}
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
         tabBarButton: props => <TabComponent label="Annotation" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="MyStats"
+      component={MyStatsStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
       }}
     />
     <Tab.Screen
@@ -580,37 +690,11 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="SwipeAI"
-      component={SwipeAIStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarVisible: false,
-        tabBarButton: (props) => <TabComponent label="SwipeAI" {...props} />
-      }}
-    />
-    <Tab.Screen
-      name="Learn"
-      component={LearnStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarButton: (props) => <TabComponent label="Learn" {...props} />,
-      }}
-    />
-
-    <Tab.Screen
       name="Wallet"
       component={WalletStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
-      }}
-    />
-    <Tab.Screen
-      name="MyStats"
-      component={MyStatsStack}
-      options={{
-        unmountOnBlur: true,
-        tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
       }}
     />
     <Tab.Screen

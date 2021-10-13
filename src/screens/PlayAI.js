@@ -32,6 +32,7 @@ import {withTranslation} from 'react-i18next';
 import {
   IconButton
 } from 'react-native-paper';
+import * as ImagePicker from 'react-native-image-picker';
 
 /**
  * play AI
@@ -63,6 +64,10 @@ const PlayAI = ({navigation, t}) => {
   const [curRectIndex, setCurRectIndex] = useState(-1);
   const [anonymVisible, setAnonymVisible] = useState(false);
   const [isEyeDrop, setEyeDrop] = useState(false);
+
+  //camera mode, 
+  const [mode, setMode] = useState('camera');
+  const [response, setResponse] = useState(null);
 
   const uploadFile = async(file)=>{
     try{
@@ -289,8 +294,40 @@ const PlayAI = ({navigation, t}) => {
     }
   }, [curRectIndex]);
 */
+
+  useEffect(()=>{
+    if(mode == 'camera'){
+      ImagePicker.launchCamera(
+        {
+          saveToPhotos: true,
+          mediaType: 'photo',
+          includeBase64: false,
+        }, 
+        setResponse);
+    } else {
+      ImagePicker.launchImageLibrary(
+        {
+          maxHeight: 200,
+          maxWidth: 200,
+          selectionLimit: 0,
+          mediaType: 'photo',
+          includeBase64: false,
+        }, setResponse);
+    }
+  }, [mode]);
   return (
     <View style={styles.container}>
+      {response?.assets &&
+          response?.assets.map(({uri}) => (
+            <View key={uri}>
+              <Image
+                resizeMode="cover"
+                resizeMethod="scale"
+                style={{width: 200, height: 200}}
+                source={{uri: uri}}
+              />
+            </View>
+          ))}
       {!readOnly? (
         <ScrollView
           showsVerticalScrollIndicator={false}

@@ -9,6 +9,7 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
+    ImageBackground,
     Platform,
 } from 'react-native';
 import {actions} from '../services/State/Reducer';
@@ -29,10 +30,11 @@ import {
   Checkbox
 } from 'react-native-paper';
 
-import MultiSelect from '../components/Multiselect'
+import MultiSelect from '../components/BountyMultiselect';
+//import SelectDropdown from "react-native-select-dropdown";
 
-import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard'
-import TagInput from '../components/TagInput'
+import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
+import TagInput from '../components/TagInput';
 import AddTag from '../components/AddTag';
 import Tags from '../components/Tags';
 import BountyView from '../components/BountyView';
@@ -252,7 +254,6 @@ const VeriPage = (props) => {
           fields:["image_id", "tag_data", "descriptions"],
           type:"TextTag",
           tags:[]});
-          console.log(response);
         if(response && response.result && response.result.length > 0) {
          
           setMaxPage(response.pageSize);
@@ -389,7 +390,6 @@ const VeriPage = (props) => {
       setBEditEnabled(true);
       setTagEditValue("");
       textEditor.focus();
-  
     }catch(err){
     }
     
@@ -423,7 +423,7 @@ const VeriPage = (props) => {
       setAnnotationTags(_tags);
     }
     else {
-      setTags(_tags);
+      setTags(_tags.toLowerCase());
     }
 
   }
@@ -468,11 +468,11 @@ const VeriPage = (props) => {
 
         if(tagEditIndex >= _tags.length) {
           //new addition
-          _tags.push(tagEditValue);
+          _tags.push(tagEditValue.toLowerCase());
           setTagsValue(_tags, editorType);
         }else {
           // modification
-          _tags[tagEditIndex] = tagEditValue;
+          _tags[tagEditIndex] = tagEditValue.toLowerCase();
           setTagsValue(_tags, editorType);
         }
       }
@@ -660,6 +660,7 @@ const VeriPage = (props) => {
         <View style={styles.container}>
           <View style={styles.CardWrapper}>
             <Image
+              resizeMode='stretch'
               style={styles.leftbar}
               source={require('../assets/left.png')}
             />
@@ -685,6 +686,7 @@ const VeriPage = (props) => {
             </View>
             <Image
               style={styles.rightbar}
+              resizeMode='stretch'
               source={require('../assets/right.png')}
               />
           </View>
@@ -715,9 +717,7 @@ const VeriPage = (props) => {
                 bIndent={tags.length == 0}
               />
             </View>
-            <Divider style={
-              {marginTop: 10}
-            }/>
+            
             <MultiSelect 
               hideTags
               hideSubmitButton
@@ -795,15 +795,18 @@ const styles = StyleSheet.create({
  
   leftbar: {
       zIndex: 0,
+      height: '100%',
       left: 0
   },
   rightbar: {
     zIndex: 0,  
-    right: 0
+    right: 0,
+    height: '100%'
   },
   
   CardWrapper: {
-    height: 350,
+    marginTop: '5%',
+    height: '30%',
     zIndex: 1000,
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -816,8 +819,10 @@ const styles = StyleSheet.create({
     zIndex: 0,
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginBottom: '5%'
   },
   ScrollView: {
+    marginTop: '5%',
     padding: 10,
   },
 });

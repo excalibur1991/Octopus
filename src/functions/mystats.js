@@ -37,7 +37,7 @@ const sumCumuData = (
       calcVeriCumu(verifcation) +
       calcAnnoTagCumu(tag_annotation) +
       calcAnnoDescCumu(text_annotation);
-    _chartDataY.push({x:index, y:curCumuValue, marker: `${value}\r\nEarnings:${curCumuValue.toFixed(4)}`}); 
+    _chartDataY.push({x:index, y:curCumuValue, marker: `${value}\r\Rewards:${curCumuValue.toFixed(4)}`}); 
     _chartDataX.push(value.split('-')[2] || '');
   });
 
@@ -59,7 +59,7 @@ const sumCumuData = (
       dataSets: [
         {
           values: _chartDataY,
-          label: 'Earnings',
+          label: 'Rewards',
           config: {
             lineWidth: 1,
             drawFilled: true,

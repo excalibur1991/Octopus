@@ -37,11 +37,11 @@ export const LoginProc = async (web3) => {
         }).slice(0,10).join('');
       await setWalletData({
         privateKey: privateKey, 
-        publicKey:publicKey,
+        publicKey: publicKey,
         seedPhrase: seedPhrase,
         password: password
       });
-    }else
+    } else
     {
       privateKey = walletInfo.privateKey;
       publicKey = walletInfo.publicKey;
@@ -57,12 +57,11 @@ export const LoginProc = async (web3) => {
       nounce = nonceResponse.nonce;
     }
 
-    let sign = await Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey)
+    let sign = await Web3.eth.accounts.sign(Web3.utils.utf8ToHex(nounce.toString()), privateKey);
     if(sign && sign.signature) {
       signature = sign.signature;
 
-      let loginResponse = await userLogin(walletInfo.publicKey, signature);
-      console.log(loginResponse);
+      let loginResponse = await userLogin(publicKey, signature);
 
       if (loginResponse &&
         loginResponse.access_token &&
@@ -78,7 +77,7 @@ export const LoginProc = async (web3) => {
       }
     }
   } catch (err) {
-    console.log('err LoginProc', err);
+    //console.log('err LoginProc', err);
   }
   return null;
 };

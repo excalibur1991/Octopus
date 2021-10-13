@@ -176,12 +176,6 @@ const DrawingPan = (props) => {
     });
   }
 
-    
-
-      useEffect(()=>{
-        console.log(props.annoRect);
-      }, []);
-
       const removeRect = (index)=>{
         let rects = [];
         props.annoRect.map((rect, rectIndex)=>{
