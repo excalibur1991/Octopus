@@ -5,7 +5,8 @@ import {
     ScrollView,
     Alert,
     TextInput,
-    Pressable
+    Pressable,
+    Dimensions
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import UploadProgress from '../components/UploadProgress';
@@ -32,7 +33,6 @@ import {withTranslation} from 'react-i18next';
 import {
   IconButton
 } from 'react-native-paper';
-import * as ImagePicker from 'react-native-image-picker';
 
 /**
  * play AI
@@ -43,9 +43,17 @@ import * as ImagePicker from 'react-native-image-picker';
  * 5. goto 1.
  */
 
+const enum_mode = {
+  MODE_PHOTO: 'photo',
+  MODE_LIBRARY:'library',
+  MODE_UPLOAD: 'upload',
+  MODE_ANNOTATE: 'annotate',
+  MODE_AI_ANNOATE: 'ai_annotate'
+};
+
 
 const PlayAI = ({navigation, t}) => {
-  const [, dispatch] = useStateValue();
+  const [{cameraSettings}, dispatch] = useStateValue();
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const [imageId, setImageId] = useState('');
@@ -66,10 +74,11 @@ const PlayAI = ({navigation, t}) => {
   const [isEyeDrop, setEyeDrop] = useState(false);
 
   //camera mode, 
-  const [mode, setMode] = useState('camera');
+  const [mode, setMode] = useState(enum_mode.MODE_PHOTO);
   const [response, setResponse] = useState(null);
 
   const uploadFile = async(file)=>{
+    console.log(file);
     try{
       setProgress(0.5);
       const filedata = new FormData();
@@ -295,40 +304,182 @@ const PlayAI = ({navigation, t}) => {
   }, [curRectIndex]);
 */
 
+const openCameraView = ()=>{
+  dispatch({
+    type: actions.SET_CAMERASETTINGS,
+    cameraSettings: {
+      show: true,
+      onCallback : (res)=>{
+        closeCameraView(res);
+      }
+    },
+  });
+};
+const closeCameraView = (res)=>{
+  console.log(res);
+  setResponse(res);
+  //cancel go back to menu
+  if(res.didCancel){
+    navigation.goBack();
+  }
+  dispatch({
+    type: actions.SET_CAMERASETTINGS,
+    cameraSettings: {
+      show: false,
+      onCallback : null
+    },
+  });
+
+  if(res.imageId){
+    setImageId(res.imageId);
+  }
+}
   useEffect(()=>{
-    if(mode == 'camera'){
-      ImagePicker.launchCamera(
-        {
-          saveToPhotos: true,
-          mediaType: 'photo',
-          includeBase64: false,
-        }, 
-        setResponse);
-    } else {
-      ImagePicker.launchImageLibrary(
-        {
-          maxHeight: 200,
-          maxWidth: 200,
-          selectionLimit: 0,
-          mediaType: 'photo',
-          includeBase64: false,
-        }, setResponse);
-    }
-  }, [mode]);
+    console.log('camera come');
+    openCameraView();
+
+  }, []);
+
+
   return (
     <View style={styles.container}>
-      {response?.assets &&
-          response?.assets.map(({uri}) => (
-            <View key={uri}>
-              <Image
-                resizeMode="cover"
-                resizeMethod="scale"
-                style={{width: 200, height: 200}}
-                source={{uri: uri}}
-              />
+<ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.uploadScrollContainer}>
+        <View style={styles.readOnlyContainer}>
+          <DrawingPan
+            setAnnoRect={setBounds}
+            setCurRectIndex={setCurRectIndex}
+            curRectIndex={curRectIndex}
+            annoRect={bounds}
+            imageSource={{imageData}}
+            onDragEnd={
+              (event, index)=>{console.log('onDragEnd', event, index)}
+            }
+            onResizeEnd={
+              (event, index)=>{console.log('onResizeEnd', event, index)}
+            }
+            onLongPressRect={
+              (event, index)=>{console.log('onLongPressRect', event, index)}
+            }
+          />
+        </View>
+        <View>
+        <TextInput
+          style={styles.ageInput}
+          keyboardType={'numeric'}
+          value={age}
+          placeholder={t('playAI.age')}
+          placeholderTextColor={'#A9A9A9'}
+          onChangeText={(txt)=>{
+            setAge(parseInt(txt));
+          }
+          }
+        />
+        <MultiSelect 
+          hideTags
+          hideSubmitButton
+          hideDropdown        
+          items={[
+            {name: t('playAI.male'), value:'Male'}, 
+            {name: t('playAI.female'), value: 'Female'}, 
+            {name: t('playAI.other'), value: 'Other'}]}
+          uniqueKey="value"
+          selectText={t('playAI.gender')}
+          displayKey="name"
+          single={true}
+          showFilter={false}
+          canAddItems={false}
+          selectedItems={gender}
+          onSelectedItemsChange={(items)=>{ 
+            setGender(items) 
+          }}
+          textInputProps={{
+            editable:false
+          }}
+          searchInputPlaceholderText={t('playAI.gender')}
+          
+          selectedItemTextColor={'#00A5FF'}
+          styleMainWrapper={{
+            marginTop: 10
+          }}/>
+
+          <View style={styles.skinButton}>
+            <Text style={{
+              alignSelf: 'center',
+            }} color={'#A9A9A9'}>{t('Annotations.skinColor')}</Text>
+            <View
+              style={{
+                marginLeft: 10,
+                backgroundColor: skinColor,
+                paddingHorizontal: 10,
+                borderColor: '#ADADAD',
+                borderWidth: 1,
+                width: 100,
+                height: 35
+              }}>
+                <TextInput
+                  style={{
+                    height: 30,
+                    paddingVertical: 0
+                  }}
+                  onChangeText={setSkinColor}
+                  value={skinColor}
+                  placeholder={'#FFFFFF'}
+                />
             </View>
-          ))}
-      {!readOnly? (
+            <IconButton 
+              size={25} 
+              icon="eyedropper-variant" 
+              color={isEyeDrop ? theme.APP_COLOR: '#333333'}
+              onPress={()=>{
+                setEyeDrop(!isEyeDrop);
+              }}
+             />
+          </View>
+        {isEyeDrop && (
+        <View
+          style={styles.colorPickerView}>
+          <ColorPicker
+            // ref={r => { this.picker = r }}
+            color={skinColor ? skinColor: '#FFFFFF'}
+            swatchesOnly={false}
+            onColorChange={(color)=>{
+            }}
+            onColorChangeComplete={(color)=>{
+              setSkinColor(color)
+            }}
+            thumbSize={15}
+            sliderSize={15}
+            noSnap={false}
+            row={true}
+            swatchesLast={false}
+            swatches={false}
+            discrete={false}
+            style={styles.colorPicker}/>
+          </View>
+        )}
+        </View>
+        <Button
+          color={theme.APP_COLOR}
+          title={t('playAI.submit')}
+          buttonStyle={styles.button}
+          onPress={
+            ()=>{
+              submitBounds();
+            }
+          }
+          textStyle={styles.buttonText}
+          />
+        </ScrollView>
+
+
+
+
+
+
+      {/*
+      {readOnly? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.uploadScrollContainer}>
@@ -518,8 +669,9 @@ const PlayAI = ({navigation, t}) => {
               />
             </View>
           </ScrollView>
-        )
-      }
+          
+              )
+      }*/}
     </View>
   );
 };

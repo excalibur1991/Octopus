@@ -23,6 +23,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import i18next from 'i18next';
 import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
+import { CameraView } from './src/components/CameraView';
 
 getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
@@ -35,7 +36,7 @@ const RootNavigator = () => {
     checkVerifySettings();
   }, []);
 
-  const [{progressSettings, alertSettings, }, dispatch] = useStateValue();
+  const [{progressSettings, alertSettings, cameraSettings}, dispatch] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
 
@@ -123,6 +124,7 @@ const RootNavigator = () => {
       <SafeAreaView style={{flex: 0, backgroundColor: theme.APP_COLOR}} />
       <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.WHITE}}>
         <StatusBar backgroundColor={theme.APP_COLOR} barStyle="dark-content" />
+        <CameraView {...cameraSettings} />
         <AppAlert {...getAlertSettings()} />
         <ModalActivityIndicator modalVisible={show} />
         <CreateRootNavigator />

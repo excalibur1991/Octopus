@@ -9,7 +9,8 @@ export const actions = {
   SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
   SET_LANGUAGE: 'SET_LANGUAGE',
   SET_DATAUSAGE: 'SET_DATAUSAGE',
-  SET_VERIFYSETTING: 'SET_VERIFYSETTING'
+  SET_VERIFYSETTING: 'SET_VERIFYSETTING',
+  SET_CAMERASETTINGS: 'SET_CAMERASETTINGS',
 };
 
 export const reducer = (state, action) => {
@@ -71,8 +72,11 @@ export const reducer = (state, action) => {
         ...state,
         verifySettings: action.verifySettings
       };
-    
-    
+    case actions.SET_CAMERASETTINGS:
+      return {
+        ...state,
+        cameraSettings: action.cameraSettings
+      };
     default:
       return state;
   }
