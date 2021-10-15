@@ -366,6 +366,18 @@ export default {
         <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize any of the items described before, you don't have to add one of these tags.</p>
         `
     },
+  },
+  playAI: {
+    annotate: 'Annotate',
+    annotating: 'Annotating...',
+    annotated: 'Annotated',
+    cancel: 'Cancel',
+    next: 'Next',
+    userAnnotationAndAI: 'User Annotation & AI',
+    editAI: 'Edit AI',
+    editAnnotation: 'Edit Annotation',
   }
   },
+  
+
 };

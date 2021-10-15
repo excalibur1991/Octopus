@@ -17,6 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {
     uploadImage, 
 } from '../services/API/APIManager';
+import DottedProgressBar from './DottedProgressBar';
 
 
 const enum_mode = {
@@ -190,20 +191,28 @@ export const CameraView = (props) => {
                 )
 
             )}
-
+            {
+                response &&
+                (
                 <View style={styles.overlay}>
                     <View style={styles.loading}>
-                        <View style={styles.progress}>
-                        {Array(10).fill(1).map((el, i) =>(
-                            <LinearGradient  key={i} style={styles.circle} colors={(progress * 10 >= i + 1) ? selectedColor : unselectedColor}>
-                            </LinearGradient>
-                        )
-                          
-                        )}
-                        </View>
-                        <Text style={styles.whiteText}>{uploadText}</Text>
+                        <DottedProgressBar 
+                            label={uploadText}
+                            progress={progress}
+                        />
+                        <Text style={{
+                            color: '#FFFFFF',
+                            fontSize: 18,
+                            fontFamily: 'Inter',
+                            textAlign: 'right',
+                            marginTop: 18,
+                            textAlign: 'right'
+                        }}>{uploadText}</Text>
                     </View>
                 </View>
+
+                )
+            }
             </View>
             <View style={styles.bottom}>
             <Ripple

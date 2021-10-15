@@ -1,8 +1,8 @@
 export const settings = {
   // development
-  // baseUrl: 'https://crab.dev.dataunion.app/',
+  baseUrl: 'https://crab.dev.dataunion.app/',
   //production
-  baseUrl: 'https://crab.dataunion.app/',
+  //baseUrl: 'https://crab.dataunion.app/',
   taxonomy: {
     getImages: '/api/v1/taxonomy/data',
     storeUserResponse: '/api/v1/taxonomy/store',

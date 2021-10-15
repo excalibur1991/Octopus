@@ -1,95 +1,86 @@
-import React, { useEffect, useRef } from "react";
-import { Animated } from "react-native"
+
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Svg, { G, Defs, ClipPath, Rect, Stop, LinearGradient, Line } from 'react-native-svg';
+import LinearGradient from 'react-native-linear-gradient';
+import {
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-function usePrevious(value) {
-    const ref = useRef(new Animated.Value(0));
-    // Store current value in ref
-    useEffect(() => {
-        ref.current = new Animated.Value(value);
-    }, [value]); // Only re-run if value changes
+const DottedProgressBar = ({progress, duration, hideLabel, selectedColor, unselectedColor, label, show, containerStyle, progressStyle, circleStyle, labelStyle})=> {
+    const [prevProgress, setPrevProgress] = useState(0);
+    const [timer, setTimer] = useState(null);
 
-    // Return previous value (happens before update in useEffect above)
-    return ref.current;
-}
-
-const DottedProgressBar = ({ percent, width, height, stopColors, unfilledColor, segmentWidth, gapWidth, duration }) => {
-    const animatedRef = useRef(new Animated.Value(0))
-    const previousPercent = usePrevious(percent);
-    useEffect(() => {
-        const animationHandler = Animated.timing(animatedRef.current, {
-            toValue: percent,
-            duration: duration,
-            useNativeDriver: true
-        }).start()
-        return () => {
-            animationHandler && animationHandler.stop();
-            animatedRef.current.setValue(previousPercent)
+    useEffect(()=>{
+        if(timer){
         }
-    }, [percent])
 
+    }, [progress]);
 
-    const translateX = animatedRef.current.interpolate({
-        inputRange: [0, 100],
-        outputRange: ["0%", "100%"],
-    })
-
-    return (<AnimatedSvg height={`${height}`} width={`${width}`}>
-        <LinearGradient
-            id="grad"
-            x1="0%"
-            x2="100%"
-            y1="0%"
-            y2="0%"
-            width="100%"
-            height="100%"
-            gradientUnits="userSpaceOnUse">
-            {stopColors}
-        </LinearGradient>
-        <Defs>
-            <G x="0" y="0">
-                <ClipPath id="clip">
-                    <AnimatedRect
-                        x={translateX}
-                        y={"0"}
-                        width="100%"
-                        height="100%" />
-                </ClipPath>
-            </G>
-        </Defs>
-        <Line x1="0" y1="0" x2="100%" y2="0" stroke="url(#grad)" strokeWidth="100%" strokeDasharray={`${segmentWidth} ${gapWidth}`} />
-        <Line x1="0" y1="0" x2="100%" y2="0" clipPath="url(#clip)" stroke={unfilledColor} strokeWidth="100%" strokeDasharray={`${segmentWidth} ${gapWidth}`} />
-    </AnimatedSvg>)
-}
-
-
-DottedProgressBar.defaultProps = {
-    percent: 0,
-    width: 375,
-    height: 30,
-    unfilledColor: "#7a7a7a",
-    segmentWidth: 5,
-    duration: 300,
-    gapWidth: 5,
-    stopColors: [
-        <Stop key={1} offset="0%" stopColor="#ada7f3" />,
-        <Stop key={4} offset="75%" stopColor="#ff55b8" />
-    ]
-}
-
-DottedProgressBar.propTypes = {
-    percent: PropTypes.number,
-    width: PropTypes.number,
-    height: PropTypes.number,
-    unfilledColor: PropTypes.string,
-    stopColors: PropTypes.arrayOf(PropTypes.element),
-    segmentWidth: PropTypes.number,
-    gapWidth: PropTypes.number,
-    duration: PropTypes.number
+    return (
+        <View style={{...styles.container}}>
+            <View style={styles.progress}>
+                {Array(10).fill(1).map((el, i) =>(
+                    <LinearGradient  key={i} style={styles.circle} colors={(progress * 10 >= i + 1) ? selectedColor : unselectedColor}>
+                    </LinearGradient>
+                ))}
+            </View>
+            {/*<Text style={styles.whiteText}>{label}</Text>*/}
+        </View>
+    );
 };
 
-export default DottedProgressBar
+const styles = StyleSheet.create({
+    container: {
+        width: '100%',
+        justifyContent: 'flex-end'
+    },
+    progress: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    circle: {
+        width: 12,
+        height: 12,
+        backgroundColor: 'red',
+        borderRadius: 6,
+        marginHorizontal: 3
+    },
+    whiteText: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        fontFamily: 'Inter',
+        textAlign: 'right',
+        marginTop: 18
+    },
+});
+
+DottedProgressBar.defaultProps = {
+    progress: 0,
+    duration: 300,
+    selectedColor: ['#72B5CB', '#A737C1'],
+    unselectedColor: ['#374768', '#422B65'],
+    label: '',
+    containerStyle: null, 
+    progressStyle: null, 
+    circleStyle: null, 
+    labelStyle: null,
+    show: false,
+    hideLabel: false
+};
+
+DottedProgressBar.propTypes = {
+    progress: PropTypes.number,
+    duration: PropTypes.number,
+    selectedColor: PropTypes.arrayOf(PropTypes.string),
+    unselectedColor:PropTypes.arrayOf(PropTypes.string),
+    containerStyle: PropTypes.any, 
+    progressStyle: PropTypes.any, 
+    circleStyle: PropTypes.any, 
+    labelStyle: PropTypes.any,
+    show: PropTypes.bool,
+};
+
+export default DottedProgressBar;

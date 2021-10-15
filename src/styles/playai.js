@@ -52,10 +52,30 @@ export const styles = StyleSheet.create({
       fontWeight: Platform.OS === 'android' ? 'bold' : '600',
       fontFamily: 'Inter-Bold',
     },
+
+    smallButton: {
+      marginTop: '1%',
+      borderRadius: 25,
+      width: 70,
+    },
+    smallButtonText: {
+      color: '#EB5454',
+      fontSize: 13,
+      textAlign: 'center',
+      fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+      fontFamily: 'Inter',
+    },
+
+    row: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
     uploadScrollContainer: {
       paddingBottom: '15%',
       flexGrow: 1,
-      paddingHorizontal: '8%'
+      paddingHorizontal: '8%',
     },
     readOnlyContainer: {
       borderRadius: 15,
@@ -129,6 +149,43 @@ export const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 5,
       paddingLeft: 10,
-    }
+    },
+    tagWrapper: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-start',
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#3A506B',
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      marginBottom: 10
+    },
+    leftbar: {
+
+    },
+    rightbar: {
+
+    },
+    CardWrapper: {
+      height: '85%',
+      zIndex: 1000,
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+    },
+    leftbar: {
+      zIndex: 0,
+      height: '100%',
+      left: 0
+    },
+    rightbar: {
+      zIndex: 0,  
+      right: 0,
+      height: '100%',
+    },
+    CardView: {
+      zIndex: 1000
+    },
+  
   });
   
