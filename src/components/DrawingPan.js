@@ -160,7 +160,7 @@ const DrawingPan = (props) => {
           source={props.imageSource}
           />
 
-          {props.annoRect.map((rect, index)=>(
+          {props.annoRect.filter(i=>i.isAI).map((rect, index)=>(
            <DragResizeBlock
             key={'annoRect' + index}
             index={index}
@@ -237,9 +237,26 @@ const DrawingPan = (props) => {
                 </Defs>
                 <Rect width="100%" height="100%" fill="url(#grid)" />
               </G>
+              <G>
+              {
+                props.annoRect.filter(i=>!i.isAI).map((rect, index)=>(
+                  
+                    <Rect
+                      key={'annoRect' + index}
+                      x={(rect.x - cropPosition.x) * rectScale + 4}
+                      y={(rect.y - cropPosition.y) * rectScale + 4}
+                      width={rect.width * rectScale - 8}
+                      height={rect.height * rectScale - 8}
+                      fill="#00ff0030"
+                      stroke="none"
+                      strokeWidth="0"
+                    />
+                ))
+              }
+              </G>
            </Svg>
            
-          </View>
+        </View>
       </View>
   );
 };

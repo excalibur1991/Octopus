@@ -30,6 +30,7 @@
     "axios": "^0.21.1",
     "browserify-zlib": "^0.1.4",
     "buffer": "^4.9.2",
+    "clamp": "^1.0.1",
     "connect": "^3.7.0",
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",

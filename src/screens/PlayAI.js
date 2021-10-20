@@ -6,7 +6,8 @@ import {
     Alert,
     TextInput,
     Pressable,
-    Dimensions
+    Dimensions,
+    TouchableOpacity
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import UploadProgress from '../components/UploadProgress';
@@ -37,6 +38,8 @@ import {
 import DottedProgressBar from '../components/DottedProgressBar';
 import SwipeCards from 'react-native-swipe-cards';
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
+import LinearGradient from 'react-native-linear-gradient';
+import { GradientBox } from '../components/GradientBox';
 /**
  * play AI
  * 1. upload photo
@@ -394,7 +397,7 @@ const cardRemoved = () =>{
 
   useEffect(()=>{
     console.log('camera come');
-    openCameraView();
+    //openCameraView();
   }, []);
 
 
@@ -408,6 +411,7 @@ const cardRemoved = () =>{
           fontFamily: 'Inter',
           marginLeft: 20
         }}>User Annotation & AI</Text>
+       
         <View style={styles.CardWrapper}>
             <Image
               resizeMode='stretch'

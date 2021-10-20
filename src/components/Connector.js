@@ -119,11 +119,11 @@ export class Connector extends Component {
         {...this._panResponder.panHandlers}
       >
       { type === 'c' ? null : 
-      type === 'tl' ? (<Image style={{width:'100%' , height :'100%' }} resizeMode={'contain'} source={require('../assets/close.png') }/>) : 
-      type === 'tr' ? (<Image style={{width:'100%' , height :'100%' }} resizeMode={'contain'} source={require('../assets/tr.png') }/>) :
-      type === 'br' ? (<Image style={{width:'100%' , height :'100%' }} resizeMode={'contain'} source={require('../assets/br.png') }/>) :
-      type === 'bl' ? (<Image style={{width:'100%' , height :'100%' }} resizeMode={'contain'} source={require('../assets/bl.png') }/>) :
-      (<Image style={{width:'100%' , height :'100%' }} resizeMode={'contain'} source={require('../assets/resize.png') }/>)
+      type === 'tl' ? (<Image style={{width:'100%' , height :'100%', opacity: 0 }} resizeMode={'contain'} source={require('../assets/close.png') }/>) : 
+      type === 'tr' ? (<Image style={{width:'100%' , height :'100%', opacity: 0 }} resizeMode={'contain'} source={require('../assets/tr.png') }/>) :
+      type === 'br' ? (<Image style={{width:'100%' , height :'100%', opacity: 0 }} resizeMode={'contain'} source={require('../assets/br.png') }/>) :
+      type === 'bl' ? (<Image style={{width:'100%' , height :'100%', opacity: 0 }} resizeMode={'contain'} source={require('../assets/bl.png') }/>) :
+      (<Image style={{width:'100%' , height :'100%', opacity: 0 }} resizeMode={'contain'} source={require('../assets/resize.png') }/>)
      }
       </View>
     );

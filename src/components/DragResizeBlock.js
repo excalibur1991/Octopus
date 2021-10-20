@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import {GradientBox} from './GradientBox';
 
 import {
   Connector,
@@ -67,10 +68,10 @@ export class DragResizeBlock extends Component {
       calculateY: (height) => {
         return 0;
       },
-      onStart: ()=>{},//this.onResizeStart,
-      onMove: ()=>{},//this.onResizeTL,
-      //onEnd: this.onResizeEnd,
-      onEnd: this.onClose
+      onStart: ()=>this.onResizeStart,
+      onMove: ()=>this.onResizeTL,
+      onEnd: this.onResizeEnd,
+      //onEnd: this.onClose
     };
 
     /**
@@ -753,29 +754,29 @@ export class DragResizeBlock extends Component {
           left: x,
           top: y,
           width: w,
+
           height: h,
-          padding: CONNECTOR_SIZE / 2,
-          zIndex: isSelected ? zIndex + 1 : zIndex,
-          backgroundColor: (index===curRectIndex)? selectedBackgroundColor:  isSelected? selectedBackgroundColor: backgroundColor
+          zIndex: isSelected ? zIndex : zIndex,
+          //backgroundColor: (index===curRectIndex)? selectedBackgroundColor:  isSelected? selectedBackgroundColor: backgroundColor
         }}
       >
-        <TouchableWithoutFeedback
-          onPress={this.onPress}
-          onLongPress={this.onLongPress}
-        >
+        <GradientBox width={w} height={h}>
+        </GradientBox>
           <View
             style={{
-              width: '100%',
-              height: '100%',
+              width: w - CONNECTOR_SIZE,
+              height: h - CONNECTOR_SIZE,
+              margin: CONNECTOR_SIZE / 2,
+              position: 'absolute',
             }}
           >
             {children}
           </View>
-        </TouchableWithoutFeedback>
 
         {isDisabled ? null : this.renderConnectors()}
 
-      </View>
+      </View>       
+
     );
   }
 }
@@ -801,6 +802,7 @@ DragResizeBlock.defaultProps = {
   selectedBackgroundColor: '#FF000030',
   backgroundColor: '#00FF0030',
   connectors: [
+    CONNECTOR_CENTER,
     //CONNECTOR_TOP_MIDDLE,
     CONNECTOR_TOP_RIGHT,
     //CONNECTOR_MIDDLE_RIGHT,
@@ -808,7 +810,6 @@ DragResizeBlock.defaultProps = {
     //CONNECTOR_BOTTOM_MIDDLE,
     CONNECTOR_BOTTOM_LEFT,
     //CONNECTOR_MIDDLE_LEFT,
-    CONNECTOR_CENTER,
     CONNECTOR_TOP_LEFT,
   ],
 
