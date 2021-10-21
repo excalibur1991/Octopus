@@ -10,12 +10,9 @@ import {
     TouchableOpacity
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import UploadProgress from '../components/UploadProgress';
-import UploadProgressTile from '../components/UploadProgressTile';
 import {useStateValue} from '../services/State/State';
 import  Button from '../components/Button';
 import {theme} from '../services/Common/theme';
-const CloudUpload = require('../assets/cloud_upload.png');
 import {actions} from '../services/State/Reducer';
 import {
   annotate,
@@ -25,18 +22,14 @@ import {
   getPlayAIAnnotation,
   setPlayAIAnnotation
 } from '../services/API/APIManager';
-import MultiSelect from '../components/Multiselect.js';
-import DrawingPan from '../components/DrawingPan';
-import DocumentPicker from 'react-native-document-picker';
-import ColorPicker from 'react-native-wheel-color-picker';
+import DrawingPan, {EDIT_MODE} from '../components/DrawingPan';
 import {styles} from '../styles/playai';
 import {withTranslation} from 'react-i18next';
 import {
   Chip,
-  IconButton
 } from 'react-native-paper';
 import DottedProgressBar from '../components/DottedProgressBar';
-import SwipeCards from 'react-native-swipe-cards';
+import SwipeCards from '../components/SwipeCards';
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
 import LinearGradient from 'react-native-linear-gradient';
 import { GradientBox } from '../components/GradientBox';
@@ -48,7 +41,6 @@ import { GradientBox } from '../components/GradientBox';
  * 4. upload user defined result
  * 5. goto 1.
  */
-
 const enum_mode = {
   MODE_PHOTO: 'photo',
   MODE_LIBRARY:'library',
@@ -62,23 +54,15 @@ const PlayAI = ({navigation, t}) => {
   const [{cameraSettings}, dispatch] = useStateValue();
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [imageId, setImageId] = useState('ffffffff3f000000');
+  const [imageId, setImageId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [readOnly, setReadOnly] = useState(false);
   const [bounds, setBounds] = useState([]); 
   const [aiBounds, setAIBounds] = useState([]);
   const [imageData, setImageData] = useState(null);
-  const [age, setAge] = useState(1);
-  const [gender, setGender] = useState(['Male']);
-  const [skinColor, setSkinColor] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [curRectIndex, setCurRectIndex] = useState(-1);
-  const [anonymVisible, setAnonymVisible] = useState(false);
-  const [isEyeDrop, setEyeDrop] = useState(false);
   const [imageDimension, setImageDimension] = useState({width: 0, height: 0});
 
   //camera mode, 
@@ -89,71 +73,16 @@ const PlayAI = ({navigation, t}) => {
   const [isAnnotationUpload, setIsAnnotationUpload] = useState(false);
   const [isAnnoAI, setIsAnnoAI] =useState(false);
   const [cards, setCards] = useState([]);
+  const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
 
-  const uploadFile = async(file)=>{
-    console.log(file);
-    try{
-      setProgress(0.5);
-      const filedata = new FormData();
-      filedata.append('file', file);
-      const result = await uploadImage(filedata);
-      if(result){
-        console.log(result);
-        if(result.id){
-          setImageId(result.id);
-          
-          const tag_result = await submitTags(result.id);
-          if(tag_result){
-            setProgress(1);
-            setSuccess(true);
-          }
-          else{
-            setError(true);
-            setErrorText("Submit Annotation failed.");
-          }
 
-        } else if (result.message) {
-          setError(true);
-          setErrorText(result.message);
-        } else if (
-          result.status &&
-          result.status === 'failed' &&
-          result.messages &&
-          result.messages.length > 0
-        ){
-          setError(true);
-          setErrorText(result.messages.join(', '));
-        }
-
-      }else{
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'error',
-            title: 'Error Occured',
-            message:
-              'This Operation Could Not Be Completed. Please Try Again Later.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-      }
-    }catch(err){
-      console.log(err);
-      dispatch({
-        type: actions.SET_ALERT_SETTINGS,
-        alertSettings: {
-          show: true,
-          type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
-          showConfirmButton: true,
-          confirmText: 'Ok',
-        },
-      });
-    }
+  const initVariables = () =>{
+    setEditMode(EDIT_MODE.MODE_SWIPE);
+    setIsAnnoAI(false);
+    setBounds([]);
+    setImageId(null);
+    setImageData(null);
+    setMode(enum_mode.MODE_PHOTO);
   };
 
   const submitTags = async(imageId, description='', tags=['playai_anonymisation_bounty'])=>{
@@ -213,21 +142,6 @@ const PlayAI = ({navigation, t}) => {
 
   };
 
-  const onPickFile = async()=>{
-    try{
-      setProgress(0);
-      setSuccess(false);
-      setError(false);
-      setErrorText('');
-      const pickedFile = await DocumentPicker.pickSingle({
-        type:[DocumentPicker.types.images]
-      });
-      if(pickedFile){
-        setFile(pickedFile);
-        uploadFile(pickedFile);
-      }
-    }catch(err){}
-  };
 
   const verifyFields = ()=>{
     let message = '';
@@ -252,31 +166,25 @@ const PlayAI = ({navigation, t}) => {
   const fetchImage = async ()=>{
     //if(imageId){
       try{
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: true,
+        });
         const result = await getImageById (imageId);
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(result);
         fileReaderInstance.onload = () => {
-          console.log(fileReaderInstance.result);
           setImageData(fileReaderInstance.result);
-
-          /*
-          
-          //retrieve playAI metadata 
-          //const ai_result = await getPlayAIAnnotation({image_id: image_id});
-          const ai_result = {
-            image_id: imageId,
-            annotations: [
-              {tag: 'playai_anonymisation_bounty', type: 'box', x: 30, y: 30, width: 150, height: 100},
-              {tag: 'playai_anonymisation_bounty', type: 'box', x: 60, y: 100, width: 50, height: 70}
-            ]
-          };
-
-          if(ai_result && ai_result.annotations){
-            setBounds(ai_result.annotations);
-          }*/
         };
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: false,
+        });
       }catch(err){
-
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: false,
+        });
       }
   }
 
@@ -285,13 +193,21 @@ const PlayAI = ({navigation, t}) => {
     setAnnotateProgress(0.3);
     setIsAnnotationUpload(true);
     let annotations = [];
+    bounds.filter((bound)=>(!bound.isAI)).map(
+    (rect)=>{
+      annotations.push();
+    }
+    );
+
+
     let data = {
       image_id: imageId,
       annotations: annotations
     };
     const result = annotate(data).then((res)=>{
+      console.log(result);
       setAnnotateProgress(0.7);
-  
+
       //retrieve playAI metadata 
       //const ai_result = await getPlayAIAnnotation({image_id: image_id});
       const ai_result = {
@@ -308,96 +224,104 @@ const PlayAI = ({navigation, t}) => {
         setAnnotateProgress(1.0);
         setIsAnnotationUpload(false);
         setIsAnnoAI(true);
+        setEditMode(-1);
+        setEditMode(EDIT_MODE.MODE_SWIPE);
+        setMode(enum_mode.MODE_AI_ANNOATE);
       }, 300);
     });
   };
+
 
   useEffect(()=>{
     fetchImage();
   }, [imageId]);
 
-/*
-  useEffect(()=>{
-    if(curRectIndex == -1){
-      setAnonymVisible(false);
-    }else{
-      setAnonymVisible(true);
+  const openCameraView = ()=>{
+    dispatch({
+      type: actions.SET_CAMERASETTINGS,
+      cameraSettings: {
+        show: true,
+        onCallback : (res)=>{
+          closeCameraView(res);
+        }
+      },
+    });
+  };
 
-      if ( typeof (bounds[curRectIndex].age)  === 'undefined') {
-        bounds[curRectIndex].age = 25;
-      }
-      if ( typeof (bounds[curRectIndex].skinColor)  === 'undefined') {
-        bounds[curRectIndex].skinColor = '#FFFFFF';
-      }
-      if ( typeof (bounds[curRectIndex].gender)  === 'undefined') {
-        bounds[curRectIndex].gender = '#Male';
-      }
-
-      setAge(bounds[curRectIndex].age);
-      setSkinColor(bounds[curRectIndex].skinColor);
-      setGender([...(bounds[curRectIndex].gender)]);
+  const closeCameraView = (res)=>{
+    setResponse(res);
+    //cancel go back to menu
+    if(!res.imageId){
+      navigation.goBack();
     }
-  }, [curRectIndex]);
-*/
+    dispatch({
+      type: actions.SET_CAMERASETTINGS,
+      cameraSettings: {
+        show: false,
+        onCallback : null
+      },
+    });
 
-const openCameraView = ()=>{
-  dispatch({
-    type: actions.SET_CAMERASETTINGS,
-    cameraSettings: {
-      show: true,
-      onCallback : (res)=>{
-        closeCameraView(res);
-      }
-    },
-  });
-};
+    setMode(enum_mode.MODE_ANNOTATE);
 
-const closeCameraView = (res)=>{
-  console.log(res);
-  setResponse(res);
-  //cancel go back to menu
-  if(res.didCancel){
-    navigation.goBack();
+    if(res.imageId){
+      setImageId(res.imageId);
+    }
   }
-  dispatch({
-    type: actions.SET_CAMERASETTINGS,
-    cameraSettings: {
-      show: false,
-      onCallback : null
-    },
-  });
 
-  if(res.imageId){
-    setImageId(res.imageId);
+
+  const submitAnnotate = () => {
+    submitBounds();
+  };
+
+  const cancelAnnotate = () => {
+    setAnnotateProgress(0);
+    setIsAnnotationUpload(false);
+  };
+
+  const handleVerify = () => {
+    callVerify();
+  };
+
+  const handleReport = () => {
+    callReport();
+
+  };
+  const callVerify = async () => {
+
+    const response = await verifyImage( 
+      imageId,
+      {tags:["playAI"], description:""},
+      {
+        tags: {
+          up_votes:["playAI"], 
+          down_votes:[]}, 
+        descriptions: {
+          up_votes:[],
+          down_votes:[]}}
+    );
   }
-}
 
+  const callReport = async() => {
+    const photos = [imageId,];
+    const response = await reportImages(photos);
+  }
 
-const submitAnnotate = () => {
-  submitBounds();
-};
-
-const cancelAnnotate = () => {
-  setAnnotateProgress(0);
-  setIsAnnotationUpload(false);
-};
-
-const handleVerify = () => {
-
-};
-
-const handleReport = () => {
-
-};
-
-const cardRemoved = () =>{
-  setIsAnnoAI(false);
-  openCameraView();
-};
+  const cardRemoved = () =>{
+    setIsAnnoAI(false);
+    initVariables();
+    openCameraView();
+  };
 
   useEffect(()=>{
-    console.log('camera come');
-    //openCameraView();
+    if(mode == enum_mode.MODE_PHOTO){
+      initVariables();
+    }
+  }, [mode]);
+
+  useEffect(()=>{
+    initVariables();
+    openCameraView();
   }, []);
 
 
@@ -410,7 +334,7 @@ const cardRemoved = () =>{
           fontSize: 24,
           fontFamily: 'Inter',
           marginLeft: 20
-        }}>User Annotation & AI</Text>
+        }}>{t('playAI.userAnnotationAndAI')}</Text>
        
         <View style={styles.CardWrapper}>
             <Image
@@ -421,30 +345,27 @@ const cardRemoved = () =>{
             <View style={styles.CardView}>
               <SwipeCards
                 cards={[{name: 'abc'}]}
+                enabled={editMode == EDIT_MODE.MODE_SWIPE? true: false}
                 renderCard={(cardData)=> (
                   <View style={{
                     borderRadius: 15,
                     backgroundColor: '#F5F6FC',
-                    marginBottom: '3%',
-                    width: 300
                   }}>
                   <DrawingPan
                     setAnnoRect={setBounds}
                     setCurRectIndex={setCurRectIndex}
                     curRectIndex={curRectIndex}
                     annoRect={bounds}
-                    imageSource={{uri: imageData}}
+                    imageSource={imageData}
                     imageDimension={imageDimension}
-                    onDragEnd={
-                      (event, index)=>{console.log('onDragEnd', event, index)}
-                    }
-                    onResizeEnd={
-                      (event, index)=>{console.log('onResizeEnd', event, index)}
-                    }
-                    onLongPressRect={
-                      (event, index)=>{console.log('onLongPressRect', event, index)}
-                    }
+                    editMode={editMode}
+                    mode={mode}
+                    isAIEnabled={true}
                   />
+                  <View 
+                    pointerEvents={editMode == EDIT_MODE.MODE_SWIPE ? 'auto' : 'none'}
+                    style={{position:'absolute', width:'100%', height: '100%'}} 
+                    ></View>
                 </View>
                 )}
                 renderNoMoreCards={() =><></>}
@@ -480,21 +401,26 @@ const cardRemoved = () =>{
                 paddingHorizontal:15,
                 paddingVertical: 10,
                 borderRadius: 25,
+                borderColor: (editMode == EDIT_MODE.MODE_AI)? '#A737C1' : 'transparent',
                 height: 52,
+                borderStyle: 'solid',
+                borderWidth: 2,
               }}
               textStyle={{
                 fontSize: 20,
                 fontWeight: '600',
-                color: '#FFFFFF',
+                color: (editMode == EDIT_MODE.MODE_AI)? '#5E7086' : '#FFFFFF',
                 fontFamily: 'Inter'
               }}
-              title={'Edit AI'}
+              title={t('playAI.editAI')}
               icon={()=>null}
               onLongPress={()=>{}}
-              onPress={()=>{}}
+              onPress={()=>{
+                setEditMode(editMode ==EDIT_MODE.MODE_AI ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_AI);
+              }}
               selected={true}
               closeIconAccessibilityLabel={'Close'}
-            >Edit AI</Chip>
+            >{t('playAI.editAI')}</Chip>
             <Chip
               style={{ 
                 backgroundColor: '#3A506B',
@@ -502,44 +428,42 @@ const cardRemoved = () =>{
                 paddingVertical: 10,
                 borderRadius: 25,
                 fontWeight: '600',
-                height: 52
+                height: 52,
+                borderStyle: 'solid',
+                borderWidth: 2,
+                borderColor: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#21975A' : 'transparent',
                }}
                textStyle={{
                 fontSize: 20,
                 fontWeight: '600',
-                color: '#FFFFFF',
+                color: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#5E7086' : '#FFFFFF',
                 fontFamily: 'Inter'
                }}
-              title={'Edit Annotation'}
+              title={t('playAI.editAnnotation')}
               icon={()=>null}
               onLongPress={()=>{}}
-              onPress={()=>{}}
+              onPress={()=>{
+                setEditMode(editMode ==EDIT_MODE.MODE_ANNOTATE ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_ANNOTATE);
+              }}
               selected={true}
               closeIconAccessibilityLabel={'Close'}
-            >Edit Annotation</Chip>
+            >{t('playAI.editAnnotation')}</Chip>
           </View>
         </ScrollView>
         </>
-      ) : (<ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.uploadScrollContainer}>
+      ) : (<View
+          style={styles.uploadScrollContainer}>
         <View style={styles.readOnlyContainer}>
           <DrawingPan
             setAnnoRect={setBounds}
             setCurRectIndex={setCurRectIndex}
             curRectIndex={curRectIndex}
             annoRect={bounds}
-            imageSource={{uri: imageData}}
+            imageSource={imageData}
             imageDimension={imageDimension}
-            onDragEnd={
-              (event, index)=>{console.log('onDragEnd', event, index)}
-            }
-            onResizeEnd={
-              (event, index)=>{console.log('onResizeEnd', event, index)}
-            }
-            onLongPressRect={
-              (event, index)=>{console.log('onLongPressRect', event, index)}
-            }
+            mode={mode}
+            editMode={EDIT_MODE.MODE_ANNOTATE}
+            isAIEnabled={true}
           />
         </View>
           <View style={styles.tagWrapper}>
@@ -547,13 +471,13 @@ const cardRemoved = () =>{
               style={{ 
                 margin:2,
                }}
-              title={'PlayAI'}
+              title={t('playAI.PlayAI')}
               icon={()=>null}
               onLongPress={()=>{}}
               onPress={()=>{}}
               selected={true}
               closeIconAccessibilityLabel={'Close'}
-            >PlayAI</Chip>
+            >{t('playAI.PlayAI')}</Chip>
           </View>
           {
             !isAnnotationUpload ? (
@@ -591,213 +515,13 @@ const cardRemoved = () =>{
                       progress={annotateProgress}
                       hideLable={true}
                     />
+                    <Text style={{textAlign: 'right'}}>{t('playAI.annotating')}</Text>
                   </View>
                 </View>
-                <Text style={{textAlign: 'right'}}>Annotating...</Text>
               </View>
             )
           }
-        </ScrollView>)}
-
-
-
-
-
-
-      {/*
-      {readOnly? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.uploadScrollContainer}>
-        <View style={styles.readOnlyContainer}>
-          <DrawingPan
-            setAnnoRect={setBounds}
-            setCurRectIndex={setCurRectIndex}
-            curRectIndex={curRectIndex}
-            annoRect={bounds}
-            imageSource={{imageData}}
-            onDragEnd={
-              (event, index)=>{console.log('onDragEnd', event, index)}
-            }
-            onResizeEnd={
-              (event, index)=>{console.log('onResizeEnd', event, index)}
-            }
-            onLongPressRect={
-              (event, index)=>{console.log('onLongPressRect', event, index)}
-            }
-          />
-        </View>
-        <View>
-        <TextInput
-          style={styles.ageInput}
-          keyboardType={'numeric'}
-          value={age}
-          placeholder={t('playAI.age')}
-          placeholderTextColor={'#A9A9A9'}
-          onChangeText={(txt)=>{
-            setAge(parseInt(txt));
-          }
-          }
-        />
-        <MultiSelect 
-          hideTags
-          hideSubmitButton
-          hideDropdown        
-          items={[
-            {name: t('playAI.male'), value:'Male'}, 
-            {name: t('playAI.female'), value: 'Female'}, 
-            {name: t('playAI.other'), value: 'Other'}]}
-          uniqueKey="value"
-          selectText={t('playAI.gender')}
-          displayKey="name"
-          single={true}
-          showFilter={false}
-          canAddItems={false}
-          selectedItems={gender}
-          onSelectedItemsChange={(items)=>{ 
-            setGender(items) 
-          }}
-          textInputProps={{
-            editable:false
-          }}
-          searchInputPlaceholderText={t('playAI.gender')}
-          
-          selectedItemTextColor={'#00A5FF'}
-          styleMainWrapper={{
-            marginTop: 10
-          }}/>
-
-          <View style={styles.skinButton}>
-            <Text style={{
-              alignSelf: 'center',
-            }} color={'#A9A9A9'}>{t('Annotations.skinColor')}</Text>
-            <View
-              style={{
-                marginLeft: 10,
-                backgroundColor: skinColor,
-                paddingHorizontal: 10,
-                borderColor: '#ADADAD',
-                borderWidth: 1,
-                width: 100,
-                height: 35
-              }}>
-                <TextInput
-                  style={{
-                    height: 30,
-                    paddingVertical: 0
-                  }}
-                  onChangeText={setSkinColor}
-                  value={skinColor}
-                  placeholder={'#FFFFFF'}
-                />
-            </View>
-            <IconButton 
-              size={25} 
-              icon="eyedropper-variant" 
-              color={isEyeDrop ? theme.APP_COLOR: '#333333'}
-              onPress={()=>{
-                setEyeDrop(!isEyeDrop);
-              }}
-             />
-          </View>
-        {isEyeDrop && (
-        <View
-          style={styles.colorPickerView}>
-          <ColorPicker
-            // ref={r => { this.picker = r }}
-            color={skinColor ? skinColor: '#FFFFFF'}
-            swatchesOnly={false}
-            onColorChange={(color)=>{
-            }}
-            onColorChangeComplete={(color)=>{
-              setSkinColor(color)
-            }}
-            thumbSize={15}
-            sliderSize={15}
-            noSnap={false}
-            row={true}
-            swatchesLast={false}
-            swatches={false}
-            discrete={false}
-            style={styles.colorPicker}/>
-          </View>
-        )}
-        </View>
-        <Button
-          color={theme.APP_COLOR}
-          title={t('playAI.submit')}
-          buttonStyle={styles.button}
-          onPress={
-            ()=>{
-              submitBounds();
-            }
-          }
-          textStyle={styles.buttonText}
-          />
-        </ScrollView>
-        ) : file ? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.uploadScrollContainer}>
-          <UploadProgress
-            file={file}
-            progress={progress}
-            success={success}
-            error={error}
-            errorText={errorText}
-            onCancel={() => {
-              setProgress(0);
-              setSuccess(false);
-              setError(false);
-              setErrorText('');
-              setFile(null);
-            }}
-          />
-          <Button
-            color={theme.APP_COLOR}
-            title={error ? t('playAI.upload') : success ? t('playAI.next') : t('playAI.back')}
-            buttonStyle={styles.button}
-            onPress={() => {
-              if (error) {
-                onPickFile();
-              } else if (success) {
-                if (verifyFields()) {
-                  setReadOnly(true);
-                }
-              } else {
-                setFile(null);
-              }
-            }}
-            textStyle={styles.buttonText}
-          />
-        </ScrollView>
-        ) : (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.uploadScrollContainer}>
-            <View style={styles.uploadBorderContainer}>
-              <Image
-                resizeMode="stretch"
-                source={CloudUpload}
-                style={styles.imageIcon}
-              />
-              <Text style={[styles.uploadText, styles.marginBottom3p]}>
-                {t('playAI.title')}
-              </Text>
-              <Button
-                title={t('playAI.uploadImage')}
-                onPress={() =>
-                  onPickFile()
-                }
-                color={theme.APP_COLOR}
-                buttonStyle={styles.button}
-                textStyle={styles.buttonText}
-              />
-            </View>
-          </ScrollView>
-          
-              )
-      }*/}
+        </View>)}
     </View>
   );
 };

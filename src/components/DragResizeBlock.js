@@ -42,12 +42,14 @@ export class DragResizeBlock extends Component {
       h,
       minW,
       minH,
+      pointerEvents,
     } = props;
 
     this.state = {
       isSelected: false,
       x,
       y,
+      pointerEvents,
       w: w < minW ? minW : w,
       h: h < minH ? minH : h,
     };
@@ -712,7 +714,6 @@ export class DragResizeBlock extends Component {
     } = this.state;
 
     return connectors.map((connectorType) => {
-      console.log('---->',connectorType);
       return (
         <Connector
           key={connectorType}
@@ -736,7 +737,9 @@ export class DragResizeBlock extends Component {
       selectedBackgroundColor,
       backgroundColor,
       curRectIndex,
-      index
+      index,
+      pointerEvents,
+
     } = this.props;
 
     const {
@@ -749,6 +752,7 @@ export class DragResizeBlock extends Component {
 
     return (
       <View
+        pointerEvents={pointerEvents}
         style={{
           position: 'absolute',
           left: x,
@@ -757,10 +761,9 @@ export class DragResizeBlock extends Component {
 
           height: h,
           zIndex: isSelected ? zIndex : zIndex,
-          //backgroundColor: (index===curRectIndex)? selectedBackgroundColor:  isSelected? selectedBackgroundColor: backgroundColor
         }}
       >
-        <GradientBox width={w} height={h}>
+        <GradientBox width={w} height={h} stroke={5}>
         </GradientBox>
           <View
             style={{

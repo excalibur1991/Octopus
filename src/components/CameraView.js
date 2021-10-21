@@ -30,7 +30,7 @@ export const CameraView = (props) => {
     
     // mode photo | upload
     const [, dispatch] = useStateValue();
-    const [mode, setMode] = useState(null);
+    const [mode, setMode] = useState(enum_mode.MODE_PHOTO);
     const [response, setResponse] = useState(null);
     const [progress, setProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(true);
@@ -59,7 +59,10 @@ export const CameraView = (props) => {
     }, 
     [show]);
 
-    const onDismiss = ()=>{
+    const onDismiss = (res)=>{
+        onCallback(res);
+        setResponse(null);
+        setMode(null);
 
     }
 
@@ -76,9 +79,24 @@ export const CameraView = (props) => {
             },
             (res)=>{
                 if(res.didCancel){
-                    onCallback(res);
-                } else {
-                    console.log(res);
+                    onDismiss(res);
+                }else if(res.errorMessage){
+                    dispatch({
+                        type: actions.SET_ALERT_SETTINGS,
+                        alertSettings: {
+                          show: true,
+                          type: 'alert',
+                          tile: 'Notice',
+                          message: `Error Occurd while taking Photos. ${res.errorMessage}`,
+                          showConfirmButton: true,
+                          confirmText: 'Ok',
+                          onConfirmPressed: ()=>{
+                            onDismiss(res);
+                          }
+                        }
+                      });
+                }
+                else {
                     setMode(enum_mode.MODE_UPLOAD);
                     setResponse(res);
                     setUploadText('Uploading...');
@@ -102,7 +120,6 @@ export const CameraView = (props) => {
                 includeBase64: false,
             }, 
             (res)=>{
-                console.log('res', res);
                 if(res){
                     setMode(enum_mode.MODE_UPLOAD);
                    
@@ -118,12 +135,11 @@ export const CameraView = (props) => {
           const filedata = new FormData();
           filedata.append('file', file);
           const result = await uploadImage(filedata);
-          console.log(result);
           if(result){
             if(result.id){
               setProgress(1);
               setTimeout(()=>{
-                onCallback({imageId: result.id, ...response});
+                onDismiss({imageId: result.id, ...response});
               }, 500);
 
     
@@ -176,7 +192,7 @@ export const CameraView = (props) => {
 
     return (
         <>
-        {show && 
+        {show && mode === enum_mode.MODE_UPLOAD &&
         <View style={styles.container}>
             <View style={styles.contents}>
             {response?.assets &&

@@ -376,6 +376,7 @@ export default {
     userAnnotationAndAI: 'User Annotation & AI',
     editAI: 'Edit AI',
     editAnnotation: 'Edit Annotation',
+    PlayAI: 'PlayAI',
   }
   },
   

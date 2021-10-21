@@ -16,8 +16,6 @@ import {
 
 import clamp from 'clamp';
 
-import Defaults from './Defaults.js';
-
 const viewport = Dimensions.get('window')
 const SWIPE_THRESHOLD = 120;
 
@@ -121,7 +119,8 @@ export default class SwipeCards extends Component {
     renderCard: PropTypes.func,
     cardRemoved: PropTypes.func,
     dragY: PropTypes.bool,
-    smoothTransition: PropTypes.bool
+    smoothTransition: PropTypes.bool,
+    enabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -151,7 +150,8 @@ export default class SwipeCards extends Component {
     renderCard: (card) => null,
     style: styles.container,
     dragY: true,
-    smoothTransition: false
+    smoothTransition: false,
+    enabled: true,
   };
 
   constructor(props) {
@@ -175,6 +175,9 @@ export default class SwipeCards extends Component {
 
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+        if(!this.props.enabled){
+            return false;
+        }
         if (Math.abs(gestureState.dx) > 3 || Math.abs(gestureState.dy) > 3) {
           this.props.onDragStart();
           return true;
@@ -183,13 +186,17 @@ export default class SwipeCards extends Component {
       },
 
       onPanResponderGrant: (e, gestureState) => {
+        if(!this.props.enabled){
+            return false;
+        }
         this.state.pan.setOffset({ x: this.state.pan.x._value, y: this.state.pan.y._value });
         this.state.pan.setValue({ x: 0, y: 0 });
       },
 
       onPanResponderTerminationRequest: (evt, gestureState) => this.props.allowGestureTermination,
 
-      onPanResponderMove: Animated.event([
+      onPanResponderMove: 
+        Animated.event([
         null, { dx: this.state.pan.x, dy: this.props.dragY ? this.state.pan.y : 0 },
       ]),
 

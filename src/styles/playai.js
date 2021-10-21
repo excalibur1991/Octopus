@@ -73,9 +73,11 @@ export const styles = StyleSheet.create({
       alignItems: 'center'
     },
     uploadScrollContainer: {
-      paddingBottom: '15%',
+      flex: 1,
       flexGrow: 1,
-      paddingHorizontal: '8%',
+      width: '100%',
+      height: '100%',
+      paddingHorizontal: '5%',
     },
     readOnlyContainer: {
       borderRadius: 15,

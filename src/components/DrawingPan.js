@@ -4,7 +4,7 @@ import {
   Dimensions, 
   Text
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import ImageZoom from 'react-native-image-pan-zoom';
 import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import PropTypes from 'prop-types';
@@ -13,12 +13,19 @@ import {theme} from '../services/Common/theme';
 import {DragResizeBlock} from '../components/DragResizeBlock';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
+import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
+
+export const EDIT_MODE = {
+  MODE_SWIPE: 0,
+  MODE_AI: 1,
+  MODE_ANNOTATE: 2,
+};
+
 
 const DrawingPan = (props) => {
   const {
       setAnnoRect = () => {},
       annoRect = [],
-      imageSource ={},
       rectHeight = 30,
       rectWidth = 30,
       onLongPressRect=()=>{},
@@ -31,15 +38,23 @@ const DrawingPan = (props) => {
       setCurRectIndex= ()=>{},
       imageWidth = 0,
       imageHeight = 0,
+      editMode,
+      mode,
+      isAIEnabled = true,
     } = props || {};
 
   const [, dispatch] = useStateValue();
   const [cropPosition, setCropPosition] = useState({x:0, y:0});
   const [rectScale, setRectScale] = useState(1.0);
   const [zoomView, setZoomView] = useState(null);
-  const [frameDimension, setFrameDimension] = useState({width: 400, height: 300});
+  const [frameDimension, setFrameDimension] = useState({width: Dimensions.get('window').width - 50, height: 300});
   const [imageDimension, setImageDimension] = useState({width:0, height: 0});
+  const [imageBlob, setImageBlob] = useState(null);
+  const [canvas, setCanvas] = useState(null);
+  const [imageRatio, setImageRatio] = useState(1.0);
 
+  const canvasRef = useRef(null);
+  const zoomViewRef = useRef(null);
 
   const find_dimensions = (props, layout)=> {
       const {x, y, width, height} = layout;
@@ -55,6 +70,7 @@ const DrawingPan = (props) => {
     };
 
   const handleOnClick = (props, position)=>{
+    if(editMode != EDIT_MODE.MODE_ANNOTATE) return;
       var found = false;
       var _rect = [];
       const origLocX = Math.floor(position.locationX);
@@ -123,11 +139,6 @@ const DrawingPan = (props) => {
       props.setAnnoRect(rects);
       props.setCurRectIndex(index);
     };
-  
-
-    useEffect(()=>{
-      console.log(props.annoRect);
-    }, []);
 
     const removeRect = (index)=>{
       let rects = [];
@@ -139,6 +150,97 @@ const DrawingPan = (props) => {
       props.setAnnoRect(rects);
       props.setCurRectIndex(-1);
     }
+
+    const handleCentering = (imageWidth, imageHeight, cropWidth, cropHeight, rectScale)=>{
+      const originalImageWidth = imageWidth;
+      const originalImageHeight = imageHeight;
+      const scaledImageWidth = originalImageWidth * rectScale;
+      const scaledImageHeight = originalImageHeight * rectScale;
+      const scaledCropWidth = cropWidth; // rectScale;
+      const scaledCropHeight = cropHeight; // rectScale;
+      
+      const originX = (scaledImageWidth - scaledCropWidth) / 2;
+      const originY = (scaledImageHeight - scaledCropHeight) / 2;
+  
+      const cropPosX = originX;
+      const cropPosY = originY;
+      
+      setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
+      setRectScale(1.0);
+    }
+
+    const drawCanvas = (blob)=>{
+      console.log('drawCanvas');
+      if(canvas == null) return;
+      const image = new CanvasImage(canvas);
+      //const context = props.canvas.getContext('2d');
+      image.src = blob;
+      image.addEventListener('load', () => {
+        //assume current drawingpan is landcape
+        const width_ratio =  frameDimension.width / image.width;
+        const height_ratio = frameDimension.height / image.height;
+  
+        var image_ratio = width_ratio;
+  
+        var inWidthBase = true;
+        //the smaller is the base
+        if(width_ratio < height_ratio){
+          inWidthBase = true;
+        }
+        else {
+          inWidthBase= false;
+        }
+        var width = Math.floor(frameDimension.width);
+        var height = Math.floor(image.height * image_ratio);
+  
+        //props.canvas.width = image.width;
+        //props.canvas.height = image.height;
+        canvas.width = width;
+        canvas.height = height;
+  
+        const context = canvas.getContext('2d');
+        //context.setTransform(1, 0, 0, 1, 0, 0);
+        context.drawImage(image, 0, 0, width, height);
+        //context.scale(1, 1);
+  
+        zoomView.positionX = 0;
+        zoomView.positionY = 0;
+        //props.setFrameDimension({width: width, height: Dimensions.get('window').height *0.5});
+        setImageDimension({width: width, height: height});
+        setRectScale(1.0);
+        setImageRatio(image_ratio);
+        handleCentering(width, height, frameDimension.width, frameDimension.height, 1.0);
+      });
+    }
+
+
+    useEffect(()=>{
+      if(props.imageSource){
+        drawCanvas(props.imageSource);
+      }
+    },
+    [props.imageSource]);
+
+    useEffect(()=>{
+      console.log(mode);
+      if(props.imageSource){
+        drawCanvas(props.imageSource);
+      }
+    }, [mode]);
+
+    useEffect(()=>{
+      setCanvas(canvasRef.current);
+    }, [canvasRef]);
+
+    
+  useEffect(()=>{
+    setZoomView(zoomViewRef.current);
+  }, [zoomViewRef]);
+  
+    useEffect(()=>{
+    }, []);
+
+
   
 
   return (
@@ -146,22 +248,21 @@ const DrawingPan = (props) => {
         onLayout={(event) => {find_dimensions(props, event.nativeEvent.layout) }}
         style={styles.imageView}>
         <ImageZoom 
-          ref={(view)=>{setZoomView(view)}}
+          ref={zoomViewRef}
           cropWidth={frameDimension.width}
           cropHeight={frameDimension.height}
-          imageWidth={frameDimension.width}
-          imageHeight={frameDimension.height}
+          imageWidth={imageDimension.width}
+          imageHeight={imageDimension.height}
           style={styles.imageZoom}
+          enableCenterFocus={false}
           onMove={(position)=>{handleOnMove(props, position)}}
           onClick={(position)=>{handleOnClick(props, position)}}
         >
-          <Image
-          style={styles.imageContainer}
-          source={props.imageSource}
-          />
+          <Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/>
 
-          {props.annoRect.filter(i=>i.isAI).map((rect, index)=>(
+          {isAIEnabled && props.annoRect.filter(i=>i.isAI).map((rect, index)=>(
            <DragResizeBlock
+             pointerEvents={editMode == EDIT_MODE.MODE_AI? 'auto' : 'none'}
             key={'annoRect' + index}
             index={index}
             curRectIndex={props.curRectIndex}
@@ -211,10 +312,13 @@ const DrawingPan = (props) => {
            />
            {rect.isAI &&
               <Text style={{
-              position: 'absolute',
-              right: -25,
-              bottom: -10,
-            }}>AI</Text>
+                position: 'absolute',
+                color: '#72B5CB',
+                fontSize: 18,
+                fontWeight: '700',
+                right: -25,
+                bottom: -10,
+              }}>AI</Text>
            }
            
           </DragResizeBlock>
@@ -232,7 +336,7 @@ const DrawingPan = (props) => {
               <G>
                 <Defs>
                   <Pattern id="grid" width={rectWidth} height={rectHeight} patternUnits="userSpaceOnUse">
-                    <Path d="M 30 0 L 0 0 0 30" fill="none" stroke="gray" stroke-width="1"/>
+                    <Path d="M 30 0 L 0 0 0 30" fill="none" stroke="#00000030" stroke-width="1"/>
                   </Pattern>
                 </Defs>
                 <Rect width="100%" height="100%" fill="url(#grid)" />
@@ -243,11 +347,11 @@ const DrawingPan = (props) => {
                   
                     <Rect
                       key={'annoRect' + index}
-                      x={(rect.x - cropPosition.x) * rectScale + 4}
-                      y={(rect.y - cropPosition.y) * rectScale + 4}
-                      width={rect.width * rectScale - 8}
-                      height={rect.height * rectScale - 8}
-                      fill="#00ff0030"
+                      x={(rect.x - cropPosition.x) * rectScale + 2}
+                      y={(rect.y - cropPosition.y) * rectScale + 2}
+                      width={rect.width * rectScale - 4}
+                      height={rect.height * rectScale - 4}
+                      fill="#FDD7CC80"
                       stroke="none"
                       strokeWidth="0"
                     />
