@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Tag from '../components/Tag';
 import Button from '../components/Button';
 import {theme} from '../services/Common/theme';
 import TextInput from '../components/TextInput';
 import ImageTagInput from '../components/ImageTagInput';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import UploadProgress from '../components/UploadProgress';
 const CloudUpload = require('../assets/cloud_upload.png');
@@ -12,6 +13,7 @@ import DotNavigation from '../components/DotNavigation';
 import styles from '../styles/uploadimage';
 import {
   onPickFile,
+  uploadMultipleFiles,
   handlePiiSelect,
   handleBountySelect,
   verifyFields,
@@ -24,8 +26,12 @@ import {
   handleChangeTags,
 } from '../functions/uploadimage';
 import {useStateValue} from '../services/State/State';
+import LinearGradient from 'react-native-linear-gradient';
+import Ripple from '../components/Ripple';
 
-const Upload = ({navigation}) => {
+const Upload = ({navigation, route}) => {
+  const {params = {}} = route || {};
+  const {file = null} = params || {};
   const [files, setFiles] = useState([]);
   const [descriptions, setDescriptions] = useState([]);
   const [tags, setTags] = useState([]);
@@ -38,6 +44,19 @@ const Upload = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [, dispatch] = useStateValue();
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (file && file.uri) {
+      const pickedFiles = [file];
+      setFiles(pickedFiles);
+      uploadMultipleFiles(
+        pickedFiles,
+        fileUploadResponses,
+        setFileUploadResponses,
+        setUploadingImageIndex,
+      );
+    }
+  }, [file]);
 
   const piiOptions = [
     'This image contains biometric information',
@@ -91,7 +110,7 @@ const Upload = ({navigation}) => {
                         title={tag}
                         iconColor="#fff"
                         textColor="#fff"
-                        backgroundColor="#405570"
+                        backgroundColor={theme.COLORS.LIGHT_GREY}
                       />
                     ))}
                   {commonTags &&
@@ -101,7 +120,7 @@ const Upload = ({navigation}) => {
                         iconColor="#fff"
                         textColor="#fff"
                         title={commonTag}
-                        backgroundColor="#663b69"
+                        backgroundColor={theme.COLORS.DARK_PURPLE}
                       />
                     ))}
                   {pii &&
@@ -110,7 +129,11 @@ const Upload = ({navigation}) => {
                     piiOptions &&
                     piiOptions.length > 0 &&
                     pii[selectedIndex].map((index) => (
-                      <Tag title={piiOptions[index]} />
+                      <Tag
+                        textColor="#fff"
+                        title={piiOptions[index]}
+                        backgroundColor={theme.COLORS.LIGHT_GREY}
+                      />
                     ))}
                   {bounties &&
                     bounties[selectedIndex] &&
@@ -119,8 +142,9 @@ const Upload = ({navigation}) => {
                     bountyOptions.length > 0 &&
                     bounties[selectedIndex].map((index) => (
                       <Tag
+                        textColor="#fff"
                         title={bountyOptions[index]}
-                        backgroundColor="#F5C3CB"
+                        backgroundColor={theme.COLORS.LIGHT_PINK}
                       />
                     ))}
                 </View>
@@ -173,28 +197,6 @@ const Upload = ({navigation}) => {
             </>
           ) : files && files.length > 0 ? (
             <>
-              <UploadProgress
-                progress={
-                  selectedIndex === uploadingImageIndex
-                    ? 0.8
-                    : fileUploadResponses &&
-                      fileUploadResponses.length > 0 &&
-                      fileUploadResponses[selectedIndex]
-                    ? 1
-                    : 0
-                }
-                success={getSuccess(fileUploadResponses, selectedIndex)}
-                error={getError(fileUploadResponses, selectedIndex)}
-                onCancel={() =>
-                  onRemove(
-                    files,
-                    setFiles,
-                    fileUploadResponses,
-                    setFileUploadResponses,
-                    selectedIndex,
-                  )
-                }
-              />
               <View style={styles.imageDescriptionBox}>
                 {files[selectedIndex] && files[selectedIndex].uri && (
                   <Image
@@ -231,7 +233,7 @@ const Upload = ({navigation}) => {
                 commonTagsPlaceholder="Enter Common Tags"
               />
               <MultiSelectDropDown
-                textColor={theme.APP_COLOR}
+                textColor={theme.COLORS.LIGHT_GREY}
                 placeholder="Choose PII"
                 options={piiOptions}
                 selectedIndices={pii[selectedIndex]}
@@ -240,7 +242,7 @@ const Upload = ({navigation}) => {
                 }
               />
               <MultiSelectDropDown
-                textColor="#ED8495"
+                textColor={theme.COLORS.LIGHT_PINK}
                 options={bountyOptions}
                 selectedIndices={bounties[selectedIndex]}
                 placeholder="Choose Bounties"
@@ -248,12 +250,13 @@ const Upload = ({navigation}) => {
                   handleBountySelect(val, selectedIndex, bounties, setBounties)
                 }
               />
-              <View style={styles.rowSpaceBetween}>
-                <Button
-                  color={theme.APP_COLOR}
-                  title="Upload"
-                  style={styles.width49p}
-                  buttonStyle={styles.button}
+              <LinearGradient
+                end={{x: 1, y: 0}}
+                start={{x: 0.15, y: 0}}
+                colors={[theme.COLORS.LIGHT_BLUE, theme.COLORS.PURPLE]}
+                style={styles.borderRadius25}>
+                <Ripple
+                  innerStyle={styles.uploadButton}
                   onPress={() =>
                     onPickFile(
                       files,
@@ -262,57 +265,72 @@ const Upload = ({navigation}) => {
                       setFileUploadResponses,
                       setUploadingImageIndex,
                     )
-                  }
-                  textStyle={styles.buttonText}
-                />
-                <Button
-                  color={theme.APP_COLOR}
-                  title="Next"
-                  disabled={!canProceed(fileUploadResponses)}
-                  style={styles.width49p}
-                  buttonStyle={styles.button}
-                  onPress={() => {
-                    if (
-                      verifyFields(
-                        dispatch,
-                        fileUploadResponses,
-                        descriptions,
-                        tags,
-                        setSelectedIndex,
-                      )
-                    ) {
-                      const allFiles = [],
-                        allFileUploadResponses = [],
-                        allDescriptions = [],
-                        allTags = [],
-                        allPiiTags = [],
-                        allBountyTags = [];
-                      for (const [
-                        index,
-                        fileUploadResponse,
-                      ] of fileUploadResponses.entries()) {
-                        if (fileUploadResponse && fileUploadResponse.id) {
-                          allFiles.push(files[index]);
-                          allFileUploadResponses.push(fileUploadResponse);
-                          allDescriptions.push(descriptions[index]);
-                          allTags.push(tags[index]);
-                          allPiiTags.push(pii[index]);
-                          allBountyTags.push(bounties[index]);
-                        }
+                  }>
+                  <Text style={styles.buttonText}>Upload</Text>
+                </Ripple>
+              </LinearGradient>
+              <UploadProgress
+                progress={
+                  selectedIndex === uploadingImageIndex
+                    ? 0.8
+                    : fileUploadResponses &&
+                      fileUploadResponses.length > 0 &&
+                      fileUploadResponses[selectedIndex]
+                    ? 1
+                    : 0
+                }
+                success={getSuccess(fileUploadResponses, selectedIndex)}
+                error={getError(fileUploadResponses, selectedIndex)}
+                onCancel={() =>
+                  onRemove(
+                    files,
+                    setFiles,
+                    fileUploadResponses,
+                    setFileUploadResponses,
+                    selectedIndex,
+                  )
+                }
+                nextDisabled={!canProceed(fileUploadResponses)}
+                onNext={() => {
+                  if (
+                    verifyFields(
+                      dispatch,
+                      fileUploadResponses,
+                      descriptions,
+                      tags,
+                      setSelectedIndex,
+                    )
+                  ) {
+                    const allFiles = [],
+                      allFileUploadResponses = [],
+                      allDescriptions = [],
+                      allTags = [],
+                      allPiiTags = [],
+                      allBountyTags = [];
+                    for (const [
+                      index,
+                      fileUploadResponse,
+                    ] of fileUploadResponses.entries()) {
+                      if (fileUploadResponse && fileUploadResponse.id) {
+                        allFiles.push(files[index]);
+                        allFileUploadResponses.push(fileUploadResponse);
+                        allDescriptions.push(descriptions[index]);
+                        allTags.push(tags[index]);
+                        allPiiTags.push(pii[index]);
+                        allBountyTags.push(bounties[index]);
                       }
-                      setFiles(allFiles);
-                      setFileUploadResponses(allFileUploadResponses);
-                      setDescriptions(allDescriptions);
-                      setTags(allTags);
-                      setPii(allPiiTags);
-                      setBounties(allBountyTags);
-                      setSelectedIndex(0);
-                      setReadOnly(true);
                     }
-                  }}
-                  textStyle={styles.buttonText}
-                />
-              </View>
+                    setFiles(allFiles);
+                    setFileUploadResponses(allFileUploadResponses);
+                    setDescriptions(allDescriptions);
+                    setTags(allTags);
+                    setPii(allPiiTags);
+                    setBounties(allBountyTags);
+                    setSelectedIndex(0);
+                    setReadOnly(true);
+                  }
+                }}
+              />
             </>
           ) : null}
           <DotNavigation

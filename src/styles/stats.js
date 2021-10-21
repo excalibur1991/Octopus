@@ -1,63 +1,96 @@
-import {
-  StyleSheet,
-  processColor,
-} from 'react-native';
+/* eslint-disable no-unused-vars */
+import {StyleSheet, processColor, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '2%',
-    paddingTop: '6%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+  },
+  headerContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: '4.3%',
+    marginHorizontal: '5.2%',
+  },
+  headerText: {
+    fontSize: 24,
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+  },
+  headerActionContainer: {
+    alignItems: 'flex-end',
+  },
+  headerActionText: {
+    fontSize: 8,
+    fontWeight: '300',
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+  },
+  statsGraphContainer: {
+    paddingBottom: '15%',
+  },
+  statsContainer: {
+    paddingVertical: '3%',
+    paddingHorizontal: '6%',
+    backgroundColor: theme.APP_COLOR_2,
   },
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  bottomContainer: {
-    marginTop: '8%',
-  },
   boxContainer: {
     flex: 0.333,
-    margin: '1%',
+    margin: '1.3%',
+  },
+  bottomContainer: {
+    flex: 1,
+    marginTop: '2.5%',
+    paddingVertical: '3%',
+    backgroundColor: theme.APP_COLOR_2,
   },
   graphContainer: {
-    marginBottom: '10%',
+    width: Dimensions.get('screen').width * 0.92,
+    height: 280,
+    backgroundColor: theme.APP_COLOR_1,
+    borderRadius: 25,
+    marginLeft: 10,
     alignItems: 'center',
+    paddingVertical: 12,
+  },
+  marginRight10: {
+    marginRight: 10,
   },
   box: {
     paddingTop: '20%',
     borderRadius: 25,
     paddingBottom: '25%',
     alignItems: 'center',
-    backgroundColor: '#F5F6FC',
+    backgroundColor: theme.APP_COLOR_1,
   },
   imageIcon: {
-    height: 20,
-    width: 30,
+    height: 24,
+    width: 24,
   },
   boxMini: {
     marginTop: '10%',
     borderRadius: 25,
     alignItems: 'center',
     paddingVertical: '3%',
-    backgroundColor: '#F5F6FC',
+    backgroundColor: theme.APP_COLOR_1,
   },
   fullWidthBox: {
     marginTop: '2%',
     borderRadius: 25,
     alignItems: 'center',
     paddingVertical: '2%',
-    backgroundColor: '#F5F6FC',
+    backgroundColor: theme.APP_COLOR_1,
   },
   itemTitle: {
     fontSize: 10,
     marginTop: '5%',
-    color: '#41474E',
+    color: theme.COLORS.WHITE,
     fontWeight: '600',
     fontFamily: 'Inter-Regular',
   },
@@ -65,46 +98,36 @@ export const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '600',
     fontFamily: 'Inter-Bold',
+    color: theme.COLORS.WHITE,
   },
   miniBoxFooter: {
     fontSize: 6,
     fontWeight: '300',
     fontFamily: 'Inter-Regular',
+    color: theme.COLORS.WHITE,
   },
   fullWidthBoxValue: {
     fontSize: 17,
     fontWeight: '600',
     fontFamily: 'Inter-Bold',
+    color: theme.COLORS.LIGHT_BLUE,
+  },
+  fullWidthBoxFooter: {
+    fontSize: 6,
+    fontWeight: '300',
+    fontFamily: 'Inter-Regular',
+    color: theme.COLORS.LIGHT_BLUE,
   },
   itemValue: {
     fontSize: 17,
     marginTop: '20%',
-    color: '#41474E',
     fontWeight: '600',
     fontFamily: 'Inter-Bold',
+    color: theme.COLORS.WHITE,
   },
   graphTitle: {
     fontSize: 11,
     fontFamily: 'Inter-Bold',
-  },
-  graph: {
-    marginTop: '5%',
-  },
-  buttonContainer: {
-    marginBottom: '10%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonInnerContainer: {},
-  button: {
-    borderRadius: 25,
-    width: '70%',
-    alignSelf: 'center',
-  },
-  buttonText: {
-    color: '#41474E',
-    fontSize: 11,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
+    color: theme.COLORS.WHITE,
   },
 });

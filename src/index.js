@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import 'react-native-gesture-handler';
 import {enableScreens} from 'react-native-screens';
 enableScreens();
@@ -6,15 +7,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TabComponent from './components/Tab';
-import {StyleSheet, Image, Alert, View, Text} from 'react-native';
+import {StyleSheet, Image, Alert, View, Text, StatusBar} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
 import About from './screens/About';
 import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
-import Verification from './screens/Verification'
-import Annotation from './screens/Annotation'
+import Verification from './screens/Verification';
+import Annotation from './screens/Annotation';
 import Wallet from './screens/Wallet';
 import UploadGuidelines from './screens/UploadGuidelines';
 import UploadImage from './screens/UploadImage';
@@ -50,11 +51,16 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
+import TabBar from './components/TabBar';
+import Footer from './components/Footer';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
+  homeContainer: {
+    flex: 1,
+  },
   leftIcon: {
     width: 40,
     height: 24,
@@ -118,7 +124,7 @@ const Header = (
   headerStyle: {
     shadowOpacity: 0,
     elevation: isTransparent ? 0 : 4,
-    backgroundColor: theme.APP_COLOR,
+    backgroundColor: theme.APP_COLOR_2,
   },
   headerLeft: showAppIcon
     ? () => (
@@ -134,8 +140,7 @@ const Header = (
         </Ripple>
       )
     : null,
-  headerRight
-    : showLanguageDropdown
+  headerRight: showLanguageDropdown
     ? () => (
         <Menu renderer={renderers.Popover}>
           <MenuTrigger
@@ -191,165 +196,11 @@ const Header = (
     : null,
 });
 
-const LandingPageStack = () => {
-  const languageOptions = [
-    {
-      icon: English,
-      label: i18n.t('landing.english'),
-      value: 'en',
-    },
-    /*{
-      icon: Chinese,
-      label: i18n.t('landing.chinese'),
-      value: 'zh',
-    },
-    {
-      icon: Deutsch,
-      label: i18n.t('landing.deutsch'),
-      value: 'de',
-    },
-    {
-      icon: Japanese,
-      label: i18n.t('landing.japanese'),
-      value: 'ja',
-    },
-    {
-      icon: Spanish,
-      label: i18n.t('landing.spanish'),
-      value: 'es',
-    }, */
-  ];
-  const [{selectedLanguage}, dispatch] = useStateValue();
-  const language = languageOptions.find((l) => l.value === selectedLanguage);
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="LandingPage"
-        component={LandingPage}
-        options={({navigation}) => {
-          return Header(
-            {
-              showTitle: false,
-              showAppIcon: true,
-              isTransparent: true,
-              showLanguageDropdown: true,
-              selectedLanguage: language,
-              dispatch,
-              languageOptions,
-            },
-            navigation,
-          );
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const AboutStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="About"
-      component={About}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const VerificationStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Verification"
-      component={Verification}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
 const AnnotationStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Annotation"
       component={Annotation}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const StatsStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Stats"
-      component={Stats}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const UploadGuidelinesStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="UploadGuidelines"
-      component={UploadGuidelines}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const UploadImageStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="UploadImage"
-      component={UploadImage}
       options={({navigation}) => {
         return Header(
           {
@@ -445,132 +296,38 @@ const SwipeAIStack = () => (
   </Stack.Navigator>
 );
 
-const WalletStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Wallet"
-      component={walletEntry}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const MyStatsStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="MyStats"
-      component={MyStats}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
-
 //please ensure these information pages should be in here?
 const LegalStack = () => (
-  <Stack.Navigator>
+  <Stack.Navigator headerMode="none">
     <Stack.Screen
       name="Legal"
       component={Legal}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
+      // options={{headerShown: false}}
     />
     <Stack.Screen
       name="Bounty"
       component={Bounty}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: false,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
+      // options={{headerShown: false}}
     />
     <Stack.Screen
       name="PrivacyInformation"
       component={PrivacyInformation}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: false,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
+      // options={{headerShown: false}}
     />
     <Stack.Screen
       name="ImageCategorization"
       component={ImageCategorization}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: false,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
+      // options={{headerShown: false}}
     />
-    <Stack.Screen
-      name="TOS"
-      component={TOS}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: true,
-            showAppIcon: false,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
-      }}
-    />
+    <Stack.Screen name="TOS" component={TOS} options={{headerShown: false}} />
   </Stack.Navigator>
 );
-
 
 const BottomTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
       style: {
+        display: 'none',
         height: 60,
         backgroundColor: '#F2F2F2',
         elevation: 3,
@@ -586,7 +343,7 @@ const BottomTabs = () => (
     }}>
     <Tab.Screen
       name="LandingPage"
-      component={LandingPageStack}
+      component={LandingPage}
       options={{
         unmountOnBlur: true,
         tabBarButton: () => null,
@@ -594,7 +351,7 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="About"
-      component={AboutStack}
+      component={About}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="About" {...props} />,
@@ -602,20 +359,20 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="UploadGuidelines"
-      component={UploadGuidelinesStack}
+      component={UploadGuidelines}
       options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
     <Tab.Screen
       name="UploadImage"
-      component={UploadImageStack}
+      component={UploadImage}
       options={{unmountOnBlur: true, tabBarButton: () => null}}
     />
     <Tab.Screen
       name="Verification"
-      component={VerificationStack}
+      component={Verification}
       options={{
         unmountOnBlur: true,
-        tabBarVisible: false,
+        // tabBarVisible: false,
         tabBarButton: (props) => (
           <TabComponent label="Verification" {...props} />
         ),
@@ -623,7 +380,7 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="MyStats"
-      component={MyStatsStack}
+      component={MyStats}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="MyStats" {...props} />,
@@ -631,7 +388,7 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="Stats"
-      component={StatsStack}
+      component={Stats}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Stats" {...props} />,
@@ -639,7 +396,7 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="Wallet"
-      component={WalletStack}
+      component={walletEntry}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
@@ -650,35 +407,89 @@ const BottomTabs = () => (
       component={LegalStack}
       options={{
         unmountOnBlur: true,
-        tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Legal" {...props} />,
+        // tabBarVisible: false,
+        tabBarButton: (props) => <TabComponent label="Legal" {...props} />,
       }}
     />
   </Tab.Navigator>
 );
 
-const RootStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Loading"
-      component={Loading}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <Stack.Screen
-      name="Home"
-      component={BottomTabs}
-      options={{
-        headerShown: false,
-      }}
-    />
-  </Stack.Navigator>
-);
+const RootStack = () => {
+  const languageOptions = [
+    {
+      icon: English,
+      label: i18n.t('landing.english'),
+      value: 'en',
+    },
+    /*{
+      icon: Chinese,
+      label: i18n.t('landing.chinese'),
+      value: 'zh',
+    },
+    {
+      icon: Deutsch,
+      label: i18n.t('landing.deutsch'),
+      value: 'de',
+    },
+    {
+      icon: Japanese,
+      label: i18n.t('landing.japanese'),
+      value: 'ja',
+    },
+    {
+      icon: Spanish,
+      label: i18n.t('landing.spanish'),
+      value: 'es',
+    }, */
+  ];
+  const [{selectedLanguage}, dispatch] = useStateValue();
+  const language = languageOptions.find((l) => l.value === selectedLanguage);
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Loading"
+        component={Loading}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={({navigation}) => {
+          return Header(
+            {
+              showTitle: false,
+              showAppIcon: true,
+              isTransparent: true,
+              showLanguageDropdown: true,
+              selectedLanguage: language,
+              dispatch,
+              languageOptions,
+            },
+            navigation,
+          );
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const Home = () => {
+  return (
+    <View style={styles.homeContainer}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.APP_COLOR_2} />
+      <TabBar />
+      <BottomTabs />
+      <Footer />
+    </View>
+  );
+};
 
 const CreateRootNavigator = () => {
   return (
-    <NavigationContainer theme={{colors: {background: theme.APP_COLOR}}}>
+    <NavigationContainer theme={{colors: {background: theme.APP_COLOR_1}}}>
       <RootStack />
     </NavigationContainer>
   );

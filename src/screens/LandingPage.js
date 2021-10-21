@@ -8,8 +8,12 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import {getUsageFlag} from '../services/API/APIManager';
+import {ScrollView} from 'react-native-gesture-handler';
+import {fetchOverall} from '../functions/mystats';
 
 const LandingPage = ({navigation, t}) => {
+  const [uploadsCount, setUploadsCount] = useState(0);
+  const [verifiedCount, setVerifiedCount] = useState(0);
   const [options, setOptions] = useState([
     /*
     {
@@ -76,6 +80,26 @@ const LandingPage = ({navigation, t}) => {
   ]);
 
   useEffect(() => {
+    fetchOverall(
+      () => {},
+      () => {},
+      setUploadsCount,
+      setVerifiedCount,
+      [],
+      [],
+      [],
+      [],
+      [],
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+      () => {},
+    );
     const setup = async () => {
       const res = await getUsageFlag();
       const item = {
@@ -100,37 +124,59 @@ const LandingPage = ({navigation, t}) => {
 
   return (
     <View style={styles.container}>
-      <Ripple
-        outerStyle={styles.swipeAiOuter}
-        innerStyle={styles.swipeAiInner}
-        onPress={() => navigation.navigate('About')}>
-        <View style={styles.swipeAiIcon}>
-          <MaterialIcon size={50} name="info" color={theme.APP_COLOR} />
-        </View>
-        <Text style={styles.buttonText}>{t('landing.info')}</Text>
-      </Ripple>
-      <FlatList
-        style={styles.Container}
-        contentContainerStyle={styles.listContainer}
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>
+          <Text style={styles.textBold}>Hi !</Text> HoneyBadger98
+        </Text>
+        <MaterialIcon
+          size={20}
+          name="info"
+          onPress={() => {}}
+          color={theme.COLORS.WHITE}
+        />
+      </View>
+      <View style={styles.statsContainer}>
+        <Text style={styles.statsLabel}>
+          <Text style={styles.statsValue}>{uploadsCount}</Text> Uploads
+        </Text>
+        <Text style={styles.statsLabel}>
+          <Text style={styles.statsValue}>{verifiedCount}</Text> Verified
+        </Text>
+      </View>
+      <ScrollView
+        style={styles.menuContainer}
         showsVerticalScrollIndicator={false}
-        data={options}
-        renderItem={({item}) => (
+        contentContainerStyle={styles.menuContainerInner}>
+        {options.slice(0, 2).map((item) => (
           <Ripple
-            onPress={() => navigation.navigate(item.screen)}
-            key={item.id}
-            outerStyle={styles.listItemOuter}
+            onPress={() => {
+              if (['UploadGuidelines', 'UploadImage'].includes(item.screen)) {
+                navigation.navigate(item.screen, {file: null});
+              } else {
+                navigation.navigate(item.screen);
+              }
+            }}
+            outerStyle={styles.listItemOuterFull}
             innerStyle={styles.listItemInner}>
-            <item.Icon
-              style={styles.icon}
-              name={item.icon}
-              size={39}
-              color={theme.APP_COLOR}
-            />
             <Text style={styles.itemTitle}>{item.title}</Text>
           </Ripple>
-        )}
-        numColumns={2}
-      />
+        ))}
+        <FlatList
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          data={options.slice(2)}
+          renderItem={({item}) => (
+            <Ripple
+              key={item.id}
+              outerStyle={styles.listItemOuter}
+              innerStyle={styles.listItemInner}
+              onPress={() => navigation.navigate(item.screen)}>
+              <Text style={styles.itemTitle}>{item.title}</Text>
+            </Ripple>
+          )}
+          numColumns={2}
+        />
+      </ScrollView>
     </View>
   );
 };

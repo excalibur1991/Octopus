@@ -4,27 +4,29 @@ import {theme} from '../services/Common/theme';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '2%',
-    paddingTop: '8%',
-    paddingHorizontal: '8%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+  },
+  headerContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: '4.3%',
+    marginHorizontal: '5.2%',
+  },
+  headerText: {
+    fontSize: 24,
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
   },
   scrollContainer: {
     flex: 1,
-  },
-  header: {
-    fontSize: 24,
-    color: '#41474E',
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-    marginBottom: '5%',
-    fontFamily: 'Inter-Regular',
-    textAlign: 'center',
+    paddingVertical: '3%',
+    paddingHorizontal: '6%',
+    backgroundColor: theme.APP_COLOR_2,
   },
   subHeader: {
     fontSize: 16,
-    color: theme.COLORS.BLACK,
+    color: theme.COLORS.WHITE,
     fontWeight: Platform.OS === 'android' ? 'bold' : '500',
     marginBottom: '6%',
     fontFamily: 'Inter-Regular',
@@ -40,13 +42,14 @@ export default StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 12,
     fontWeight: '300',
+    color: theme.COLORS.WHITE,
   },
   bulletIcon: {
     paddingTop: Platform.OS === 'ios' ? '1.5%' : '2.3%',
     marginRight: '1%',
   },
   bulletText: {
-    color: '#000',
+    color: theme.COLORS.WHITE,
     fontSize: 12,
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
     fontFamily: 'Inter-Regular',
@@ -60,16 +63,5 @@ export default StyleSheet.create({
   checkBoxContainer: {
     marginTop: '3%',
     marginHorizontal: 1,
-  },
-  acceptButton: {
-    borderRadius: 15,
-    marginTop: '3%',
-  },
-  acceptButtonText: {
-    color: theme.COLORS.WHITE,
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-    fontFamily: 'Inter-Bold',
   },
 });

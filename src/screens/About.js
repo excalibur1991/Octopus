@@ -6,8 +6,11 @@ import {withTranslation} from 'react-i18next';
 const About = ({t}) => {
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.header}>{t('about.heading')}</Text>
+      <Text style={styles.header}>{t('about.heading')}</Text>
+      <ScrollView
+        style={styles.contentContainer}
+        contentContainerStyle={styles.contentInnerContainer}
+        showsVerticalScrollIndicator={false}>
         <Text style={styles.text}>{t('about.para1')}</Text>
         <Text style={styles.text}>{t('about.para2')}</Text>
         <Text style={styles.text}>{t('about.para3')}</Text>

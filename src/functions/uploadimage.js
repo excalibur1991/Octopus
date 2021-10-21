@@ -98,7 +98,7 @@ export const verifyFields = (
   return true;
 };
 
-const uploadMultipleFiles = async (
+export const uploadMultipleFiles = async (
   pickedFiles = [],
   fileUploadResponses = [],
   setFileUploadResponses = () => {},

@@ -1,99 +1,89 @@
-import {
-    View,
-    StyleSheet,
-    Text,
-    Linking,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useStateValue} from '../services/State/State';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import React from 'react';
 import {theme} from '../services/Common/theme';
 import {withTranslation} from 'react-i18next';
 import Button from '../components/Button';
 
 const Legal = ({navigation, t}) => {
+  const options = [
+    {
+      title: 'Bounty Information',
+      screen: 'Bounty',
+    },
+    {
+      title: 'Personal Information',
+      screen: 'ImageCategorization',
+    },
+    {
+      title: 'Privacy Policy',
+      screen: 'PrivacyInformation',
+    },
+    {
+      title: 'Terms of Service',
+      screen: 'TOS',
+    },
+  ];
 
-    const [, dispatch] = useStateValue();
-
-    const options = [
-        {
-            title: 'Bounty Information',
-            screen: 'Bounty'
-        },
-        {
-            title: 'Personal Information',
-            screen: 'ImageCategorization'
-        },
-        {
-            title: 'Privacy Policy',
-            screen: 'PrivacyInformation'
-        },
-        {
-            title:'Terms of Service',
-            screen: 'TOS',
-        }
-    ];
-   
-    useEffect(()=>{
-
-    }, []);
-
-    return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Legal Info</Text>
-            {
-                options.map((option)=>{
-                    return (
-                        <Button
-                            color="#f2f2f2"
-                            title={option.title}
-                            style={styles.buttonWrapper}
-                            buttonStyle={styles.button}
-                            onPress={() =>
-                                navigation.navigate(option.screen)
-                            }
-                            textStyle={styles.buttonText}
-                        />
-                    )
-                })
-            }
-            
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Legal Info</Text>
+      <ScrollView
+        style={styles.contentContainer}
+        contentContainerStyle={styles.contentInnerContainer}>
+        {options.map((option) => {
+          return (
+            <Button
+              title={option.title}
+              style={styles.buttonWrapper}
+              buttonStyle={styles.button}
+              onPress={() => navigation.navigate(option.screen)}
+              textStyle={styles.buttonText}
+            />
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
 };
 
-
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      width: '100%',
-      marginTop: '2%',
-      paddingTop: '5%',
-      paddingHorizontal: 25,
-      alignItems: 'center',
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 30
-
-    },
-    buttonText: {
-        fontSize: 19,
-        fontWeight: '600',
-        color: theme.APP_COLOR,
-        fontFamily: 'Inter-Bold',
-    },
-    buttonWrapper: {
-        width: '90%'
-    },
-    button: {
-        borderRadius: 25,
-        alignSelf: 'center',
-    },
+  container: {
+    flex: 1,
+  },
+  header: {
+    fontSize: 24,
+    display: 'flex',
+    fontWeight: '500',
+    flexDirection: 'row',
+    marginVertical: '4.3%',
+    marginHorizontal: '5.2%',
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+  },
+  contentContainer: {
+    flex: 1,
+    paddingTop: '5%',
+    paddingHorizontal: 25,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  contentInnerContainer: {
+    alignItems: 'center',
+    paddingBottom: '23%',
+  },
+  buttonText: {
+    fontSize: 19,
+    fontWeight: '500',
+    fontFamily: 'Inter-Regular',
+    color: theme.COLORS.WHITE,
+  },
+  buttonWrapper: {
+    width: '90%',
+  },
+  button: {
+    borderRadius: 25,
+    alignSelf: 'center',
+    backgroundColor: theme.APP_COLOR_1,
+  },
 });
-
 
 export default withTranslation()(Legal);

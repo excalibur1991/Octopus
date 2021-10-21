@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Text, Animated, TouchableOpacity, Easing} from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import {theme} from '../services/Common/theme';
 
 class CheckBox extends React.Component {
   constructor(props) {
@@ -24,8 +25,12 @@ class CheckBox extends React.Component {
   };
 
   render() {
-    const {title = '', size = 20, textColor = '#000', editable = true} =
-      this.props || {};
+    const {
+      title = '',
+      size = 20,
+      textColor = '#000',
+      editable = true,
+    } = this.props || {};
     const {springValue} = this.state;
 
     return (
@@ -42,15 +47,23 @@ class CheckBox extends React.Component {
             width: size,
             height: size,
             borderWidth: 1,
-            borderColor: this.props.isChecked ? '#00a9a5' : '#949aa2',
+            borderColor: this.props.isChecked
+              ? theme.COLORS.LIGHT_GREY
+              : '#949aa2',
             borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: this.props.isChecked ? '#00a9a5' : 'transparent',
+            backgroundColor: this.props.isChecked
+              ? theme.COLORS.LIGHT_GREY
+              : 'transparent',
             transform: [{scale: springValue}],
           }}>
           {this.props.isChecked ? (
-            <EntypoIcon name="check" color="#fff" size={size - 5} />
+            <EntypoIcon
+              name="check"
+              color={theme.APP_COLOR_2}
+              size={size - 5}
+            />
           ) : null}
         </Animated.View>
         <Text

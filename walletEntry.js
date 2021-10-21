@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -35,7 +36,7 @@ class App extends Component {
   render() {
     const {t} = this.props;
     return (
-      <Stack.Navigator>
+      <Stack.Navigator headerMode="none">
         <Stack.Screen
           name="WalletHome"
           component={Home}

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from 'react';
 import {LineChart} from 'react-native-charts-wrapper';
 import {
@@ -7,6 +9,7 @@ import {
   View,
   Dimensions,
   processColor,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -14,6 +17,8 @@ import {useStateValue} from '../services/State/State';
 import {styles} from '../styles/mystats';
 import {sumCumuData, updateChart, fetchOverall} from '../functions/mystats';
 import {withTranslation} from 'react-i18next';
+import {theme} from '../services/Common/theme';
+import OctIcon from 'react-native-vector-icons/Octicons';
 
 const UploadIcon = require('../assets/uploads.png');
 
@@ -23,7 +28,7 @@ var _arr_tag_annotations = [];
 var _arr_text_annotations = [];
 var _arr_verifications = [];
 
-const MyStats = ({t}) => {
+const MyStats = ({t, navigation}) => {
   useEffect(() => {
     fetchOverall(
       dispatch,
@@ -43,7 +48,7 @@ const MyStats = ({t}) => {
       setCumuChartDate,
       setCurChartState,
       setCurChartdataNew,
-      setCurCumuChartdata
+      setCurCumuChartdata,
     );
   }, []);
 
@@ -57,8 +62,8 @@ const MyStats = ({t}) => {
   const [cumuQuicrra, setCumuQuicrra] = useState(0);
 
   const [graphTitle, setGraphTitle] = useState(t('myStats.upload'));
-  const [chartDate, setChartDate] = useState(['2020', '2021']); 
-  const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']); 
+  const [chartDate, setChartDate] = useState(['2020', '2021']);
+  const [CumuChartDate, setCumuChartDate] = useState(['2020', '2021']);
   const [curChartState, setCurChartState] = useState('uploads');
 
   const [curChartdata, setCurChartdata] = useState({});
@@ -70,68 +75,94 @@ const MyStats = ({t}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.topContainer}>
-          <View style={styles.boxContainer}>
-            <View style={styles.box}>
-              <Image
-                resizeMode="stretch"
-                source={require('../assets/uploads.png')}
-                style={styles.imageIcon}
-              />
-              <Text style={styles.itemTitle}>{t('myStats.uploads')}</Text>
-              <Text style={styles.itemValue}>{uploads}</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>My Stats</Text>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Wallet')}>
+          <View style={styles.headerActionContainer}>
+            <OctIcon size={15} name="settings" color={theme.COLORS.WHITE} />
+            <Text style={styles.headerActionText}>Settings</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.statsGraphContainer}>
+        <View style={styles.statsContainer}>
+          <View style={styles.topContainer}>
+            <View style={styles.boxContainer}>
+              <View style={styles.box}>
+                <Image
+                  resizeMode="stretch"
+                  source={require('../assets/uploads.png')}
+                  style={styles.imageIcon}
+                />
+                <Text style={styles.itemTitle}>{t('myStats.uploads')}</Text>
+                <Text style={styles.itemValue}>{uploads}</Text>
+              </View>
+              <View style={styles.boxMini}>
+                <Text style={styles.miniBoxValue}>{uploadsQuicrra}</Text>
+                <Text style={styles.miniBoxFooter}>
+                  {t('myStats.datatoken')}
+                </Text>
+              </View>
             </View>
-            <View style={styles.boxMini}>
-              <Text style={styles.miniBoxValue}>{uploadsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
+            <View style={styles.boxContainer}>
+              <View style={styles.box}>
+                <Image
+                  resizeMode="stretch"
+                  source={require('../assets/annotations.png')}
+                  style={styles.imageIcon}
+                />
+                <Text style={styles.itemTitle}>{t('myStats.annotations')}</Text>
+                <Text style={styles.itemValue}>{annotations}</Text>
+              </View>
+              <View style={styles.boxMini}>
+                <Text style={styles.miniBoxValue}>{annotationsQuicrra}</Text>
+                <Text style={styles.miniBoxFooter}>
+                  {t('myStats.datatoken')}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.boxContainer}>
+              <View style={styles.box}>
+                <Image
+                  resizeMode="stretch"
+                  source={require('../assets/verifications.png')}
+                  style={styles.imageIcon}
+                />
+                <Text style={styles.itemTitle}>
+                  {t('myStats.verifications')}
+                </Text>
+                <Text style={styles.itemValue}>{verifications}</Text>
+              </View>
+              <View style={styles.boxMini}>
+                <Text style={styles.miniBoxValue}>{verificationsQuicrra}</Text>
+                <Text style={styles.miniBoxFooter}>
+                  {t('myStats.datatoken')}
+                </Text>
+              </View>
             </View>
           </View>
-          <View style={styles.boxContainer}>
-            <View style={styles.box}>
-              <Image
-                resizeMode="stretch"
-                source={require('../assets/annotations.png')}
-                style={styles.imageIcon}
-              />
-              <Text style={styles.itemTitle}>{t('myStats.annotations')}</Text>
-              <Text style={styles.itemValue}>{annotations}</Text>
-            </View>
-            <View style={styles.boxMini}>
-              <Text style={styles.miniBoxValue}>{annotationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
-            </View>
-          </View>
-          <View style={styles.boxContainer}>
-            <View style={styles.box}>
-              <Image
-                resizeMode="stretch"
-                source={require('../assets/verifications.png')}
-                style={styles.imageIcon}
-              />
-              <Text style={styles.itemTitle}>{t('myStats.verifications')}</Text>
-              <Text style={styles.itemValue}>{verifications}</Text>
-            </View>
-            <View style={styles.boxMini}>
-              <Text style={styles.miniBoxValue}>{verificationsQuicrra}</Text>
-              <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
-            </View>
+          <View style={styles.fullWidthBox}>
+            <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
+            <Text style={styles.fullWidthBoxFooter}>
+              {t('myStats.datatoken')}
+            </Text>
           </View>
         </View>
-        <View style={styles.fullWidthBox}>
-          <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
-          <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
-        </View>
-        <View style={styles.bottomContainer}>
+        <ScrollView
+          horizontal
+          pagingEnabled
+          nestedScrollEnabled
+          style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
             <Text style={styles.graphTitle}>
               {t('myStats.cumulative')} {graphTitle} {t('myStats.count')}
             </Text>
             <LineChart
-              style={styles.chart}
               data={curChartdata_new}
               chartDescription={{text: ''}}
-              legend={{}}
+              legend={{form: 'CIRCLE', textColor: processColor('white')}}
               marker={{
                 enabled: true,
                 backgroundTint: processColor('black'),
@@ -143,13 +174,14 @@ const MyStats = ({t}) => {
                 granularity: 1,
                 position: 'BOTTOM',
                 valueFormatter: chartDate,
-                drawGridLines:false
+                drawGridLines: false,
+                textColor: processColor('white'),
               }}
               yAxis={{
-                 left:{axisMinimum:0},
-                 right: {enabled: false},
-                 drawGridLines: false,
-                }}
+                left: {axisMinimum: 0, textColor: processColor('white')},
+                right: {enabled: false},
+                drawGridLines: false,
+              }}
               drawGridBackground={false}
               borderColor={processColor('#F0C0FF8C')}
               borderWidth={0}
@@ -164,24 +196,23 @@ const MyStats = ({t}) => {
               doubleTapToZoomEnabled={true}
               highlightPerTapEnabled={true}
               highlightPerDragEnabled={false}
-              width={350}
-              height={300}
+              width={Dimensions.get('screen').width * 0.9}
+              height={240}
               dragDecelerationEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
               noDataText={t('myStats.noChartDataAvailable')}
             />
           </View>
-          <View style={styles.graphContainer}>
+          <View style={{...styles.graphContainer, ...styles.marginRight10}}>
             <Text style={styles.graphTitle}>
               {t('myStats.cumulativeEarnings')}
             </Text>
             <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
             <LineChart
-              style={styles.chart}
               data={curCumuChartdata}
               chartDescription={{text: ''}}
-              legend={{}}
+              legend={{form: 'CIRCLE', textColor: processColor('white')}}
               marker={{
                 enabled: true,
                 backgroundTint: processColor('black'),
@@ -193,13 +224,14 @@ const MyStats = ({t}) => {
                 granularity: 1,
                 position: 'BOTTOM',
                 valueFormatter: CumuChartDate,
-                drawGridLines:false
+                drawGridLines: false,
+                textColor: processColor('white'),
               }}
               yAxis={{
-                 left:{axisMinimum:0},
-                 right: {enabled: false},
-                 drawGridLines: false,
-                }}
+                left: {axisMinimum: 0, textColor: processColor('white')},
+                right: {enabled: false},
+                drawGridLines: false,
+              }}
               drawGridBackground={false}
               borderColor={processColor('#F0C0FF8C')}
               borderWidth={0}
@@ -214,15 +246,15 @@ const MyStats = ({t}) => {
               doubleTapToZoomEnabled={true}
               highlightPerTapEnabled={true}
               highlightPerDragEnabled={false}
-              width={350}
-              height={300}
+              width={Dimensions.get('screen').width * 0.9}
+              height={230}
               dragDecelerationEnabled={true}
               dragDecelerationFrictionCoef={0.99}
               keepPositionOnRotation={false}
               noDataText={t('myStats.noChartDataAvailable')}
             />
           </View>
-        </View>
+        </ScrollView>
       </ScrollView>
     </View>
   );

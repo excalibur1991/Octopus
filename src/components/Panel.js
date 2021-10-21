@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Text, View, StyleSheet, Animated, Platform} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Ripple from '../components/Ripple';
+import {theme} from '../services/Common/theme';
 
 const Panel = ({title, children}) => {
   const [maxHeight, setMaxHeight] = useState();
@@ -43,6 +44,7 @@ const Panel = ({title, children}) => {
           <AntIcon
             name={expanded ? 'caretup' : 'caretdown'}
             style={styles.caretIcon}
+            color={theme.COLORS.WHITE}
             size={13}
           />
           <Text style={styles.title}>{title}</Text>
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   titleOuter: {
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    backgroundColor: '#E3E7FF',
+    backgroundColor: theme.COLORS.LIGHT_GREY,
   },
   titleInner: {
     flexDirection: 'row',
@@ -80,13 +82,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 13,
-    color: '#000',
+    color: theme.COLORS.WHITE,
     fontWeight: Platform.OS === 'android' ? 'bold' : '500',
     textAlign: 'center',
     fontFamily: 'Inter-Regular',
   },
   bodyOuter: {
-    backgroundColor: '#f5f6fc',
+    backgroundColor: theme.APP_COLOR_1,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
     paddingHorizontal: '3%',

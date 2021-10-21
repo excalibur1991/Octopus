@@ -6,10 +6,8 @@ export default StyleSheet.create({
     flex: 1,
     marginTop: '2%',
     paddingTop: '8%',
-    paddingHorizontal: '8%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    paddingHorizontal: '5.3%',
+    backgroundColor: theme.APP_COLOR_2,
   },
   marginBottom3p: {
     marginBottom: '3%',
@@ -30,7 +28,7 @@ export default StyleSheet.create({
     marginVertical: '10%',
   },
   uploadText: {
-    color: theme.APP_COLOR,
+    color: theme.COLORS.WHITE,
     fontSize: 12,
     textAlign: 'center',
     fontFamily: 'Inter-Regular',
@@ -53,13 +51,10 @@ export default StyleSheet.create({
     fontFamily: 'Inter-Bold',
   },
   uploadScrollContainer: {
-    paddingBottom: '15%',
+    paddingBottom: 10,
   },
   readOnlyContainer: {
-    borderRadius: 15,
-    paddingVertical: '8%',
     paddingHorizontal: '4%',
-    backgroundColor: '#F5F6FC',
     marginBottom: '3%',
   },
   readOnlyTagsContainer: {
@@ -80,9 +75,10 @@ export default StyleSheet.create({
     marginTop: 10,
     fontFamily: 'Inter-Regular',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+    color: theme.COLORS.WHITE,
   },
   descriptionContainer: {
-    borderColor: 'lightgray',
+    borderColor: theme.COLORS.LIGHT_GREY,
     borderRadius: 10,
     borderWidth: 1,
     marginVertical: 5,
@@ -91,11 +87,11 @@ export default StyleSheet.create({
   },
   text: {
     fontFamily: 'Inter-Regular',
+    color: theme.COLORS.WHITE,
   },
   imageDescriptionBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: '12%',
   },
   uploadImage: {
     flex: 1,
@@ -117,5 +113,16 @@ export default StyleSheet.create({
   },
   width49p: {
     width: '49%',
+  },
+  borderRadius25: {
+    borderRadius: 25,
+    marginVertical: 10,
+  },
+  uploadButton: {
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    justifyContent: 'center',
   },
 });

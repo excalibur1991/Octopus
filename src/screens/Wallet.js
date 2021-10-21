@@ -5,7 +5,7 @@ import CopyTextBox from '../components/CopyTextBox';
 import {styles} from '../styles/wallet';
 import {withTranslation} from 'react-i18next';
 
-const Wallet = () => {
+const Wallet = ({t}) => {
   const credentials = [
     {
       oneLine: false,

@@ -11,44 +11,68 @@ export const styles = StyleSheet.create({
   boxText: {
     marginTop: '4%',
     width: 250,
+    color: theme.COLORS.WHITE,
   },
   container_: {
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  wrapperStyle :{
+  wrapperStyle: {
     backgroundColor: '#00000000',
     borderBottomColor: '#000000',
     borderBottomWidth: 1,
   },
-  button1 :{
+  button1: {
     width: '100%',
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 2,
-    borderColor: "#ffffff",
+    borderColor: '#ffffff',
     borderWidth: 1,
-    shadowColor: "rgba(0,0,0,.12)",
+    shadowColor: 'rgba(0,0,0,.12)',
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   bigTextView: {
-    fontFamily: "Cochin",
+    fontFamily: 'Cochin',
     fontSize: 15,
-    fontWeight: "bold",
-   // position:'relative',
+    fontWeight: 'bold',
+    color: theme.COLORS.WHITE,
+    // position:'relative',
     //left:10,
     //top:'-5%'
   },
   container: {
     flex: 1,
-    marginTop: '2%',
-    paddingTop: '5%',
     paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+  },
+  headerContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: '4.3%',
+    marginHorizontal: '2%',
+  },
+  headerText: {
+    fontSize: 24,
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+  },
+  headerActionContainer: {
+    alignItems: 'flex-end',
+  },
+  headerActionText: {
+    fontSize: 8,
+    fontWeight: '300',
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+  },
+  contentContainer: {
+    paddingTop: '5%',
+    alignItems: 'center',
+    paddingBottom: '16%',
   },
   rows: {
     flexDirection: 'row',
@@ -84,30 +108,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  wrapperStyle :{
-    backgroundColor: '#00000000',
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1,
-  },
-  button1 :{
-    width: '100%',
-    backgroundColor: "#ffffff",
-    borderRadius: 2,
-    borderColor: "#ffffff",
-    borderWidth: 1,
-    shadowColor: "rgba(0,0,0,.12)",
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    justifyContent: 'space-between'
-  },
-  MainContainer:
-  {
-    paddingTop: (Platform.OS === 'ios') ? 20 : 0,
+  MainContainer: {
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
     flex: 1,
     padding: 20,
     paddingBottom: 0,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textInputStyle: {
     textAlign: 'center',
@@ -116,7 +123,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#AA00FF',
     borderRadius: 8,
-    marginBottom: 20
+    marginBottom: 20,
   },
   button: {
     width: '92%',
@@ -124,7 +131,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 12,
     backgroundColor: '#AA00FF',
     borderRadius: 5,
-    marginBottom: 20
+    marginBottom: 20,
   },
   TextStyle: {
     color: '#fff',
@@ -134,30 +141,23 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   parent: {
-    //flex: 1,
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: theme.APP_COLOR,
-    borderRadius: 8,
+    borderBottomWidth: 0.5,
+    borderColor: theme.COLORS.WHITE,
     marginBottom: 20,
-    width: 300
-   // justifyContent: 'flex-start'
+  },
+  width90p: {
+    width: '90%',
   },
   buttonStyle: {
-      borderRadius: 25,
-      width: '70%',
-      alignSelf: 'center',
-    },
-    buttonText: {
-      fontSize: 19,
-      fontWeight: '600',
-      color: theme.APP_COLOR,
-      fontFamily: 'Inter-Bold',
-    },
-    deleteButtonText: {
-      fontSize: 19,
-      fontWeight: '600',
-      color: '#FF1493',
-      fontFamily: 'Inter-Bold',
-    },
+    borderRadius: 25,
+    alignSelf: 'center',
+    backgroundColor: theme.COLORS.LIGHT_GREY,
+  },
+  deleteButtonText: {
+    fontSize: 18,
+    fontFamily: 'Inter-Regular',
+    color: theme.COLORS.LIGHT_RED,
+    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
+  },
 });

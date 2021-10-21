@@ -1,15 +1,26 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-unused-vars */
 //import '../../shim.js'
-import React, {Component} from 'react'
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity,TouchableHighlight, ToastAndroid} from 'react-native'
+import React, {Component} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  TouchableHighlight,
+  ToastAndroid,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import {connect} from "react-redux"
-import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js'
-import * as Utils from '../web3/utils'
-import Dialog from "react-native-dialog"
+import {connect} from 'react-redux';
+import {STPupdateAccounts, STPupdateSeedPhrase} from '../actions/actions.js';
+import * as Utils from '../web3/utils';
+import Dialog from 'react-native-dialog';
 //import lightwallet from 'eth-lightwallet'
-import bip39 from 'react-native-bip39'
-import { hdPathString, localStorageKey } from '../web3/constants'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import bip39 from 'react-native-bip39';
+import {hdPathString, localStorageKey} from '../web3/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/Button';
 import {Picker} from '@react-native-picker/picker';
 import CButton from '../components/CButton';
@@ -20,9 +31,12 @@ import {
   handleNewWallet,
   readStoredWallet,
   handleNewAccount,
-  handleWalletDelete
+  handleWalletDelete,
 } from '../functions/walletsettings';
 import {withTranslation} from 'react-i18next';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {theme} from '../services/Common/theme';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 class WalletSettings extends Component {
   constructor(props) {
@@ -32,7 +46,7 @@ class WalletSettings extends Component {
       publicKey: '',
       privateKey: '',
       pword: '',
-      mnemonics:'',
+      mnemonics: '',
       newdialogVisible: false,
       restoredialogVisible: false,
       selectedLanguage: '',
@@ -49,9 +63,7 @@ class WalletSettings extends Component {
       dappTokenBalance: '0',
       stakingBalance: '0',
       age: '',
-      pword: ''
     };
-
 
     // const [age, setAge] = useState('')
 
@@ -70,129 +82,158 @@ class WalletSettings extends Component {
   componentDidMount() {
     chkNetwork(this);
     webThreeReturned(this);
-    readStoredWallet(this)
+    readStoredWallet(this);
   }
 
-
   render() {
-    const {t} = this.props;
+    const {t, navigation} = this.props;
     return (
-      <ScrollView  style={styles.container} showsVerticalScrollIndicator={true}>
-        <View style={{display: 'none'}}>
-          <Picker
-            selectedValue={this.state.networktype}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({networktype: itemValue })
-            }>
-            <Picker.Item label={t('walletSettings.mainnet')} value="mainnet" />
-          </Picker>
-          <View style={styles.alignCenter}>
-            <Text>
-              {this.state.isConnected
-                ? `${t('walletSettings.connectedTo')} ${
-                    this.state.networktype
-                  } ${t('walletSettings.node')}`
-                : t('walletSettings.notConnected')}
-            </Text>
-          </View>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Settings</Text>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('My Wallet')}>
+            <View style={styles.headerActionContainer}>
+              <MaterialIcon
+                size={15}
+                name="account-balance-wallet"
+                color={theme.COLORS.WHITE}
+              />
+              <Text style={styles.headerActionText}>My Wallet</Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-        <View>
-          <View style={[styles.rows, {display: 'none'}]}>
-            <View>
-              <Text />
-              <Text style={styles.quickra}>0 {t('walletSettings.quicra')}</Text>
-              <Text style={styles.ocean}>
-                {this.state.ethTokenBal} {t('walletSettings.eth')}
+        <ScrollView
+          showsVerticalScrollIndicator={true}
+          contentContainerStyle={styles.contentContainer}>
+          <View style={{display: 'none'}}>
+            <Picker
+              selectedValue={this.state.networktype}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({networktype: itemValue})
+              }>
+              <Picker.Item
+                label={t('walletSettings.mainnet')}
+                value="mainnet"
+              />
+            </Picker>
+            <View style={styles.alignCenter}>
+              <Text>
+                {this.state.isConnected
+                  ? `${t('walletSettings.connectedTo')} ${
+                      this.state.networktype
+                    } ${t('walletSettings.node')}`
+                  : t('walletSettings.notConnected')}
               </Text>
-              <Text style={styles.ocean}>
-                {this.state.oceanERC20TokenBal} {t('walletSettings.ocean')}
-              </Text>
-              <Text style={styles.ocean}>
-                {this.state.phec0ERC20TokenBal} {t('walletSettings.phecor')}
-              </Text>
-            </View>
-            <View style={styles.alignEnd}>
-              <Text style={styles.txtPortfolio}>
-                24h {t('walletSettings.portfolio')}
-              </Text>
-              <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
             </View>
           </View>
-          <Text style={styles.bigTextView}>
-            {t('walletSettings.info')}
-          </Text>
-          <Text />
           <View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.publicKey')}
-            </Text>
-            <View style={styles.parent}>
-              <Text numberOfLines={1} style={styles.boxText}>
-                {this.state.publicKey}
-              </Text>
-              <CButton text={this.state.publicKey}/>
+            <View style={[styles.rows, {display: 'none'}]}>
+              <View>
+                <Text />
+                <Text style={styles.quickra}>
+                  0 {t('walletSettings.quicra')}
+                </Text>
+                <Text style={styles.ocean}>
+                  {this.state.ethTokenBal} {t('walletSettings.eth')}
+                </Text>
+                <Text style={styles.ocean}>
+                  {this.state.oceanERC20TokenBal} {t('walletSettings.ocean')}
+                </Text>
+                <Text style={styles.ocean}>
+                  {this.state.phec0ERC20TokenBal} {t('walletSettings.phecor')}
+                </Text>
+              </View>
+              <View style={styles.alignEnd}>
+                <Text style={styles.txtPortfolio}>
+                  24h {t('walletSettings.portfolio')}
+                </Text>
+                <Text style={styles.txtOceanDelta}> (+15.53%) </Text>
+              </View>
             </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.warning')}
-            </Text>
+            <Text style={styles.bigTextView}>{t('walletSettings.info')}</Text>
             <Text />
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.mnemonicPhrase')}
-            </Text>
-            <View style={styles.parent}>
-            <TextInput
-               numberOfLines={1} 
-               style={styles.boxText}
-               value={this.state.mnemonics}
-               editable={false}         
-               secureTextEntry={this.state.mnemonics? true:false}   
-              />
-              <CButton text={this.state.mnemonics}/>
-            </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.privateKey')}
-            </Text>
-            <View style={styles.parent}>
-            <TextInput
-               numberOfLines={1} 
-               style={styles.boxText}
-               value={this.state.privateKey}
-               editable={false}         
-               secureTextEntry={this.state.privateKey? true:false}   
-              />
-              <CButton text={this.state.privateKey}/>
-            </View>
-            <Text style={styles.bigTextView}>
-              {t('walletSettings.password')}
-            </Text>
-            <View style={styles.parent}>
-            <TextInput
-              numberOfLines={1} 
-              style={styles.boxText}
-              value={this.state.pword}
-              editable={false}          
-              secureTextEntry={this.state.pword? true:false}        
-             /> 
-             <CButton text={this.state.pword}/>
+            <View>
+              <Text style={styles.bigTextView}>
+                {t('walletSettings.publicKey')}
+              </Text>
+              <View style={styles.parent}>
+                <Text numberOfLines={1} style={styles.boxText}>
+                  {this.state.publicKey}
+                </Text>
+                <CButton text={this.state.publicKey} />
+              </View>
+              <Text style={styles.bigTextView}>
+                {t('walletSettings.warning')}
+              </Text>
+              <Text />
+              <Text style={styles.bigTextView}>
+                {t('walletSettings.mnemonicPhrase')}
+              </Text>
+              <View style={styles.parent}>
+                <TextInput
+                  numberOfLines={1}
+                  style={styles.boxText}
+                  value={this.state.mnemonics}
+                  editable={false}
+                  secureTextEntry={this.state.mnemonics ? true : false}
+                />
+                <CButton text={this.state.mnemonics} />
+              </View>
+              <Text style={styles.bigTextView}>
+                {t('walletSettings.privateKey')}
+              </Text>
+              <View style={styles.parent}>
+                <TextInput
+                  numberOfLines={1}
+                  style={styles.boxText}
+                  value={this.state.privateKey}
+                  editable={false}
+                  secureTextEntry={this.state.privateKey ? true : false}
+                />
+                <CButton text={this.state.privateKey} />
+              </View>
+              <Text style={styles.bigTextView}>
+                {t('walletSettings.password')}
+              </Text>
+              <View style={styles.parent}>
+                <TextInput
+                  numberOfLines={1}
+                  style={styles.boxText}
+                  value={this.state.pword}
+                  editable={false}
+                  secureTextEntry={this.state.pword ? true : false}
+                />
+                <CButton text={this.state.pword} />
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    )
+          <Button
+            color={theme.APP_COLOR_1}
+            title="Delete Info"
+            style={styles.width90p}
+            buttonStyle={styles.buttonStyle}
+            onPress={() => {}}
+            textStyle={styles.deleteButtonText}
+          />
+        </ScrollView>
+      </View>
+    );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   web3: state.web3,
   account: state.reducers.account,
   seedPhrase: state.reducers.seedPhrase,
-})
+});
 
 const mapDispatchToProps = (dispatch) => {
   // Action
   return {
     STPupdateAccounts: (account0) => dispatch(STPupdateAccounts(account0)),
-    STPupdateSeedPhrase: (seedPhrase) => dispatch(STPupdateSeedPhrase(seedPhrase)),
+    STPupdateSeedPhrase: (seedPhrase) =>
+      dispatch(STPupdateSeedPhrase(seedPhrase)),
   };
 };
 

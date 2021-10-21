@@ -1,54 +1,63 @@
 import React from 'react';
 import {Text, View, StyleSheet, Platform} from 'react-native';
 import * as Progress from 'react-native-progress';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {theme} from '../services/Common/theme';
-import Ripple from './Ripple';
+import Button from '../components/Button';
 
 const UploadProgress = ({
   progress = 0,
   success = false,
   error = false,
+  onNext = () => {},
+  nextDisabled = true,
   onCancel = () => {},
 }) => {
   return (
-    <View style={styles.center}>
-      <Text style={styles.text}>{success ? 'Uploaded' : 'Uploading'}</Text>
-      {error ? (
-        <>
-          <IonIcon name="close" size={40} color="#D60E18" />
-          <Text style={styles.errorText}>{error}</Text>
-        </>
-      ) : success ? (
-        <IonIcon name="checkmark-circle" size={40} color="#62B25D" />
+    <View style={styles.rowSpaceBetween}>
+      {success || error ? (
+        <Button
+          title="Next"
+          onPress={onNext}
+          disabled={nextDisabled}
+          color={theme.APP_COLOR}
+          style={styles.buttonContainer}
+          buttonStyle={styles.button}
+          textStyle={styles.nextButtonText}
+        />
       ) : (
-        <Text style={styles.text}>{Math.floor(progress * 100) + '%'}</Text>
-      )}
-      {!error && (
-        <>
-          <Progress.Bar
-            width={300}
-            borderWidth={0}
-            height={6}
-            color="#4e9cf9"
-            progress={progress}
-            unfilledColor="#e0eeff"
+        !error && (
+          <Button
+            title="Cancel"
+            onPress={onCancel}
+            color={theme.APP_COLOR}
+            style={styles.buttonContainer}
+            buttonStyle={styles.button}
+            textStyle={styles.cancelButtonText}
           />
-          {!success && (
-            <Ripple
-              onPress={onCancel}
-              innerStyle={styles.cancelInnerContainer}
-              outerStyle={styles.cancelOuterContainer}>
-              <IonIcon
-                size={18}
-                color={theme.APP_COLOR}
-                name="close-circle-outline"
-              />
-              <Text style={styles.cancelText}>Cancel</Text>
-            </Ripple>
-          )}
-        </>
+        )
       )}
+      <View style={styles.progressContainer}>
+        {error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : success ? (
+          <Text style={styles.successText}>Uploaded</Text>
+        ) : (
+          <Text style={styles.uploadText}>{`Uploading... (${Math.floor(
+            progress * 100,
+          )}%)`}</Text>
+        )}
+        {!error && (
+          <Progress.Bar
+            height={6}
+            width={220}
+            borderWidth={0}
+            progress={progress}
+            style={styles.progress}
+            color={theme.APP_COLOR_1}
+            unfilledColor={theme.COLORS.LIGHT_GREY}
+          />
+        )}
+      </View>
     </View>
   );
 };
@@ -56,37 +65,62 @@ const UploadProgress = ({
 export default UploadProgress;
 
 const styles = StyleSheet.create({
+  rowSpaceBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  buttonContainer: {
+    width: '25%',
+  },
+  progressContainer: {
+    width: '73%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  button: {
+    borderRadius: 15,
+    backgroundColor: theme.COLORS.LIGHT_GREY,
+  },
+  nextButtonText: {
+    fontSize: 13,
+    textAlign: 'center',
+    fontFamily: 'Inter-Regular',
+    color: theme.COLORS.LIGHT_BLUE,
+    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+  },
+  cancelButtonText: {
+    fontSize: 13,
+    textAlign: 'center',
+    fontFamily: 'Inter-Regular',
+    color: theme.COLORS.LIGHT_RED,
+    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+  },
   center: {
     alignItems: 'center',
   },
-  text: {
-    fontSize: 24,
-    color: '#41474E',
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-    fontFamily: 'Inter-Bold',
+  uploadText: {
+    fontSize: 18,
     textAlign: 'center',
+    fontFamily: 'Inter-Bold',
+    color: theme.COLORS.WHITE,
+    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
   },
   errorText: {
     fontSize: 12,
-    color: '#D60E18',
     fontWeight: '600',
+    textAlign: 'right',
     fontFamily: 'Inter-Regular',
-    textAlign: 'center',
+    color: theme.COLORS.ERROR_COLOR,
   },
-  cancelOuterContainer: {
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  cancelInnerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-  },
-  cancelText: {
-    marginLeft: 2,
-    color: theme.APP_COLOR,
+  successText: {
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'right',
     fontFamily: 'Inter-Regular',
+    color: theme.COLORS.SUCCESS_COLOR,
+  },
+  progress: {
+    marginTop: 2,
   },
 });

@@ -28,7 +28,7 @@ const ImageTagInput = ({
               title={tag}
               iconColor="#fff"
               textColor="#fff"
-              backgroundColor="#405570"
+              backgroundColor={theme.COLORS.LIGHT_GREY}
               onRemove={() => {
                 const allTags = tags.slice();
                 allTags.splice(index, 1);
@@ -41,6 +41,7 @@ const ImageTagInput = ({
           ref={tagInputRef}
           onChangeText={setTag}
           placeholder={tagsPlaceholder}
+          placeholderTextColor={theme.COLORS.LIGHT_GREY}
           style={[styles.inputSingleline, {minWidth: 100}]}
           returnKeyType="default"
           autoCapitalize="none"
@@ -71,7 +72,7 @@ const ImageTagInput = ({
               title={commonTag}
               iconColor="#fff"
               textColor="#fff"
-              backgroundColor="#663b69"
+              backgroundColor={theme.COLORS.DARK_PURPLE}
               onRemove={() => {
                 const allCommonTags = commonTags.slice();
                 allCommonTags.splice(index, 1);
@@ -84,6 +85,7 @@ const ImageTagInput = ({
           ref={commonTagInputRef}
           onChangeText={setCommonTag}
           placeholder={commonTagsPlaceholder}
+          placeholderTextColor={theme.COLORS.LIGHT_GREY}
           style={[styles.inputSingleline, {minWidth: 145}]}
           returnKeyType="default"
           autoCapitalize="none"
@@ -115,12 +117,12 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#DADADA',
-    marginVertical: 5,
+    borderColor: theme.COLORS.LIGHT_GREY,
+    marginVertical: 10,
   },
   divider: {
     height: 1,
-    backgroundColor: '#DADADA',
+    backgroundColor: theme.COLORS.LIGHT_GREY,
     marginHorizontal: '5%',
   },
   childContainer: {
@@ -136,6 +138,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     padding: 5,
-    color: theme.COLORS.BLACK,
+    color: theme.COLORS.WHITE,
   },
 });

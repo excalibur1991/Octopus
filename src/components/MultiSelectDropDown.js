@@ -58,9 +58,11 @@ const MultiSelect = ({
         customStyles={{
           optionsContainer: {
             width: '85%',
+            elevation: 10,
             borderWidth: 1,
-            borderColor: 'lightgray',
             borderRadius: 10,
+            backgroundColor: theme.APP_COLOR_1,
+            borderColor: theme.COLORS.LIGHT_GREY,
           },
         }}>
         {options &&
@@ -73,7 +75,9 @@ const MultiSelect = ({
                 <CheckBox
                   title={item}
                   textColor={
-                    selectedIndices.includes(index) ? textColor : '#8C98A9'
+                    selectedIndices.includes(index)
+                      ? textColor
+                      : theme.COLORS.WHITE
                   }
                   fontSize={14}
                   onChange={() => onSelect(index)}
@@ -91,10 +95,10 @@ export default MultiSelect;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 5,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#DADADA',
+    marginVertical: 10,
+    borderColor: theme.COLORS.LIGHT_GREY,
   },
   box: {
     paddingVertical: 13,
@@ -108,11 +112,10 @@ const styles = StyleSheet.create({
   placeholderText: {
     flex: 1,
     fontSize: 14,
-    color: '#A2A2A2',
     fontFamily: 'Inter-Regular',
   },
   icon: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
   },
   valueText: {
     flex: 1,
@@ -121,6 +124,7 @@ const styles = StyleSheet.create({
   },
   valueContainer: {
     flex: 1,
+    height: 20,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
