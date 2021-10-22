@@ -72,5 +72,9 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires the camera to take an image to be identified</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app would like access to your photo gallery</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string></string>
 </dict>
 </plist>

@@ -369,7 +369,7 @@ const DrawingPan = (props) => {
 DrawingPan.propTypes = {
   setAnnoRect: PropTypes.func,
   annoRect: PropTypes.array,
-  imageSource: PropTypes.object,
+  imageSource: PropTypes.string,
   rectHeight: PropTypes.number,
   rectWidth: PropTypes.number,
   onLongPressRect: PropTypes.func,

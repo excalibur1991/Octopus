@@ -78,16 +78,18 @@ export const CameraView = (props) => {
 //                includeBase64: false,
             },
             (res)=>{
+                console.log(res);
                 if(res.didCancel){
                     onDismiss(res);
-                }else if(res.errorMessage){
+                }else if(res.errorMessage || res.errorCode){
+                    console.log('err',res);
                     dispatch({
                         type: actions.SET_ALERT_SETTINGS,
                         alertSettings: {
                           show: true,
                           type: 'alert',
                           tile: 'Notice',
-                          message: `Error Occurd while taking Photos. ${res.errorMessage}`,
+                          message: `Error Occurd while taking Photos. ${res.errorMessage || ""} ${res.errorCode || ""}`,
                           showConfirmButton: true,
                           confirmText: 'Ok',
                           onConfirmPressed: ()=>{

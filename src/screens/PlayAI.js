@@ -66,7 +66,7 @@ const PlayAI = ({navigation, t}) => {
   const [imageDimension, setImageDimension] = useState({width: 0, height: 0});
 
   //camera mode, 
-  const [mode, setMode] = useState(enum_mode.MODE_PHOTO);
+  const [mode, setMode] = useState(null);
   const [response, setResponse] = useState(null);
 
   const [annotateProgress, setAnnotateProgress] = useState(0);
@@ -316,12 +316,12 @@ const PlayAI = ({navigation, t}) => {
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
+      openCameraView();
     }
   }, [mode]);
 
   useEffect(()=>{
     initVariables();
-    openCameraView();
   }, []);
 
 
