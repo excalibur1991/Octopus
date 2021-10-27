@@ -47,7 +47,7 @@ const DrawingPan = (props) => {
   const [cropPosition, setCropPosition] = useState({x:0, y:0});
   const [rectScale, setRectScale] = useState(1.0);
   const [zoomView, setZoomView] = useState(null);
-  const [frameDimension, setFrameDimension] = useState({width: Dimensions.get('window').width - 50, height: 300});
+  const [frameDimension, setFrameDimension] = useState({width: Dimensions.get('window').width - 50, height: Dimensions.get('screen').height * 0.5});
   const [imageDimension, setImageDimension] = useState({width:0, height: 0});
   const [imageBlob, setImageBlob] = useState(null);
   const [canvas, setCanvas] = useState(null);
@@ -164,9 +164,12 @@ const DrawingPan = (props) => {
   
       const cropPosX = originX;
       const cropPosY = originY;
-      
+      console.log('handleCentering', imageWidth, imageHeight, rectScale, cropWidth,cropHeight, cropPosX, cropPosY);
       setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
       setRectScale(1.0);
+      
+      zoomView.reset();
+    
     }
 
     const drawCanvas = (blob)=>{
