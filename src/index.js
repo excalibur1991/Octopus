@@ -24,6 +24,7 @@ import RomanNumberStats from './screens/RomanNumberStats';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
+import Browser from './embeddedBrowser/App'
 import walletEntry from '../walletEntry';
 import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
@@ -468,6 +469,25 @@ const SwipeAIStack = () => (
   </Stack.Navigator>
 );
 
+const BrowserStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Browser"
+      component={Browser}
+      options={({navigation}) => {
+        return Header(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
 const WalletStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -607,6 +627,7 @@ const BottomTabs = () => (
         borderTopWidth: 1,
       },
     }}>
+{/** 
     <Tab.Screen
       name="LandingPage"
       component={LandingPageStack}
@@ -615,6 +636,7 @@ const BottomTabs = () => (
         tabBarButton: () => null,
       }}
     />
+
     <Tab.Screen
       name="About"
       component={AboutStack}
@@ -651,6 +673,7 @@ const BottomTabs = () => (
         tabBarButton: props => <TabComponent label="Annotation" {...props} />,
       }}
     />
+*/}
     <Tab.Screen
       name="MyStats"
       component={MyStatsStack}
@@ -670,6 +693,14 @@ const BottomTabs = () => (
     <Tab.Screen
       name="Wallet"
       component={WalletStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Browser"
+      component={BrowserStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Wallet" {...props} />,
