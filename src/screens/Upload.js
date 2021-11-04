@@ -6,16 +6,21 @@ import UploadImage from './UploadImage';
 import PlayAI  from './PlayAI';
 import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 import {actions} from '../services/State/Reducer';
+import { Appbar } from 'react-native-paper';
 //later branch the Upload cases
 const Upload = (props) => {
   //set this true cause TOC first show always
   const [{dataUsageSettings }, dispatch] = useStateValue();
 
+  const {navigation} = props || {};
+  
+
   useEffect(() => {
+    
   }, []);
 
   return (
-      <>
+      <View style={{flex:1, backgroundColor: '#ccc', height: '100%'}}>
       {
        (dataUsageSettings == false) ? (
        <UploadGuidelines 
@@ -32,7 +37,7 @@ const Upload = (props) => {
         <PlayAI {...props} />
        )
       }
-      </>
+      </View>
   );
 };
 export default Upload;

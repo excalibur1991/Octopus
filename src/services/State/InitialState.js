@@ -18,4 +18,5 @@ export const initialState = {
   dataUsageSettings: false,
   verifySettings: false,
   cameraSettings: {show: false, onCallback: null},
+  playAISettings: {tutorialMode: true},
 };

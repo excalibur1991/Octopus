@@ -4,11 +4,11 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      marginTop: '2%',
+      //marginTop: '2%',
       paddingTop: '8%',
       paddingHorizontal: 0,
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
+      //borderTopLeftRadius: 25,
+      //borderTopRightRadius: 25,
       backgroundColor: theme.COLORS.WHITE,
     },
     marginBottom3p: {

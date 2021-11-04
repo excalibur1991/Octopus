@@ -121,9 +121,8 @@ const RootNavigator = () => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 0, backgroundColor: theme.APP_COLOR}} />
       <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.WHITE}}>
-        <StatusBar backgroundColor={theme.APP_COLOR} barStyle="dark-content" />
+        <StatusBar backgroundColor={'transparent'} translucent={true} barStyle="dark-content" />
         <CameraView {...cameraSettings} />
         <AppAlert {...getAlertSettings()} />
         <ModalActivityIndicator modalVisible={show} />

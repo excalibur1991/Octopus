@@ -3,11 +3,8 @@ import {
     Image,
     Text,
     ScrollView,
-    Alert,
-    TextInput,
-    Pressable,
     Dimensions,
-    TouchableOpacity
+    Modal
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -16,11 +13,8 @@ import {theme} from '../services/Common/theme';
 import {actions} from '../services/State/Reducer';
 import {
   annotate,
-  uploadImage, 
   annotateImage,
   getImageById,
-  getPlayAIAnnotation,
-  setPlayAIAnnotation
 } from '../services/API/APIManager';
 import DrawingPan, {EDIT_MODE} from '../components/DrawingPan';
 import {styles} from '../styles/playai';
@@ -30,9 +24,6 @@ import {
 } from 'react-native-paper';
 import DottedProgressBar from '../components/DottedProgressBar';
 import SwipeCards from '../components/SwipeCards';
-import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
-import LinearGradient from 'react-native-linear-gradient';
-import { GradientBox } from '../components/GradientBox';
 /**
  * play AI
  * 1. upload photo
@@ -51,7 +42,7 @@ const enum_mode = {
 
 
 const PlayAI = ({navigation, t}) => {
-  const [{cameraSettings}, dispatch] = useStateValue();
+  const [{cameraSettings, playAISettings}, dispatch] = useStateValue();
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const [imageId, setImageId] = useState(null);
@@ -83,84 +74,6 @@ const PlayAI = ({navigation, t}) => {
     setImageId(null);
     setImageData(null);
     setMode(enum_mode.MODE_PHOTO);
-  };
-
-  const submitTags = async(imageId, description='', tags=['playai_anonymisation_bounty'])=>{
-    let ret = false;
-    try{
-      setLoading(true);
-      const req = {
-        image_id: imageId,
-        description: description,
-        tags: tags,
-      };
-      const result = await annotateImage(req);
-      if (result && result.status && result.status === 'success') {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'success',
-            title: 'Success!',
-            message: 'Description & Tags Submitted',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-        ret = true;
-      } else {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'error',
-            title: 'Error Occured',
-            message:
-              'This Operation Could Not Be Completed. Please Try Again Later.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-      }
-    } catch (err) {
-      dispatch({
-        type: actions.SET_ALERT_SETTINGS,
-        alertSettings: {
-          show: true,
-          type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
-          showConfirmButton: true,
-          confirmText: 'Ok',
-        },
-      });
-    } finally {
-      setLoading(false);
-    }
-    return ret;
-
-  };
-
-
-  const verifyFields = ()=>{
-    let message = '';
-    //check bounds
-    if (message) {
-      dispatch({
-        type: actions.SET_ALERT_SETTINGS,
-        alertSettings: {
-          show: true,
-          type: 'error',
-          tile: 'Fields Required',
-          message: message,
-          showConfirmButton: true,
-          confirmText: 'Ok'
-        }
-      });
-      return false;
-    }
-    return true;
   };
 
   const fetchImage = async ()=>{
@@ -316,7 +229,7 @@ const PlayAI = ({navigation, t}) => {
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
-      openCameraView();
+      //openCameraView();
     }
   }, [mode]);
 
@@ -522,6 +435,17 @@ const PlayAI = ({navigation, t}) => {
             )
           }
         </View>)}
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={true}
+          statusBarTranslucent={true}
+          onRequestClose={() => {
+            
+          }}
+            >
+              <Text>abc</Text>
+        </Modal>
     </View>
   );
 };

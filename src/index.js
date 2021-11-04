@@ -332,16 +332,9 @@ const UploadStack = () => (
     <Stack.Screen
       name="Upload"
       component={Upload}
-      options={({navigation}) => {
-        return Header(
-          {
-            showTitle: false,
-            showAppIcon: true,
-            isTransparent: true,
-            showRightButton: true,
-          },
-          navigation,
-        );
+      options={{
+        headerShown: true,
+        headerTransparent: true
       }}
     />
   </Stack.Navigator>
@@ -597,6 +590,10 @@ const PlayAIStack = () => (
       name="PlayAI"
       component={PlayAI}
       options={({navigation}) => {
+        navigation.setOptions({
+          headerShown: true,
+          headerTransparent: true,
+        });
         return Header(
           {
             showTitle: false,

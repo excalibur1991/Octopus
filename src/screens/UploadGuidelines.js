@@ -114,6 +114,8 @@ const Upload = ({navigation, ...props}) => {
             onPress={async (e) => {
               setChecked(!checked);
               if (e) {
+                setDataUsageAvailable();
+                /*    
                 const res = await saveUsageFlag({flag: 'ACCEPTED'});
                 if (
                   res &&
@@ -123,6 +125,7 @@ const Upload = ({navigation, ...props}) => {
                   //navigation.navigate('UploadImage');
                   setDataUsageAvailable();
                 }
+                */
               }
             }}
             status={ checked ? 'checked': 'unchecked'}

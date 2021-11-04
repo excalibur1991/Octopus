@@ -1,6 +1,6 @@
 export const settings = {
   // development
-  baseUrl: 'https://crab.dev.dataunion.app/',
+  baseUrl: 'https://crab.dev.dataunion.app',
   //production
   //baseUrl: 'https://crab.dataunion.app/',
   taxonomy: {

@@ -11,6 +11,7 @@ export const actions = {
   SET_DATAUSAGE: 'SET_DATAUSAGE',
   SET_VERIFYSETTING: 'SET_VERIFYSETTING',
   SET_CAMERASETTINGS: 'SET_CAMERASETTINGS',
+  SET_PLAYAISETTINGS: 'SET_PLAYAISETTINGS',
 };
 
 export const reducer = (state, action) => {
@@ -76,6 +77,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         cameraSettings: action.cameraSettings
+      };
+    case actions.SET_PLAYAISETTINGS:
+      return {
+        ...state,
+        playAISettings: action.playAISettings
       };
     default:
       return state;
