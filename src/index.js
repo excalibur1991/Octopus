@@ -193,6 +193,49 @@ const Header = (
     : null,
 });
 
+
+const FullScreenHeader = (
+  {
+    title = null,
+    showTitle = false,
+    showAppIcon = false,
+    isTransparent = false,
+    showRightButton = false,
+    showLanguageDropdown = false,
+    selectedLanguage = null,
+    dispatch = null,
+    languageOptions = [],
+  },
+  navigation,
+) => ({
+  title: showTitle ? title : null,
+  headerTitleStyle: {
+    color: theme.COLORS.WHITE,
+  },
+  headerShown: true,
+  headerTransparent: true,
+
+  headerStyle: {
+    shadowOpacity: 0,
+    elevation: isTransparent ? 0 : 4,
+    //backgroundColor: theme.APP_COLOR,
+  },
+  headerLeft: showAppIcon
+    ? () => (
+        <Ripple
+          onPress={() => navigation.navigate('LandingPage')}
+          outerStyle={styles.leftButtonOuter}
+          innerStyle={styles.leftButtonInner}>
+          <Image
+            style={styles.leftIcon}
+            resizeMode="stretch"
+            source={require('./assets/icon.png')}
+          />
+        </Ripple>
+      )
+    : null,
+  });
+
 const LandingPageStack = () => {
   const languageOptions = [
     {
@@ -332,9 +375,16 @@ const UploadStack = () => (
     <Stack.Screen
       name="Upload"
       component={Upload}
-      options={{
-        headerShown: true,
-        headerTransparent: true
+      options={({navigation}) => {
+        return FullScreenHeader(
+          {
+            showTitle: false,
+            showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
       }}
     />
   </Stack.Navigator>
