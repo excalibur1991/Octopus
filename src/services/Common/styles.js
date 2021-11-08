@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {dark_theme} from './theme';
 
-module.exports = StyleSheet.create({
+export const CommonStyles = StyleSheet.create({
     
     title: {
         fontFamily: 'Moon-Bold',
@@ -29,11 +29,15 @@ module.exports = StyleSheet.create({
     },
     h2: {
         fontFamily: 'Moon-Bold',
-        fontSize: 24
+        fontSize: 24,
     },
     h3: {
         fontFamily: 'Moon-Bold',
         fontSize: 18,
+    },
+    large_bold_text: {
+        fontFamily: 'Moon-Bold',
+        fontSize: 16,
     },
     large_text: {
         fontFamily: 'Moon-Light',

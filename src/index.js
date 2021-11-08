@@ -697,7 +697,7 @@ const BottomTabs = () => (
       component={UploadStack}
       options={{
         unmountOnBlur: true, 
-        tabBarButton: (props) => <TabComponent label="Upload" {...props} />
+        tabBarButton: (props) => null 
       }}
     />
     <Tab.Screen

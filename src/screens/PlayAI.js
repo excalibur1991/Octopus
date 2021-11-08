@@ -4,7 +4,9 @@ import {
     Text,
     ScrollView,
     Dimensions,
-    Modal
+    Modal,
+    requireNativeComponent,
+    StyleSheet
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -41,7 +43,7 @@ const enum_mode = {
 };
 
 
-const PlayAI = ({navigation, t}) => {
+const PlayAI = ({navigation, params, t}) => {
   const [{cameraSettings, playAISettings}, dispatch] = useStateValue();
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -65,6 +67,9 @@ const PlayAI = ({navigation, t}) => {
   const [isAnnoAI, setIsAnnoAI] =useState(false);
   const [cards, setCards] = useState([]);
   const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
+
+
+  const {mode} = params || '';
 
 
   const initVariables = () =>{
@@ -225,6 +230,13 @@ const PlayAI = ({navigation, t}) => {
     initVariables();
     openCameraView();
   };
+
+  /**
+   * handleNextTut
+   */
+  const handleNextTut = () =>{
+
+  }
 
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
@@ -435,17 +447,28 @@ const PlayAI = ({navigation, t}) => {
             )
           }
         </View>)}
-        <Modal
-          animationType="none"
-          transparent={true}
-          visible={true}
-          statusBarTranslucent={true}
-          onRequestClose={() => {
-            
-          }}
-            >
-              <Text>abc</Text>
-        </Modal>
+        {
+          (mode == 'tutorial') && (
+            <View style={styles.tut_overlay}>
+              <View style={styles.tut_exit}>
+                <Button 
+                  onPress={navigation.navigate('')}
+                ><Image source={require('../assets/exit.png')} /></Button>
+                <Text>Exit WALKTHROUGH</Text>
+              </View>
+              <Button style={styles.next_tut_btn} onPress={handleNextTut()}>
+                <Image source={require('../assets/btn_tut_next.png')} />
+              </Button>
+              <View>
+                <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
+                <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
+                <Text style={styles.tut_desc_heading}>How to Play:</Text>
+                <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.
+                </Text>
+              </View>
+            </View>
+          )
+        }
     </View>
   );
 };
