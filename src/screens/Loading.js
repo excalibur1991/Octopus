@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
-import {Text, Image, View, StyleSheet} from 'react-native';
+import {Text, Image, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {styles} from '../styles/loading';
@@ -9,16 +10,14 @@ import {withTranslation} from 'react-i18next';
 const Loading = ({navigation, t}) => {
   const web3 = useSelector((state) => state.web3);
   useEffect(() => {
-    LoginProc(
-      web3
-    ).then(()=>(
+    LoginProc(web3).then(() =>
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{name: 'Home'}],
         }),
-      )
-    ));
+      ),
+    );
   }, []);
 
   return (

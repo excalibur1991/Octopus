@@ -3,14 +3,40 @@ import React, {useEffect, useState} from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {Text, View, FlatList} from 'react-native';
+import {Text, View, FlatList, Image, ActivityIndicator} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import {getUsageFlag} from '../services/API/APIManager';
+import * as Progress from 'react-native-progress';
+import {useNft} from 'use-nft';
 
 const LandingPage = ({navigation, t}) => {
   const [options, setOptions] = useState([
+    {
+      title: 'Browse Missions',
+      subTitle: 'Trophies, NFT items & Vouchers',
+      screen: 'Stats',
+      icon: require('../assets/search.png'),
+      width: 22,
+      height: 32,
+    },
+    {
+      title: 'My Missions',
+      subTitle: 'Trophies, NFT items & Vouchers',
+      screen: 'About',
+      icon: require('../assets/ellipse.png'),
+      width: 32,
+      height: 32,
+    },
+    {
+      title: 'My Wallet',
+      subTitle: 'Trophies, NFT items & Vouchers',
+      screen: 'UploadImage',
+      icon: require('../assets/dollar.png'),
+      width: 32,
+      height: 30,
+    },
     /*
     {
       title: 'Roman Number Upload',
@@ -19,30 +45,30 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     */
-    {
-      title: t('landing.upload'),
-      screen: 'Upload',
-      icon: 'cloud-upload',
-      Icon: MaterialIcon,
-    },
-    {
-      title: t('landing.annotation'),
-      screen: 'Annotation',
-      icon: 'note-add',
-      Icon: MaterialIcon,
-    },
-    {
-      title: t('landing.verification'),
-      screen: 'Verification',
-      icon: 'fingerprint',
-      Icon: MaterialIcon,
-    },
-    {
-      title: t('landing.myStats'),
-      screen: 'MyStats',
-      icon: 'analytics-sharp',
-      Icon: IonIcon,
-    },
+    // {
+    //   title: t('landing.upload'),
+    //   screen: 'Upload',
+    //   icon: 'cloud-upload',
+    //   Icon: MaterialIcon,
+    // },
+    // {
+    //   title: t('landing.annotation'),
+    //   screen: 'Annotation',
+    //   icon: 'note-add',
+    //   Icon: MaterialIcon,
+    // },
+    // {
+    //   title: t('landing.verification'),
+    //   screen: 'Verification',
+    //   icon: 'fingerprint',
+    //   Icon: MaterialIcon,
+    // },
+    // {
+    //   title: t('landing.myStats'),
+    //   screen: 'MyStats',
+    //   icon: 'analytics-sharp',
+    //   Icon: IonIcon,
+    // },
     /*
     {
       title: t('landing.learn'),
@@ -51,12 +77,12 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     */
-    {
-      title: t('landing.stats'),
-      screen: 'Stats',
-      icon: 'analytics',
-      Icon: MaterialIcon,
-    },
+    // {
+    //   title: t('landing.stats'),
+    //   screen: 'Stats',
+    //   icon: 'analytics',
+    //   Icon: MaterialIcon,
+    // },
     /*
     {
       icon: 'info',
@@ -65,19 +91,24 @@ const LandingPage = ({navigation, t}) => {
       Icon: MaterialIcon,
     },
     */
-    {
-      title: t('landing.wallet'),
-      screen: 'Wallet',
-      icon: 'account-balance-wallet',
-      Icon: MaterialIcon,
-    },
-    {
-      title: t('Legal'),
-      screen: 'Legal',
-      icon: 'privacy-tip',
-      Icon: MaterialIcon,
-    },
+    // {
+    //   title: t('landing.wallet'),
+    //   screen: 'Wallet',
+    //   icon: 'account-balance-wallet',
+    //   Icon: MaterialIcon,
+    // },
+    // {
+    //   title: t('Legal'),
+    //   screen: 'Legal',
+    //   icon: 'privacy-tip',
+    //   Icon: MaterialIcon,
+    // },
   ]);
+
+  const {nft, loading} = useNft(
+    '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d',
+    '102',
+  );
 
   useEffect(() => {
     const setup = async () => {
@@ -104,7 +135,89 @@ const LandingPage = ({navigation, t}) => {
 
   return (
     <View style={styles.container}>
-      <Ripple
+      <View style={styles.centered}>
+        <MaterialIcon
+          size={40}
+          name="info"
+          style={styles.infoIcon}
+          color={theme.COLORS.WHITE}
+          onPress={() => navigation.navigate('Information')}
+        />
+        <View>
+          <Progress.Circle
+            size={200}
+            progress={0.7}
+            thickness={10}
+            color="#3B6BD0"
+            borderWidth={0}
+            strokeCap="round"
+            unfilledColor="transparent"
+            direction="counter-clockwise"
+          />
+          <View style={styles.imageContainer}>
+            {loading ? (
+              <ActivityIndicator color={theme.COLORS.WHITE} size="large" />
+            ) : (
+              <Image
+                borderRadius={100}
+                resizeMode="stretch"
+                style={styles.image}
+                source={
+                  nft && nft.image
+                    ? {uri: nft.image}
+                    : require('../assets/app-logo.png')
+                }
+              />
+            )}
+          </View>
+        </View>
+        <Text style={styles.levelChip}>LV. 3</Text>
+        <Text style={styles.expText}>
+          EXP <Text style={styles.text}>550</Text>/800
+        </Text>
+        <View style={styles.divider} />
+        <View style={styles.countGroup}>
+          <View style={styles.countBox}>
+            <Text style={styles.countValue}>38</Text>
+            <Text style={styles.countLabel}>Missions</Text>
+          </View>
+          <View style={styles.countBox}>
+            <Text style={styles.countValue}>01</Text>
+            <Text style={styles.countLabel}>Ongoing</Text>
+          </View>
+          <View style={styles.countBox}>
+            <Text style={styles.countValue}>20</Text>
+            <Text style={styles.countLabel}>Earnings</Text>
+          </View>
+        </View>
+      </View>
+      <FlatList
+        data={options}
+        style={styles.menuContainer}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
+        renderItem={({item}) => (
+          <Ripple
+            onPress={() => navigation.navigate(item.screen)}
+            key={item.id}
+            outerStyle={styles.listItemOuter}
+            innerStyle={styles.listItemInner}>
+            <View style={styles.iconContainer}>
+              <Image
+                resizeMode="stretch"
+                source={item.icon}
+                style={{width: item.width, height: item.height}}
+              />
+            </View>
+            <View>
+              <Text style={styles.titleText}>{item.title}</Text>
+              <Text style={styles.subTitleText}>{item.subTitle}</Text>
+            </View>
+          </Ripple>
+        )}
+      />
+
+      {/* <Ripple
         outerStyle={styles.swipeAiOuter}
         innerStyle={styles.swipeAiInner}
         onPress={() => navigation.navigate('About')}>
@@ -112,8 +225,8 @@ const LandingPage = ({navigation, t}) => {
           <MaterialIcon size={50} name="info" color={theme.APP_COLOR} />
         </View>
         <Text style={styles.buttonText}>{t('landing.info')}</Text>
-      </Ripple>
-      <FlatList
+      </Ripple> */}
+      {/* <FlatList
         style={styles.Container}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
@@ -134,7 +247,7 @@ const LandingPage = ({navigation, t}) => {
           </Ripple>
         )}
         numColumns={2}
-      />
+      /> */}
     </View>
   );
 };

@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: theme.APP_COLOR,
+    color: theme.APP_COLOR_1,
     fontFamily: 'Inter-Regular',
     fontSize: 19,
     fontWeight: '600',
@@ -23,6 +23,6 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    backgroundColor: '#F3F0F3',
+    backgroundColor: theme.COLORS.WHITE,
   },
 });

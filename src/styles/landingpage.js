@@ -4,12 +4,86 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '20%',
-    paddingTop: '5%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    marginTop: '3%',
+  },
+  centered: {
+    alignItems: 'center',
+  },
+  infoIcon: {
+    left: 43,
+    position: 'absolute',
+  },
+  imageContainer: {
+    top: 1,
+    left: 1,
+    right: 1,
+    bottom: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    justifyContent: 'center',
+  },
+  image: {
+    height: 160,
+    width: 160,
+  },
+  levelChip: {
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: '#3B6BD0',
+    minWidth: 108,
+    marginTop: '4.5%',
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 18,
+    color: theme.COLORS.WHITE,
+    textAlign: 'center',
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 18,
+    color: theme.COLORS.WHITE,
+    textAlign: 'center',
+  },
+  expText: {
+    color: theme.COLORS.WHITE,
+    marginTop: 12,
+  },
+  text: {
+    color: '#7EC7FC',
+  },
+  divider: {
+    height: 2,
+    width: '100%',
+    marginTop: 11,
+    marginBottom: 22,
+    backgroundColor: '#25262B',
+  },
+  countGroup: {
+    flexDirection: 'row',
+  },
+  countBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: '6%',
+  },
+  countValue: {
+    fontSize: 24,
+    lineHeight: 28,
+    fontWeight: 'bold',
+    color: theme.COLORS.WHITE,
+  },
+  countLabel: {
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+  menuContainer: {
+    marginTop: '5.5%',
   },
   swipeAiOuter: {
     marginTop: '-25%',
@@ -44,19 +118,19 @@ export const styles = StyleSheet.create({
     paddingBottom: '5%',
   },
   listItemOuter: {
-    width: '45.9%',
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     shadowOffset: {width: 0, height: 4},
     elevation: 5,
-    margin: '2%',
-    borderRadius: 25,
-    backgroundColor: '#F5F6FC',
+    marginHorizontal: '4%',
+    marginVertical: '2%',
+    borderRadius: 15,
+    backgroundColor: theme.APP_COLOR_2,
   },
   listItemInner: {
-    padding: '10%',
-    marginBottom: '28.5%',
+    flexDirection: 'row',
+    paddingVertical: 18,
   },
   itemTitle: {
     fontSize: 24,
@@ -65,13 +139,24 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: '9%',
   },
-  icon: {
-    marginVertical: '5%',
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '30%',
   },
-  buttonText: {
-    color: '#000',
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-    alignSelf: 'flex-end',
+  textContainer: {
+    width: '70%',
+  },
+  titleText: {
+    fontSize: 18,
+    lineHeight: 21,
+    color: '#B592FF',
+    textTransform: 'uppercase',
+  },
+  subTitleText: {
+    fontSize: 11,
+    lineHeight: 13,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
 });

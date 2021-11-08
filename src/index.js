@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import 'react-native-gesture-handler';
 import {enableScreens} from 'react-native-screens';
 enableScreens();
@@ -10,11 +11,12 @@ import {StyleSheet, Image, Alert, View, Text} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
 import About from './screens/About';
+import Information from './screens/Information';
 import Stats from './screens/Stats';
 import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
-import Verification from './screens/Verification'
-import Annotation from './screens/Annotation'
+import Verification from './screens/Verification';
+import Annotation from './screens/Annotation';
 import Wallet from './screens/Wallet';
 //import UploadGuidelines from './screens/UploadGuidelines';
 //import UploadImage from './screens/UploadImage';
@@ -25,6 +27,7 @@ import RomanNumberStats from './screens/RomanNumberStats';
 //import MyWallet from '../wallet/App';
 //import myApp from '../myApp'
 import walletEntry from '../walletEntry';
+import WalletSettings from './screens/WalletSettings';
 import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
@@ -36,6 +39,7 @@ import Ripple from './components/Ripple';
 import {theme} from './services/Common/theme';
 import i18n from './languages/i18n';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useStateValue} from './services/State/State';
 import {actions} from './services/State/Reducer';
 import {setLanguage} from './services/DataManager';
@@ -65,22 +69,38 @@ const styles = StyleSheet.create({
     height: 30,
   },
   leftButtonOuter: {
-    marginLeft: 5,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    marginLeft: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_2,
   },
   leftButtonInner: {
-    padding: 10,
+    // padding: 10,
+  },
+  languageButtonOuter: {
+    marginRight: 20,
+    borderRadius: 30,
+    overflow: 'hidden',
+    backgroundColor: theme.APP_COLOR_2,
   },
   rightButtonOuter: {
-    marginRight: 5,
-    borderRadius: 10,
+    marginRight: 15,
+    borderRadius: 30,
+    overflow: 'hidden',
   },
   rightButtonInner: {
     padding: 5,
   },
+  languageOptionsContainer: {
+    borderRadius: 15,
+    backgroundColor: theme.COLORS.BLACK,
+  },
   flagIcon: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     marginRight: 5,
   },
   languageBox: {
@@ -92,19 +112,26 @@ const styles = StyleSheet.create({
   },
   languageOption: {
     padding: 10,
+    borderColor: theme.COLORS.WHITE_OPACITY_3P,
+  },
+  languageOptionText: {
+    fontSize: 14,
+    color: theme.COLORS.WHITE_OPACITY_3P,
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
 const Header = (
   {
     title = null,
-    showTitle = false,
-    showAppIcon = false,
+    showBackButton = false,
     isTransparent = false,
     showRightButton = false,
+    rightButtonIcon = null,
+    rightButtonOnPress = () => {},
     showLanguageDropdown = false,
     selectedLanguage = null,
     dispatch = null,
@@ -112,58 +139,55 @@ const Header = (
   },
   navigation,
 ) => ({
-  title: showTitle ? title : null,
+  title: title ? title : null,
   headerTitleStyle: {
     color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
+  headerTitleAlign: 'center',
   headerStyle: {
     shadowOpacity: 0,
     elevation: isTransparent ? 0 : 4,
-    backgroundColor: theme.APP_COLOR,
+    backgroundColor: isTransparent ? 'transparent' : theme.APP_COLOR_1,
   },
-  headerLeft: showAppIcon
+  headerLeft: showBackButton
     ? () => (
         <Ripple
-          onPress={() => navigation.navigate('LandingPage')}
+          onPress={() => navigation.goBack()}
           outerStyle={styles.leftButtonOuter}
           innerStyle={styles.leftButtonInner}>
-          <Image
-            style={styles.leftIcon}
-            resizeMode="stretch"
-            source={require('./assets/icon.png')}
+          <EntypoIcon
+            size={25}
+            name="chevron-left"
+            color={theme.COLORS.WHITE}
           />
         </Ripple>
       )
     : null,
-  headerRight
-    : showLanguageDropdown
+  headerRight: showLanguageDropdown
     ? () => (
-        <Menu renderer={renderers.Popover}>
+        <Menu
+          renderer={renderers.Popover}
+          rendererProps={{anchorStyle: {backgroundColor: 'transparent'}}}>
           <MenuTrigger
-            customStyles={{
-              triggerOuterWrapper: {
-                ...styles.rightButtonOuter,
-                backgroundColor: theme.COLORS.WHITE,
-                overflow: 'hidden',
-              },
-            }}>
+            customStyles={{triggerOuterWrapper: styles.languageButtonOuter}}>
             <View style={styles.languageBox}>
               <Image
-                style={styles.flagIcon}
                 resizeMode="stretch"
+                style={styles.flagIcon}
                 source={selectedLanguage.icon}
               />
-              <Text style={{color: theme.COLORS.BLACK}}>
-                {selectedLanguage.label}
-              </Text>
-              <EntypoIcon name="chevron-down" size={20} />
+              <EntypoIcon
+                size={20}
+                name="chevron-down"
+                color={theme.COLORS.WHITE}
+              />
             </View>
           </MenuTrigger>
-          <MenuOptions>
+          <MenuOptions optionsContainerStyle={styles.languageOptionsContainer}>
             {languageOptions.map((item, index) => (
               <MenuOption
                 key={index}
-                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   ...styles.languageOption,
                   borderBottomWidth:
@@ -178,16 +202,27 @@ const Header = (
                 }}>
                 <View style={styles.row}>
                   <Image
-                    style={styles.flagIcon}
-                    resizeMode="stretch"
                     source={item.icon}
+                    resizeMode="stretch"
+                    style={styles.flagIcon}
                   />
-                  <Text>{item.label}</Text>
+                  <Text style={styles.languageOptionText}>
+                    {item.value.toUpperCase()}
+                  </Text>
                 </View>
               </MenuOption>
             ))}
           </MenuOptions>
         </Menu>
+      )
+    : showRightButton
+    ? () => (
+        <Ripple
+          onPress={rightButtonOnPress}
+          outerStyle={styles.rightButtonOuter}
+          innerStyle={styles.rightButtonInner}>
+          {rightButtonIcon}
+        </Ripple>
       )
     : null,
 });
@@ -199,7 +234,7 @@ const LandingPageStack = () => {
       label: i18n.t('landing.english'),
       value: 'en',
     },
-    /*{
+    {
       icon: Chinese,
       label: i18n.t('landing.chinese'),
       value: 'zh',
@@ -218,10 +253,11 @@ const LandingPageStack = () => {
       icon: Spanish,
       label: i18n.t('landing.spanish'),
       value: 'es',
-    }, */
+    },
   ];
   const [{selectedLanguage}, dispatch] = useStateValue();
   const language = languageOptions.find((l) => l.value === selectedLanguage);
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -230,13 +266,26 @@ const LandingPageStack = () => {
         options={({navigation}) => {
           return Header(
             {
-              showTitle: false,
-              showAppIcon: true,
+              title: 'Dashboard',
               isTransparent: true,
               showLanguageDropdown: true,
               selectedLanguage: language,
               dispatch,
               languageOptions,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="Information"
+        component={Information}
+        options={({navigation}) => {
+          return Header(
+            {
+              title: 'Information',
+              showBackButton: true,
+              isTransparent: true,
             },
             navigation,
           );
@@ -314,10 +363,9 @@ const StatsStack = () => (
       options={({navigation}) => {
         return Header(
           {
-            showTitle: false,
-            showAppIcon: true,
+            title: 'Global Stats',
+            showBackButton: true,
             isTransparent: true,
-            showRightButton: true,
           },
           navigation,
         );
@@ -472,14 +520,36 @@ const WalletStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Wallet"
-      component={walletEntry}
+      component={Wallet}
       options={({navigation}) => {
         return Header(
           {
-            showTitle: false,
-            showAppIcon: true,
+            title: 'My Wallet',
+            showBackButton: true,
             isTransparent: true,
             showRightButton: true,
+            rightButtonIcon: (
+              <IonIcon
+                size={25}
+                name="settings-outline"
+                color={theme.COLORS.WHITE}
+              />
+            ),
+            rightButtonOnPress: () => navigation.navigate('WalletSettings'),
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="WalletSettings"
+      component={WalletSettings}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Wallet Settings',
+            showBackButton: true,
+            isTransparent: true,
           },
           navigation,
         );
@@ -589,13 +659,12 @@ const LegalStack = () => (
   </Stack.Navigator>
 );
 
-
 const BottomTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
       style: {
-        height: 60,
-        backgroundColor: '#F2F2F2',
+        height: 80,
+        backgroundColor: 'transparent',
         elevation: 3,
         shadowColor: theme.APP_COLOR,
         shadowOffset: {
@@ -603,11 +672,53 @@ const BottomTabs = () => (
           height: 5,
         },
         shadowOpacity: 0.5,
-        borderTopColor: '#C2C2C2',
-        borderTopWidth: 1,
+        paddingBottom: 20,
+        paddingVertical: 20,
       },
     }}>
     <Tab.Screen
+      name="LandingPage"
+      component={LandingPageStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="Dashboard" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="About"
+      component={About}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => (
+          <TabComponent label="BrowseMissions" {...props} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="UploadImage"
+      component={UploadStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="MyMissions" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Stats"
+      component={StatsStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="Stats" {...props} />,
+      }}
+    />
+    <Tab.Screen
+      name="Wallet"
+      component={WalletStack}
+      options={{
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="MyWallet" {...props} />,
+      }}
+    />
+    {/* <Tab.Screen
       name="LandingPage"
       component={LandingPageStack}
       options={{
@@ -627,8 +738,8 @@ const BottomTabs = () => (
       name="Upload"
       component={UploadStack}
       options={{
-        unmountOnBlur: true, 
-        tabBarButton: (props) => <TabComponent label="Upload" {...props} />
+        unmountOnBlur: true,
+        tabBarButton: (props) => <TabComponent label="Upload" {...props} />,
       }}
     />
     <Tab.Screen
@@ -642,13 +753,13 @@ const BottomTabs = () => (
         ),
       }}
     />
-     <Tab.Screen
+    <Tab.Screen
       name="Annotation"
       component={AnnotationStack}
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Annotation" {...props} />,
+        tabBarButton: (props) => <TabComponent label="Annotation" {...props} />,
       }}
     />
     <Tab.Screen
@@ -681,9 +792,9 @@ const BottomTabs = () => (
       options={{
         unmountOnBlur: true,
         tabBarVisible: false,
-        tabBarButton: props => <TabComponent label="Legal" {...props} />,
+        tabBarButton: (props) => <TabComponent label="Legal" {...props} />,
       }}
-    />
+    /> */}
   </Tab.Navigator>
 );
 
@@ -708,7 +819,7 @@ const RootStack = () => (
 
 const CreateRootNavigator = () => {
   return (
-    <NavigationContainer theme={{colors: {background: theme.APP_COLOR}}}>
+    <NavigationContainer theme={{colors: {background: '#121212'}}}>
       <RootStack />
     </NavigationContainer>
   );

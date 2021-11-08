@@ -1,110 +1,167 @@
-import {
-  StyleSheet,
-  processColor,
-} from 'react-native';
+import {StyleSheet, processColor, Platform, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '2%',
-    paddingTop: '6%',
-    paddingHorizontal: '4%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
+    paddingTop: '5.5%',
+    paddingHorizontal: '4.2%',
   },
-  topContainer: {
+  tabs: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  bottomContainer: {
-    marginTop: '8%',
+  tabOuter: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    width: Dimensions.get('window').width * 0.4,
   },
-  boxContainer: {
-    flex: 0.333,
-    margin: '1%',
+  tabOuterActive: {
+    backgroundColor: theme.APP_COLOR_2,
   },
-  graphContainer: {
-    marginBottom: '10%',
+  tabInner: {
+    padding: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  box: {
-    paddingTop: '20%',
-    borderRadius: 25,
-    paddingBottom: '25%',
+  tabText: {
+    fontSize: 10,
+    lineHeight: 11.5,
+    textAlign: 'center',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+  },
+  tabTextActive: {
+    fontSize: 12,
+    lineHeight: 13.8,
+  },
+  statsContainer: {
+    borderRadius: 8,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  uavContainer: {
+    paddingVertical: 15,
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F6FC',
+    paddingHorizontal: 13,
+  },
+  uavItem: {
+    width: '30%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  uavCenterItem: {
+    width: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  uavItemDivider: {
+    width: 1,
+    height: '105%',
+    marginTop: -22,
+    marginBottom: -45,
+    backgroundColor: theme.APP_COLOR_1,
   },
   imageIcon: {
-    height: 20,
+    height: 30,
     width: 30,
   },
-  boxMini: {
-    marginTop: '10%',
-    borderRadius: 25,
-    alignItems: 'center',
-    paddingVertical: '3%',
-    backgroundColor: '#F5F6FC',
-  },
-  fullWidthBox: {
-    marginTop: '2%',
-    borderRadius: 25,
-    alignItems: 'center',
-    paddingVertical: '2%',
-    backgroundColor: '#F5F6FC',
-  },
-  itemTitle: {
+  uavItemTitle: {
     fontSize: 10,
-    marginTop: '5%',
-    color: '#41474E',
-    fontWeight: '600',
+    marginTop: 9,
+    lineHeight: 12,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
     fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
-  miniBoxValue: {
+  uavItemValue: {
+    fontSize: 13,
+    marginTop: 10,
+    lineHeight: 15,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '600' : 'normal',
+  },
+  uavItemQuicraValue: {
     fontSize: 9,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
-  },
-  miniBoxFooter: {
-    fontSize: 6,
-    fontWeight: '300',
+    marginTop: 34,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
     fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '600' : 'normal',
   },
-  fullWidthBoxValue: {
-    fontSize: 17,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
+  uavItemQuicra: {
+    fontSize: 6,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '300' : 'normal',
   },
-  itemValue: {
+  uavStatsDivider: {
+    height: 1,
+    backgroundColor: theme.APP_COLOR_1,
+  },
+  quicraContainer: {
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quicraValue: {
     fontSize: 17,
-    marginTop: '20%',
-    color: '#41474E',
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
+    lineHeight: 20.57,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
+  },
+  quicra: {
+    fontSize: 6,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '300' : 'normal',
+  },
+  mainDivider: {
+    height: 2,
+    marginVertical: 29,
+    marginHorizontal: -15,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  graph: {
+    fontSize: 18,
+    marginBottom: 10,
+    lineHeight: 20.71,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+  },
+  graphContainer: {
+    borderRadius: 8,
+    marginTop: 22,
+    paddingVertical: 12,
+    paddingHorizontal: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_2,
   },
   graphTitle: {
     fontSize: 11,
-    fontFamily: 'Inter-Bold',
+    lineHeight: 13,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
-  graph: {
-    marginTop: '5%',
-  },
-  buttonContainer: {
-    marginBottom: '10%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonInnerContainer: {},
-  button: {
-    borderRadius: 25,
-    width: '70%',
-    alignSelf: 'center',
-  },
-  buttonText: {
-    color: '#41474E',
-    fontSize: 11,
-    fontWeight: '600',
-    fontFamily: 'Inter-Bold',
+  graphQuicra: {
+    fontSize: 6,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '300' : 'normal',
   },
 });
