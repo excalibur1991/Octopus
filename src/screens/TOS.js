@@ -37,7 +37,7 @@ const TOS = ({navigation, t}) => {
             <Text style={styles.contactHeader}>
                 {t('tos.contactHeader')}
             </Text>
-            <Text onPress={()=>{Linking.openURL('mailto:copyright@dataunion.app')}}
+            <Text onPress={()=>{Linking.openURL('mailto:info@visiotherapy.io')}}
             style={styles.contactMail}>
                 {t('tos.copyrightMail')}
             </Text>

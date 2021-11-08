@@ -133,7 +133,7 @@ export default {
     },
     tos: {
       header: 'Copyright - TOS',
-      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, VisioTherapy reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, DataUnion may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. VisioTherapy will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
+      body:  'In accordance with the Digital Millennium Copyright Act ("DMCA”), Directive 2001/29/EG and other relevant laws, VisioTherapy reserves the right to terminate accounts (and block Ethereum addresses) of users who appear to be repeatedly responsible for legal violations. In addition, VisioTherapy may, in its sole discretion, restrict access to its services and / or close the accounts of users who infringe the intellectual property rights of others, regardless of whether they are repeated infringements. VisioTherapy will respond accordingly to alleged copyright infringements that have occurred while using our services and that are reported to the address mentioned below.',
       contactHeader: 'Contact for copyright violations (Designated Agent):',
       copyrightMail: 'info@visiotherapy.io' 
     },

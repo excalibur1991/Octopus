@@ -24,7 +24,7 @@ const ModalActivityIndicator = props => {
               width: 100,
               height: 60,
             }}
-            source={require('../assets/icon.png')}
+            source={require('../assets/VT.png')}
           />
           <ActivityIndicator
             size={20}

@@ -14,12 +14,12 @@ const Upload = ({navigation}) => {
         showsVerticalScrollIndicator={false}>
         <Text style={styles.header}>Upload Data</Text>
         <Text style={styles.subHeader}>
-          Upload, Describe & Tag Data for the DataUnion image dataset &
+          Upload, Describe & Tag Data for the VisioTherapy Video dataset &
           receive rewards.
         </Text>
         <Panel title="Read the Terms and Upload Guidelines">
           <Text style={[styles.marginBottom3p, styles.text]}>
-            We at DataUnion respect the privacy and intellectual property of
+            We at VisioTherapy respect the privacy and intellectual property of
             our users. We expect that you do the same.
           </Text>
           <Text style={[styles.marginBottom3p, styles.text]}>
@@ -53,10 +53,10 @@ const Upload = ({navigation}) => {
             addresses) of users who appear to be responsible for legal
             violations or violations of our
             <Text
-              style={styles.linkText}
-              onPress={() => Linking.openURL('https://alpha.dataunion.app/terms')}>
-              {' Terms of service.'}
-            </Text>
+             onPress={()=>{
+               navigation.navigate('Legal', {screen: 'TOS'});
+             }}
+            > Terms of service.</Text>
           </Text>
           <View style={styles.checkBoxContainer}>
             <CheckBox
@@ -73,7 +73,7 @@ const Upload = ({navigation}) => {
                 }
               }}
               textColor="#1b1d1e"
-              title="I accept DataUnion's Guidelines and Terms of Service"
+              title="I accept VisioTherapy's Guidelines and Terms of Service"
             />
           </View>
         </Panel>

@@ -1,8 +1,8 @@
 export const settings = {
   // development
-  baseUrl: 'https://crab.dev.dataunion.app/',
+  //baseUrl: 'https://crab.dev.dataunion.app/',
   //production
-  // baseUrl: 'https://crab.dataunion.app/',
+  baseUrl: 'https://crab.dataunion.app/',
   taxonomy: {
     getImages: '/api/v1/taxonomy/data',
     storeUserResponse: '/api/v1/taxonomy/store',
@@ -10,10 +10,10 @@ export const settings = {
     getLabelImage: '/api/v1/taxonomy/label?label_id=$[label_id]',
     //overall: '/api/v1/stats/overall?start_date=$[start_date]&end_date=$[end_date]',
     overall:
-      '/api/v1/stats/overall-graph?end_date=$[end_date]&start_date=$[start_date]',
+      '/api/v1/stats/overall-graph?end_date=$[end_date]&start_date=$[start_date]&entity_type=video',
     //userStats: '/api/v1/stats/user?start_date=$[start_date]&end_date=$[end_date]',
     userStats:
-      '/api/v1/stats/user-graph?start_date=$[start_date]&end_date=$[end_date]',
+      '/api/v1/stats/user-graph?start_date=$[start_date]&end_date=$[end_date]&entity_type=video',
     uploadImage: 'api/v1/upload-file',
     uploadVideo: 'api/v1/videos/upload',
     annotateImage: 'api/v1/annotate',

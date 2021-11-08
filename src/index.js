@@ -129,7 +129,7 @@ const Header = (
           <Image
             style={styles.leftIcon}
             resizeMode="stretch"
-            source={require('./assets/icon.png')}
+            source={require('./assets/VT.png')}
           />
         </Ripple>
       )

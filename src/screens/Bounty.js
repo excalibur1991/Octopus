@@ -50,31 +50,6 @@ const Bounty = ({navigation, t}) => {
             tag: 'Food Bounty',
             header: t('bountyTag.FoodBounty.header'),
             content: t('bountyTag.FoodBounty.content')
-        },
-        {
-            tag: 'project.bb Bounty(Cigarette Butts)',
-            header: t('bountyTag.ProjectBBBounty.header'),
-            content:t('bountyTag.ProjectBBBounty.content')
-        },
-        {
-            tag: 'NFT + Art Bounty(photos of NFTs + Art)',
-            header: t('bountyTag.NFTArtBounty.header'),
-            content: t('bountyTag.NFTArtBounty.content')
-        },
-        {
-            tag: 'Optical Character Recognition Bounty (OCR)',
-            header: t('bountyTag.OpticalCharacterRecognitionBounty.header'),
-            content: t('bountyTag.OpticalCharacterRecognitionBounty.content')
-        },
-        {
-            tag: 'Meme Bounty',
-            header: t('bountyTag.MemeBounty.header'),
-            content: t('bountyTag.MemeBounty.content')
-        },
-        {
-            tag: 'Products Bounty',
-            header: t('bountyTag.ProductsBounty.header'),
-            content: t('bountyTag.ProductsBounty.content')
         }
     ];
 

@@ -110,14 +110,14 @@ const TOC = (props) => {
             <Text style={styles.title}>Verify data</Text>
             <Text 
                 style={styles.description}
-            >Improve the DataUnion.app image dataset &nbsp; receive rewards. Flag inappropriate images, check that tags &nbsp; descriptions are fitting, and add missing tags. If a description is not fitting you can add another one. Bad actors will be weeded out by the democratic system.</Text>
+            >Improve the VisioTherapy video dataset &nbsp; receive rewards. Flag inappropriate images, check that tags &nbsp; descriptions are fitting, and add missing tags. If a description is not fitting you can add another one. Bad actors will be weeded out by the democratic system.</Text>
 
             <View style={styles.boxContainer}>
                 <View style={styles.boxHeader}>
                     <Text style={styles.boxHeaderText}>▼ Read the Terms and Upload Guidelines</Text>
                 </View>
                 <View style={styles.boxContent}>
-                    <Text style={styles.textNormal}>We at DataUnion.app respect the privacy and intellectual property of our users. We expect that you do the same.</Text>
+                    <Text style={styles.textNormal}>We at VisioTherapy respect the privacy and intellectual property of our users. We expect that you do the same.</Text>
                     <Text style={styles.textNormal}>We expect that you do not upload images:</Text>
                     <Text style={styles.textBold}>
                         • Where you do not own the rights to{'\n'}
@@ -127,7 +127,11 @@ const TOC = (props) => {
                     </Text>
                     <Text style={styles.textNormal}>
                     We reserve the right to terminate accounts (and block Ethereum addresses) of users who appear to be responsible for legal violations or violations of our 
-                    <Text color={''} onPress={()=> {Linking.openURL('https://alpha.dataunion.app/terms/')}}> Terms of service.</Text> 
+                        <Text
+                         onPress={()=>{
+                           navigation.navigate('Legal', {screen: 'TOS'});
+                         }}
+                        > Terms of service.</Text>
                     </Text>
                     <Checkbox.Item
                         onPress={()=>onCheck(!checked)}
@@ -138,7 +142,7 @@ const TOC = (props) => {
                         }}
                         color='#1b1d1e'
                         position='leading'
-                        label={'I accept DataUnion\'s Guidelines and Terms of Service'}
+                        label={'I accept VisioTherapy\'s Guidelines and Terms of Service'}
                         
                     />
                 </View>
