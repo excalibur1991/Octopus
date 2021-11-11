@@ -10,12 +10,24 @@ export const theme = {
     LIGHT_PURPLE: '#974BD6',
     LIGHT_BLUE: '#4667D1',
     BLUE: '#7666E8',
+    YELLOW: '#F0C514',
+
+    DARK_PURPLE: '#7C56BE',
+    DARK_BLUE: '#3B6BD0',
+    SKY_BLUE: '#5BAAFB',
+
+    DARK_PURPLE_1: '#8138D1',
+    DARK_BLUE_1: '#4A4FCE',
+    SILVER: '#C4C4C4',
+
+    GREY_80P: '#62646DCC',
+
     BLUR: '#34343480',
     GREY: '#505564',
     LIGHT_GREY: '#61636E66',
     LIGHT_RED: '#EB5454',
 
-    DARK_PURPLE: '#6A3A6B',
+    // DARK_PURPLE: '#6A3A6B',
     LIGHT_PINK: '#ED8495',
     ERROR_COLOR: '#D60E18',
     SUCCESS_COLOR: '#62B25D',

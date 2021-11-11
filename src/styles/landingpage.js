@@ -117,18 +117,18 @@ export const styles = StyleSheet.create({
   listContainer: {
     paddingBottom: '5%',
   },
-  listItemOuter: {
+  listItem: {
+    marginHorizontal: '4%',
+    marginVertical: '2%',
+  },
+  listItemButton: {
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     shadowOffset: {width: 0, height: 4},
     elevation: 5,
-    marginHorizontal: '4%',
-    marginVertical: '2%',
     borderRadius: 15,
     backgroundColor: theme.APP_COLOR_2,
-  },
-  listItemInner: {
     flexDirection: 'row',
     paddingVertical: 18,
   },

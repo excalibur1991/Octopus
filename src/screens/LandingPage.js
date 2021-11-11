@@ -16,7 +16,7 @@ const LandingPage = ({navigation, t}) => {
     {
       title: 'Browse Missions',
       subTitle: 'Trophies, NFT items & Vouchers',
-      screen: 'Stats',
+      screen: 'BrowseMissions',
       icon: require('../assets/search.png'),
       width: 22,
       height: 32,
@@ -24,7 +24,7 @@ const LandingPage = ({navigation, t}) => {
     {
       title: 'My Missions',
       subTitle: 'Trophies, NFT items & Vouchers',
-      screen: 'About',
+      screen: 'MyMissions',
       icon: require('../assets/ellipse.png'),
       width: 32,
       height: 32,
@@ -32,7 +32,7 @@ const LandingPage = ({navigation, t}) => {
     {
       title: 'My Wallet',
       subTitle: 'Trophies, NFT items & Vouchers',
-      screen: 'UploadImage',
+      screen: 'Wallet',
       icon: require('../assets/dollar.png'),
       width: 32,
       height: 30,
@@ -197,57 +197,26 @@ const LandingPage = ({navigation, t}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         renderItem={({item}) => (
-          <Ripple
-            onPress={() => navigation.navigate(item.screen)}
-            key={item.id}
-            outerStyle={styles.listItemOuter}
-            innerStyle={styles.listItemInner}>
-            <View style={styles.iconContainer}>
-              <Image
-                resizeMode="stretch"
-                source={item.icon}
-                style={{width: item.width, height: item.height}}
-              />
-            </View>
-            <View>
-              <Text style={styles.titleText}>{item.title}</Text>
-              <Text style={styles.subTitleText}>{item.subTitle}</Text>
-            </View>
-          </Ripple>
+          <View style={styles.listItem}>
+            <Ripple
+              onPress={() => navigation.navigate(item.screen)}
+              key={item.id}
+              style={styles.listItemButton}>
+              <View style={styles.iconContainer}>
+                <Image
+                  resizeMode="stretch"
+                  source={item.icon}
+                  style={{width: item.width, height: item.height}}
+                />
+              </View>
+              <View>
+                <Text style={styles.titleText}>{item.title}</Text>
+                <Text style={styles.subTitleText}>{item.subTitle}</Text>
+              </View>
+            </Ripple>
+          </View>
         )}
       />
-
-      {/* <Ripple
-        outerStyle={styles.swipeAiOuter}
-        innerStyle={styles.swipeAiInner}
-        onPress={() => navigation.navigate('About')}>
-        <View style={styles.swipeAiIcon}>
-          <MaterialIcon size={50} name="info" color={theme.APP_COLOR} />
-        </View>
-        <Text style={styles.buttonText}>{t('landing.info')}</Text>
-      </Ripple> */}
-      {/* <FlatList
-        style={styles.Container}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        data={options}
-        renderItem={({item}) => (
-          <Ripple
-            onPress={() => navigation.navigate(item.screen)}
-            key={item.id}
-            outerStyle={styles.listItemOuter}
-            innerStyle={styles.listItemInner}>
-            <item.Icon
-              style={styles.icon}
-              name={item.icon}
-              size={39}
-              color={theme.APP_COLOR}
-            />
-            <Text style={styles.itemTitle}>{item.title}</Text>
-          </Ripple>
-        )}
-        numColumns={2}
-      /> */}
     </View>
   );
 };

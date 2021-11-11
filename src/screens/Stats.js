@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {LineChart} from 'react-native-charts-wrapper';
-import {Image, ScrollView, Text, View, processColor} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  processColor,
+  StyleSheet,
+} from 'react-native';
 import {useStateValue} from '../services/State/State';
 import {styles} from '../styles/stats';
 const UploadIcon = require('../assets/uploads.png');
@@ -20,9 +27,11 @@ var _arr_verifications = [];
 const Tab = ({title, value, isSelected, setTab}) => {
   return (
     <Ripple
-      innerStyle={styles.tabInner}
-      onPress={() => setTab(value, title)}
-      outerStyle={[styles.tabOuter, isSelected ? styles.tabOuterActive : {}]}>
+      style={StyleSheet.flatten([
+        styles.tab,
+        isSelected ? styles.tabActive : {},
+      ])}
+      onPress={() => setTab(value, title)}>
       <Text style={[styles.tabText, isSelected ? styles.tabTextActive : {}]}>
         {title}
       </Text>

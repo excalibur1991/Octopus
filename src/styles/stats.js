@@ -1,4 +1,4 @@
-import {StyleSheet, processColor, Platform, Dimensions} from 'react-native';
+import {StyleSheet, Platform, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -11,18 +11,16 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  tabOuter: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    width: Dimensions.get('window').width * 0.4,
-  },
-  tabOuterActive: {
-    backgroundColor: theme.APP_COLOR_2,
-  },
-  tabInner: {
+  tab: {
     padding: 10,
     alignItems: 'center',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     justifyContent: 'center',
+    width: Dimensions.get('window').width * 0.4,
+  },
+  tabActive: {
+    backgroundColor: theme.APP_COLOR_2,
   },
   tabText: {
     fontSize: 10,

@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
     paddingTop: '5.5%',
     paddingHorizontal: '4.2%',
   },
+  contentContainer: {
+    paddingBottom: '10%',
+  },
   quicraContainer: {
     marginVertical: 9,
     paddingVertical: 10,
@@ -103,7 +106,7 @@ export const styles = StyleSheet.create({
   },
   stakeUnstakeButtonStyle: {
     borderRadius: 30,
-    alignSelf: 'center',
+    // alignSelf: 'center',
     width: Dimensions.get('screen').width * 0.44,
   },
   stakeButtonText: {

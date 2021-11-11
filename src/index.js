@@ -31,6 +31,9 @@ import WalletSettings from './screens/WalletSettings';
 import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
+import BrowseMissions from './screens/BrowseMissions';
+import ImageUploadMission from './screens/ImageUploadMission';
+import MyMissions from './screens/MyMissions';
 import ImageCategorization from './screens/ImageCategorization';
 import TOS from './screens/TOS';
 import PrivacyInformation from './screens/PrivacyInformation';
@@ -68,31 +71,22 @@ const styles = StyleSheet.create({
     width: 32,
     height: 30,
   },
-  leftButtonOuter: {
+  leftButton: {
     width: 40,
     height: 40,
-    marginLeft: 20,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.APP_COLOR_2,
   },
-  leftButtonInner: {
-    // padding: 10,
-  },
   languageButtonOuter: {
-    marginRight: 20,
     borderRadius: 30,
     overflow: 'hidden',
     backgroundColor: theme.APP_COLOR_2,
   },
-  rightButtonOuter: {
-    marginRight: 15,
-    borderRadius: 30,
-    overflow: 'hidden',
-  },
-  rightButtonInner: {
+  rightButton: {
     padding: 5,
+    borderRadius: 30,
   },
   languageOptionsContainer: {
     borderRadius: 15,
@@ -150,12 +144,15 @@ const Header = (
     elevation: isTransparent ? 0 : 4,
     backgroundColor: isTransparent ? 'transparent' : theme.APP_COLOR_1,
   },
+  headerLeftContainerStyle: {
+    marginLeft: 20,
+  },
+  headerRightContainerStyle: {
+    marginRight: 20,
+  },
   headerLeft: showBackButton
     ? () => (
-        <Ripple
-          onPress={() => navigation.goBack()}
-          outerStyle={styles.leftButtonOuter}
-          innerStyle={styles.leftButtonInner}>
+        <Ripple onPress={() => navigation.goBack()} style={styles.leftButton}>
           <EntypoIcon
             size={25}
             name="chevron-left"
@@ -217,10 +214,7 @@ const Header = (
       )
     : showRightButton
     ? () => (
-        <Ripple
-          onPress={rightButtonOnPress}
-          outerStyle={styles.rightButtonOuter}
-          innerStyle={styles.rightButtonInner}>
+        <Ripple onPress={rightButtonOnPress} style={styles.rightButtonOuter}>
           {rightButtonIcon}
         </Ripple>
       )
@@ -386,6 +380,58 @@ const UploadStack = () => (
             showAppIcon: true,
             isTransparent: true,
             showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const BrowseMissionsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="BrowseMissions"
+      component={BrowseMissions}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Browse Missions',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageUploadMission"
+      component={ImageUploadMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Image Upload',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const MyMissionsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="MyMissions"
+      component={MyMissions}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'My Missions',
+            showBackButton: true,
+            isTransparent: true,
           },
           navigation,
         );
@@ -685,8 +731,8 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="About"
-      component={About}
+      name="BrowseMissions"
+      component={BrowseMissionsStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => (
@@ -695,8 +741,8 @@ const BottomTabs = () => (
       }}
     />
     <Tab.Screen
-      name="UploadImage"
-      component={UploadStack}
+      name="MyMissions"
+      component={MyMissionsStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="MyMissions" {...props} />,

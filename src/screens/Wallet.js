@@ -79,7 +79,10 @@ const Wallet = ({t}) => {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.contentContainer}>
       <View style={styles.quicraContainer}>
         <Text style={styles.quicraText}>1.2 QUICRA-0</Text>
         <View style={styles.oceanPortfolioContainer}>
