@@ -35,7 +35,7 @@ const Upload = (props) => {
         }} 
        />) : (
         /*<UploadImage {...props} />*/
-        <MainScreeen />
+        <MainScreeen {...props} />
         //<PlayAI {...props} />
        )
       }

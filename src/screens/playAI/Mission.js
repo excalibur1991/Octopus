@@ -56,7 +56,9 @@ export const Mission = ({navigation}) => {
                 >START</RoundButton>
                 <RoundButton
                     onPress={
-                        ()=>{navigation.navigate({name: 'playAI', params: {mode: 'tutorial'})}
+                        ()=>{
+                            navigation.navigate('playAI', {isTutorial: true})
+                        }
                     }
                 >TUTORIAL (1 MIN)</RoundButton>
             </View>

@@ -18,9 +18,11 @@ export const dark_theme = {
     BLUE: '#384DD7',
     GREY: '#404040',
     BG_GREY: '#25262B',
+    LIGHT_GREY: '#62646D',
   },
   GRADIENTS:{
-    PRIMARY: ['#074BB9', '#DE29F7'],
-    SECONDARY: ['#70E0FF', '#182EF0']
+    PRIMARY: ['#DE29F7','#074BB9'],
+    SECONDARY: ['#70E0FF', '#182EF0'],
+    BUTTON: ['#8138D1', '#4A4FCE']
   },
 };

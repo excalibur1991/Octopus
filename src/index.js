@@ -697,6 +697,7 @@ const BottomTabs = () => (
       component={UploadStack}
       options={{
         unmountOnBlur: true, 
+        tabBarVisible: false,
         tabBarButton: (props) => null 
       }}
     />

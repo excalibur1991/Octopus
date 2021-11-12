@@ -41,33 +41,46 @@ export const MainScreeen = ({navigation}) => {
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
             }}>
-                <ListItem containerStyle={{
-                    backgroundColor: 'transparent'
+
+                <View style={{
+                    paddingVertical: 40,
+                    paddingHorizontal: 34,
+
                 }}>
-                    <Avatar
-                        style={{width: 80, height: 80}}
-                        //size={'large'}
-                        title={'abc'}
-                        source={require('../../assets/companyIcon.png')}
-                    />
-                    <ListItem.Content>
-                        <ListItem.Title
-                           style={{...CommonStyles.large_bold_text, color: '#FFF'}}
-                        >{'Company Name Here\nButterfly Images'}</ListItem.Title>
-                        <ListItem.Subtitle>
-                            <Chip title={'common'} />
-                            <Chip title={'common2'} />
-                        </ListItem.Subtitle>
-                    </ListItem.Content>
-                </ListItem>
+                    <ListItem containerStyle={{
+                        backgroundColor: 'transparent',
+                        padding: 0,
+                    }}>
+                        <Avatar
+                            style={{width: 80, height: 80}}
+                            //size={'large'}
+                            title={'abc'}
+                            source={require('../../assets/companyIcon.png')}
+                        />
+                        <ListItem.Content>
+                            <ListItem.Title
+                            style={{...CommonStyles.large_bold_text, color: '#FFF'}}
+                            >{'Company Name Here\nButterfly Images'}</ListItem.Title>
+                            <ListItem.Subtitle>
+                                <Chip title={'common'}/>
+                                <Chip title={'common2'} containerStyle={{marginLeft: 12, }} />
+                            </ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                </View>
                 <Divider />
-                <View style={}>
+                <View style={{
+                    paddingVertical: 40,
+                    paddingHorizontal: 34,
+                }}>
                     <RoundButton
+                        title={'ABOUT MISSION'}
                         onPress={()=>{navigation.navigate('Mission')}}
-                    >ABOUT MISSION</RoundButton>
+                    />
                     <RoundButton
+                        title={'CLAIM MISSION'}
                         onPress={()=>{navigation.navigate('')}}
-                    >CLAIM MISSION</RoundButton>
+                    />
                 </View>
             </View>
         </View>

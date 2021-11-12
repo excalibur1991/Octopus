@@ -6,7 +6,7 @@ import {
     Dimensions,
     Modal,
     requireNativeComponent,
-    StyleSheet
+    StyleSheet,
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
@@ -69,7 +69,7 @@ const PlayAI = ({navigation, params, t}) => {
   const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
 
 
-  const {mode} = params || '';
+  //const {mode} = params || '';
 
 
   const initVariables = () =>{
@@ -235,6 +235,100 @@ const PlayAI = ({navigation, params, t}) => {
    * handleNextTut
    */
   const handleNextTut = () =>{
+
+  }
+
+  const TutDesc = ({title, desc}) =>{
+    return (
+      <>
+        <Text>{title}</Text>
+        <Text>{desc}</Text>
+      </>
+    );
+
+  }
+
+  const TutorialOverlay = ({step}) => {
+    return (
+      <>
+      {(step === 'tut_description') && (
+        <View>
+          <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
+          <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
+          <Text style={styles.tut_desc_heading}>How to Play:</Text>
+          <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.
+          </Text>
+      </View>
+      )}
+      {
+        (step === 'tut_drawface') && (
+          <View>
+            <Text>DRAW THE FACE</Text>
+            <Text>Annotate the face by clicking on the boxes</Text>
+          </View>
+        )
+      }
+      {
+        (step === 'tut_press_annotate') && (
+          <View>
+            <Text>PRESS 'annotate'</Text>
+            <Text>Press Annotate to finish</Text>
+          </View>
+        )
+      }
+      {
+        (step === 'tut_annotation' ) && (
+          <View>
+            <Text>ANNOTATION</Text>
+            <Text>Annotation is displayed in the coloured boxes</Text>
+          </View>
+        )
+      }
+      {(step === 'tut_aiframe') && (
+        <View>
+          <Text>AI FRAME</Text>
+          <Text>AI frame is displayed in the gradient square</Text>
+        </View>
+      ) } 
+      {(step === 'tut_need_editing') && (
+        <View>
+          <TutDesc 
+            title={'IMAGE NEEDS EDITING'}
+            desc={'If the AI framedoese not match the annotation, you can edit incoreect parts'}
+            />
+        </View>
+      )}
+      {(step === 'tut_edit_annotation') && (
+        <View>
+          <TutDesc
+            title={'EDIT ANNOTATION'}
+            desc={'If the annotation does not match the AI frame annotation, you can reannotate the face.'}
+          />
+        </View>
+      )}
+      {(step === 'tut_swipe_left') && (
+        <View>
+          <TutDesc
+            title={'SWIPE LEFT TO REPORT'}
+            desc={'If the image contains inappropriate content, You canallways report it to be removed.'}
+            />
+        </View>
+      )}
+      {(step === 'tut_swiipe_right') && (
+        <View>
+          <TutDesc
+            title={'SWIPE RIGHT TO VERIFY'}
+            desc={'If the AI frame matches the annotation, you can verify.'}
+            />
+        </View>
+      )}
+      {(step === 'tut_completed') && (
+        <View>
+          
+        </View>
+      )}
+      </>
+    );
 
   }
 
@@ -459,13 +553,7 @@ const PlayAI = ({navigation, params, t}) => {
               <Button style={styles.next_tut_btn} onPress={handleNextTut()}>
                 <Image source={require('../assets/btn_tut_next.png')} />
               </Button>
-              <View>
-                <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
-                <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
-                <Text style={styles.tut_desc_heading}>How to Play:</Text>
-                <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.
-                </Text>
-              </View>
+             
             </View>
           )
         }
