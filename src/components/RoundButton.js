@@ -11,7 +11,7 @@ const RoundButton = props => {
     title = '',
     onPress = () => {},
     loading = false,
-    color = '#2bae6a',
+    color = '#FFF',
     icon = null,
     height = null,
     style = {},
@@ -71,7 +71,7 @@ const RoundButton = props => {
             </View>
             <Text
               style={{
-                color: disabled ? '#90a2bb' : isOutlined ? color : '#fff',
+                color: '#FFF',
                 fontSize: 13,
                 ...textStyle,
               }}>
@@ -80,14 +80,15 @@ const RoundButton = props => {
           </View>
         </LinearGradient>
       </TouchableOpacity>
-      ) : (
+      ) : 
+      (
     <View style={style}>
       <Ripple
         outerStyle={{
           width: '100%',
           borderWidth: 0,  //!disabled && isOutlined ? 2 : 0,
           borderColor: color,
-          backgroundColor: '#26252B', //disabled ? '#cccccc' : isOutlined ? '#fff' : color,
+          backgroundColor: type =='secondary' ? '#26252B' : '#622646D', //disabled ? '#cccccc' : isOutlined ? '#fff' : color,
           borderRadius: 30,
           marginVertical: 5,
           ...buttonStyle,
@@ -101,7 +102,7 @@ const RoundButton = props => {
         }}
         onPress={onPress}
         disabled={disabled}>
-        {/*loading ? (
+        {loading ? (
           <ActivityIndicator color={isOutlined ? '#000' : '#fff'} />
         ) : (
           <View
@@ -113,25 +114,22 @@ const RoundButton = props => {
             }}>
             <View
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 10,
-                bottom: 0,
                 justifyContent: 'center',
                 alignItems: 'center',
+                marginRight: 10,
               }}>
               {icon}
             </View>
             <Text
               style={{
-                color: disabled ? '#90a2bb' : isOutlined ? color : '#fff',
+                color: '#fff',
                 fontSize: 13,
                 ...textStyle,
               }}>
               {title}
             </Text>
           </View>
-        )*/}
+        )}
       </Ripple>
     </View>
       )
@@ -142,7 +140,7 @@ const RoundButton = props => {
 };
 
 RoundButton.propTypes = {
-  icon: PropTypes.string,
+  icon: PropTypes.any,
   title: PropTypes.string,
   onPress: PropTypes.func,
   loading: PropTypes.bool,

@@ -34,7 +34,7 @@ import TOS from './screens/TOS';
 import PrivacyInformation from './screens/PrivacyInformation';
 import Legal from './screens/Legal';
 import Ripple from './components/Ripple';
-import {theme} from './services/Common/theme';
+import {dark_theme, theme} from './services/Common/theme';
 import i18n from './languages/i18n';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {useStateValue} from './services/State/State';
@@ -52,6 +52,7 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -224,12 +225,16 @@ const FullScreenHeader = (
     ? () => (
         <Ripple
           onPress={() => navigation.navigate('LandingPage')}
-          outerStyle={styles.leftButtonOuter}
+          outerStyle={{
+            borderRadius: 30,
+            marginLeft: 20,
+            backgroundColor: dark_theme.COLORS.BG_GREY
+          }}
           innerStyle={styles.leftButtonInner}>
-          <Image
-            style={styles.leftIcon}
-            resizeMode="stretch"
-            source={require('./assets/icon.png')}
+            <MaterialIcon
+            name="chevron-left"
+            size={24}
+            color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
           />
         </Ripple>
       )

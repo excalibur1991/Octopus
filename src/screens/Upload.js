@@ -7,7 +7,8 @@ import PlayAI  from './PlayAI';
 import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 import {actions} from '../services/State/Reducer';
 import { Appbar } from 'react-native-paper';
-import { MainScreeen } from './playAI/MainSceen';
+import { MainScreen } from './playAI/MainSceen';
+import { Mission} from './playAI/Mission';
 //later branch the Upload cases
 const Upload = (props) => {
   //set this true cause TOC first show always
@@ -35,7 +36,7 @@ const Upload = (props) => {
         }} 
        />) : (
         /*<UploadImage {...props} />*/
-        <MainScreeen {...props} />
+        <MainScreen {...props} />
         //<PlayAI {...props} />
        )
       }
