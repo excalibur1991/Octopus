@@ -9,23 +9,26 @@ import {
     StyleSheet,
   } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useStateValue} from '../services/State/State';
-import  Button from '../components/Button';
-import {theme} from '../services/Common/theme';
-import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../../services/State/State';
+import  Button from '../../components/Button';
+import {theme} from '../../services/Common/theme';
+import {actions} from '../../services/State/Reducer';
 import {
   annotate,
   annotateImage,
   getImageById,
-} from '../services/API/APIManager';
-import DrawingPan, {EDIT_MODE} from '../components/DrawingPan';
-import {styles} from '../styles/playai';
+} from '../../services/API/APIManager';
+import DrawingPan, {EDIT_MODE} from '../../components/DrawingPan';
+import {styles} from '../../styles/playai';
 import {withTranslation} from 'react-i18next';
 import {
   Chip,
 } from 'react-native-paper';
-import DottedProgressBar from '../components/DottedProgressBar';
-import SwipeCards from '../components/SwipeCards';
+import DottedProgressBar from '../../components/DottedProgressBar';
+import SwipeCards from '../../components/SwipeCards';
+import Ripple from '../../components/Ripple';
+import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
+import { CommonStyles } from '../../services/Common/styles';
 /**
  * play AI
  * 1. upload photo
@@ -43,7 +46,7 @@ const enum_mode = {
 };
 
 
-const PlayAI = ({navigation, params, t}) => {
+const PlayAI = (props) => {
   const [{cameraSettings, playAISettings}, dispatch] = useStateValue();
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -67,9 +70,10 @@ const PlayAI = ({navigation, params, t}) => {
   const [isAnnoAI, setIsAnnoAI] =useState(false);
   const [cards, setCards] = useState([]);
   const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
+  const [tutStep, setTutStep] = useState('tut_description');
 
 
-  //const {mode} = params || '';
+  const {isTutorial, navigation, t} = props || '';
 
 
   const initVariables = () =>{
@@ -235,6 +239,10 @@ const PlayAI = ({navigation, params, t}) => {
    * handleNextTut
    */
   const handleNextTut = () =>{
+    switch(tutStep){
+      case 'tut_description':
+        setPrivacyAndTermsAccepted();
+    }
 
   }
 
@@ -248,10 +256,10 @@ const PlayAI = ({navigation, params, t}) => {
 
   }
 
-  const TutorialOverlay = ({step}) => {
+  const TutorialOverlay = () => {
     return (
       <>
-      {(step === 'tut_description') && (
+      {(tutStep === 'tut_description') && (
         <View>
           <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
           <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
@@ -261,7 +269,7 @@ const PlayAI = ({navigation, params, t}) => {
       </View>
       )}
       {
-        (step === 'tut_drawface') && (
+        (tutStep === 'tut_drawface') && (
           <View>
             <Text>DRAW THE FACE</Text>
             <Text>Annotate the face by clicking on the boxes</Text>
@@ -269,7 +277,7 @@ const PlayAI = ({navigation, params, t}) => {
         )
       }
       {
-        (step === 'tut_press_annotate') && (
+        (tutStep === 'tut_press_annotate') && (
           <View>
             <Text>PRESS 'annotate'</Text>
             <Text>Press Annotate to finish</Text>
@@ -277,20 +285,20 @@ const PlayAI = ({navigation, params, t}) => {
         )
       }
       {
-        (step === 'tut_annotation' ) && (
+        (tutStep === 'tut_annotation' ) && (
           <View>
             <Text>ANNOTATION</Text>
             <Text>Annotation is displayed in the coloured boxes</Text>
           </View>
         )
       }
-      {(step === 'tut_aiframe') && (
+      {(tutStep === 'tut_aiframe') && (
         <View>
           <Text>AI FRAME</Text>
           <Text>AI frame is displayed in the gradient square</Text>
         </View>
       ) } 
-      {(step === 'tut_need_editing') && (
+      {(tutStep === 'tut_need_editing') && (
         <View>
           <TutDesc 
             title={'IMAGE NEEDS EDITING'}
@@ -298,15 +306,15 @@ const PlayAI = ({navigation, params, t}) => {
             />
         </View>
       )}
-      {(step === 'tut_edit_annotation') && (
+      {(tutStep === 'tut_edit_annotation') && (
         <View>
           <TutDesc
             title={'EDIT ANNOTATION'}
-            desc={'If the annotation does not match the AI frame annotation, you can reannotate the face.'}
+            desc={'If the annotation does not match the AI frame annotation, you can reannotate the face.'} 
           />
         </View>
       )}
-      {(step === 'tut_swipe_left') && (
+      {(tutStep === 'tut_swipe_left') && (
         <View>
           <TutDesc
             title={'SWIPE LEFT TO REPORT'}
@@ -314,7 +322,7 @@ const PlayAI = ({navigation, params, t}) => {
             />
         </View>
       )}
-      {(step === 'tut_swiipe_right') && (
+      {(tutStep === 'tut_swiipe_right') && (
         <View>
           <TutDesc
             title={'SWIPE RIGHT TO VERIFY'}
@@ -322,7 +330,7 @@ const PlayAI = ({navigation, params, t}) => {
             />
         </View>
       )}
-      {(step === 'tut_completed') && (
+      {(tutStep === 'tut_completed') && (
         <View>
           
         </View>
@@ -345,6 +353,7 @@ const PlayAI = ({navigation, params, t}) => {
 
 
   return (
+    <>
     <View style={styles.container}>
       {isAnnoAI ? (
         <>
@@ -359,7 +368,7 @@ const PlayAI = ({navigation, params, t}) => {
             <Image
               resizeMode='stretch'
               style={styles.leftbar}
-              source={require('../assets/left.png')}
+              source={require('../../assets/left.png')}
             />
             <View style={styles.CardView}>
               <SwipeCards
@@ -402,7 +411,7 @@ const PlayAI = ({navigation, params, t}) => {
             <Image
               style={styles.rightbar}
               resizeMode='stretch'
-              source={require('../assets/right.png')}
+              source={require('../../assets/right.png')}
               />
           </View>
         <ScrollView
@@ -541,23 +550,32 @@ const PlayAI = ({navigation, params, t}) => {
             )
           }
         </View>)}
-        {
-          (mode == 'tutorial') && (
-            <View style={styles.tut_overlay}>
-              <View style={styles.tut_exit}>
-                <Button 
-                  onPress={navigation.navigate('')}
-                ><Image source={require('../assets/exit.png')} /></Button>
-                <Text>Exit WALKTHROUGH</Text>
-              </View>
-              <Button style={styles.next_tut_btn} onPress={handleNextTut()}>
-                <Image source={require('../assets/btn_tut_next.png')} />
-              </Button>
-             
-            </View>
-          )
-        }
+        
     </View>
+    {
+      (isTutorial) && (
+        <>
+        <View style={styles.tut_overlay}>
+          <View style={styles.tut_exit}>
+            <Ripple 
+              onPress={navigation.navigate('')}
+            ><Image source={require('../../assets/exit.png')} />
+            </Ripple>
+            <Text style={{color: '#FFF', marginTop: 7}}>EXIT WALKTHROUGH</Text>
+          </View>
+          <View style={styles.tut_content}>
+            <TutorialOverlay />
+          </View>
+          <View style={styles.next_tut_btn}>
+            <Ripple onPress={handleNextTut()}>
+              <Image source={require('../../assets/btn_tut_next.png')} />
+            </Ripple>
+          </View>
+        </View>
+        </>
+      )
+    }
+    </>
   );
 };
 

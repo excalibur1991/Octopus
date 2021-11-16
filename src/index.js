@@ -15,7 +15,7 @@ import SwipeAI from './screens/SwipeAI';
 import Learn from './screens/Learn';
 import Verification from './screens/Verification';
 import Annotation from './screens/Annotation';
-import PlayAI from './screens/PlayAI';
+import PlayAI from './screens/playAI/PlayAI';
 import Wallet from './screens/Wallet';
 //import UploadGuidelines from './screens/UploadGuidelines';
 //import UploadImage from './screens/UploadImage';
@@ -392,7 +392,7 @@ const UploadStack = () => (
         );
       }}
     />
-  </Stack.Navigator>
+   </Stack.Navigator>
 );
 
 /*

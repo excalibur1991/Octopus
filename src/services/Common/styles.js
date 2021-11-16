@@ -43,6 +43,10 @@ export const CommonStyles = StyleSheet.create({
         fontFamily: 'Moon-Light',
         fontSize: 16
     },
+    normal_bold_text: {
+        fontFamily: 'Moon-Bold',
+        fontSize: 12,
+    },
     normal_text: {
         fontFamily: 'Moon-Light',
         fontSize: 12,

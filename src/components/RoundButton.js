@@ -28,24 +28,25 @@ const RoundButton = props => {
   return (
     <>
     { type === 'primary' ? (
+      <View style={style}>
       <TouchableOpacity 
         onPress={onPress}
         disabled={disabled}
       >
         <LinearGradient colors={dark_theme.GRADIENTS.BUTTON}
-      start={{
-        x: 0,
-        y: 0
-      }}
-      end={{
-        x: 1,
-        y: 1
-      }}
+          start={{
+            x: 0,
+            y: 0
+          }}
+          end={{
+            x: 1,
+            y: 1
+          }}
           style={{
             borderRadius: 30,
             width: '100%',
             borderWidth: 0,
-            paddingVertical: 20,
+            paddingVertical: 18,
             paddingHorizontal: 10,
             marginVertical: 5,
             ...buttonStyle
@@ -60,12 +61,9 @@ const RoundButton = props => {
             }}>
             <View
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 10,
-                bottom: 0,
                 justifyContent: 'center',
                 alignItems: 'center',
+                marginRight: 10,
               }}>
               {icon}
             </View>
@@ -80,6 +78,7 @@ const RoundButton = props => {
           </View>
         </LinearGradient>
       </TouchableOpacity>
+      </View>
       ) : 
       (
     <View style={style}>

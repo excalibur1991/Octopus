@@ -188,6 +188,43 @@ export const styles = StyleSheet.create({
     CardView: {
       zIndex: 1000
     },
+
+    tut_overlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'black',
+      opacity: 0.78,
+      zIndex: 999
+    },
+    tut_exit: {
+      position: 'absolute',
+      alignItems: 'flex-end',
+      right: 24,
+      top: 40,
+    },
+    tut_content: {
+      width: '80%',
+      height: '100%',
+      flex: 1,
+      justifyContent: 'center',
+      marginLeft: 0
+      
+    },
+    next_tut_btn: {
+      position: 'absolute',
+      right: -40
+    },
+    tut_desc_heading: {
+      color: '#FFF'
+    },
+    tut_description: {
+      color: '#FFF'
+    }
   
   });
   

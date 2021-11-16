@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import UploadGuidelines from './UploadGuidelines';
 import UploadImage from './UploadImage';
-import PlayAI  from './PlayAI';
 import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 import {actions} from '../services/State/Reducer';
 import { Appbar } from 'react-native-paper';

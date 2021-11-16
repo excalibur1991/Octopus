@@ -5,7 +5,7 @@ import {
     Image,
     View,
     Text,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 import { Avatar, Chip, Divider, ListItem } from "react-native-elements";
 
@@ -13,6 +13,9 @@ import { CommonStyles } from "../../services/Common/styles";
 import RoundButton from "../../components/RoundButton";
 import { NavigationContainer } from "@react-navigation/native";
 import Tag from "../../components/Tag";
+import { theme, dark_theme } from "../../services/Common/theme";
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Ripple from '../../components/Ripple';
 
 
 
@@ -26,8 +29,7 @@ const styles = StyleSheet.create({
 });
 
 
-export const Mission = (props) => {
-    const {onNext, onTutorial} = props || {};
+export const MissionComplete = ({navigation}) => {
     return (
         <View style={{
             flex: 1, 
@@ -86,26 +88,49 @@ export const Mission = (props) => {
                         alignItems: 'center',
 
                     }}>
-                        <Text style={{...CommonStyles.h3, color: '#FFF', marginTop: 20 }}>LET'S BEGIN</Text>
-                        <Text style={{...CommonStyles.large_bold_text, color: '#FFF', marginTop: 20, textAlign: 'center' }}>YOU ARE ABOUT TO COMPLETE 1 IMAGE FOR THIS IMAGE</Text>
-                        <View style={{marginTop: 60}}>
+                        <Text style={{...CommonStyles.h3, color: '#FFF', marginTop: 20}}>MISSION COMPLETED!</Text>
+                        <Text style={{...CommonStyles.normal_bold_text, color: '#FFF', marginTop: 20, textAlign: 'center' }}>COLLECT REWARDS ON 'MY MISSIONS>COMPLETED' ONCE YOUR MISSION HAS BEEN APPROVED.</Text>
+                        <View style={{marginTop: 60, alignItems: 'center'}}>
                             <RoundButton
-                                title='START'
+                                title='MY MISSIONS'
                                 type='primary'
                                 onPress={
                                     ()=>{
-                                        onNext();
+                                        navigation.navigate('playAI', {isTutorial: true})
+                                    }
+                                }
+                                icon={<Image source={require('../../assets/ico_location.png')} />}
+                            />
+                            <RoundButton
+                                title='ABOUT MISSION'
+                                type='secondary'
+                                icon={<Image source={require('../../assets/ico_video.png')} />}
+                                onPress={
+                                    ()=>{
+                                        navigation.navigate('playAI', {isTutorial: true})
                                     }
                                 }
                             />
-                            <RoundButton
-                                title='TUTORIAL (1 MIN)'
-                                type='secondary'
-                                icon={<Image source={require('../../assets/ico_video.png')} />}
-                                onPress={()=>{
-                                    onTutorial();
-                                }}
-                            />
+                            <View style={{marginTop: 28}}>
+                                <Ripple
+                                    onPress={() =>{}}
+                                    outerStyle={{
+                                        borderRadius: 30,
+                                        backgroundColor: dark_theme.COLORS.BG_GREY,
+                                        width: 60,
+                                        height: 60,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}
+                                    innerStyle={{
+                                        height: 60,
+                                        width: 60,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        <Image source={require('../../assets/ico_close.png')} />
+                                </Ripple>
+                            </View>
                         </View>
                 </View>
         </View>
