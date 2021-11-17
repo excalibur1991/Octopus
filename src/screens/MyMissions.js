@@ -1,209 +1,22 @@
 import React, {useState} from 'react';
+import Ripple from '../components/Ripple';
+import {styles} from '../styles/mymissions';
+import {theme} from '../services/Common/theme';
+import * as Progress from 'react-native-progress';
+import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   Text,
   View,
   ScrollView,
   Image,
-  Modal,
-  Dimensions,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
-import {theme} from '../services/Common/theme';
-import {styles} from '../styles/mymissions';
-import Ripple from '../components/Ripple';
-import LinearGradient from 'react-native-linear-gradient';
-import AntIcon from 'react-native-vector-icons/AntDesign';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-const UploadMission = require('../assets/image_upload_mission_test.png');
-const CompanyIcon = require('../assets/company_icon.png');
-
-const InfoModal = ({open = false, onClose = () => {}}) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  return (
-    <Modal transparent visible={open} statusBarTranslucent animationType="fade">
-      <View style={styles.infoModalContainer}>
-        <View style={styles.infoModalContentContainer}>
-          <View style={styles.header}>
-            <FontAwesome5Icon
-              size={42}
-              name="list-alt"
-              color={theme.COLORS.WHITE}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.headerTitle}>About Mission</Text>
-          </View>
-          <ScrollView
-            horizontal
-            pagingEnabled
-            nestedScrollEnabled
-            onScroll={(e) => {
-              const index = Math.round(
-                (e.nativeEvent.contentOffset.x /
-                  Dimensions.get('screen').width) *
-                  0.9,
-              );
-              setCurrentIndex(index);
-            }}
-            showsHorizontalScrollIndicator={false}>
-            <View style={styles.infoContainerItems}>
-              <View style={styles.infoContainerItem}>
-                <Text style={styles.infoContentItemTitle}>Title1</Text>
-                <Text style={styles.infoContentItemDescription}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aenean et tellus justo. Sed nec sodales est. Nunc venenatis
-                  tellus at leo posuere, vitae interdum mi consequat.
-                  Pellentesque nec lacus
-                </Text>
-              </View>
-              <View style={styles.infoContainerItem}>
-                <Text style={styles.infoContentItemTitle}>Rewards</Text>
-                <Text style={styles.infoContentItemDescription}>
-                  lacinia, congue sapien quis, dapibus Duis et molestie
-                  ligula,nec maximus erat. Donec dapibus, justo sed viverra
-                  sagittis, eros sapien consequat nunc, Duis et molestie
-                  ligula,nec maximus erat. Donec dapibus, justo sed viverra.
-                </Text>
-              </View>
-            </View>
-            <View style={styles.infoContainerItems}>
-              <View style={styles.infoContainerItem}>
-                <Text style={styles.infoContentItemTitle}>Requirements</Text>
-                <Text style={styles.infoContentItemDescription}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aenean et tellus justo. Sed nec sodales est. Nunc venenatis
-                  tellus at leo posuere, vitae interdum mi consequat.
-                  Pellentesque nec lacus
-                </Text>
-              </View>
-              <View style={styles.infoContainerItem}>
-                <Text style={styles.infoContentItemTitle}>Rewards</Text>
-                <Text style={styles.infoContentItemDescription}>
-                  lacinia, congue sapien quis, dapibus Duis et molestie
-                  ligula,nec maximus erat. Donec dapibus, justo sed viverra
-                  sagittis, eros sapien consequat nunc, Duis et molestie
-                  ligula,nec maximus erat. Donec dapibus, justo sed viverra.
-                </Text>
-              </View>
-            </View>
-          </ScrollView>
-          <View style={styles.bottomContainer}>
-            <View style={styles.dots}>
-              {Array.from(Array(2).keys()).map((_, index) => (
-                <Ripple
-                  key={index}
-                  outerStyle={
-                    currentIndex === index
-                      ? styles.dotOuter
-                      : styles.dotOuterActive
-                  }
-                  innerStyle={styles.dotInner}
-                />
-              ))}
-            </View>
-            <LinearGradient
-              end={{x: 1, y: 0}}
-              start={{x: 0.15, y: 0}}
-              colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
-              style={styles.modalButtonOuter}>
-              <Ripple
-                onPress={onClose}
-                outerStyle={styles.radius30}
-                innerStyle={styles.modalButtonInner}>
-                <Text
-                  style={{
-                    ...styles.itemTitle,
-                    color: theme.COLORS.WHITE,
-                  }}>
-                  Got It
-                </Text>
-              </Ripple>
-            </LinearGradient>
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-};
-
-const RadioButton = ({checked, onCheckChange}) => {
-  return (
-    <Ripple
-      outerStyle={styles.radioButtonOuter}
-      innerStyle={styles.radioButton}
-      onPress={() => onCheckChange(!checked)}>
-      {checked && (
-        <LinearGradient
-          end={{x: 1, y: 0}}
-          start={{x: 0.15, y: 0}}
-          style={styles.radioButtonInner}
-          colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
-        />
-      )}
-    </Ripple>
-  );
-};
-
-const TCModal = ({open = false, onClose = () => {}}) => {
-  return (
-    <Modal
-      transparent
-      visible={open}
-      statusBarTranslucent
-      animationType="slide">
-      <View style={styles.tcModalContainer}>
-        <View style={styles.tcModalContentContainer}>
-          <Text style={styles.tcHeaderTitle}>Terms &amp; Conditions</Text>
-          <View style={styles.mainDivider} />
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.tcContainerItems}>
-            <View style={styles.tcContainerItem}>
-              <Text style={styles.tcContentItemTitle}>
-                Vivamus pulvinar neque
-              </Text>
-              <Text style={styles.tcContentItemDescription}>
-                Lorem ipsum dolor sit amet, consectetu r adipiscing elit. Aenean
-                et tellus justo. Sed nec sodales est. Nunc venenatis tellus at
-                leo posuere, vitae interdum mi consequat. Pellentesque nec lacus
-                Lorem ipsum dolor sit amet, consectetu r adipiscing elit. Aenean
-                et tellus justo. Sed nec sodales est. Nunc venenatis tellus at
-                leo posuere, vitae interdum mi consequat. Pellentesque nec lacus
-                Lorem ipsum dolor sit amet, consectetu r adipiscing elit. Aenean
-                et tellus justo. Sed nec sodales est. Nunc venenatis tellus at
-                leo posuere, vitae interdum mi consequat. Pellentesque nec lacus
-              </Text>
-            </View>
-            <View style={styles.tcContainerItem}>
-              <Text style={styles.tcContentItemTitle}>
-                Vestibulum ante ipsum
-              </Text>
-              <Text style={styles.tcContentItemDescription}>
-                lacinia, congue sapien quis, dapibus Duis et molestie ligula,nec
-                maximus erat. Donec dapibus, justo sed viverra sagittis, eros
-                sapien consequat nunc, Duis et molestie ligula,nec maximus erat.
-                Donec dapibus, justo sed viverra . Lorem ipsum dolor sit amet,
-                consectetu r adipiscing elit. Aenean et tellus justo. Sed nec
-                sodales est. Nunc venenatis tellus at leo posuere, vitae
-                interdum mi consequat. Pellentesque nec lacus
-              </Text>
-            </View>
-          </ScrollView>
-          <LinearGradient
-            colors={['transparent', theme.COLORS.BLACK]}
-            style={styles.tcCloseButtonContainer}>
-            <Ripple
-              onPress={onClose}
-              outerStyle={styles.radius30}
-              innerStyle={styles.tcCloseButton}>
-              <AntIcon size={23} name="close" color={theme.COLORS.WHITE} />
-            </Ripple>
-          </LinearGradient>
-        </View>
-      </View>
-    </Modal>
-  );
-};
+const MissionCard1 = require('../assets/image_upload_mission_test.png');
+const MissionCard2 = require('../assets/company_icon.png');
+const MissionCard3 = require('../assets/dashboard_image.png');
+const MissionCard4 = require('../assets/image_upload_mission_test.png');
 
 const Tab = ({title, value, isSelected, setTab, count}) => {
   return (
@@ -222,37 +35,172 @@ const Tab = ({title, value, isSelected, setTab, count}) => {
 
 const MyMissions = ({navigation}) => {
   const [tab, setTab] = useState('Ongoing');
-  const [missions, setMissions] = useState([]);
+  const [missions, setMissions] = useState([
+    {
+      type: 'ongoing',
+      image: MissionCard1,
+      level: 'Lv. 3',
+      title1: 'Butterflies',
+      title2: 'Company Name',
+      progressTotal: 5,
+      progressCompleted: 2,
+      status: 'inprogress',
+    },
+    {
+      type: 'ongoing',
+      image: MissionCard1,
+      level: 'Lv. 2',
+      title1: 'Butterflies',
+      title2: 'Company Name',
+      progressTotal: 5,
+      progressCompleted: 0,
+      status: 'inprogress',
+    },
+    {
+      type: 'completed',
+      image: MissionCard2,
+      level: 'Lv. 7',
+      title1: 'Butterflies',
+      title2: 'Company Name',
+      status: 'pending',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'completed',
+      image: MissionCard3,
+      level: 'Lv. 8',
+      title1: 'Banana Peels',
+      title2: 'Mini Quest',
+      status: 'readytogetreward',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'completed',
+      image: MissionCard4,
+      level: 'Lv. 10',
+      title1: 'Food',
+      title2: 'Liddl',
+      status: 'rewardgiven',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'completed',
+      image: MissionCard2,
+      level: 'Lv. 10',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
+      status: 'rewardgiven',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+  ]);
+
+  const filteredMissions = missions.filter(
+    (m) => m.type.toLowerCase() === tab.toLowerCase(),
+  );
+  const ongoingMissionsCount = missions.filter(
+    (m) => m.type.toLowerCase() === 'ongoing',
+  ).length;
+  const completedMissionsCount = missions.filter(
+    (m) => m.type.toLowerCase() === 'completed',
+  ).length;
 
   return (
     <View style={styles.container}>
       <View style={styles.tabs}>
         <Tab
-          count={0}
+          count={ongoingMissionsCount}
           setTab={setTab}
           value="Ongoing"
           title="Ongoing"
           isSelected={tab === 'Ongoing'}
         />
         <Tab
-          count={5}
+          count={completedMissionsCount}
           setTab={setTab}
           value="Completed"
           title="Completed"
           isSelected={tab === 'Completed'}
         />
       </View>
-      {missions && missions.length > 0 ? (
+      {filteredMissions && filteredMissions.length > 0 ? (
         <ScrollView
           style={styles.missionCards}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.companyInfoContentContainer}>
-          <Ripple
-            outerStyle={styles.radius30}
-            innerStyle={styles.missionCard}
-            onPress={() => {}}>
-            <Text style={styles.emptyTitle}>OOps, its empty here!</Text>
-          </Ripple>
+          contentContainerStyle={styles.missionCardsContentContainer}>
+          {filteredMissions.map((mission) => {
+            const isOngoingMission = mission.type.toLowerCase() === 'ongoing';
+            return (
+              <Ripple
+                style={styles.missionCard}
+                onPress={() => navigation.navigate('MissionStatus', {mission})}>
+                <View>
+                  <Image
+                    resizeMode="stretch"
+                    source={mission.image}
+                    style={styles.cardImage}
+                  />
+                  <View style={styles.levelContainer}>
+                    <View style={styles.levelChip}>
+                      <Text style={styles.levelText}>{mission.level}</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.cardInfoContainer}>
+                  <Text
+                    style={
+                      styles.cardTitle
+                    }>{`${mission.title2} - ${mission.title1}`}</Text>
+                  <View style={styles.typeChip}>
+                    <Text style={styles.typeText}>Image Upload</Text>
+                  </View>
+                  <View style={styles.statusContainer}>
+                    {isOngoingMission ? (
+                      <View style={styles.progressContainer}>
+                        <Progress.Bar
+                          height={12}
+                          borderWidth={0}
+                          borderRadius={30}
+                          color={theme.COLORS.DARK_BLUE}
+                          unfilledColor={theme.COLORS.MID_GREY}
+                          progress={parseFloat(
+                            mission.progressCompleted / mission.progressTotal,
+                            10,
+                          )}
+                          width={Dimensions.get('screen').width * 0.42}
+                        />
+                        <Text style={styles.progressText}>
+                          {`${mission.progressCompleted}/${mission.progressTotal}`}
+                        </Text>
+                      </View>
+                    ) : mission.status === 'pending' ? (
+                      <Text style={styles.pendingText}>
+                        Pending for Verification...
+                      </Text>
+                    ) : (
+                      <Ripple
+                        disabled={mission.status === 'rewardgiven'}
+                        onPress={() => {}}
+                        style={
+                          mission.status === 'rewardgiven'
+                            ? styles.rewardButtonDisabled
+                            : styles.rewardButton
+                        }>
+                        <FontAwesome5Icon
+                          size={20}
+                          name="hand-holding-usd"
+                          color={theme.COLORS.WHITE}
+                        />
+                      </Ripple>
+                    )}
+                  </View>
+                </View>
+              </Ripple>
+            );
+          })}
         </ScrollView>
       ) : (
         <View style={styles.emptyContainer}>

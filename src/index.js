@@ -34,6 +34,7 @@ import Bounty from './screens/Bounty';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import MyMissions from './screens/MyMissions';
+import MissionStatus from './screens/MissionStatus';
 import ImageCategorization from './screens/ImageCategorization';
 import TOS from './screens/TOS';
 import PrivacyInformation from './screens/PrivacyInformation';
@@ -430,6 +431,33 @@ const MyMissionsStack = () => (
         return Header(
           {
             title: 'My Missions',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="MissionStatus"
+      component={MissionStatus}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Mission Status',
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageUploadMission"
+      component={ImageUploadMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
           },
