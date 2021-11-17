@@ -220,10 +220,17 @@ export const styles = StyleSheet.create({
       right: -40
     },
     tut_desc_heading: {
-      color: '#FFF'
+      color: '#FFF',
+      fontFamily: 'Moon-Bold',
+      fontSize: 24,
+      lineHeight: 24,
     },
     tut_description: {
-      color: '#FFF'
+      marginTop: 15,
+      color: '#FFF',
+      fontFamily: 'Moon-Light',
+      fontSize: 12,
+      lineHeight: 20,
     }
   
   });

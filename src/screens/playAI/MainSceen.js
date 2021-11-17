@@ -39,7 +39,7 @@ export const MainScreen = (props) => {
             <PlayAI {...props} />
         }
         {curPage === 'playai_tut' &&
-            <PlayAI isTutorial={true} {...props} />
+            <PlayAI isTutorial={true}  onExitTutorial={()=>{setCurPage('mission'); console.log('missions'); }} {...props} />
         }
         {curPage === 'intro' && (
             <Intro {...props} onNext={()=>{setCurPage('mission');}} />

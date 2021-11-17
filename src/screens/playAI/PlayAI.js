@@ -73,7 +73,7 @@ const PlayAI = (props) => {
   const [tutStep, setTutStep] = useState('tut_description');
 
 
-  const {isTutorial, navigation, t} = props || '';
+  const {isTutorial, navigation, t, onExitTutorial} = props || '';
 
 
   const initVariables = () =>{
@@ -263,6 +263,7 @@ const PlayAI = (props) => {
         <View>
           <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
           <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
+          <View style={{height: 50}}></View>
           <Text style={styles.tut_desc_heading}>How to Play:</Text>
           <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.
           </Text>
@@ -558,7 +559,7 @@ const PlayAI = (props) => {
         <View style={styles.tut_overlay}>
           <View style={styles.tut_exit}>
             <Ripple 
-              onPress={navigation.navigate('')}
+              onPress={()=>onExitTutorial()}
             ><Image source={require('../../assets/exit.png')} />
             </Ripple>
             <Text style={{color: '#FFF', marginTop: 7}}>EXIT WALKTHROUGH</Text>
