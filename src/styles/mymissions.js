@@ -33,6 +33,7 @@ export const styles = StyleSheet.create({
   },
   emptyContainer: {
     padding: 35,
+    marginTop: 23,
     borderWidth: 3,
     borderRadius: 16,
     alignItems: 'center',

@@ -9,7 +9,8 @@ export const actions = {
   SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
   SET_LANGUAGE: 'SET_LANGUAGE',
   SET_DATAUSAGE: 'SET_DATAUSAGE',
-  SET_VERIFYSETTING: 'SET_VERIFYSETTING'
+  SET_VERIFYSETTING: 'SET_VERIFYSETTING',
+  SET_SHOW_WALKTHROUGH: 'SET_SHOW_WALKTHROUGH',
 };
 
 export const reducer = (state, action) => {
@@ -64,15 +65,18 @@ export const reducer = (state, action) => {
     case actions.SET_DATAUSAGE:
       return {
         ...state,
-        dataUsageSettings: action.dataUsageSettings 
+        dataUsageSettings: action.dataUsageSettings,
       };
     case actions.SET_VERIFYSETTING:
       return {
         ...state,
-        verifySettings: action.verifySettings
+        verifySettings: action.verifySettings,
       };
-    
-    
+    case actions.SET_SHOW_WALKTHROUGH:
+      return {
+        ...state,
+        showWalkthrough: action.showWalkthrough,
+      };
     default:
       return state;
   }

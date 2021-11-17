@@ -5,15 +5,18 @@ export const theme = {
   COLORS: {
     WHITE: '#FFF',
     BLACK: '#000',
+    BLACK_OPACITY_78P: '#000000C7',
     WHITE_OPACITY_3P: '#FFFFFF4D',
     PURPLE: '#B592FF',
     LIGHT_PURPLE: '#974BD6',
+    MEDIUM_PURPLE: '#A262E2',
     LIGHT_BLUE: '#4667D1',
     BLUE: '#7666E8',
     YELLOW: '#F0C514',
 
     DARK_PURPLE: '#7C56BE',
     DARK_BLUE: '#3B6BD0',
+    SKY_BLUE_DARK: '#4E9CF9',
     SKY_BLUE: '#5BAAFB',
 
     DARK_PURPLE_1: '#8138D1',
@@ -26,6 +29,8 @@ export const theme = {
     GREY: '#505564',
     LIGHT_GREY: '#61636E66',
     LIGHT_RED: '#EB5454',
+
+    GREY_A5: '#A5A5A5',
 
     // DARK_PURPLE: '#6A3A6B',
     LIGHT_PINK: '#ED8495',

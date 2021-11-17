@@ -17,4 +17,5 @@ export const initialState = {
   selectedLanguage: 'en',
   dataUsageSettings: false,
   verifySettings: false,
+  showWalkthrough: false,
 };

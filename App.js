@@ -32,6 +32,7 @@ import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
 import {ethers} from 'ethers';
 import {NftProvider} from 'use-nft';
+import Walkthrough from './src/screens/Walkthrough';
 
 getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
@@ -44,7 +45,8 @@ const RootNavigator = () => {
     checkVerifySettings();
   }, []);
 
-  const [{progressSettings, alertSettings}, dispatch] = useStateValue();
+  const [{progressSettings, alertSettings, showWalkthrough}, dispatch] =
+    useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
 
@@ -136,6 +138,7 @@ const RootNavigator = () => {
         />
         <AppAlert {...getAlertSettings()} />
         <ModalActivityIndicator modalVisible={show} />
+        {showWalkthrough && <Walkthrough />}
         <CreateRootNavigator />
       </SafeAreaView>
     </>

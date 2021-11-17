@@ -12,6 +12,8 @@ import {withTranslation} from 'react-i18next';
 import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
 import {theme} from '../services/Common/theme';
+import {useStateValue} from '../services/State/State';
+import {actions} from '../services/State/Reducer';
 
 const buttons = [
   {title: 'What is Data Union?', action: () => {}},
@@ -110,10 +112,7 @@ const InfoModal = ({open = false, onClose = () => {}}) => {
               start={{x: 0.15, y: 0}}
               colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
               style={styles.buttonOuter}>
-              <Ripple
-                onPress={onClose}
-                outerStyle={styles.radius30}
-                innerStyle={styles.buttonInner}>
+              <Ripple onPress={onClose} style={styles.buttonInner}>
                 <Text
                   style={{
                     ...styles.itemTitle,
@@ -130,8 +129,9 @@ const InfoModal = ({open = false, onClose = () => {}}) => {
   );
 };
 
-const Information = () => {
+const Information = ({navigation}) => {
   const [open, setOpen] = useState(false);
+  const [, dispatch] = useStateValue();
 
   return (
     <>
@@ -143,13 +143,14 @@ const Information = () => {
         contentContainerStyle={styles.contentContainer}
         renderItem={({item, index}) =>
           !item.useGradientColors ? (
-            <Ripple
-              key={index}
-              onPress={() => setOpen(true)}
-              outerStyle={styles.listItemOuter}
-              innerStyle={styles.listItemInner}>
-              <Text style={styles.itemTitle}>{item.title}</Text>
-            </Ripple>
+            <View style={styles.listItemOuter}>
+              <Ripple
+                key={index}
+                onPress={() => setOpen(true)}
+                style={styles.listItemInner}>
+                <Text style={styles.itemTitle}>{item.title}</Text>
+              </Ripple>
+            </View>
           ) : (
             <LinearGradient
               end={{x: 1, y: 0}}
@@ -158,9 +159,18 @@ const Information = () => {
               style={styles.listItemOuter}>
               <Ripple
                 key={index}
-                onPress={() => setOpen(true)}
-                outerStyle={styles.radius15}
-                innerStyle={styles.listItemInner}>
+                onPress={() => {
+                  navigation.navigate('LandingPage');
+                  setTimeout(
+                    () =>
+                      dispatch({
+                        type: actions.SET_SHOW_WALKTHROUGH,
+                        showWalkthrough: true,
+                      }),
+                    100,
+                  );
+                }}
+                style={styles.listItemInner}>
                 <Text
                   style={{
                     ...styles.itemTitle,
