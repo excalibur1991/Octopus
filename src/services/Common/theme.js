@@ -3,10 +3,12 @@ export const theme = {
   APP_COLOR_1: '#121212',
   APP_COLOR_2: '#25262B',
   COLORS: {
+    TRANSPARENT: 'transparent',
     WHITE: '#FFF',
     BLACK: '#000',
     BLACK_OPACITY_78P: '#000000C7',
     WHITE_OPACITY_3P: '#FFFFFF4D',
+    WHITE_OPACITY_40P: '#FFFFFF66',
     PURPLE: '#B592FF',
     LIGHT_PURPLE: '#974BD6',
     MEDIUM_PURPLE: '#A262E2',
@@ -24,6 +26,7 @@ export const theme = {
     SILVER: '#C4C4C4',
 
     GREY_80P: '#62646DCC',
+    MID_GREY: '#62646D',
 
     BLUR: '#34343480',
     GREY: '#505564',
@@ -35,7 +38,7 @@ export const theme = {
     // DARK_PURPLE: '#6A3A6B',
     LIGHT_PINK: '#ED8495',
     ERROR_COLOR: '#D60E18',
-    SUCCESS_COLOR: '#62B25D',
+    SUCCESS_COLOR: '#45B05D',
     TAB_BAR_ICON_FOCUSED: '#72B5CB',
     TAB_BAR_ICON_NOT_FOCUSED: '#FFFFFF',
     BOTTOM_TAB_ICON_FOCUSED: '#8c91a2',
