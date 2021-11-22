@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-native/no-inline-styles */ 
 import {
   SafeAreaView,
   StatusBar,
