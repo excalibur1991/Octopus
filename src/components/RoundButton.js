@@ -46,9 +46,10 @@ const RoundButton = props => {
             borderRadius: 30,
             width: '100%',
             borderWidth: 0,
-            paddingVertical: 18,
             paddingHorizontal: 10,
             marginVertical: 5,
+            justifyContent: 'center',
+            minHeight: 60,
             ...buttonStyle
           }}
         >
@@ -82,7 +83,7 @@ const RoundButton = props => {
       ) : 
       (
     <View style={style}>
-      <Ripple
+      <Ripple  d
         outerStyle={{
           width: '100%',
           borderWidth: 0,  //!disabled && isOutlined ? 2 : 0,

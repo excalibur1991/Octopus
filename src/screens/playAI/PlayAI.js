@@ -11,7 +11,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useStateValue} from '../../services/State/State';
 import  Button from '../../components/Button';
-import {theme} from '../../services/Common/theme';
+import {theme, dark_theme} from '../../services/Common/theme';
 import {actions} from '../../services/State/Reducer';
 import {
   annotate,
@@ -71,6 +71,7 @@ const PlayAI = (props) => {
   const [cards, setCards] = useState([]);
   const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
   const [tutStep, setTutStep] = useState('tut_description');
+  const [tutStepIndex, setTutStepIndex] = useState(0);
 
 
   const {isTutorial, navigation, t, onExitTutorial} = props || '';
@@ -239,64 +240,89 @@ const PlayAI = (props) => {
    * handleNextTut
    */
   const handleNextTut = () =>{
-    switch(tutStep){
-      case 'tut_description':
-        setPrivacyAndTermsAccepted();
+    console.log(tutStepIndex);
+    if(tutStepIndex < tutStepDesc.length){
+      setTutStepIndex(tutStepIndex+1);
+      setTutStep(tutStepDesc[tutStepIndex + 1]);
     }
-
   }
 
   const TutDesc = ({title, desc}) =>{
     return (
       <>
-        <Text>{title}</Text>
-        <Text>{desc}</Text>
-      </>
+        <Text style={styles.tut_desc_heading}>{title}</Text>
+        <Text style={styles.tut_description}>{desc}</Text>
+        <View style={{height: 50}}></View>
+       </>
     );
 
   }
+
+  const tutStepDesc = [
+    'tut_description',
+    'tut_drawface',
+    'tut_press_annotate',
+    'tut_annotation',
+    'tut_aiframe',
+    'tut_need_editing',
+    'tut_edit_annotation',
+    'tut_swipe_left',
+    'tut_swiipe_right',
+    'tut_completed'
+  ];
 
   const TutorialOverlay = () => {
     return (
       <>
       {(tutStep === 'tut_description') && (
         <View>
-          <Text style={styles.tut_desc_heading}>ABOUT PLAY AI</Text>
-          <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet</Text>
-          <View style={{height: 50}}></View>
-          <Text style={styles.tut_desc_heading}>How to Play:</Text>
-          <Text style={styles.tut_description}>Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.
-          </Text>
+          <TutDesc 
+            title={'ABOUT PLAY AI'}
+            desc={'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet'}
+            />
+
+          <TutDesc 
+            title={'How to Play:'}
+            desc={'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.'}
+            />
       </View>
       )}
       {
         (tutStep === 'tut_drawface') && (
-          <View>
-            <Text>DRAW THE FACE</Text>
-            <Text>Annotate the face by clicking on the boxes</Text>
+          <View style={{flex:1, justifyContent: 'flex-end'}}>
+            <TutDesc 
+              title={'DRAW THE FACE'}
+              desc={'Annotate the face by clicking on the boxes'}
+            />
           </View>
         )
       }
       {
         (tutStep === 'tut_press_annotate') && (
           <View>
-            <Text>PRESS 'annotate'</Text>
-            <Text>Press Annotate to finish</Text>
+            <TutDesc 
+              title={'PRESS \'ANNOTATE\''}
+              desc={'Press Annotate to finish'}
+            />
           </View>
         )
       }
       {
         (tutStep === 'tut_annotation' ) && (
           <View>
-            <Text>ANNOTATION</Text>
-            <Text>Annotation is displayed in the coloured boxes</Text>
+            <TutDesc 
+              title={'ANNOTATION'}
+              desc={'Annotation is displayed in the coloured boxes'}
+            />
           </View>
         )
       }
       {(tutStep === 'tut_aiframe') && (
         <View>
-          <Text>AI FRAME</Text>
-          <Text>AI frame is displayed in the gradient square</Text>
+          <TutDesc 
+            title={'AI FRAME'}
+            desc={'AI frame is displayed in the gradient square'}
+          />
         </View>
       ) } 
       {(tutStep === 'tut_need_editing') && (
@@ -307,8 +333,16 @@ const PlayAI = (props) => {
             />
         </View>
       )}
+      {(tutStep === 'tut_edit_ai') && (
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <TutDesc
+            title={'EDIT AI'}
+            desc={'If the annotation does not match the AI frame annotation, you can reannotate the face.'} 
+          />
+        </View>
+      )}
       {(tutStep === 'tut_edit_annotation') && (
-        <View>
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <TutDesc
             title={'EDIT ANNOTATION'}
             desc={'If the annotation does not match the AI frame annotation, you can reannotate the face.'} 
@@ -316,7 +350,7 @@ const PlayAI = (props) => {
         </View>
       )}
       {(tutStep === 'tut_swipe_left') && (
-        <View>
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <TutDesc
             title={'SWIPE LEFT TO REPORT'}
             desc={'If the image contains inappropriate content, You canallways report it to be removed.'}
@@ -324,7 +358,7 @@ const PlayAI = (props) => {
         </View>
       )}
       {(tutStep === 'tut_swiipe_right') && (
-        <View>
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <TutDesc
             title={'SWIPE RIGHT TO VERIFY'}
             desc={'If the AI frame matches the annotation, you can verify.'}
@@ -332,8 +366,45 @@ const PlayAI = (props) => {
         </View>
       )}
       {(tutStep === 'tut_completed') && (
-        <View>
-          
+        <View style={{
+          flex: 1, 
+          justifyContent: 'center', 
+          alignContent:'center', 
+          alignItems: 'center'}}>
+          <Text style={{
+            color: '#FFF',
+            fontFamily: 'Moon-Bold',
+            fontSize: 32,
+            textAlign: 'center'
+          }}>TUTORIAL COMPLETED</Text>
+          <Text style={{
+            color: '#FFF',
+            fontFamily: 'Moon-Bold',
+            fontSize: 14,
+            textAlign: 'center',
+            marginVertical: 20
+          }}>EXIT TUTORIAL MODE BY CLICKING THE BUTTON BELOW</Text>
+
+          <Ripple
+            onPress={() =>{
+              onExitTutorial();
+            }}
+            outerStyle={{
+                borderRadius: 30,
+                backgroundColor: dark_theme.COLORS.BG_GREY,
+                width: 60,
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+            innerStyle={{
+                height: 60,
+                width: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <Image source={require('../../assets/ico_close.png')} />
+          </Ripple>
         </View>
       )}
       </>
@@ -568,7 +639,7 @@ const PlayAI = (props) => {
             <TutorialOverlay />
           </View>
           <View style={styles.next_tut_btn}>
-            <Ripple onPress={handleNextTut()}>
+            <Ripple onPress={()=>handleNextTut()}>
               <Image source={require('../../assets/btn_tut_next.png')} />
             </Ripple>
           </View>
