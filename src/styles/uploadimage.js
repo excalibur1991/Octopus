@@ -5,14 +5,98 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     marginTop: '2%',
-    paddingTop: '8%',
-    paddingHorizontal: '8%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: theme.COLORS.WHITE,
   },
+  imageDescriptionContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
+  },
+  uploadImage: {
+    flex: 1,
+    height: 140,
+    marginRight: 15,
+    borderRadius: Platform.OS === 'ios' ? 8 : 20,
+  },
+  imageCount: {
+    left: 25,
+    bottom: 8,
+    fontSize: 12,
+    lineHeight: 14,
+    textAlign: 'center',
+    position: 'absolute',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+  },
+  tagsContainer: {
+    paddingHorizontal: '5%',
+  },
+  actionsContainer: {
+    paddingHorizontal: '5%',
+  },
+  button: {
+    marginTop: 10,
+  },
+  buttonIconRight: {
+    marginLeft: 5,
+  },
+  buttonIconLeft: {
+    marginRight: 5,
+  },
+  buttonOuter: {
+    width: '100%',
+    borderRadius: 30,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '1%',
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  radius30: {
+    borderRadius: 30,
+  },
+  gradientButtonInner: {
+    width: '100%',
+    borderRadius: 30,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '1%',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontFamily: 'Inter-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+  modalButtonGradient: {
+    borderRadius: 30,
+    marginVertical: '1.25%',
+  },
+  modalButton: {
+    margin: 3,
+    borderRadius: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '1%',
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_1,
+  },
+
   marginBottom3p: {
     marginBottom: '3%',
+  },
+  divider: {
+    height: 2,
+    marginVertical: 16,
+    backgroundColor: theme.APP_COLOR_2,
   },
   uploadContainer: {
     flex: 1,
@@ -41,17 +125,17 @@ export default StyleSheet.create({
     width: 90,
     marginBottom: '3%',
   },
-  button: {
-    marginTop: '2%',
-    borderRadius: 15,
-  },
-  buttonText: {
-    color: theme.COLORS.WHITE,
-    fontSize: 19,
-    textAlign: 'center',
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-    fontFamily: 'Inter-Bold',
-  },
+  // button: {
+  //   marginTop: '2%',
+  //   borderRadius: 15,
+  // },
+  // buttonText: {
+  //   color: theme.COLORS.WHITE,
+  //   fontSize: 19,
+  //   textAlign: 'center',
+  //   fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+  //   fontFamily: 'Inter-Bold',
+  // },
   uploadScrollContainer: {
     paddingBottom: '15%',
   },
@@ -92,18 +176,7 @@ export default StyleSheet.create({
   text: {
     fontFamily: 'Inter-Regular',
   },
-  imageDescriptionBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '12%',
-  },
-  uploadImage: {
-    flex: 1,
-    height: 120,
-    alignSelf: 'center',
-    marginBottom: '2%',
-    marginRight: 5,
-  },
+
   descriptionTextInput: {
     flex: 1,
   },

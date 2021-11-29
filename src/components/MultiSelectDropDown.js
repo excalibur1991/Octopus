@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 import CheckBox from './CheckBox';
 import {
   Menu,
@@ -48,19 +48,17 @@ const MultiSelect = ({
           )}
           <EntypoIcon
             size={20}
-            color="#A2A2A2"
-            style={styles.icon}
             name="chevron-down"
+            color={theme.COLORS.WHITE}
           />
         </View>
       </MenuTrigger>
       <MenuOptions
         customStyles={{
           optionsContainer: {
-            width: '85%',
-            borderWidth: 1,
-            borderColor: 'lightgray',
+            width: '90%',
             borderRadius: 10,
+            backgroundColor: theme.APP_COLOR_2,
           },
         }}>
         {options &&
@@ -91,28 +89,28 @@ export default MultiSelect;
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: 8,
     marginVertical: 5,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#DADADA',
+    backgroundColor: theme.COLORS.BLUE,
   },
   box: {
     paddingVertical: 13,
-    paddingHorizontal: 10,
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   option: {
-    paddingVertical: 5,
     paddingHorizontal: 3,
+    justifyContent: 'center',
   },
   placeholderText: {
     flex: 1,
-    fontSize: 14,
-    color: '#A2A2A2',
+    fontSize: 16,
+    lineHeight: 22,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
     fontFamily: 'Inter-Regular',
-  },
-  icon: {
-    alignSelf: 'flex-end',
+    fontWeight: Platform.OS === 'android' ? 'normal' : '400',
   },
   valueText: {
     flex: 1,

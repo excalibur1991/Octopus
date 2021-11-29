@@ -14,6 +14,8 @@ import Ripple from './Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {theme} from '../services/Common/theme';
+import LinearGradient from 'react-native-linear-gradient';
 
 const HwBackHandler = BackHandler || BackAndroid;
 const HW_BACK_EVENT = 'hardwareBackPress';
@@ -30,7 +32,9 @@ export default class Alert extends Component {
       showSelf: false,
     };
 
-    if (show) this._springShow(true);
+    if (show) {
+      this._springShow(true);
+    }
   }
 
   componentDidMount() {
@@ -64,8 +68,11 @@ export default class Alert extends Component {
 
   _toggleAlert = (fromConstructor) => {
     // eslint-disable-next-line react/no-direct-mutation-state
-    if (fromConstructor) this.state = {showSelf: true};
-    else this.setState({showSelf: !this.state.showSelf});
+    if (fromConstructor) {
+      this.state = {showSelf: true};
+    } else {
+      this.setState({showSelf: !this.state.showSelf});
+    }
   };
 
   _handleHwBackEvent = () => {
@@ -81,7 +88,9 @@ export default class Alert extends Component {
 
   _onTapOutside = () => {
     const {closeOnTouchOutside} = this.props;
-    if (closeOnTouchOutside) this._springHide();
+    if (closeOnTouchOutside) {
+      this._springHide();
+    }
   };
 
   _onDismiss = () => {
@@ -164,52 +173,37 @@ export default class Alert extends Component {
       <View style={styles.container}>
         <View style={styles.overlay} />
         <Animated.View style={[styles.contentContainer, animation]}>
-          <View
-            style={{
-              position: 'absolute',
-              right: 0,
-              left: 0,
-              top: -30,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                padding: 2,
-                elevation: 5,
-                borderRadius: 50,
-                borderWidth: 0.5,
-                backgroundColor: '#fff',
-                borderColor: colors[type],
-              }}>
-              <View
-                style={{
-                  backgroundColor: colors[type],
-                  borderRadius: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 50,
-                  height: 50,
-                }}>
-                {icons[type]}
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              marginVertical: 10,
-              marginTop: 30,
-              alignItems: 'center',
-            }}>
-            {title ? <Text style={styles.title}>{title}</Text> : null}
-            {message ? <Text style={styles.message}>{message}</Text> : null}
-          </View>
-          {showCancelButton || showConfirmButton ? (
-            <View style={styles.action}>
-              {showCancelButton ? this._renderButton(cancelButtonData) : null}
-              {showConfirmButton ? this._renderButton(confirmButtonData) : null}
+          <FontAwesomeIcon
+            name="question"
+            size={30}
+            color={theme.COLORS.WHITE}
+          />
+          {title ? <Text style={styles.title}>{title}</Text> : null}
+          {message ? <Text style={styles.message}>{message}</Text> : null}
+          {showCancelButton ? (
+            <LinearGradient
+              end={{x: 1, y: 0}}
+              start={{x: 0.15, y: 0}}
+              colors={[theme.COLORS.DARK_PURPLE_1, theme.COLORS.DARK_BLUE_1]}
+              style={styles.radius30}>
+              <Ripple
+                style={styles.gradientButtonInner}
+                onPress={cancelButtonData.onPress}>
+                <Text style={styles.buttonText}>{cancelButtonData.text}</Text>
+              </Ripple>
+            </LinearGradient>
+          ) : null}
+          {showConfirmButton ? (
+            <View style={styles.button}>
+              <Ripple
+                style={styles.gradientButtonInner}
+                onPress={confirmButtonData.onPress}>
+                <Text style={styles.buttonText}>{confirmButtonData.text}</Text>
+              </Ripple>
             </View>
           ) : null}
+          {/* {showCancelButton ? this._renderButton(cancelButtonData) : null} */}
+          {/* {showConfirmButton ? this._renderButton(confirmButtonData) : null} */}
         </Animated.View>
       </View>
     );
@@ -246,8 +240,11 @@ export default class Alert extends Component {
     const {show} = nextProps;
     const {showSelf} = this.state;
 
-    if (show && !showSelf) this._springShow();
-    else if (show === false && showSelf) this._springHide();
+    if (show && !showSelf) {
+      this._springShow();
+    } else if (show === false && showSelf) {
+      this._springHide();
+    }
   }
 
   componentWillUnmount() {
@@ -261,23 +258,69 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
     position: 'absolute',
+    justifyContent: 'flex-end',
   },
   overlay: {
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backgroundColor: 'rgba(52,52,52,0.5)',
+    backgroundColor: theme.COLORS.COD_GRAY_OPACITY_50P,
   },
   contentContainer: {
-    maxWidth: '75%',
-    minWidth: '75%',
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 5,
     elevation: 10,
+    maxWidth: '95%',
+    minWidth: '95%',
+    borderRadius: 30,
+    marginBottom: 51,
+    paddingVertical: 38,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  title: {
+    fontSize: 16,
+    marginTop: 11,
+    lineHeight: 30,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+  },
+  message: {
+    fontSize: 12,
+    marginTop: 5,
+    marginBottom: 20,
+    lineHeight: 20,
+    textAlign: 'center',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+  },
+  radius30: {
+    borderRadius: 30,
+  },
+  gradientButtonInner: {
+    width: 300,
+    borderRadius: 30,
+    alignSelf: 'center',
+    alignItems: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '1%',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    lineHeight: 21,
+    textAlign: 'center',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
+  },
+  button: {
+    marginTop: 15,
   },
   content: {
     justifyContent: 'center',
@@ -289,18 +332,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  title: {
-    textAlign: 'center',
-    color: '#000',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  message: {
-    color: '#000',
-    fontSize: 14,
-    textAlign: 'center',
-  },
   buttonOuter: {
     flex: 1,
     margin: 5,
@@ -310,10 +341,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 13,
   },
 });
 

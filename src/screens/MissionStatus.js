@@ -21,7 +21,6 @@ const MissionStatus = ({navigation, route}) => {
     progressTotal = 0,
     progressCompleted = 0,
   } = mission || {};
-  console.log('Mission: ', mission);
 
   return (
     <View style={styles.container}>
@@ -128,10 +127,11 @@ const MissionStatus = ({navigation, route}) => {
               onPress={() => {
                 if (
                   type.toLowerCase() === 'completed' &&
-                  ['pending', 'readytogetreward'].includes(status.toLowerCase())
+                  status.toLowerCase() === 'rewardgiven'
                 ) {
-                } else {
                   navigation.navigate('Wallet');
+                } else {
+                  navigation.navigate('BeginImageUpload', {mission});
                 }
               }}
               style={

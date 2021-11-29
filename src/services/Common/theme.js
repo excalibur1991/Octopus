@@ -6,6 +6,7 @@ export const theme = {
     TRANSPARENT: 'transparent',
     WHITE: '#FFF',
     BLACK: '#000',
+    COD_GRAY_OPACITY_50P: '#12121280',
     BLACK_OPACITY_78P: '#000000C7',
     WHITE_OPACITY_3P: '#FFFFFF4D',
     WHITE_OPACITY_40P: '#FFFFFF66',
@@ -20,6 +21,7 @@ export const theme = {
     DARK_BLUE: '#3B6BD0',
     SKY_BLUE_DARK: '#4E9CF9',
     SKY_BLUE: '#5BAAFB',
+    ROYAL_BLUE: '#5759E5',
 
     DARK_PURPLE_1: '#8138D1',
     DARK_BLUE_1: '#4A4FCE',

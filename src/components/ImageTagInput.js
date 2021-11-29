@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-shadow */
 import React, {useState, useRef} from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet, Text, Platform} from 'react-native';
 import {theme} from '../services/Common/theme';
 import Tag from './Tag';
 
@@ -20,15 +20,16 @@ const ImageTagInput = ({
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>Tags</Text>
       <View style={styles.childContainer}>
         {tags &&
           tags.length > 0 &&
           tags.map((tag, index) => (
             <Tag
               title={tag}
-              iconColor="#fff"
-              textColor="#fff"
-              backgroundColor="#405570"
+              iconColor={theme.COLORS.WHITE}
+              textColor={theme.COLORS.WHITE}
+              backgroundColor={theme.COLORS.ROYAL_BLUE}
               onRemove={() => {
                 const allTags = tags.slice();
                 allTags.splice(index, 1);
@@ -41,6 +42,7 @@ const ImageTagInput = ({
           ref={tagInputRef}
           onChangeText={setTag}
           placeholder={tagsPlaceholder}
+          placeholderTextColor={theme.COLORS.WHITE}
           style={[styles.inputSingleline, {minWidth: 100}]}
           returnKeyType="default"
           autoCapitalize="none"
@@ -63,15 +65,16 @@ const ImageTagInput = ({
         />
       </View>
       <View style={styles.divider} />
+      <Text style={styles.label}>Common Tags</Text>
       <View style={styles.childContainer}>
         {commonTags &&
           commonTags.length > 0 &&
           commonTags.map((commonTag, index) => (
             <Tag
               title={commonTag}
-              iconColor="#fff"
-              textColor="#fff"
-              backgroundColor="#663b69"
+              iconColor={theme.COLORS.WHITE}
+              textColor={theme.COLORS.WHITE}
+              backgroundColor={theme.COLORS.DARK_PURPLE}
               onRemove={() => {
                 const allCommonTags = commonTags.slice();
                 allCommonTags.splice(index, 1);
@@ -84,6 +87,7 @@ const ImageTagInput = ({
           ref={commonTagInputRef}
           onChangeText={setCommonTag}
           placeholder={commonTagsPlaceholder}
+          placeholderTextColor={theme.COLORS.WHITE}
           style={[styles.inputSingleline, {minWidth: 145}]}
           returnKeyType="default"
           autoCapitalize="none"
@@ -114,28 +118,36 @@ export default ImageTagInput;
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#DADADA',
+    borderRadius: 8,
     marginVertical: 5,
+    paddingVertical: '3%',
+    paddingHorizontal: '4%',
+    borderColor: theme.COLORS.BLUE,
   },
   divider: {
     height: 1,
-    backgroundColor: '#DADADA',
-    marginHorizontal: '5%',
+    marginVertical: 10,
+    backgroundColor: theme.COLORS.BLUE,
   },
   childContainer: {
+    marginTop: 10,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    padding: 5,
+    alignItems: 'center',
   },
   inputSingleline: {
     flex: 1,
-    paddingHorizontal: 10,
-    borderColor: 'lightgray',
+    padding: 0,
     borderRadius: 10,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    padding: 5,
-    color: theme.COLORS.BLACK,
+    borderColor: 'lightgray',
+    color: theme.COLORS.WHITE,
+  },
+  label: {
+    fontSize: 10,
+    lineHeight: 12,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
 });

@@ -35,6 +35,8 @@ import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
+import BeginImageUpload from './screens/BeginImageUpload';
+import UploadImage from './screens/UploadImage';
 import ImageCategorization from './screens/ImageCategorization';
 import TOS from './screens/TOS';
 import PrivacyInformation from './screens/PrivacyInformation';
@@ -459,6 +461,33 @@ const MyMissionsStack = () => (
           {
             title: 'Image Upload',
             showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="BeginImageUpload"
+      component={BeginImageUpload}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Uploading Images',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageUpload"
+      component={UploadImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Image Uploads',
             isTransparent: true,
           },
           navigation,
