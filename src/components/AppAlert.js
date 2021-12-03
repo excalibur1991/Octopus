@@ -11,8 +11,7 @@ import {
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Ripple from './Ripple';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import AntIcon from 'react-native-vector-icons/AntDesign';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {theme} from '../services/Common/theme';
 import LinearGradient from 'react-native-linear-gradient';
@@ -164,8 +163,8 @@ export default class Alert extends Component {
 
     const icons = {
       info: <FontAwesomeIcon name="info" {...iconStyle} />,
-      warn: <AntIcon name="exclamation" {...iconStyle} />,
-      success: <FeatherIcon name="check" {...iconStyle} />,
+      warn: <FontAwesomeIcon name="question" {...iconStyle} />,
+      success: <EntypoIcon name="check" {...iconStyle} />,
       error: <FontAwesomeIcon name="remove" {...iconStyle} />,
     };
 
@@ -173,11 +172,8 @@ export default class Alert extends Component {
       <View style={styles.container}>
         <View style={styles.overlay} />
         <Animated.View style={[styles.contentContainer, animation]}>
-          <FontAwesomeIcon
-            name="question"
-            size={30}
-            color={theme.COLORS.WHITE}
-          />
+          {icons[type]}
+
           {title ? <Text style={styles.title}>{title}</Text> : null}
           {message ? <Text style={styles.message}>{message}</Text> : null}
           {showCancelButton ? (

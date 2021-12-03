@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */ 
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   StatusBar,
@@ -45,8 +45,15 @@ const RootNavigator = () => {
     checkVerifySettings();
   }, []);
 
-  const [{progressSettings, alertSettings, showWalkthrough}, dispatch] =
-    useStateValue();
+  const [
+    {
+      progressSettings,
+      alertSettings,
+      showLandingPageWalkthrough,
+      showUploadImagePageWalkthrough,
+    },
+    dispatch,
+  ] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
 
@@ -127,6 +134,9 @@ const RootNavigator = () => {
       },
     };
   };
+
+  const showWalkthrough =
+    showLandingPageWalkthrough || showUploadImagePageWalkthrough;
 
   return (
     <>

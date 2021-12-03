@@ -33,6 +33,7 @@ import MyStats from './screens/MyStats';
 import Bounty from './screens/Bounty';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
+import ImageVerifyMission from './screens/ImageVerifyMission';
 import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
 import BeginImageUpload from './screens/BeginImageUpload';
@@ -414,6 +415,20 @@ const BrowseMissionsStack = () => (
         return Header(
           {
             title: 'Image Upload',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageVerifyMission"
+      component={ImageVerifyMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Verifying Images',
             showBackButton: true,
             isTransparent: true,
           },

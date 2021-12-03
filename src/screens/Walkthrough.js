@@ -5,15 +5,25 @@ import {theme} from '../services/Common/theme';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import LandingPageWalkthrough from '../components/LandingPageWalkthrough';
+import UploadImagePageWalkthrough from '../components/UploadImagePageWalkthrough';
 import {useStateValue} from '../services/State/State';
 import {actions} from '../services/State/Reducer';
 
 const Walkthrough = () => {
-  const [, dispatch] = useStateValue();
+  const [
+    {showLandingPageWalkthrough, showUploadImagePageWalkthrough},
+    dispatch,
+  ] = useStateValue();
   const [step, setStep] = useState(0);
 
+  const totalSteps = showLandingPageWalkthrough
+    ? 9
+    : showUploadImagePageWalkthrough
+    ? 5
+    : 0;
+
   const onNext = () => {
-    if (step > 7) {
+    if (step > totalSteps - 1) {
       setStep(0);
     } else {
       setStep(step + 1);
@@ -23,16 +33,11 @@ const Walkthrough = () => {
   return (
     <View style={styles.container}>
       {/* Exit Walkthrough Button */}
-      {step < 8 && (
+      {step < totalSteps - 1 && (
         <View style={styles.exitContainer}>
           <Ripple
             style={styles.exitButton}
-            onPress={() =>
-              dispatch({
-                type: actions.SET_SHOW_WALKTHROUGH,
-                showWalkthrough: false,
-              })
-            }>
+            onPress={() => dispatch({type: actions.EXIT_WALKTHROUGH})}>
             <MaterialCommunityIcon
               size={26}
               name="login-variant"
@@ -43,10 +48,14 @@ const Walkthrough = () => {
         </View>
       )}
 
-      <LandingPageWalkthrough step={step} />
+      {showLandingPageWalkthrough && <LandingPageWalkthrough step={step} />}
+
+      {showUploadImagePageWalkthrough && (
+        <UploadImagePageWalkthrough step={step} />
+      )}
 
       {/* Next Button */}
-      {step < 8 && (
+      {step < totalSteps - 1 && (
         <View style={styles.nextContainer}>
           <LinearGradient
             end={{x: 1, y: 0.9}}
@@ -79,7 +88,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 1,
     position: 'absolute',
-    // display: 'none',
   },
   exitContainer: {
     top: 5,

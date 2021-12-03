@@ -25,7 +25,7 @@ const missions = [
   },
   {
     value: 2.1,
-    type: 'verification',
+    type: 'verify',
     cover: VerificationMission,
     coverTitle: 'Verification     Lv.1',
     title: 'Company Name - Butterfly',
@@ -33,7 +33,7 @@ const missions = [
   },
   {
     value: 2.1,
-    type: 'annotation',
+    type: 'annotate',
     cover: AnnotationMission,
     coverTitle: 'Annotation     Lv.1',
     title: 'Company Name - Butterfly',
@@ -109,9 +109,9 @@ const MissionCard = ({
           styles.coverTitle,
           type === 'upload'
             ? styles.uploadCoverTitle
-            : type === 'verification'
+            : type === 'verify'
             ? styles.verificationCoverTitle
-            : type === 'annotation'
+            : type === 'annotate'
             ? styles.annotationCoverTitle
             : {},
         ]}>
@@ -180,17 +180,27 @@ const BrowseMissions = ({navigation}) => {
         ))}
       </ScrollView>
       <ScrollView contentContainerStyle={styles.missionCardsContainer}>
-        {missions.map((mission) => (
-          <MissionCard
-            type={mission.type}
-            cover={mission.cover}
-            title={mission.title}
-            value={mission.value}
-            coverTitle={mission.coverTitle}
-            description={mission.description}
-            onPress={() => navigation.navigate('ImageUploadMission')}
-          />
-        ))}
+        {missions &&
+          missions.length > 0 &&
+          missions
+            .filter((m) => m.type.toLowerCase() === type.toLowerCase())
+            .map((mission) => (
+              <MissionCard
+                type={mission.type}
+                cover={mission.cover}
+                title={mission.title}
+                value={mission.value}
+                coverTitle={mission.coverTitle}
+                description={mission.description}
+                onPress={() =>
+                  navigation.navigate(
+                    mission.type === 'upload'
+                      ? 'ImageUploadMission'
+                      : 'ImageVerifyMission',
+                  )
+                }
+              />
+            ))}
       </ScrollView>
     </View>
   );

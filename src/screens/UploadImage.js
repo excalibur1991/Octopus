@@ -311,7 +311,7 @@ const Upload = ({navigation}) => {
                           type: actions.SET_ALERT_SETTINGS,
                           alertSettings: {
                             show: true,
-                            type: 'info',
+                            type: 'warn',
                             message:
                               'ARE YOU SURE YOU WANT TO EXIT THE MISSION NOW? YOU MAY GO TO ‘MY MISSIONS’ TO CONTINUE UNFINISHED MISSIONS.',
                             confirmText: 'EXIT',

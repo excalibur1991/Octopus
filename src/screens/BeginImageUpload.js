@@ -5,8 +5,11 @@ import {Text, View, Image} from 'react-native';
 import {theme} from '../services/Common/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import {useStateValue} from '../services/State/State';
+import {actions} from '../services/State/Reducer';
 
 const BeginImageUpload = ({navigation, route}) => {
+  const [, dispatch] = useStateValue();
   const {params} = route || {};
   const {mission = {}} = params || {};
   const {
@@ -65,7 +68,18 @@ const BeginImageUpload = ({navigation, route}) => {
           </LinearGradient>
         </View>
         <View style={styles.button}>
-          <Ripple onPress={() => {}} style={styles.buttonOuter}>
+          <Ripple
+            onPress={() => {
+              navigation.navigate('ImageUpload');
+              setTimeout(
+                () =>
+                  dispatch({
+                    type: actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH,
+                  }),
+                100,
+              );
+            }}
+            style={styles.buttonOuter}>
             <EntypoIcon
               size={24}
               name="video"

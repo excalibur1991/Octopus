@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import {Text, View, ScrollView, Image, Modal, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
-import {styles} from '../styles/imageuploadmission';
+import {styles} from '../styles/imageverifymission';
 import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-const UploadMission = require('../assets/image_upload_mission_test.png');
-const CompanyIcon = require('../assets/company_icon.png');
+const VerifyMission = require('../assets/image_verify_mission_test.png');
+const CompanyIcon = require('../assets/company_icon_verify.png');
+import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
 
 const InfoModal = ({open = false, onClose = () => {}}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -187,11 +189,12 @@ const TCModal = ({open = false, onClose = () => {}}) => {
   );
 };
 
-const ImageUploadMission = ({navigation}) => {
+const ImageVerifyMission = ({navigation}) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showTCButton, setShowTCButton] = useState(false);
   const [tcAgreed, setTCAgreed] = useState(false);
   const [showTC, setShowTC] = useState(false);
+  const [, dispatch] = useStateValue();
 
   return (
     <>
@@ -200,24 +203,9 @@ const ImageUploadMission = ({navigation}) => {
       <View style={styles.container}>
         <Image
           resizeMode="stretch"
-          source={UploadMission}
+          source={VerifyMission}
           style={styles.cardCover}
         />
-        <View style={styles.countdownContainer}>
-          <AntIcon name="clockcircleo" size={22} color={theme.COLORS.WHITE} />
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Days</Text>
-            <Text style={styles.countdownvalue}>03</Text>
-          </View>
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Hours</Text>
-            <Text style={styles.countdownvalue}>16</Text>
-          </View>
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Minutes</Text>
-            <Text style={styles.countdownvalue}>59</Text>
-          </View>
-        </View>
         <ScrollView
           style={styles.companyInfoContainer}
           showsVerticalScrollIndicator={false}
@@ -244,23 +232,6 @@ const ImageUploadMission = ({navigation}) => {
                 </View>
               </View>
               <View style={styles.mainDivider} />
-              <View style={styles.rewardContainer}>
-                <Text style={styles.rewardTitle}>Rewards</Text>
-                <View style={styles.rewardItem}>
-                  <View style={styles.exp}>
-                    <Text style={styles.expText}>Exp</Text>
-                  </View>
-                  <Text style={styles.x}>x</Text>
-                  <Text style={styles.rewardTitle}>1000</Text>
-                </View>
-                <View style={styles.rewardItem}>
-                  <View style={styles.rewardSign}>
-                    <Text style={styles.rewardSignText}>$</Text>
-                  </View>
-                  <Text style={styles.x}>x</Text>
-                  <Text style={styles.rewardTitle}>1.21</Text>
-                </View>
-              </View>
               <View style={styles.mainDivider} />
               <View style={styles.button}>
                 <Ripple
@@ -319,7 +290,22 @@ const ImageUploadMission = ({navigation}) => {
                   style={styles.radius30}>
                   <Ripple
                     disabled={!tcAgreed}
-                    onPress={() => navigation.navigate('MyMissions')}
+                    onPress={() => {
+                      dispatch({
+                        type: actions.SET_ALERT_SETTINGS,
+                        alertSettings: {
+                          show: true,
+                          type: 'success',
+                          message: 'Mission has been added to your board.',
+                          confirmText: 'Got It',
+                          cancelText: 'Got It',
+                          title: 'New Mission Accepted!',
+                          showCancelButton: true,
+                          onCancelPressed: () => {},
+                        },
+                      });
+                      navigation.navigate('MyMissions');
+                    }}
                     style={
                       tcAgreed ? styles.gradientButtonInner : styles.buttonOuter
                     }>
@@ -335,4 +321,4 @@ const ImageUploadMission = ({navigation}) => {
   );
 };
 
-export default ImageUploadMission;
+export default ImageVerifyMission;

@@ -237,12 +237,7 @@ const LandingPageWalkthrough = ({step}) => {
       </Text>
       <View style={styles.closeButtonContainer}>
         <Ripple
-          onPress={() =>
-            dispatch({
-              type: actions.SET_SHOW_WALKTHROUGH,
-              showWalkthrough: false,
-            })
-          }
+          onPress={() => dispatch({type: actions.EXIT_WALKTHROUGH})}
           style={styles.closeButton}>
           <AntIcon size={20} name="close" color={theme.COLORS.WHITE} />
         </Ripple>
@@ -286,7 +281,7 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.41 : 0.48),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step1_1_inner: {
     flex: 1,
@@ -300,7 +295,7 @@ const styles = StyleSheet.create({
   step1_2: {
     flex: 1,
     marginTop: '20%',
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step2_1: {
@@ -308,7 +303,7 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.51 : 0.57),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2_1_inner: {
     flex: 1,
@@ -322,13 +317,13 @@ const styles = StyleSheet.create({
   step2_2: {
     flex: 1,
     marginTop: Platform.OS === 'ios' ? '67%' : '70%',
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step3_1: {
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.07),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step3_1_inner: {
     flex: 1,
@@ -344,7 +339,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     marginTop: Platform.OS === 'ios' ? '74%' : '82%',
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step4_1: {
@@ -353,11 +348,11 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4_2: {
     flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4_1_inner: {
     flex: 1,
@@ -400,11 +395,11 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step5_2: {
     flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step5_1_inner: {
     flex: 1,
@@ -447,11 +442,11 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step6_2: {
     flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step6_1_inner: {
     flex: 1,
@@ -498,11 +493,11 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step7_2: {
     flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step7_1_inner: {
     flex: 1,
@@ -545,11 +540,11 @@ const styles = StyleSheet.create({
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
       Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step8_2: {
     flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step8_1_inner: {
     flex: 1,
@@ -649,7 +644,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '10%',
-    backgroundColor: theme.COLORS.BLACK_OPACITY_78P,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   completedHeading: {
     fontSize: 36,

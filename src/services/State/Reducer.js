@@ -10,7 +10,9 @@ export const actions = {
   SET_LANGUAGE: 'SET_LANGUAGE',
   SET_DATAUSAGE: 'SET_DATAUSAGE',
   SET_VERIFYSETTING: 'SET_VERIFYSETTING',
-  SET_SHOW_WALKTHROUGH: 'SET_SHOW_WALKTHROUGH',
+  SET_SHOW_LANDING_PAGE_WALKTHROUGH: 'SET_SHOW_LANDING_PAGE_WALKTHROUGH',
+  SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH: 'SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH',
+  EXIT_WALKTHROUGH: 'EXIT_WALKTHROUGH',
 };
 
 export const reducer = (state, action) => {
@@ -72,10 +74,21 @@ export const reducer = (state, action) => {
         ...state,
         verifySettings: action.verifySettings,
       };
-    case actions.SET_SHOW_WALKTHROUGH:
+    case actions.SET_SHOW_LANDING_PAGE_WALKTHROUGH:
       return {
         ...state,
-        showWalkthrough: action.showWalkthrough,
+        showLandingPageWalkthrough: true,
+      };
+    case actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showUploadImagePageWalkthrough: true,
+      };
+    case actions.EXIT_WALKTHROUGH:
+      return {
+        ...state,
+        showLandingPageWalkthrough: false,
+        showUploadImagePageWalkthrough: false,
       };
     default:
       return state;

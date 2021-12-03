@@ -164,8 +164,7 @@ const Information = ({navigation}) => {
                   setTimeout(
                     () =>
                       dispatch({
-                        type: actions.SET_SHOW_WALKTHROUGH,
-                        showWalkthrough: true,
+                        type: actions.SET_SHOW_LANDING_PAGE_WALKTHROUGH,
                       }),
                     100,
                   );
