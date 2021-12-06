@@ -23,6 +23,7 @@ const Upload = (props) => {
   return (
       <View style={{flex:1, backgroundColor: '#ccc', height: '100%'}}>
       {
+        /*
        (dataUsageSettings == false) ? (
        <UploadGuidelines 
        isDataUsageAvailable={dataUsageSettings}
@@ -34,11 +35,12 @@ const Upload = (props) => {
           });
         }} 
        />) : (
-        /*<UploadImage {...props} />*/
+        //<UploadImage {...props} />
         <MainScreen {...props} />
         //<PlayAI {...props} />
-       )
+       )*/
       }
+      <MainScreen {...props} />
       </View>
   );
 };

@@ -34,11 +34,10 @@ export const Mission = (props) => {
             width: '100%', 
             height: '100%',
             backgroundColor: '#121212',
-            paddingTop: 80
+            paddingTop: 80,
             }}>
                 <View style={{
                         width: '100%',
-                        flex: 0.4,
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: 'transparent'
@@ -46,10 +45,11 @@ export const Mission = (props) => {
                     <View style={{
                         alignItems: 'center'
                     }}>
+                        
                     <Avatar
                         title={'aasdf'}
                         rounded={true}
-                        size={'large'}
+                        size={'xlarge'}
                         title={'abc'}
                         source={require('../../assets/bg_playai.png')}
                     />
@@ -78,9 +78,9 @@ export const Mission = (props) => {
                         />
                     </View>
                 </View>
-                <Divider />
+                <Divider style={{marginTop: 20}} />
                 <View style={{
-                        flex: 0.6,
+                        flex: 1,
                         paddingVertical: 40,
                         paddingHorizontal: 34,
                         alignItems: 'center',

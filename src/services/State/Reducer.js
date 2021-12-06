@@ -12,6 +12,7 @@ export const actions = {
   SET_VERIFYSETTING: 'SET_VERIFYSETTING',
   SET_CAMERASETTINGS: 'SET_CAMERASETTINGS',
   SET_PLAYAISETTINGS: 'SET_PLAYAISETTINGS',
+  SET_HEADERSETTINGS: 'SET_HEADERSETTINGS',
 };
 
 export const reducer = (state, action) => {
@@ -82,6 +83,12 @@ export const reducer = (state, action) => {
       return {
         ...state,
         playAISettings: action.playAISettings
+      };
+    
+    case action.SET_HEADERSETTINGS:
+      return {
+        ...state,
+        headerSettings: action.headerSettings
       };
     default:
       return state;

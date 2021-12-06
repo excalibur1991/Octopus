@@ -29,6 +29,7 @@ import SwipeCards from '../../components/SwipeCards';
 import Ripple from '../../components/Ripple';
 import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
 import { CommonStyles } from '../../services/Common/styles';
+
 /**
  * play AI
  * 1. upload photo
@@ -415,7 +416,9 @@ const PlayAI = (props) => {
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
-      //openCameraView();
+      if(!isTutorial){
+        openCameraView();
+      }
     }
   }, [mode]);
 

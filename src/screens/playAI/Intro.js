@@ -4,7 +4,8 @@ import {
     ImageBackground,    
     Image,
     View,
-    Text
+    Text,
+    Dimensions
 } from 'react-native';
 import { Avatar, Chip, Divider, ListItem } from "react-native-elements";
 
@@ -13,6 +14,7 @@ import RoundButton from "../../components/RoundButton";
 import { NavigationContainer } from "@react-navigation/native";
 import Tag from "../../components/Tag";
 import CircleCheckBox from 'react-native-circle-checkbox';
+import BottomSheet from '../../components/BottomSheet';
 
 
 export const Intro = (props)=>{
@@ -30,26 +32,18 @@ export const Intro = (props)=>{
                     width: '100%',
                     flex: 0.5,
                 }}>
-                <ImageBackground
-            style={{
-                width: '100%',
-                height: '100%',
-            }}
-            source={require('../../assets/bg_playai.png')}>
-            </ImageBackground>
+                    <ImageBackground
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                        }}
+                        source={require('../../assets/bg_playai.png')}>
+                    </ImageBackground>
                 </View>
-            
+            <BottomSheet 
+                panelHeight={Dimensions.get('window').height / 2}
+            >
             <View style={{
-                backgroundColor: '#121212',
-                marginTop: -30,
-                flex: 0.5,
-                width: '100%',
-                bottom: 0,
-                borderTopLeftRadius: 30,
-                borderTopRightRadius: 30,
-            }}>
-
-                <View style={{
                     paddingVertical: 40,
                     paddingHorizontal: 34,
                     justifyContent: 'center',
@@ -155,7 +149,8 @@ export const Intro = (props)=>{
                 )}
                     
                 </View>
-            </View>
+            </BottomSheet>
+           
         </View>
     );
 }
