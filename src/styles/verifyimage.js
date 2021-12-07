@@ -1,4 +1,4 @@
-import {Platform, StyleSheet, Dimensions} from 'react-native';
+import {Platform, StyleSheet, Dimensions, StatusBar} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export default StyleSheet.create({
