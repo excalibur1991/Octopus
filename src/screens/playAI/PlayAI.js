@@ -272,6 +272,13 @@ const PlayAI = (props) => {
     'tut_completed'
   ];
 
+  const showTutItem = (targetTutStep) => {
+    if(tutStep === targetTutStep){
+      return {zIndex: 100};
+    }
+    return {};
+  }
+
   const TutorialOverlay = () => {
     return (
       <>
