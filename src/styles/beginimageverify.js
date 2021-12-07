@@ -6,13 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  uploadImageContainer: {
-    marginTop: 5,
-    borderWidth: 3,
-    borderRadius: 250,
-    borderColor: theme.COLORS.DARK_PURPLE,
-  },
-  verifyImageContainer: {
+  imageContainer: {
     marginTop: 5,
     borderWidth: 3,
     borderRadius: 250,
@@ -27,8 +21,8 @@ export const styles = StyleSheet.create({
     top: 10,
     left: 10,
     right: 10,
-    position: 'absolute',
     alignItems: 'center',
+    position: 'absolute',
   },
   levelChip: {
     borderRadius: 30,
@@ -73,7 +67,7 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     paddingVertical: 5,
     paddingHorizontal: 30,
-    backgroundColor: theme.COLORS.DARK_PURPLE,
+    backgroundColor: theme.COLORS.DARK_BLUE,
   },
   progressText: {
     fontSize: 16,
@@ -83,42 +77,14 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
-  doneText: {
-    fontSize: 36,
-    lineHeight: 41,
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
+
   divider: {
     height: 2,
     width: '100%',
     marginVertical: 20,
     backgroundColor: theme.APP_COLOR_2,
   },
-  dividerCompletedUpload: {
-    height: 2,
-    width: '100%',
-    marginVertical: 20,
-    backgroundColor: theme.COLORS.DARK_PURPLE,
-  },
-  dividerCompletedVerify: {
-    height: 2,
-    width: '100%',
-    marginVertical: 20,
-    backgroundColor: theme.COLORS.DARK_BLUE,
-  },
-  dividerShadow: {
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 70,
-    opacity: 0.5,
-    position: 'absolute',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
+
   statusContainer: {
     alignItems: 'center',
     paddingHorizontal: '4%',
@@ -143,79 +109,14 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
-  completedDescription: {
-    fontSize: 16,
-    lineHeight: 26,
-    textAlign: 'center',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
-  rewardContainer: {
-    marginTop: 15,
-  },
-  expContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'center',
-  },
-  rewardValue: {
-    fontSize: 48,
-    lineHeight: 55,
-    textAlign: 'center',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
-  rewardLabel: {
-    fontSize: 18,
-    marginLeft: 5,
-    lineHeight: 21,
-    textAlign: 'center',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
-  rewardSign: {
-    fontSize: 35,
-    marginRight: 8,
-    borderRadius: 25,
-    paddingVertical: 5,
-    overflow: 'hidden',
-    textAlign: 'center',
-    paddingHorizontal: 15,
-    color: theme.APP_COLOR_1,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    backgroundColor: theme.COLORS.YELLOW,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
-  xLabel: {
-    fontSize: 10,
-    lineHeight: 21,
-    marginRight: 5,
-    textAlign: 'center',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
 
   actionsContainer: {
-    marginTop: 15,
+    marginTop: 50,
   },
   button: {
     marginTop: 10,
   },
   buttonIcon: {
-    marginRight: 10,
-  },
-  buttonIconImage: {
-    width: 26,
-    height: 20,
     marginRight: 10,
   },
   buttonOuter: {
@@ -259,13 +160,5 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
-  },
-  closeButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.APP_COLOR_2,
   },
 });

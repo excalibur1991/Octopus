@@ -19,4 +19,5 @@ export const initialState = {
   verifySettings: false,
   showLandingPageWalkthrough: false,
   showUploadImagePageWalkthrough: false,
+  showVerifyImagePageWalkthrough: false,
 };

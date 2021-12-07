@@ -136,13 +136,21 @@ export const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
-  typeChip: {
+  uploadTypeChip: {
     marginTop: 5,
     borderRadius: 30,
     paddingVertical: 2,
     paddingHorizontal: 12,
     alignSelf: 'flex-start',
     backgroundColor: theme.COLORS.DARK_PURPLE,
+  },
+  verifyTypeChip: {
+    marginTop: 5,
+    borderRadius: 30,
+    paddingVertical: 2,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+    backgroundColor: theme.COLORS.DARK_BLUE,
   },
   typeText: {
     fontSize: 8,

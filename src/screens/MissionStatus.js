@@ -17,14 +17,19 @@ const MissionStatus = ({navigation, route}) => {
     level = '',
     title1 = '',
     title2 = '',
-    status = 'pending',
     progressTotal = 0,
     progressCompleted = 0,
+    status = 'inprogress',
   } = mission || {};
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
+      <View
+        style={
+          type === 'upload'
+            ? styles.uploadImageContainer
+            : styles.verifyImageContainer
+        }>
         <Image resizeMode="stretch" source={image} style={styles.image} />
         <View style={styles.levelContainer}>
           <View style={styles.levelChip}>
@@ -37,8 +42,9 @@ const MissionStatus = ({navigation, route}) => {
         <Text style={styles.subTitle}>{title1}</Text>
       </View>
 
-      {type.toLowerCase() === 'ongoing' ||
-      ['pending', 'readytogetreward'].includes(status.toLowerCase()) ? (
+      {['inprogress', 'pending', 'readytogetreward'].includes(
+        status.toLowerCase(),
+      ) ? (
         <>
           <View style={styles.progressContainer}>
             <View style={styles.progressChip}>
@@ -55,26 +61,37 @@ const MissionStatus = ({navigation, route}) => {
           <View style={styles.progressContainer}>
             <Text style={styles.doneText}>You did it!</Text>
           </View>
-          <View style={styles.dividerCompleted}>
-            <LinearGradient
-              style={styles.dividerShadow}
-              colors={[theme.COLORS.TRANSPARENT, theme.COLORS.DARK_PURPLE]}
-            />
-          </View>
+          {type.toLowerCase() === 'upload' ? (
+            <View style={styles.dividerCompletedUpload}>
+              <LinearGradient
+                style={styles.dividerShadow}
+                colors={[theme.COLORS.TRANSPARENT, theme.COLORS.DARK_PURPLE]}
+              />
+            </View>
+          ) : (
+            <View style={styles.dividerCompletedVerify}>
+              <LinearGradient
+                style={styles.dividerShadow}
+                colors={[theme.COLORS.TRANSPARENT, theme.COLORS.DARK_BLUE]}
+              />
+            </View>
+          )}
         </>
       )}
 
       <View style={styles.statusContainer}>
-        {type.toLowerCase() === 'ongoing' ? (
+        {status.toLowerCase() === 'inprogress' ? (
           <>
             <Text style={styles.statusTitle}>
               {progressCompleted > 0 ? 'Almost There!' : 'Keep it up!'}
             </Text>
             <Text style={styles.statusDescription}>
-              {`You have uploaded\n${progressCompleted} out of ${progressTotal} images.`}
+              {`You have ${
+                type === 'upload' ? 'uploaded' : 'verified'
+              }\n${progressCompleted} out of ${progressTotal} images.`}
             </Text>
             <Text style={styles.statusDescription}>
-              {progressTotal - progressCompleted} more images to go.
+              {progressTotal - progressCompleted} more image(s) to go.
             </Text>
           </>
         ) : (
@@ -120,45 +137,74 @@ const MissionStatus = ({navigation, route}) => {
             colors={[theme.COLORS.DARK_PURPLE_1, theme.COLORS.DARK_BLUE_1]}
             style={styles.radius30}>
             <Ripple
-              disabled={
-                type.toLowerCase() === 'completed' &&
-                ['pending', 'readytogetreward'].includes(status.toLowerCase())
-              }
+              disabled={['pending', 'readytogetreward'].includes(
+                status.toLowerCase(),
+              )}
               onPress={() => {
-                if (
-                  type.toLowerCase() === 'completed' &&
-                  status.toLowerCase() === 'rewardgiven'
-                ) {
-                  navigation.navigate('Wallet');
+                if (type.toLowerCase() === 'upload') {
+                  if (status.toLowerCase() === 'rewardgiven') {
+                    navigation.navigate('Wallet');
+                  } else {
+                    navigation.navigate('BeginImageUpload', {mission});
+                  }
                 } else {
-                  navigation.navigate('BeginImageUpload', {mission});
+                  if (status.toLowerCase() === 'rewardgiven') {
+                    navigation.navigate('MyMissions');
+                  } else {
+                    navigation.navigate('BeginImageVerify', {mission});
+                  }
                 }
               }}
               style={
-                type.toLowerCase() === 'completed' &&
                 ['pending', 'readytogetreward'].includes(status.toLowerCase())
                   ? styles.gradientButtonInnerDisabled
                   : styles.gradientButtonInner
               }>
-              {type.toLowerCase() === 'completed' &&
-              status.toLowerCase() === 'rewardgiven' ? (
+              {type.toLowerCase() === 'upload' ? (
                 <>
-                  <Image
-                    resizeMode="stretch"
-                    style={styles.buttonIconImage}
-                    source={require('../assets/MyWallet.png')}
-                  />
-                  <Text style={styles.buttonText}>Wallet</Text>
+                  {status.toLowerCase() !== 'inprogress' ? (
+                    <>
+                      <Image
+                        resizeMode="stretch"
+                        style={styles.buttonIconImage}
+                        source={require('../assets/MyWallet.png')}
+                      />
+                      <Text style={styles.buttonText}>Wallet</Text>
+                    </>
+                  ) : (
+                    <>
+                      <FeatherIcon
+                        size={20}
+                        name="upload"
+                        color={theme.COLORS.WHITE}
+                        style={styles.buttonIcon}
+                      />
+                      <Text style={styles.buttonText}>Upload</Text>
+                    </>
+                  )}
                 </>
               ) : (
                 <>
-                  <FeatherIcon
-                    size={20}
-                    name="upload"
-                    color={theme.COLORS.WHITE}
-                    style={styles.buttonIcon}
-                  />
-                  <Text style={styles.buttonText}>Upload</Text>
+                  {status.toLowerCase() !== 'inprogress' ? (
+                    <>
+                      <Image
+                        resizeMode="stretch"
+                        style={styles.buttonIconImage}
+                        source={require('../assets/MyMissions.png')}
+                      />
+                      <Text style={styles.buttonText}>My Missions</Text>
+                    </>
+                  ) : (
+                    <>
+                      <FeatherIcon
+                        size={20}
+                        name="upload"
+                        color={theme.COLORS.WHITE}
+                        style={styles.buttonIcon}
+                      />
+                      <Text style={styles.buttonText}>Verify</Text>
+                    </>
+                  )}
                 </>
               )}
             </Ripple>
@@ -166,7 +212,11 @@ const MissionStatus = ({navigation, route}) => {
         </View>
         <View style={styles.button}>
           <Ripple
-            onPress={() => navigation.navigate('ImageUploadMission')}
+            onPress={() =>
+              type.toLowerCase() === 'upload'
+                ? navigation.navigate('ImageUploadMission')
+                : navigation.navigate('ImageVerifyMission')
+            }
             style={styles.buttonOuter}>
             <FontAwesome5Icon
               size={24}
@@ -175,10 +225,7 @@ const MissionStatus = ({navigation, route}) => {
               style={styles.buttonIcon}
             />
             <Text style={styles.buttonText}>
-              {type.toLowerCase() === 'completed' &&
-              ['pending', 'readytogetreward'].includes(status.toLowerCase())
-                ? 'About Mission'
-                : 'Mission Page'}
+              {type === 'upload' ? 'About Mission' : 'Mission Page'}
             </Text>
           </Ripple>
         </View>

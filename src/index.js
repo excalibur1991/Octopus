@@ -38,6 +38,8 @@ import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
 import BeginImageUpload from './screens/BeginImageUpload';
 import UploadImage from './screens/UploadImage';
+import BeginImageVerify from './screens/BeginImageVerify';
+import VerifyImage from './screens/VerifyImage';
 import ImageCategorization from './screens/ImageCategorization';
 import TOS from './screens/TOS';
 import PrivacyInformation from './screens/PrivacyInformation';
@@ -503,6 +505,47 @@ const MyMissionsStack = () => (
         return Header(
           {
             title: 'Image Uploads',
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageVerifyMission"
+      component={ImageVerifyMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Verifying Images',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="BeginImageVerify"
+      component={BeginImageVerify}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Verifying Images',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageVerify"
+      component={VerifyImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Verifying Images',
             isTransparent: true,
           },
           navigation,

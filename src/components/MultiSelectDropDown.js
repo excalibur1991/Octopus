@@ -17,6 +17,7 @@ const MultiSelect = ({
   selectedIndices = [],
   onSelect = () => {},
   textColor = theme.APP_COLOR,
+  color = theme.COLORS.BLUE,
 }) => {
   return (
     <Menu renderer={renderers.ContextMenu}>
@@ -24,6 +25,7 @@ const MultiSelect = ({
         customStyles={{
           triggerOuterWrapper: {
             ...styles.container,
+            backgroundColor: color || theme.COLORS.BLUE,
             overflow: 'hidden',
           },
         }}>
@@ -91,7 +93,6 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
     marginVertical: 5,
-    backgroundColor: theme.COLORS.BLUE,
   },
   box: {
     paddingVertical: 13,

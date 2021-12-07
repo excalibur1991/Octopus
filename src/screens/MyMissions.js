@@ -17,6 +17,7 @@ const MissionCard1 = require('../assets/image_upload_mission_test.png');
 const MissionCard2 = require('../assets/company_icon.png');
 const MissionCard3 = require('../assets/dashboard_image.png');
 const MissionCard4 = require('../assets/image_upload_mission_test.png');
+const MissionCard5 = require('../assets/image_verify_mission_test.png');
 
 const Tab = ({title, value, isSelected, setTab, count}) => {
   return (
@@ -37,27 +38,47 @@ const MyMissions = ({navigation}) => {
   const [tab, setTab] = useState('Ongoing');
   const [missions, setMissions] = useState([
     {
-      type: 'ongoing',
+      type: 'upload',
       image: MissionCard1,
       level: 'Lv. 3',
       title1: 'Butterflies',
       title2: 'Company Name',
+      status: 'inprogress',
       progressTotal: 5,
       progressCompleted: 2,
-      status: 'inprogress',
     },
     {
-      type: 'ongoing',
+      type: 'upload',
       image: MissionCard1,
       level: 'Lv. 2',
       title1: 'Butterflies',
       title2: 'Company Name',
+      status: 'inprogress',
       progressTotal: 5,
       progressCompleted: 0,
-      status: 'inprogress',
     },
     {
-      type: 'completed',
+      type: 'verify',
+      image: MissionCard5,
+      level: 'Lv. 2',
+      title1: 'Foods',
+      title2: 'Liddl',
+      status: 'inprogress',
+      progressTotal: 5,
+      progressCompleted: 4,
+    },
+    {
+      type: 'verify',
+      image: MissionCard5,
+      level: 'Lv. 2',
+      title1: 'Foods',
+      title2: 'Liddl',
+      status: 'inprogress',
+      progressTotal: 5,
+      progressCompleted: 0,
+    },
+    {
+      type: 'upload',
       image: MissionCard2,
       level: 'Lv. 7',
       title1: 'Butterflies',
@@ -67,7 +88,7 @@ const MyMissions = ({navigation}) => {
       progressCompleted: 5,
     },
     {
-      type: 'completed',
+      type: 'upload',
       image: MissionCard3,
       level: 'Lv. 8',
       title1: 'Banana Peels',
@@ -77,7 +98,7 @@ const MyMissions = ({navigation}) => {
       progressCompleted: 5,
     },
     {
-      type: 'completed',
+      type: 'upload',
       image: MissionCard4,
       level: 'Lv. 10',
       title1: 'Food',
@@ -87,7 +108,37 @@ const MyMissions = ({navigation}) => {
       progressCompleted: 5,
     },
     {
-      type: 'completed',
+      type: 'verify',
+      image: MissionCard5,
+      level: 'Lv. 7',
+      title1: 'Food',
+      title2: 'Liddl',
+      status: 'pending',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'verify',
+      image: MissionCard5,
+      level: 'Lv. 8',
+      title1: 'Food',
+      title2: 'Liddl',
+      status: 'readytogetreward',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'verify',
+      image: MissionCard5,
+      level: 'Lv. 10',
+      title1: 'Food',
+      title2: 'Liddl',
+      status: 'rewardgiven',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'upload',
       image: MissionCard2,
       level: 'Lv. 10',
       title1: 'Natureyou',
@@ -98,14 +149,16 @@ const MyMissions = ({navigation}) => {
     },
   ]);
 
-  const filteredMissions = missions.filter(
-    (m) => m.type.toLowerCase() === tab.toLowerCase(),
+  const filteredMissions = missions.filter((m) =>
+    tab.toLowerCase() === 'ongoing'
+      ? m.status.toLowerCase() === 'inprogress'
+      : m.status.toLowerCase() !== 'inprogress',
   );
   const ongoingMissionsCount = missions.filter(
-    (m) => m.type.toLowerCase() === 'ongoing',
+    (m) => m.status.toLowerCase() === 'inprogress',
   ).length;
   const completedMissionsCount = missions.filter(
-    (m) => m.type.toLowerCase() === 'completed',
+    (m) => m.status.toLowerCase() !== 'inprogress',
   ).length;
 
   return (
@@ -132,7 +185,8 @@ const MyMissions = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.missionCardsContentContainer}>
           {filteredMissions.map((mission) => {
-            const isOngoingMission = mission.type.toLowerCase() === 'ongoing';
+            const isOngoingMission =
+              mission.status.toLowerCase() === 'inprogress';
             return (
               <Ripple
                 style={styles.missionCard}
@@ -154,9 +208,15 @@ const MyMissions = ({navigation}) => {
                     style={
                       styles.cardTitle
                     }>{`${mission.title2} - ${mission.title1}`}</Text>
-                  <View style={styles.typeChip}>
-                    <Text style={styles.typeText}>Image Upload</Text>
-                  </View>
+                  {mission.type === 'upload' ? (
+                    <View style={styles.uploadTypeChip}>
+                      <Text style={styles.typeText}>Image Upload</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.verifyTypeChip}>
+                      <Text style={styles.typeText}>Image Verify</Text>
+                    </View>
+                  )}
                   <View style={styles.statusContainer}>
                     {isOngoingMission ? (
                       <View style={styles.progressContainer}>
