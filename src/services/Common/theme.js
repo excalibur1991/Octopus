@@ -6,6 +6,7 @@ export const theme = {
     TRANSPARENT: 'transparent',
     WHITE: '#FFF',
     BLACK: '#000',
+    BLACK_04: '#040404',
     COD_GRAY_OPACITY_50P: '#12121280',
     BLACK_OPACITY_90P: '#000000E6',
     WHITE_OPACITY_3P: '#FFFFFF4D',

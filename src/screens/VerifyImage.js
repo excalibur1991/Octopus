@@ -39,6 +39,7 @@ import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const initial_piis = [
@@ -103,34 +104,119 @@ const initial_bounties = [
   },
 ];
 
+const reportOptions = [
+  'Contains pornographic content',
+  'Contains violent content',
+  'Contains illegal content',
+  'Contains self promotion',
+  'Contains political promotion',
+  'Contains harassement',
+  'other',
+];
+
 var _bEditEnabled = false;
 
-const InfoModal = ({open = false, onClose = () => {}}) => {
+const RadioButton = ({checked, onCheckChange}) => {
+  return (
+    <Ripple style={styles.radioButton} onPress={() => onCheckChange(!checked)}>
+      {checked && (
+        <LinearGradient
+          end={{x: 1, y: 0}}
+          start={{x: 0.15, y: 0}}
+          style={styles.radioButtonDot}
+          colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
+        />
+      )}
+    </Ripple>
+  );
+};
+
+const ReportModal = ({open = false, onClose = () => {}}) => {
+  const [selectedReportOption, setSelectedReportOption] = useState(0);
+  const [caseReported, setCaseReported] = useState(false);
+
+  const handleClose = () => {
+    setSelectedReportOption(0);
+    setCaseReported(false);
+    onClose();
+  };
+
   return (
     <Modal transparent visible={open} statusBarTranslucent animationType="fade">
-      <View style={styles.infoModalContainer}>
-        <View style={styles.infoModalContentContainer}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>About Mission</Text>
+      <View style={styles.reportModalContainer}>
+        <View style={styles.reportModalContentContainer}>
+          <View style={styles.closeButton}>
+            <AntIcon
+              size={20}
+              name="close"
+              onPress={handleClose}
+              color={theme.COLORS.WHITE}
+            />
           </View>
-
-          <View style={styles.bottomContainer}>
-            <LinearGradient
-              end={{x: 1, y: 0}}
-              start={{x: 0.15, y: 0}}
-              colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
-              style={styles.modalButtonGradient}>
-              <Ripple onPress={onClose} style={styles.modalButton}>
-                <Text
-                  style={{
-                    ...styles.itemTitle,
-                    color: theme.COLORS.WHITE,
-                  }}>
-                  Report
-                </Text>
-              </Ripple>
-            </LinearGradient>
-          </View>
+          {!caseReported ? (
+            <>
+              <Text style={styles.headerTitle}>
+                Are you sure you want to report the image ?
+              </Text>
+              <Text style={styles.subTitle}>
+                Check the relevant boxes below
+              </Text>
+              <View style={styles.radioButtons}>
+                {reportOptions.map((ro, index) => (
+                  <View style={styles.reportOptionRow}>
+                    <RadioButton
+                      checked={selectedReportOption === index}
+                      onCheckChange={() => setSelectedReportOption(index)}
+                    />
+                    <Text
+                      onPress={() => setSelectedReportOption(index)}
+                      style={styles.reportOptionLabel}>
+                      {ro}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              {reportOptions[selectedReportOption].toLowerCase() ===
+                'other' && (
+                <TextInput
+                  multiline
+                  style={styles.reportOther}
+                  placeholder="Image Contains...ETC"
+                  placeholderTextColor={theme.COLORS.WHITE}
+                />
+              )}
+              <LinearGradient
+                end={{x: 1, y: 0}}
+                start={{x: 0.15, y: 0}}
+                colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
+                style={styles.modalButtonGradient}>
+                <Ripple
+                  onPress={() => setCaseReported(true)}
+                  style={styles.modalButton}>
+                  <Text
+                    style={{
+                      ...styles.itemTitle,
+                      color: theme.COLORS.WHITE,
+                    }}>
+                    Report
+                  </Text>
+                </Ripple>
+              </LinearGradient>
+            </>
+          ) : (
+            <>
+              <Text style={styles.headerTitleReported}>Case Reported</Text>
+              <Text style={styles.subTitleReported}>
+                Report has been delivereed and will be evaluated collectively by
+                other users. Thank you for your asistance.
+              </Text>
+              <View style={styles.tcCloseButtonContainer}>
+                <Ripple onPress={handleClose} style={styles.tcCloseButton}>
+                  <AntIcon size={23} name="close" color={theme.COLORS.WHITE} />
+                </Ripple>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </Modal>
@@ -194,8 +280,7 @@ const VeriPage = (props) => {
   const [selectedPiis, setSelectedPiis] = useState([]);
   const [selectedBounties, setSelectedBounties] = useState([]);
 
-  const [openModal, setOpenModal] = useState([]);
-  
+  const [openModal, setOpenModal] = useState(false);
 
   const tagHandler = (tags, annotations) => {};
 
@@ -459,7 +544,6 @@ const VeriPage = (props) => {
   //add annotation tag
   const handleNewTag = () => {
     try {
-      setOpenModal(true);
       setEditorType('annotation');
       setTagEditiIndex(annotationTags ? annotationTags.length : 0);
       setTagEditValue('');
@@ -741,7 +825,7 @@ const VeriPage = (props) => {
    */
   return (
     <View style={styles.container}>
-      {/* <InfoModal open={openModal} /> */}
+      <ReportModal open={openModal} onClose={() => setOpenModal(false)} />
       <View style={styles.progressContainer}>
         <Progress.Bar
           height={8}
@@ -862,7 +946,7 @@ const VeriPage = (props) => {
                     title: 'EXIT MISSION',
                     showConfirmButton: true,
                     showCancelButton: true,
-                    onConfirmPressed: () => {},
+                    onConfirmPressed: () => setOpenModal(true),
                     onCancelPressed: () => {},
                   },
                 });
