@@ -29,6 +29,7 @@ import SwipeCards from '../../components/SwipeCards';
 import Ripple from '../../components/Ripple';
 import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
 import { CommonStyles } from '../../services/Common/styles';
+import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 
 /**
  * play AI
@@ -76,6 +77,9 @@ const PlayAI = (props) => {
 
 
   const {isTutorial, navigation, t, onExitTutorial} = props || '';
+
+
+  const CopilotText = walkthroughable(Text);
 
 
   const initVariables = () =>{
@@ -424,7 +428,7 @@ const PlayAI = (props) => {
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
       if(!isTutorial){
-        openCameraView();
+        //openCameraView();
       }
     }
   }, [mode]);
@@ -595,6 +599,7 @@ const PlayAI = (props) => {
               color={theme.APP_COLOR}
               title={t('playAI.annotate')}
               buttonStyle={styles.button}
+              style={{zIndex: 900, position:'relative'}}
               onPress={
                 ()=>{
                   submitAnnotate();
@@ -634,7 +639,7 @@ const PlayAI = (props) => {
         </View>)}
         
     </View>
-    {
+    {/*
       (isTutorial) && (
         <>
         <View style={styles.tut_overlay}>
@@ -656,10 +661,35 @@ const PlayAI = (props) => {
         </View>
         </>
       )
-    }
+      */
+      }
+      <CopilotStep
+        text="This is a hello world example!"
+        order={1}
+        name="hello1"
+      >
+        <CopilotText>THis is test</CopilotText>
+        
+      </CopilotStep>
+      <CopilotStep
+        text="This is a second hello world example!"
+        order={2}
+        name="hello2"
+      >
+        <CopilotText>THis is test</CopilotText>
+        
+      </CopilotStep>
+
+
+      <Button title='test' onPress={()=>{
+            props.start();
+      }} />
     </>
   );
 };
 
-export default withTranslation()(PlayAI);
+export default withTranslation()(
+  copilot({
+    overlay: 'view',
+  })(PlayAI));
 
