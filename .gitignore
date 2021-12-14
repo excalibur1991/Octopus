@@ -60,3 +60,6 @@ buck-out/
 
 yarn.lock
 package-lock.json
+.expo
+.env
+.env.js

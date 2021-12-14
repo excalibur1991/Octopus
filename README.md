@@ -1,51 +1,26 @@
+# React Native Boilerplate
 
-# Octopus
-DataUnion.app's mobile app to use the platform on mobile phones.
+This project is using:
 
-## Available Scripts
-### `npm install` or `yarn`
-It will add all the required components for your project to run inside your node_modules.
-## Install Pods for iOS
-### npx pod-install
-It will install all of pods files required for your project.
-## Running app in Android or iOS
-In the project directory, you can run:
-### `npx react-native run-android` or `npx react-native run-ios`
-## OR
-### `react-native run-android` or `react-native run-ios`
-Runs the app in development mode.<br>
-On android emulator or ios simulator.
-The page will automatically reload if you make changes to the code.<br>
-You will see the build errors and lint warnings in the console.
-## User Guide
-You can find detailed instructions on using React Native and many tips in [its documentation](https://reactnative.dev/docs/getting-started).
+- [create-react-native-dapp](cawfree/create-react-native-dapp) to bootstrap the project.
+- [WalletConnect v1 react-native integration](https://docs.walletconnect.com/1.0/quick-start/dapps/react-native) for authenthication (we use a slightly modiefied version, located in `./src/WalletConnect` to allow to modify the `enable` function of Moralis).
+- [react-moralis](https://github.com/MoralisWeb3/react-moralis) for react hooks
 
-# Commands to run the iOS version on Mac
+Check the corresponding docs for additional information and help.
 
-Requirements:
+## Getting started
 
-pod --version => >= 1.10.1
+#### Setup
 
-yarn -v => >= 1.22.4
+- Install the expo CLI globally: `npm i -g expo-cli`
+- Make sure you've logged into expo-cli.
+- Copy this repo
+- `cd` into the project
+- Copy `.env.example` to `.env`
+- install dependencies via `yarn install`
 
-node -v => >= v14.0.0
+#### Start
 
-XCode + Simulator installed
-
-Then run in the root directory:
-```
-yarn
-
-yarn react-native link
-
-npx pod-install
-
-npx react-native run-ios
-```
-
-
-# Commands to run the Android version on Windows
-```
-yarn install --check-files
-react-native run-android
-```
+- Web: `yarn web`
+- IOS: `yarn ios`
+- Android: `yarn android`

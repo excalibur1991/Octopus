@@ -1,4 +1,11 @@
 {
-  "name": "DataUnion",
-  "displayName": "DataUnion"
+  "expo": {
+    "ios": {
+      "bundleIdentifier": "com.dataunion"
+    },
+    "android": {
+      "package": "com.dataunion"
+    },
+    "scheme": "dataunion"
+  }
 }
