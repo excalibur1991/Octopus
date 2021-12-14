@@ -15,10 +15,11 @@ import Tag from "../../components/Tag";
 import CircleCheckBox from 'react-native-circle-checkbox';
 import { Mission } from "./Mission";
 import {MissionComplete} from './MissionComplete';
-import { Intro } from "./Intro";
+import Intro from "./Intro";
 import PlayAI from "./PlayAI";
+import {withTranslation} from 'react-i18next';
 
-export const MainScreen = (props) => {
+const MainScreen = (props) => {
     const {navigation} = props || {};
 
     const [curPage, setCurPage] = useState('intro');
@@ -47,3 +48,5 @@ export const MainScreen = (props) => {
         </>
     );
 };
+
+export default withTranslation()(MainScreen);

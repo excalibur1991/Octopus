@@ -6,7 +6,7 @@ import UploadImage from './UploadImage';
 import {getDataUsageFlag, setDataUsageFlag} from '../services/DataManager';
 import {actions} from '../services/State/Reducer';
 import { Appbar } from 'react-native-paper';
-import { MainScreen } from './playAI/MainSceen';
+import MainScreen from './playAI/MainSceen';
 import { Mission} from './playAI/Mission';
 //later branch the Upload cases
 const Upload = (props) => {
