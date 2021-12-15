@@ -29,7 +29,8 @@ import SwipeCards from '../../components/SwipeCards';
 import Ripple from '../../components/Ripple';
 import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
 import { CommonStyles } from '../../services/Common/styles';
-import {copilot, walkthroughable, CopilotStep} from '../../components/TutOverlay';
+import RoundButton from '../../components/RoundButton';
+import Tag from '../../components/Tag';
 
 /**
  * play AI
@@ -76,10 +77,7 @@ const PlayAI = (props) => {
   const [tutStepIndex, setTutStepIndex] = useState(0);
 
 
-  const {isTutorial, navigation, t, onExitTutorial} = props || '';
-
-
-  const CopilotText = walkthroughable(Text);
+  const {navigation, t} = props || {};
 
 
   const initVariables = () =>{
@@ -241,310 +239,233 @@ const PlayAI = (props) => {
     openCameraView();
   };
 
-  /**
-   * handleNextTut
-   */
-  const handleNextTut = () =>{
-    console.log(tutStepIndex);
-    if(tutStepIndex < tutStepDesc.length){
-      setTutStepIndex(tutStepIndex+1);
-      setTutStep(tutStepDesc[tutStepIndex + 1]);
-    }
-  }
-
-  const TutDesc = ({title, desc}) =>{
-    return (
-      <>
-        <Text style={styles.tut_desc_heading}>{title}</Text>
-        <Text style={styles.tut_description}>{desc}</Text>
-        <View style={{height: 50}}></View>
-       </>
-    );
-
-  }
-
-  const tutStepDesc = [
-    'tut_description',
-    'tut_drawface',
-    'tut_press_annotate',
-    'tut_annotation',
-    'tut_aiframe',
-    'tut_need_editing',
-    'tut_edit_annotation',
-    'tut_swipe_left',
-    'tut_swiipe_right',
-    'tut_completed'
-  ];
-
 
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
-      if(!isTutorial){
-        //openCameraView();
-      }
+      //openCameraView();
     }
   }, [mode]);
 
   useEffect(()=>{
     initVariables();
-    if(isTutorial){
-      props.start();
-    }
 }, []);
 
 
+const AnnoAI = (props) => {
   return (
     <>
-    <View style={styles.container}>
-      {isAnnoAI ? (
-        <>
-        <Text style={{
-          fontWeight: '500',
-          fontSize: 24,
-          fontFamily: 'Inter',
-          marginLeft: 20
-        }}>{t('playAI.userAnnotationAndAI')}</Text>
-       
-        <View style={styles.CardWrapper}>
-            <Image
-              resizeMode='stretch'
-              style={styles.leftbar}
-              source={require('../../assets/left.png')}
-            />
-            <View style={styles.CardView}>
-              <SwipeCards
-                cards={[{name: 'abc'}]}
-                enabled={editMode == EDIT_MODE.MODE_SWIPE? true: false}
-                renderCard={(cardData)=> (
-                  <View style={{
-                    borderRadius: 15,
-                    backgroundColor: '#F5F6FC',
-                  }}>
-                  <DrawingPan
-                    setAnnoRect={setBounds}
-                    setCurRectIndex={setCurRectIndex}
-                    curRectIndex={curRectIndex}
-                    annoRect={bounds}
-                    imageSource={imageData}
-                    imageDimension={imageDimension}
-                    editMode={editMode}
-                    mode={mode}
-                    isAIEnabled={true}
-                  />
-                  <View 
-                    pointerEvents={editMode == EDIT_MODE.MODE_SWIPE ? 'auto' : 'none'}
-                    style={{position:'absolute', width:'100%', height: '100%'}} 
-                    ></View>
-                </View>
-                )}
-                renderNoMoreCards={() =><></>}
-                nopeText='Reported'
-                yupText='Verified' 
-                stack={false} 
-                handleYup={ (card)=> handleVerify(card) }
-                handleNope={ (card)=>handleReport(card) }
-                hasMaybeAction={false}
-                cardRemoved={ (index)=>cardRemoved(index) }
-                showYup = {false}
-                showNope = {false}
-                />
-            </View>
-            <Image
-              style={styles.rightbar}
-              resizeMode='stretch'
-              source={require('../../assets/right.png')}
+    <Text style={{
+      fontWeight: '500',
+      fontSize: 24,
+      fontFamily: 'Inter',
+      marginLeft: 20
+    }}>{t('playAI.userAnnotationAndAI')}</Text>
+   
+    <View style={styles.CardWrapper}>
+        <Image
+          resizeMode='stretch'
+          style={styles.leftbar}
+          source={require('../../assets/left.png')}
+        />
+        <View style={styles.CardView}>
+          <SwipeCards
+            cards={[{name: 'abc'}]}
+            enabled={editMode == EDIT_MODE.MODE_SWIPE? true: false}
+            renderCard={(cardData)=> (
+              <View style={{
+                borderRadius: 15,
+                backgroundColor: '#F5F6FC',
+              }}>
+              <DrawingPan
+                setAnnoRect={setBounds}
+                setCurRectIndex={setCurRectIndex}
+                curRectIndex={curRectIndex}
+                annoRect={bounds}
+                imageSource={imageData}
+                imageDimension={imageDimension}
+                editMode={editMode}
+                mode={mode}
+                isAIEnabled={true}
               />
-          </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.uploadScrollContainer}
-        >
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-          }}>
-          <Chip
-              style={{ 
-                backgroundColor: '#3A506B',
-                paddingHorizontal:15,
-                paddingVertical: 10,
-                borderRadius: 25,
-                borderColor: (editMode == EDIT_MODE.MODE_AI)? '#A737C1' : 'transparent',
-                height: 52,
-                borderStyle: 'solid',
-                borderWidth: 2,
-              }}
-              textStyle={{
-                fontSize: 20,
-                fontWeight: '600',
-                color: (editMode == EDIT_MODE.MODE_AI)? '#5E7086' : '#FFFFFF',
-                fontFamily: 'Inter'
-              }}
-              title={t('playAI.editAI')}
-              icon={()=>null}
-              onLongPress={()=>{}}
-              onPress={()=>{
-                setEditMode(editMode ==EDIT_MODE.MODE_AI ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_AI);
-              }}
-              selected={true}
-              closeIconAccessibilityLabel={'Close'}
-            >{t('playAI.editAI')}</Chip>
-            <Chip
-              style={{ 
-                backgroundColor: '#3A506B',
-                paddingHorizontal:15,
-                paddingVertical: 10,
-                borderRadius: 25,
-                fontWeight: '600',
-                height: 52,
-                borderStyle: 'solid',
-                borderWidth: 2,
-                borderColor: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#21975A' : 'transparent',
-               }}
-               textStyle={{
-                fontSize: 20,
-                fontWeight: '600',
-                color: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#5E7086' : '#FFFFFF',
-                fontFamily: 'Inter'
-               }}
-              title={t('playAI.editAnnotation')}
-              icon={()=>null}
-              onLongPress={()=>{}}
-              onPress={()=>{
-                setEditMode(editMode ==EDIT_MODE.MODE_ANNOTATE ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_ANNOTATE);
-              }}
-              selected={true}
-              closeIconAccessibilityLabel={'Close'}
-            >{t('playAI.editAnnotation')}</Chip>
-          </View>
-        </ScrollView>
-        </>
-      ) : (<View
-          style={styles.uploadScrollContainer}>
-        <View style={styles.readOnlyContainer}>
-          <DrawingPan
-            setAnnoRect={setBounds}
-            setCurRectIndex={setCurRectIndex}
-            curRectIndex={curRectIndex}
-            annoRect={bounds}
-            imageSource={imageData}
-            imageDimension={imageDimension}
-            mode={mode}
-            editMode={EDIT_MODE.MODE_ANNOTATE}
-            isAIEnabled={true}
-          />
+              <View 
+                pointerEvents={editMode == EDIT_MODE.MODE_SWIPE ? 'auto' : 'none'}
+                style={{position:'absolute', width:'100%', height: '100%'}} 
+                ></View>
+            </View>
+            )}
+            renderNoMoreCards={() =><></>}
+            nopeText='Reported'
+            yupText='Verified' 
+            stack={false} 
+            handleYup={ (card)=> handleVerify(card) }
+            handleNope={ (card)=>handleReport(card) }
+            hasMaybeAction={false}
+            cardRemoved={ (index)=>cardRemoved(index) }
+            showYup = {false}
+            showNope = {false}
+            />
         </View>
-          <View style={styles.tagWrapper}>
-            <Chip
-              style={{ 
-                margin:2,
-               }}
-              title={t('playAI.PlayAI')}
-              icon={()=>null}
-              onLongPress={()=>{}}
-              onPress={()=>{}}
-              selected={true}
-              closeIconAccessibilityLabel={'Close'}
-            >{t('playAI.PlayAI')}</Chip>
-          </View>
-          {
-            !isAnnotationUpload ? (
-              <Button
-              color={theme.APP_COLOR}
+        <Image
+          style={styles.rightbar}
+          resizeMode='stretch'
+          source={require('../../assets/right.png')}
+          />
+      </View>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.uploadScrollContainer}
+    >
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+      }}>
+      <Chip
+          style={{ 
+            backgroundColor: '#3A506B',
+            paddingHorizontal:15,
+            paddingVertical: 10,
+            borderRadius: 25,
+            borderColor: (editMode == EDIT_MODE.MODE_AI)? '#A737C1' : 'transparent',
+            height: 52,
+            borderStyle: 'solid',
+            borderWidth: 2,
+          }}
+          textStyle={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: (editMode == EDIT_MODE.MODE_AI)? '#5E7086' : '#FFFFFF',
+            fontFamily: 'Inter'
+          }}
+          title={t('playAI.editAI')}
+          icon={()=>null}
+          onLongPress={()=>{}}
+          onPress={()=>{
+            setEditMode(editMode ==EDIT_MODE.MODE_AI ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_AI);
+          }}
+          selected={true}
+          closeIconAccessibilityLabel={'Close'}
+        >{t('playAI.editAI')}</Chip>
+        <Chip
+          style={{ 
+            backgroundColor: '#3A506B',
+            paddingHorizontal:15,
+            paddingVertical: 10,
+            borderRadius: 25,
+            fontWeight: '600',
+            height: 52,
+            borderStyle: 'solid',
+            borderWidth: 2,
+            borderColor: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#21975A' : 'transparent',
+           }}
+           textStyle={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: (editMode == EDIT_MODE.MODE_ANNOTATE)? '#5E7086' : '#FFFFFF',
+            fontFamily: 'Inter'
+           }}
+          title={t('playAI.editAnnotation')}
+          icon={()=>null}
+          onLongPress={()=>{}}
+          onPress={()=>{
+            setEditMode(editMode ==EDIT_MODE.MODE_ANNOTATE ? EDIT_MODE.MODE_SWIPE : EDIT_MODE.MODE_ANNOTATE);
+          }}
+          selected={true}
+          closeIconAccessibilityLabel={'Close'}
+        >{t('playAI.editAnnotation')}</Chip>
+      </View>
+    </ScrollView>
+    </>
+  );
+}
+
+const PlayAIAnnotationView = (props) => {
+  return (
+    <View
+        style={styles.uploadScrollContainer}>
+      <View style={styles.readOnlyContainer}>
+        <DrawingPan
+          setAnnoRect={setBounds}
+          setCurRectIndex={setCurRectIndex}
+          curRectIndex={curRectIndex}
+          annoRect={bounds}
+          imageSource={imageData}
+          imageDimension={imageDimension}
+          mode={mode}
+          editMode={EDIT_MODE.MODE_ANNOTATE}
+          isAIEnabled={true}
+        />
+      </View>
+      <View style={styles.tagWrapper}>
+        <Tag title={t('playAI.editAI')} isGradient={true} />
+      </View>
+        {
+          !isAnnotationUpload ? (
+            <>
+            <RoundButton
               title={t('playAI.annotate')}
-              buttonStyle={styles.button}
-              style={{zIndex: 900, position:'relative'}}
+              type={'primary'}
               onPress={
                 ()=>{
                   submitAnnotate();
                 }
               }
-              textStyle={styles.buttonText}
               />
-            ) : (
-              <View style={{
-                flex: 1,
-                width: '100%',
-                flexDirection: 'column',
-              }}>
-                <View style={styles.row}>
-                  <Button
-                    color={'#3A506B'}
-                    buttonStyle={styles.smallButton}
-                    title={'Cancel'}
-                    onPress={
-                      ()=>cancelAnnotate()
-                    }
-                    textStyle={styles.smallButtonText}
+              <RoundButton
+              title={t('playAI.exit')}
+              type={'outline'}
+              tail={
+                <Image source={require('../../assets/exit.png')} />}
+              onPress={
+                ()=>{
+                  navigation.goBack();
+                }
+              }
+              />
+            </>
+           
+          ) : (
+            <View style={{
+              flex: 1,
+              width: '100%',
+              flexDirection: 'column',
+            }}>
+              <View style={styles.row}>
+                <Button
+                  color={'#3A506B'}
+                  buttonStyle={styles.smallButton}
+                  title={'Cancel'}
+                  onPress={
+                    ()=>cancelAnnotate()
+                  }
+                  textStyle={styles.smallButtonText}
+                />
+                <View style={{
+                  width: Dimensions.get('window').width - 200
+                }}>
+                  <DottedProgressBar 
+                    progress={annotateProgress}
+                    hideLable={true}
                   />
-                  <View style={{
-                    width: Dimensions.get('window').width - 200
-                  }}>
-                    <DottedProgressBar 
-                      progress={annotateProgress}
-                      hideLable={true}
-                    />
-                    <Text style={{textAlign: 'right'}}>{t('playAI.annotating')}</Text>
-                  </View>
+                  <Text style={{textAlign: 'right'}}>{t('playAI.annotating')}</Text>
                 </View>
               </View>
-            )
-          }
-        </View>)}
-        
+            </View>
+          )
+        }
     </View>
-    {/*
-      (isTutorial) && (
-        <>
-        <View style={styles.tut_overlay}>
-          <View style={styles.tut_exit}>
-            <Ripple 
-              onPress={()=>onExitTutorial()}
-            ><Image source={require('../../assets/exit.png')} />
-            </Ripple>
-            <Text style={{color: '#FFF', marginTop: 7}}>EXIT WALKTHROUGH</Text>
-          </View>
-          <View style={styles.tut_content}>
-            <TutorialOverlay />
-          </View>
-          <View style={styles.next_tut_btn}>
-            <Ripple onPress={()=>handleNextTut()}>
-              <Image source={require('../../assets/btn_tut_next.png')} />
-            </Ripple>
-          </View>
-        </View>
-        </>
-      )
-      */
-      }
-      <CopilotStep
-        text="This is a hello world example!"
-        order={1}
-        name="hello1"
-      >
-        <CopilotText></CopilotText>
-      </CopilotStep>
-      <CopilotStep
-        text="This is a second hello world example!"
-        order={2}
-        name="hello2"
-      >
-        <CopilotText>THis is test</CopilotText>
-        
-      </CopilotStep>
+  );
+}
 
-
-      <Button title='test' onPress={()=>{
-            props.start();
-      }} />
+return (
+    <>
+    <View style={styles.container}>
+      {isAnnoAI ? <AnnoAI /> : <PlayAIAnnotationView />}
+    </View>
     </>
   );
 };
 
-export default withTranslation()(
-  copilot({
-    overlay: 'view',
-  })(PlayAI));
+export default withTranslation()(PlayAI);
 

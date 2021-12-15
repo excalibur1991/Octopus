@@ -20,7 +20,9 @@ import PlayAI from "./PlayAI";
 import {withTranslation} from 'react-i18next';
 
 const MainScreen = (props) => {
-    const {navigation} = props || {};
+    const {navigation, route} = props || {};
+
+    console.log(route);
 
     const [curPage, setCurPage] = useState('intro');
     const [tocChecked, setTocChecked] = useState(false);
@@ -29,18 +31,16 @@ const MainScreen = (props) => {
         <>
         {curPage === 'mission' && (
             <Mission {...props} 
-                onNext={()=>{setCurPage('playai');}} 
-                onTutorial={()=>{setCurPage('playai_tut')}}
+                onNext={()=>{
+                    navigation.navigate('PlayAI', {isTutorial: false, onComplete: (ret)=>{setCurPage('mission_completed')}});
+                }} 
+                onTutorial={()=>{
+                    navigation.navigate('PlayAITutorial', {isTutorial: true, onExitTutorial: (ret)=>{setCurPage('mission');}});
+                }}
             />
         )}
         {curPage === 'mission_completed' &&
             <MissionComplete {...props} />
-        }
-        {curPage === 'playai' &&
-            <PlayAI {...props} />
-        }
-        {curPage === 'playai_tut' &&
-            <PlayAI isTutorial={true}  onExitTutorial={()=>{setCurPage('mission'); console.log('missions'); }} {...props} />
         }
         {curPage === 'intro' && (
             <Intro {...props} onNext={()=>{setCurPage('mission');}} />

@@ -13,21 +13,23 @@ const RoundButton = props => {
     loading = false,
     color = '#FFF',
     icon = null,
-    height = null,
+    tail = null,
     style = {},
     variant = 'default',
     textStyle = {},
     buttonStyle = {},
     disabled = false,
     isBottomButton = false,
-    type= 'primary', // prmiary | secondary | light
+    height = 57,
+    width = '100%',
+    type= 'primary', // prmiary | secondary | light | outline
   } = props || {};
 
   const isOutlined = variant === 'outlined';
 
   return (
     <>
-    { type === 'primary' ? (
+    {type === 'outline' ? (
       <View style={style}>
       <TouchableOpacity 
         onPress={onPress}
@@ -44,12 +46,77 @@ const RoundButton = props => {
           }}
           style={{
             borderRadius: 30,
-            width: '100%',
+            width: width,
             borderWidth: 0,
-            paddingHorizontal: 10,
+            paddingHorizontal: 2,
+            paddingVertical: 2,
+            justifyContent: 'center',
+            minHeight: height,
+            ...buttonStyle
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              width: '100%',
+              borderRadius: 30,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#121212'
+            }}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 10,
+              }}>
+              {icon}
+            </View>
+            <Text
+              style={{
+                color: '#FFF',
+                fontSize: 13,
+                ...textStyle,
+              }}>
+              {title}
+            </Text>
+            {tail && (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}>
+              {tail}
+            </View>
+            )}
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+      </View>
+    ) : type === 'primary' ? (
+      <View style={style}>
+      <TouchableOpacity 
+        onPress={onPress}
+        disabled={disabled}
+      >
+        <LinearGradient colors={dark_theme.GRADIENTS.BUTTON}
+          start={{
+            x: 0,
+            y: 0
+          }}
+          end={{
+            x: 1,
+            y: 1
+          }}
+          style={{
+            borderRadius: 30,
+            width: width,
+            borderWidth: 0,
             marginVertical: 5,
             justifyContent: 'center',
-            minHeight: 60,
+            minHeight: height,
             ...buttonStyle
           }}
         >
@@ -76,6 +143,16 @@ const RoundButton = props => {
               }}>
               {title}
             </Text>
+            {tail && (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}>
+              {tail}
+            </View>
+            )}
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -83,7 +160,7 @@ const RoundButton = props => {
       ) : 
       (
     <View style={style}>
-      <Ripple  d
+      <Ripple
         outerStyle={{
           width: '100%',
           borderWidth: 0,  //!disabled && isOutlined ? 2 : 0,
@@ -112,14 +189,16 @@ const RoundButton = props => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View
+              {icon && (
+              <View
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginRight: 10,
               }}>
               {icon}
-            </View>
+              </View>
+              )}
             <Text
               style={{
                 color: '#fff',
@@ -128,6 +207,16 @@ const RoundButton = props => {
               }}>
               {title}
             </Text>
+            {tail && (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}>
+              {tail}
+            </View>
+            )}
           </View>
         )}
       </Ripple>
@@ -152,6 +241,8 @@ RoundButton.propTypes = {
   textStyle: PropTypes.object,
   buttonStyle: PropTypes.object,
   type: PropTypes.string,
+  width: PropTypes.any,
+  height: PropTypes.any,
 };
 
 export default RoundButton;

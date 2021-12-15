@@ -8,7 +8,8 @@ import {
     Dimensions
 } from 'react-native';
 import { Avatar, Chip, Divider, ListItem } from "react-native-elements";
-
+import {useStateValue} from '../../services/State/State';
+import {actions} from '../../services/State/Reducer';
 import { CommonStyles } from "../../services/Common/styles";
 import RoundButton from "../../components/RoundButton";
 import { NavigationContainer } from "@react-navigation/native";
@@ -25,6 +26,8 @@ const Intro = (props)=>{
     const {t, navigation, onNext} = props || {};
     const [curPage, setCurPage] = useState('');
     const [tocChecked, setTocChecked] = useState(false);
+
+    const [{dataUsageSettings }, dispatch] = useStateValue();
 
 
     const TocSheetHeader = (props) => {
@@ -87,9 +90,13 @@ const Intro = (props)=>{
                     filterColor='#25262B'
                     innerColor='#61636E'
                     styleLabel={{color: '#FFF'}}
-                    checked={tocChecked}
+                    checked={dataUsageSettings}
                     onToggle={()=>{
-                        setTocChecked(!tocChecked);
+                        dispatch({
+                            type: actions.SET_DATAUSAGE,
+                            dataUsageSettings: !dataUsageSettings
+                          });
+                        //setTocChecked(!tocChecked);
                     }}
                 />
                 <Text style={{color: '#FFF', marginLeft: 10}}>BY CHECKING THIS BOX I AGREE TO DATA UNION'S <Text onPress={()=>{
@@ -100,10 +107,11 @@ const Intro = (props)=>{
                 <View style={{height: 44}}></View>
                 <RoundButton
                     title={'CONTINUE'}
-                    disabled={!tocChecked}
-                    type={tocChecked ? 'primary': 'secondary'}
+                    disabled={!dataUsageSettings}
+                    type={dataUsageSettings ? 'primary': 'secondary'}
                     onPress={()=>{
-                        onNext();
+                        if(dataUsageSettings)
+                            onNext();
                     }}
                 />
             </>
@@ -116,15 +124,19 @@ const Intro = (props)=>{
                 <RoundButton
                     title={'ABOUT MISSION'}
                     type={'secondary'}
-                    icon={
-                        <Image source={require('../../assets/ico_list.png')} />}
+                    icon={<Image source={require('../../assets/ico_list.png')} />}
                     onPress={()=>{navigation.navigate('Mission')}}
                 />
                 <RoundButton
                     title={'CLAIM MISSION'}
                     type={'primary'}
                     onPress={()=>{
-                        setCurPage('toc');
+                        if(dataUsageSettings){
+                            onNext();
+                        }
+                        else {
+                            setCurPage('toc');
+                        }
                     }}
                 />
             </View>
@@ -133,7 +145,6 @@ const Intro = (props)=>{
 
     const TocSheetContent = (props) => {
         const {t} = props || {};
-        console.log(t);
         return (
             <>
                 <RNFadedScrollView 
