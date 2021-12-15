@@ -34,11 +34,11 @@ export const styles = StyleSheet.create({
     marginTop: '4.5%',
     paddingHorizontal: 20,
     paddingVertical: 5,
-    fontWeight: 'bold',
     fontSize: 16,
     lineHeight: 18,
     color: theme.COLORS.WHITE,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
   },
   buttonText: {
     fontWeight: 'bold',
@@ -48,11 +48,13 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   expText: {
-    color: theme.COLORS.WHITE,
     marginTop: 12,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
   },
   text: {
     color: '#7EC7FC',
+    fontFamily: 'Moon-Bold',
   },
   divider: {
     height: 2,
@@ -72,15 +74,15 @@ export const styles = StyleSheet.create({
   countValue: {
     fontSize: 24,
     lineHeight: 28,
-    fontWeight: 'bold',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
   },
   countLabel: {
     fontSize: 12,
     lineHeight: 15,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
   menuContainer: {
     marginTop: '5.5%',
@@ -132,13 +134,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 18,
   },
-  itemTitle: {
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-    color: '#41474E',
-    fontWeight: '600',
-    marginTop: '9%',
-  },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -151,11 +146,13 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 21,
     color: '#B592FF',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
   },
   subTitleText: {
     fontSize: 11,
     lineHeight: 13,
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },

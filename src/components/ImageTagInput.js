@@ -139,15 +139,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     borderRadius: 10,
+    fontFamily: 'Moon-Light',
     borderColor: 'lightgray',
     color: theme.COLORS.WHITE,
   },
   label: {
     fontSize: 10,
     lineHeight: 12,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
 });

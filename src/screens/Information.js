@@ -98,12 +98,7 @@ const InfoModal = ({open = false, onClose = () => {}}) => {
               {Array.from(Array(2).keys()).map((_, index) => (
                 <Ripple
                   key={index}
-                  outerStyle={
-                    currentIndex === index
-                      ? styles.dotOuter
-                      : styles.dotOuterActive
-                  }
-                  innerStyle={styles.dotInner}
+                  style={currentIndex === index ? styles.dot : styles.dotActive}
                 />
               ))}
             </View>

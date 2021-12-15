@@ -17,6 +17,7 @@ export const initialState = {
   selectedLanguage: 'en',
   dataUsageSettings: false,
   verifySettings: false,
+  walkthroughCurrentStep: 0,
   showLandingPageWalkthrough: false,
   showUploadImagePageWalkthrough: false,
   showVerifyImagePageWalkthrough: false,

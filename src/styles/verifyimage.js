@@ -1,4 +1,4 @@
-import {Platform, StyleSheet, Dimensions, StatusBar} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export default StyleSheet.create({
@@ -72,9 +72,9 @@ export default StyleSheet.create({
     backgroundColor: theme.APP_COLOR_1,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
   },
@@ -109,19 +109,17 @@ export default StyleSheet.create({
   headerTitle: {
     fontSize: 14,
     lineHeight: 17,
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    textTransform: 'uppercase',
   },
   subTitle: {
     fontSize: 12,
     marginTop: 17,
     lineHeight: 14,
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    textTransform: 'uppercase',
   },
   radioButtons: {
     marginVertical: 20,
@@ -147,12 +145,11 @@ export default StyleSheet.create({
     backgroundColor: theme.APP_COLOR_2,
   },
   reportOptionLabel: {
-    fontSize: 10,
+    fontSize: 9,
     lineHeight: 11,
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    textTransform: 'uppercase',
   },
   reportOther: {
     padding: 10,
@@ -160,6 +157,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     textAlignVertical: 'top',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
     backgroundColor: theme.APP_COLOR_1,
   },
@@ -167,33 +165,17 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     textAlign: 'center',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    textTransform: 'uppercase',
   },
   subTitleReported: {
     fontSize: 12,
     marginTop: 17,
     lineHeight: 14,
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
-  },
-  modalButtonGradient: {
-    borderRadius: 30,
-    marginVertical: '1.25%',
-  },
-  modalButton: {
-    margin: 3,
-    borderRadius: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: '5%',
-    paddingHorizontal: '1%',
-    justifyContent: 'center',
-    backgroundColor: theme.APP_COLOR_2,
+    textTransform: 'uppercase',
   },
   tcCloseButtonContainer: {
     marginTop: 60,

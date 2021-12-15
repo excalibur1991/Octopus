@@ -1,17 +1,22 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Platform} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import LandingPageWalkthrough from '../components/LandingPageWalkthrough';
 import UploadImagePageWalkthrough from '../components/UploadImagePageWalkthrough';
+import VerifyImagePageWalkthrough from '../components/VerifyImagePageWalkthrough';
 import {useStateValue} from '../services/State/State';
 import {actions} from '../services/State/Reducer';
 
-const Walkthrough = () => {
+const Walkthrough = ({navigation}) => {
   const [
-    {showLandingPageWalkthrough, showUploadImagePageWalkthrough},
+    {
+      showLandingPageWalkthrough,
+      showUploadImagePageWalkthrough,
+      showVerifyImagePageWalkthrough,
+    },
     dispatch,
   ] = useStateValue();
   const [step, setStep] = useState(0);
@@ -20,14 +25,29 @@ const Walkthrough = () => {
     ? 9
     : showUploadImagePageWalkthrough
     ? 5
+    : showVerifyImagePageWalkthrough
+    ? 10
     : 0;
 
   const onNext = () => {
     if (step > totalSteps - 1) {
       setStep(0);
+      dispatch({
+        type: actions.SET_WALKTHROUGH_CURRENT_STEP,
+        walkthroughCurrentStep: 0,
+      });
     } else {
       setStep(step + 1);
+      dispatch({
+        type: actions.SET_WALKTHROUGH_CURRENT_STEP,
+        walkthroughCurrentStep: step + 1,
+      });
     }
+  };
+
+  const exitWalkthrough = () => {
+    navigation.goBack();
+    dispatch({type: actions.EXIT_WALKTHROUGH});
   };
 
   return (
@@ -35,9 +55,7 @@ const Walkthrough = () => {
       {/* Exit Walkthrough Button */}
       {step < totalSteps - 1 && (
         <View style={styles.exitContainer}>
-          <Ripple
-            style={styles.exitButton}
-            onPress={() => dispatch({type: actions.EXIT_WALKTHROUGH})}>
+          <Ripple style={styles.exitButton} onPress={exitWalkthrough}>
             <MaterialCommunityIcon
               size={26}
               name="login-variant"
@@ -48,10 +66,25 @@ const Walkthrough = () => {
         </View>
       )}
 
-      {showLandingPageWalkthrough && <LandingPageWalkthrough step={step} />}
+      {showLandingPageWalkthrough && (
+        <LandingPageWalkthrough
+          step={step}
+          onExitWalkthrough={exitWalkthrough}
+        />
+      )}
 
       {showUploadImagePageWalkthrough && (
-        <UploadImagePageWalkthrough step={step} />
+        <UploadImagePageWalkthrough
+          step={step}
+          onExitWalkthrough={exitWalkthrough}
+        />
+      )}
+
+      {showVerifyImagePageWalkthrough && (
+        <VerifyImagePageWalkthrough
+          step={step}
+          onExitWalkthrough={exitWalkthrough}
+        />
       )}
 
       {/* Next Button */}
@@ -86,7 +119,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1,
+    zIndex: 10,
     position: 'absolute',
   },
   exitContainer: {
@@ -103,10 +136,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop: 5,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.GREY_A5,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   nextContainer: {
     top: 0,

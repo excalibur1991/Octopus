@@ -24,10 +24,9 @@ export default StyleSheet.create({
     lineHeight: 14,
     textAlign: 'center',
     position: 'absolute',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   tagsContainer: {
     paddingHorizontal: '5%',
@@ -69,9 +68,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
   },
@@ -117,7 +116,7 @@ export default StyleSheet.create({
     color: theme.APP_COLOR,
     fontSize: 12,
     textAlign: 'center',
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
     fontWeight: '400',
   },
   imageIcon: {
@@ -134,7 +133,7 @@ export default StyleSheet.create({
   //   fontSize: 19,
   //   textAlign: 'center',
   //   fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-  //   fontFamily: 'Inter-Bold',
+  //   fontFamily: 'Moon-Bold',
   // },
   uploadScrollContainer: {
     paddingBottom: '15%',
@@ -162,7 +161,7 @@ export default StyleSheet.create({
   textFieldHeader: {
     fontSize: 12,
     marginTop: 10,
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
     fontWeight: Platform.OS === 'android' ? 'bold' : '600',
   },
   descriptionContainer: {
@@ -174,7 +173,7 @@ export default StyleSheet.create({
     maxHeight: 100,
   },
   text: {
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
   },
 
   descriptionTextInput: {

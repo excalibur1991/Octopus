@@ -2,8 +2,6 @@ import {Text, View, Platform, Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
-import {actions} from '../services/State/Reducer';
-import {useStateValue} from '../services/State/State';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 const steps = [
@@ -29,9 +27,7 @@ const steps = [
   },
 ];
 
-const UploadImagePageWalkthrough = ({step}) => {
-  const [, dispatch] = useStateValue();
-
+const UploadImagePageWalkthrough = ({step, onExitWalkthrough}) => {
   const step1 = (
     <View style={styles.step1_1}>
       <View style={styles.step1_1_inner}>
@@ -112,9 +108,7 @@ const UploadImagePageWalkthrough = ({step}) => {
         Exit tutorial mode by clicking the button below.
       </Text>
       <View style={styles.closeButtonContainer}>
-        <Ripple
-          onPress={() => dispatch({type: actions.EXIT_WALKTHROUGH})}
-          style={styles.closeButton}>
+        <Ripple onPress={onExitWalkthrough} style={styles.closeButton}>
           <AntIcon size={20} name="close" color={theme.COLORS.WHITE} />
         </Ripple>
       </View>
@@ -181,12 +175,12 @@ const styles = StyleSheet.create({
 
   step2_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.07),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.055 : 0.07),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '37%' : '43%',
+    marginTop: Platform.OS === 'ios' ? '39%' : '44%',
     paddingTop: '10%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
@@ -229,7 +223,7 @@ const styles = StyleSheet.create({
   },
   step4_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '59%' : '63%',
+    marginTop: Platform.OS === 'ios' ? '58.5%' : '61.5%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4TextContainer: {
@@ -278,19 +272,17 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     lineHeight: 28,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.WHITE,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   description: {
     fontSize: 12,
     marginTop: 5,
     lineHeight: 14,
+    fontFamily: 'Moon-Light',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.WHITE,
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
 
   completedComtainer: {
@@ -304,20 +296,18 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 43,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   completedDescription: {
     fontSize: 16,
     marginTop: 20,
     lineHeight: 19,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
   closeButtonContainer: {
     marginTop: 20,

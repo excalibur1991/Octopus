@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Platform} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import CheckBox from './CheckBox';
 import {
   Menu,
@@ -16,7 +16,7 @@ const MultiSelect = ({
   options = [],
   selectedIndices = [],
   onSelect = () => {},
-  textColor = theme.APP_COLOR,
+  textColor = theme.APP_COLOR_1,
   color = theme.COLORS.BLUE,
 }) => {
   return (
@@ -73,7 +73,9 @@ const MultiSelect = ({
                 <CheckBox
                   title={item}
                   textColor={
-                    selectedIndices.includes(index) ? textColor : '#8C98A9'
+                    selectedIndices.includes(index)
+                      ? textColor
+                      : theme.COLORS.REGENT_GRAY
                   }
                   fontSize={14}
                   onChange={() => onSelect(index)}
@@ -108,15 +110,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     lineHeight: 22,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'android' ? 'normal' : '400',
   },
   valueText: {
     flex: 1,
-    fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    fontFamily: 'Moon-Bold',
   },
   valueContainer: {
     flex: 1,

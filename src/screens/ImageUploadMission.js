@@ -84,11 +84,7 @@ const InfoModal = ({open = false, onClose = () => {}}) => {
               {Array.from(Array(2).keys()).map((_, index) => (
                 <Ripple
                   key={index}
-                  style={
-                    currentIndex === index
-                      ? styles.dotOuter
-                      : styles.dotOuterActive
-                  }
+                  style={currentIndex === index ? styles.dot : styles.dotActive}
                 />
               ))}
             </View>
@@ -98,13 +94,7 @@ const InfoModal = ({open = false, onClose = () => {}}) => {
               colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
               style={styles.modalButtonGradient}>
               <Ripple onPress={onClose} style={styles.modalButton}>
-                <Text
-                  style={{
-                    ...styles.itemTitle,
-                    color: theme.COLORS.WHITE,
-                  }}>
-                  Got It
-                </Text>
+                <Text style={styles.buttonText}>Got It</Text>
               </Ripple>
             </LinearGradient>
           </View>

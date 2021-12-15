@@ -24,21 +24,21 @@ import {
   GetWords,
 } from '../services/API/APIManager';
 import SwipeCards from 'react-native-swipe-cards';
-import {Chip, IconButton, Button, Divider, Checkbox} from 'react-native-paper';
-import MultiSelect from '../components/BountyMultiselect';
+// import {Chip, IconButton, Button, Divider, Checkbox} from 'react-native-paper';
+// import MultiSelect from '../components/BountyMultiselect';
 //import SelectDropdown from "react-native-select-dropdown";
 import {SwipeImageCard, NoMoreCards} from '../components/SwipeImageCard';
 import TagInput from '../components/TagInput';
 import AddTag from '../components/AddTag';
 import Tags from '../components/Tags';
-import BountyView from '../components/BountyView';
+// import BountyView from '../components/BountyView';
 import {theme} from '../services/Common/theme';
 import * as Progress from 'react-native-progress';
 import styles from '../styles/verifyimage';
 import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+// import FeatherIcon from 'react-native-vector-icons/Feather';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -193,13 +193,7 @@ const ReportModal = ({open = false, onClose = () => {}}) => {
                 <Ripple
                   onPress={() => setCaseReported(true)}
                   style={styles.modalButton}>
-                  <Text
-                    style={{
-                      ...styles.itemTitle,
-                      color: theme.COLORS.WHITE,
-                    }}>
-                    Report
-                  </Text>
+                  <Text style={styles.buttonText}>Report</Text>
                 </Ripple>
               </LinearGradient>
             </>

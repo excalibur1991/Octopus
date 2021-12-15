@@ -6,6 +6,8 @@ import {useSelector} from 'react-redux';
 import {styles} from '../styles/loading';
 import {LoginProc} from '../functions/loading';
 import {withTranslation} from 'react-i18next';
+const logo = require('../assets/icon.png');
+const oceanIcon = require('../assets/ocean.png');
 
 const Loading = ({navigation, t}) => {
   const web3 = useSelector((state) => state.web3);
@@ -22,19 +24,11 @@ const Loading = ({navigation, t}) => {
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        resizeMode="stretch"
-        source={require('../assets/icon.png')}
-      />
+      <Image source={logo} style={styles.image} resizeMode="stretch" />
       <View style={styles.creatingWallet}>
         <Text style={styles.text}>{t('loading.poweredBy')}</Text>
       </View>
-      <Image
-        style={styles.image}
-        resizeMode="contain"
-        source={require('../assets/ocean.png')}
-      />
+      <Image source={oceanIcon} style={styles.image} resizeMode="contain" />
     </View>
   );
 };

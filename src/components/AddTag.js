@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import PropTypes from 'prop-types';
+import {theme} from '../services/Common/theme';
 
 const AddTag = (props) => {
   const {handleNewTag = () => {}} = props || {};
@@ -11,9 +12,9 @@ const AddTag = (props) => {
       <View style={styles.ChipWrapper}>
         <IconButton
           icon="plus"
-          color="#FFFFFF"
+          color={theme.COLORS.WHITE}
           textStyle={styles.ChipText}
-          style={{backgroundColor: '#3A506B'}}
+          style={{backgroundColor: theme.APP_COLOR_2}}
           onPress={() => {
             props.handleNewTag();
           }}

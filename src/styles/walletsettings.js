@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -33,19 +33,17 @@ export const styles = StyleSheet.create({
   textBoxTitle: {
     fontSize: 10,
     lineHeight: 11.5,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   textBoxValue: {
     fontSize: 11,
     lineHeight: 15.1,
     marginTop: '3.5%',
-    color: theme.COLORS.WHITE,
+    fontFamily: 'Moon-Light',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    color: theme.COLORS.WHITE,
   },
   buttonStyle: {
     width: '70%',
@@ -54,10 +52,9 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     textAlignVertical: 'center',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.LIGHT_RED,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
 });

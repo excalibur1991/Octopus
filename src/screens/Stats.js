@@ -213,7 +213,11 @@ const Stats = ({t, navigation}) => {
           <LineChart
             data={curChartdata_new}
             chartDescription={{text: ''}}
-            legend={{form: 'CIRCLE', textColor: processColor('white')}}
+            legend={{
+              form: 'CIRCLE',
+              fontFamily: 'Moon-Bold',
+              textColor: processColor('white'),
+            }}
             marker={{
               enabled: true,
               backgroundTint: processColor('black'),
@@ -227,9 +231,14 @@ const Stats = ({t, navigation}) => {
               valueFormatter: chartDate,
               drawGridLines: false,
               textColor: processColor('white'),
+              fontFamily: 'Moon-Bold',
             }}
             yAxis={{
-              left: {axisMinimum: 0, textColor: processColor('white')},
+              left: {
+                axisMinimum: 0,
+                textColor: processColor('white'),
+                fontFamily: 'Moon-Bold',
+              },
               right: {enabled: false},
               drawGridLines: false,
             }}
@@ -263,7 +272,11 @@ const Stats = ({t, navigation}) => {
             style={styles.chart}
             data={curCumuChartdata}
             chartDescription={{text: ''}}
-            legend={{form: 'CIRCLE', textColor: processColor('white')}}
+            legend={{
+              form: 'CIRCLE',
+              textColor: processColor('white'),
+              fontFamily: 'Moon-Bold',
+            }}
             marker={{
               enabled: true,
               backgroundTint: processColor('black'),
@@ -277,9 +290,14 @@ const Stats = ({t, navigation}) => {
               valueFormatter: CumuChartDate,
               drawGridLines: false,
               textColor: processColor('white'),
+              fontFamily: 'Moon-Bold',
             }}
             yAxis={{
-              left: {axisMinimum: 0, textColor: processColor('white')},
+              left: {
+                axisMinimum: 0,
+                textColor: processColor('white'),
+                fontFamily: 'Moon-Bold',
+              },
               right: {enabled: false},
               drawGridLines: false,
             }}

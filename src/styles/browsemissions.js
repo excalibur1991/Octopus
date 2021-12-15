@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -39,10 +39,9 @@ export const styles = StyleSheet.create({
   badgeCount: {
     fontSize: 16,
     lineHeight: 18,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   uploadImageIcon: {
     width: 43,
@@ -60,10 +59,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 6,
     lineHeight: 14,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   filtersContainer: {
     height: 40,
@@ -86,10 +84,9 @@ export const styles = StyleSheet.create({
   filterText: {
     fontSize: 12,
     lineHeight: 13.7,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   missionCardsContainer: {
     paddingTop: '5%',
@@ -128,10 +125,9 @@ export const styles = StyleSheet.create({
   coverTitleText: {
     fontSize: 14,
     lineHeight: 16,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   cardFooter: {
     marginTop: 10,
@@ -146,19 +142,17 @@ export const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     lineHeight: 18.41,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   cardDescription: {
     fontSize: 12,
     marginTop: 4,
     lineHeight: 14,
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
   cardValueGradient: {
     borderRadius: 30,
@@ -178,19 +172,17 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.YELLOW,
   },
   cardValueSignText: {
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 18,
+    fontFamily: 'Moon-Bold',
     color: theme.APP_COLOR_1,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   cardValue: {
     fontSize: 16,
     lineHeight: 18,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
 });

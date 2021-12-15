@@ -8,12 +8,17 @@ export const theme = {
     BLACK: '#000',
     BLACK_04: '#040404',
     COD_GRAY_OPACITY_50P: '#12121280',
+    AZALEA: '#F5C3CB',
+    VOODOO: '#663B69',
+    FIORD: '#405570',
+    REGENT_GRAY: '#8C98A9',
     BLACK_OPACITY_90P: '#000000E6',
     WHITE_OPACITY_3P: '#FFFFFF4D',
     WHITE_OPACITY_40P: '#FFFFFF66',
     PURPLE: '#B592FF',
     LIGHT_PURPLE: '#974BD6',
     MEDIUM_PURPLE: '#A262E2',
+    MEDIUM_PURPLE_1: '#A147D7',
     LIGHT_BLUE: '#4667D1',
     BLUE: '#7666E8',
     YELLOW: '#F0C514',
@@ -35,10 +40,10 @@ export const theme = {
     GREY: '#505564',
     LIGHT_GREY: '#61636E66',
     LIGHT_RED: '#EB5454',
+    LIGHT_RED_OPACITY_71P: '#EB5454B5',
 
     GREY_A5: '#A5A5A5',
 
-    // DARK_PURPLE: '#6A3A6B',
     LIGHT_PINK: '#ED8495',
     ERROR_COLOR: '#D60E18',
     SUCCESS_COLOR: '#45B05D',
@@ -48,6 +53,3 @@ export const theme = {
     BOTTOM_TAB_NOT_ICON_FOCUSED: '#fff',
   },
 };
-
-// Color Palette
-// #0B132B, #1C2541, #1C2541, #3A506B, #72B5CB, #A737C1, #EB5454, #EBDC54, #83E374

@@ -55,7 +55,7 @@ const steps = [
   },
 ];
 
-const LandingPageWalkthrough = ({step}) => {
+const LandingPageWalkthrough = ({step, onExitWalkthrough}) => {
   const [, dispatch] = useStateValue();
 
   const step1 = (
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: theme.COLORS.MEDIUM_PURPLE,
     left: Platform.OS === 'ios' ? '1.5%' : '1%',
-    bottom: Platform.OS === 'ios' ? '5.5%' : '1.3%',
+    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
   },
   step4_circle_inner: {
     width: '100%',
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: theme.COLORS.MEDIUM_PURPLE,
     left: Platform.OS === 'ios' ? '20%' : '19.5%',
-    bottom: Platform.OS === 'ios' ? '5.5%' : '1.3%',
+    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
   },
   step5_circle_inner: {
     width: '100%',
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: theme.COLORS.MEDIUM_PURPLE,
     left: Platform.OS === 'ios' ? '41.3%' : '40.6%',
-    bottom: Platform.OS === 'ios' ? '5.5%' : '1.3%',
+    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
   },
   step6_circle_inner: {
     width: '100%',
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: theme.COLORS.MEDIUM_PURPLE,
     left: Platform.OS === 'ios' ? '63.6%' : '63.25%',
-    bottom: Platform.OS === 'ios' ? '5.5%' : '1.3%',
+    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
   },
   step7_circle_inner: {
     width: '100%',
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: theme.COLORS.MEDIUM_PURPLE,
     left: Platform.OS === 'ios' ? '82.7%' : '82%',
-    bottom: Platform.OS === 'ios' ? '5.5%' : '1.3%',
+    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
   },
   step8_circle_inner: {
     width: '100%',
@@ -624,19 +624,17 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     lineHeight: 28,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.WHITE,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   description: {
     fontSize: 12,
     marginTop: 5,
     lineHeight: 14,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    textTransform: 'uppercase',
   },
 
   completedComtainer: {
@@ -650,20 +648,18 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 43,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   completedDescription: {
     fontSize: 16,
     marginTop: 20,
     lineHeight: 19,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
   closeButtonContainer: {
     marginTop: 20,

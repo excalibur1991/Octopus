@@ -43,8 +43,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 3,
     lineHeight: 12,
-    fontWeight: '600',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
   },
 });

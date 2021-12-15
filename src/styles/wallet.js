@@ -1,4 +1,4 @@
-import {StyleSheet, Platform, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -17,9 +17,8 @@ export const styles = StyleSheet.create({
   },
   quicraText: {
     fontSize: 27,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   oceanPortfolioContainer: {
     flexDirection: 'row',
@@ -27,23 +26,20 @@ export const styles = StyleSheet.create({
   },
   oceanText: {
     fontSize: 20,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.BLUE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   portfolioText: {
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'right',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
   },
   percentText: {
     fontSize: 20,
     textAlign: 'right',
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.SUCCESS_COLOR,
-    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
   },
   sendAmountInputContainer: {
     borderWidth: 1,
@@ -55,15 +51,15 @@ export const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 10,
     lineHeight: 11.5,
-    color: theme.COLORS.WHITE,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    color: theme.COLORS.WHITE,
   },
   input: {
     padding: 0,
     marginTop: 11,
     lineHeight: 15.1,
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
   },
   inputDivider: {
@@ -85,11 +81,10 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
     textAlignVertical: 'center',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   stakeUnstakeContainer: {
     padding: 10,
@@ -106,23 +101,20 @@ export const styles = StyleSheet.create({
   },
   stakeUnstakeButtonStyle: {
     borderRadius: 30,
-    // alignSelf: 'center',
     width: Dimensions.get('screen').width * 0.44,
   },
   stakeButtonText: {
     fontSize: 18,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
     textAlignVertical: 'center',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   unstakeButtonText: {
     fontSize: 18,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     textAlignVertical: 'center',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.LIGHT_RED,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
 });

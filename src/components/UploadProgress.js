@@ -41,7 +41,7 @@ const UploadProgress = ({
               outerStyle={styles.cancelOuterContainer}>
               <IonIcon
                 size={18}
-                color={theme.APP_COLOR}
+                color={theme.APP_COLOR_1}
                 name="close-circle-outline"
               />
               <Text style={styles.cancelText}>Cancel</Text>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#D60E18',
     fontWeight: '600',
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
     textAlign: 'center',
   },
   cancelOuterContainer: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     marginLeft: 2,
-    color: theme.APP_COLOR,
-    fontFamily: 'Inter-Regular',
+    color: theme.APP_COLOR_1,
+    fontFamily: 'Moon-Light',
   },
 });

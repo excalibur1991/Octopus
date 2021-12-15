@@ -13,6 +13,7 @@ export const actions = {
   SET_SHOW_LANDING_PAGE_WALKTHROUGH: 'SET_SHOW_LANDING_PAGE_WALKTHROUGH',
   SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH: 'SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH',
   SET_SHOW_VERIFY_IMAGE_WALKTHROUGH: 'SET_SHOW_VERIFY_IMAGE_WALKTHROUGH',
+  SET_WALKTHROUGH_CURRENT_STEP: 'SET_WALKTHROUGH_CURRENT_STEP',
   EXIT_WALKTHROUGH: 'EXIT_WALKTHROUGH',
 };
 
@@ -85,10 +86,15 @@ export const reducer = (state, action) => {
         ...state,
         showUploadImagePageWalkthrough: true,
       };
-    case actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH:
+    case actions.SET_SHOW_VERIFY_IMAGE_WALKTHROUGH:
       return {
         ...state,
         showVerifyImagePageWalkthrough: true,
+      };
+    case actions.SET_WALKTHROUGH_CURRENT_STEP:
+      return {
+        ...state,
+        walkthroughCurrentStep: action.walkthroughCurrentStep,
       };
     case actions.EXIT_WALKTHROUGH:
       return {
@@ -96,6 +102,7 @@ export const reducer = (state, action) => {
         showLandingPageWalkthrough: false,
         showUploadImagePageWalkthrough: false,
         showVerifyImagePageWalkthrough: false,
+        walkthroughCurrentStep: 0,
       };
     default:
       return state;

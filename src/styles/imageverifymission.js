@@ -1,4 +1,4 @@
-import {StyleSheet, Platform, Dimensions, StatusBar} from 'react-native';
+import {StyleSheet, Dimensions, StatusBar} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -8,41 +8,6 @@ export const styles = StyleSheet.create({
   cardCover: {
     height: '50%',
     width: '100%',
-  },
-  countdownContainer: {
-    left: 0,
-    right: 0,
-    top: '32%',
-    borderRadius: 60,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    paddingHorizontal: 28,
-    marginHorizontal: '10%',
-    justifyContent: 'center',
-    backgroundColor: theme.APP_COLOR_1,
-  },
-  countdownItem: {
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  countdownLabel: {
-    fontSize: 12,
-    lineHeight: 14,
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
-  },
-  countdownvalue: {
-    fontSize: 32,
-    lineHeight: 40,
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   companyInfoContainer: {
     marginTop: '-8%',
@@ -67,10 +32,9 @@ export const styles = StyleSheet.create({
   compantTitle: {
     fontSize: 16,
     lineHeight: 24,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   tags: {
     marginTop: 9,
@@ -86,10 +50,9 @@ export const styles = StyleSheet.create({
   tagText: {
     fontSize: 12,
     lineHeight: 14,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   mainDivider: {
     height: 2,
@@ -130,19 +93,18 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
   tcText: {
     padding: 38,
     fontSize: 16,
     lineHeight: 29,
     textAlign: 'center',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+    textTransform: 'uppercase',
   },
   actionContainer: {
     paddingHorizontal: 40,
@@ -158,21 +120,19 @@ export const styles = StyleSheet.create({
     lineHeight: 16,
     textAlign: 'left',
     paddingHorizontal: 16,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     color: theme.COLORS.SILVER,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   radioButtonTextLink: {
     fontSize: 12,
     lineHeight: 16,
     textAlign: 'left',
     paddingHorizontal: 16,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.DARK_BLUE,
     textDecorationLine: 'underline',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
 
   // Info Modal Styling
@@ -200,10 +160,9 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     marginTop: 13,
     textAlign: 'center',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+    textTransform: 'uppercase',
   },
   infoContainerItems: {
     flex: 1,
@@ -217,7 +176,7 @@ export const styles = StyleSheet.create({
   infoContentItemTitle: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
@@ -226,10 +185,9 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
     marginTop: '6%',
     textAlign: 'center',
+    fontFamily: 'Moon-Light',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
   bottomContainer: {
     flex: 1,
@@ -246,7 +204,7 @@ export const styles = StyleSheet.create({
     marginVertical: '13.5%',
     justifyContent: 'center',
   },
-  dotOuter: {
+  dot: {
     width: 12,
     height: 12,
     elevation: 5,
@@ -258,7 +216,7 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     backgroundColor: theme.COLORS.PURPLE,
   },
-  dotOuterActive: {
+  dotActive: {
     width: 12,
     height: 12,
     elevation: 5,
@@ -318,10 +276,9 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   tcContainerItems: {
     alignItems: 'center',
@@ -332,10 +289,10 @@ export const styles = StyleSheet.create({
     paddingTop: 32,
   },
   tcContentItemTitle: {
-    fontSize: 18,
+    fontSize: 14,
     lineHeight: 17,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
@@ -344,10 +301,9 @@ export const styles = StyleSheet.create({
     lineHeight: 20,
     marginTop: 20,
     textAlign: 'center',
-    textTransform: 'uppercase',
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    textTransform: 'uppercase',
   },
   tcCloseButtonContainer: {
     left: 0,

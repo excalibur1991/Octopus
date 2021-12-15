@@ -35,8 +35,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
     color: theme.COLORS.PURPLE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+    fontFamily: 'Moon-Bold',
   },
 
   infoModalContainer: {
@@ -65,8 +64,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
+    fontFamily: 'Moon-Bold',
   },
   infoContainerItems: {
     flex: 1,
@@ -80,7 +78,7 @@ export const styles = StyleSheet.create({
   infoContentItemTitle: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
@@ -91,8 +89,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+    fontFamily: 'Moon-Light',
   },
   bottomContainer: {
     flex: 1,
@@ -109,7 +106,7 @@ export const styles = StyleSheet.create({
     marginVertical: '13.5%',
     justifyContent: 'center',
   },
-  dotOuter: {
+  dot: {
     width: 12,
     height: 12,
     elevation: 5,
@@ -121,7 +118,7 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     backgroundColor: theme.COLORS.PURPLE,
   },
-  dotOuterActive: {
+  dotActive: {
     width: 12,
     height: 12,
     elevation: 5,
@@ -132,10 +129,6 @@ export const styles = StyleSheet.create({
     shadowColor: theme.COLORS.BLACK,
     backgroundColor: theme.COLORS.GREY,
     shadowOffset: {width: 0, height: 4},
-  },
-  dotInner: {
-    paddingVertical: '5.4%',
-    paddingHorizontal: '1%',
   },
   buttonOuter: {
     shadowColor: theme.COLORS.BLACK,

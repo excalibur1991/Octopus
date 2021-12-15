@@ -173,7 +173,6 @@ export default class Alert extends Component {
         <View style={styles.overlay} />
         <Animated.View style={[styles.contentContainer, animation]}>
           {icons[type]}
-
           {title ? <Text style={styles.title}>{title}</Text> : null}
           {message ? <Text style={styles.message}>{message}</Text> : null}
           {showCancelButton ? (
@@ -280,8 +279,8 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    fontFamily: 'Moon-Bold',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   message: {
     fontSize: 12,
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Moon-Light',
     fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
   radius30: {
@@ -312,8 +311,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
+    fontFamily: 'Moon-Bold',
+    fontWeight: Platform.OS === 'ios' ? '600' : 'normal',
   },
   button: {
     marginTop: 15,

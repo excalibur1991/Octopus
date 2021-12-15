@@ -70,11 +70,11 @@ const BeginImageVerify = ({navigation, route}) => {
         <View style={styles.button}>
           <Ripple
             onPress={() => {
-              navigation.navigate('ImageVerify');
+              navigation.navigate('VerifyImageWalkthrough');
               setTimeout(
                 () =>
                   dispatch({
-                    type: actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH,
+                    type: actions.SET_SHOW_VERIFY_IMAGE_WALKTHROUGH,
                   }),
                 100,
               );

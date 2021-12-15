@@ -5,10 +5,10 @@ import TextInput from '../components/TextInput';
 import ImageTagInput from '../components/ImageTagInput';
 import React, {useState} from 'react';
 import MultiSelectDropDown from '../components/MultiSelectDropDown';
-import UploadProgress from '../components/UploadProgress';
+// import UploadProgress from '../components/UploadProgress';
 const CloudUpload = require('../assets/cloud_upload.png');
 const Test = require('../assets/image_upload_mission_test.png');
-import {ScrollView, Text, View, Image, Platform} from 'react-native';
+import {ScrollView, Text, View, Image} from 'react-native';
 import DotNavigation from '../components/DotNavigation';
 import styles from '../styles/uploadimage';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -95,19 +95,19 @@ const Upload = ({navigation}) => {
                     tags[selectedIndex].map((tag) => (
                       <Tag
                         title={tag}
-                        iconColor="#fff"
-                        textColor="#fff"
-                        backgroundColor="#405570"
+                        iconColor={theme.COLORS.WHITE}
+                        textColor={theme.COLORS.WHITE}
+                        backgroundColor={theme.COLORS.FIORD}
                       />
                     ))}
                   {commonTags &&
                     commonTags.length > 0 &&
                     commonTags.map((commonTag) => (
                       <Tag
-                        iconColor="#fff"
-                        textColor="#fff"
                         title={commonTag}
-                        backgroundColor="#663b69"
+                        iconColor={theme.COLORS.WHITE}
+                        textColor={theme.COLORS.WHITE}
+                        backgroundColor={theme.COLORS.VOODOO}
                       />
                     ))}
                   {pii &&
@@ -126,7 +126,7 @@ const Upload = ({navigation}) => {
                     bounties[selectedIndex].map((index) => (
                       <Tag
                         title={bountyOptions[index]}
-                        backgroundColor="#F5C3CB"
+                        backgroundColor={theme.COLORS.AZALEA}
                       />
                     ))}
                 </View>
@@ -134,7 +134,7 @@ const Upload = ({navigation}) => {
               <Button
                 disabled={loading}
                 loading={loading}
-                color={theme.APP_COLOR}
+                color={theme.APP_COLOR_1}
                 buttonStyle={styles.button}
                 textStyle={styles.buttonText}
                 title={'Submit Description & Tags'}
@@ -384,7 +384,7 @@ const Upload = ({navigation}) => {
                   setUploadingImageIndex,
                 )
               }
-              color={theme.APP_COLOR}
+              color={theme.APP_COLOR_1}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
             />
@@ -527,7 +527,7 @@ export default Upload;
 //               <Button
 //                 disabled={loading}
 //                 loading={loading}
-//                 color={theme.APP_COLOR}
+//                 color={theme.APP_COLOR_1}
 //                 buttonStyle={styles.button}
 //                 textStyle={styles.buttonText}
 //                 title={'Submit Description & Tags'}
@@ -630,7 +630,7 @@ export default Upload;
 //                 commonTagsPlaceholder="Enter Common Tags"
 //               />
 //               <MultiSelectDropDown
-//                 textColor={theme.APP_COLOR}
+//                 textColor={theme.APP_COLOR_1}
 //                 placeholder="Choose PII"
 //                 options={piiOptions}
 //                 selectedIndices={pii[selectedIndex]}
@@ -649,7 +649,7 @@ export default Upload;
 //               />
 //               <View style={styles.rowSpaceBetween}>
 //                 <Button
-//                   color={theme.APP_COLOR}
+//                   color={theme.APP_COLOR_1}
 //                   title="Upload"
 //                   style={styles.width49p}
 //                   buttonStyle={styles.button}
@@ -665,7 +665,7 @@ export default Upload;
 //                   textStyle={styles.buttonText}
 //                 />
 //                 <Button
-//                   color={theme.APP_COLOR}
+//                   color={theme.APP_COLOR_1}
 //                   title="Next"
 //                   disabled={!canProceed(fileUploadResponses)}
 //                   style={styles.width49p}
@@ -761,7 +761,7 @@ export default Upload;
 //                   setUploadingImageIndex,
 //                 )
 //               }
-//               color={theme.APP_COLOR}
+//               color={theme.APP_COLOR_1}
 //               buttonStyle={styles.button}
 //               textStyle={styles.buttonText}
 //             />

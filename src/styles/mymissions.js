@@ -1,4 +1,4 @@
-import {StyleSheet, Platform, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -25,10 +25,9 @@ export const styles = StyleSheet.create({
   tabText: {
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   emptyContainer: {
     padding: 35,
@@ -41,23 +40,21 @@ export const styles = StyleSheet.create({
     borderColor: theme.APP_COLOR_2,
   },
   emptyTitle: {
-    fontSize: 16,
-    lineHeight: 23,
+    fontSize: 20,
+    lineHeight: 24,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.GREY_80P,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   emptyDescription: {
     fontSize: 10,
     marginTop: 20,
     lineHeight: 16,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.GREY_80P,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'normal',
   },
   buttonOuter: {
     width: '90%',
@@ -118,10 +115,9 @@ export const styles = StyleSheet.create({
     fontSize: 9,
     lineHeight: 10,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   cardInfoContainer: {
     flex: 1,
@@ -131,10 +127,9 @@ export const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 12,
     lineHeight: 14,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   uploadTypeChip: {
     marginTop: 5,
@@ -156,10 +151,9 @@ export const styles = StyleSheet.create({
     fontSize: 8,
     lineHeight: 10,
     textAlign: 'center',
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   statusContainer: {
     marginTop: 20,
@@ -172,18 +166,16 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 18,
     marginLeft: 5,
+    fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   pendingText: {
     fontSize: 12,
     lineHeight: 14,
+    fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter-Regular',
     color: theme.COLORS.WHITE_OPACITY_40P,
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   rewardButton: {
     height: 40,
