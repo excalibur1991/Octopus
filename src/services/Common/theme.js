@@ -3,6 +3,7 @@ export const theme = {
   COLORS: {
     WHITE: '#fff',
     BLACK: '#000',
+    BACKGROUND: '#121212',
     BOTTOM_TAB_ICON_FOCUSED: '#8c91a2',
     BOTTOM_TAB_NOT_ICON_FOCUSED: '#fff',
   },

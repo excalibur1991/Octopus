@@ -377,6 +377,8 @@ export default {
     editAI: 'Edit AI',
     editAnnotation: 'Edit Annotation',
     PlayAI: 'PlayAI',
+    exit: 'Exit',
+    playAIMission: 'PLAYAI MISSION',
   }
   },
   

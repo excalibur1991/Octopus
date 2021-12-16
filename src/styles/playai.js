@@ -1,15 +1,12 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      //marginTop: '2%',
       paddingTop: '25%',
       paddingHorizontal: 0,
-      //borderTopLeftRadius: 25,
-      //borderTopRightRadius: 25,
-      backgroundColor: theme.COLORS.WHITE,
+      backgroundColor: theme.COLORS.BACKGROUND,
     },
     marginBottom3p: {
       marginBottom: '3%',
@@ -194,7 +191,7 @@ export const styles = StyleSheet.create({
       top: 0,
       left: 0,
       width: '100%',
-      height: '100%',
+      height: Dimensions.get('window').height, //'100%',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'black',

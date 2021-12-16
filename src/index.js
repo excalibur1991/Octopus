@@ -53,6 +53,8 @@ import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { MissionComplete } from './screens/playAI/MissionComplete';
+import PlayAITutorial from './screens/playAI/PlayAITutorial';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -210,18 +212,21 @@ const FullScreenHeader = (
   navigation,
 ) => ({
   title: showTitle ? title : null,
+  headerTitleAlign: 'center',
   headerTitleStyle: {
     color: theme.COLORS.WHITE,
   },
+  headerBackVisible:false,
   headerShown: true,
   headerTransparent: true,
+
 
   headerStyle: {
     shadowOpacity: 0,
     elevation: isTransparent ? 0 : 4,
     //backgroundColor: theme.APP_COLOR,
   },
-  headerLeft: showAppIcon
+  headerLeft: showAppIcon 
     ? () => (
         <Ripple
           onPress={() => navigation.navigate('LandingPage')}
@@ -383,8 +388,57 @@ const UploadStack = () => (
       options={({navigation}) => {
         return FullScreenHeader(
           {
-            showTitle: false,
+            title: i18n.t('playAI.playAIMission'),
+            showTitle: true,
             showAppIcon: true,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="PlayAI"
+      component={PlayAI}
+      options={({navigation}) => {
+        return FullScreenHeader(
+          {
+            title: i18n.t('playAI.playAIMission'),
+            showTitle: true,
+            showAppIcon: false,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="PlayAITutorial"
+      component={PlayAITutorial}
+      options={({navigation}) => {
+        return FullScreenHeader(
+          {
+            title: i18n.t('playAI.playAIMission'),
+            showTitle: true,
+            showAppIcon: false,
+            isTransparent: true,
+            showRightButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="MissionComplete"
+      component={MissionComplete}
+      options={({navigation}) => {
+        return FullScreenHeader(
+          {
+            title: i18n.t('playAI.playAIMission'),
+            showTitle: true,
+            showAppIcon: false,
             isTransparent: true,
             showRightButton: true,
           },
