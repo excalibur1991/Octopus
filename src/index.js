@@ -27,13 +27,17 @@ import WalletSettings from './screens/WalletSettings';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import ImageVerifyMission from './screens/ImageVerifyMission';
+import ImageAnnotateMission from './screens/ImageAnnotateMission';
 import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
 import BeginImageUpload from './screens/BeginImageUpload';
 import UploadImage from './screens/UploadImage';
 import BeginImageVerify from './screens/BeginImageVerify';
 import VerifyImage from './screens/VerifyImage';
+import BeginImageAnnotate from './screens/BeginImageAnnotate';
+import AnnotateImage from './screens/AnnotateImage';
 import VerifyImageWalkthrough from './screens/VerifyImageWalkthrough';
+import AnnotateImageWalkthrough from './screens/AnnotateImageWalkthrough';
 import Walkthrough from './screens/Walkthrough';
 // import ImageCategorization from './screens/ImageCategorization';
 // import TOS from './screens/TOS';
@@ -435,6 +439,20 @@ const BrowseMissionsStack = () => (
         );
       }}
     />
+    <Stack.Screen
+      name="ImageAnnotateMission"
+      component={ImageAnnotateMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Annotating Images Lv.2',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
   </Stack.Navigator>
 );
 
@@ -550,12 +568,67 @@ const MyMissionsStack = () => (
       }}
     />
     <Stack.Screen
+      name="BeginImageAnnotate"
+      component={BeginImageAnnotate}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Annotating Images',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageAnnotate"
+      component={AnnotateImage}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Annotating Images',
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ImageAnnotateMission"
+      component={ImageAnnotateMission}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Annotating Images Lv.2',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
       name="VerifyImageWalkthrough"
       component={VerifyImageWalkthrough}
       options={({navigation}) => {
         return Header(
           {
             title: 'Verifying Images',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="AnnotateImageWalkthrough"
+      component={AnnotateImageWalkthrough}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'annotating images',
             showBackButton: true,
             isTransparent: true,
           },
@@ -837,13 +910,15 @@ const BottomTabs = ({navigation}) => {
       showLandingPageWalkthrough,
       showUploadImagePageWalkthrough,
       showVerifyImagePageWalkthrough,
+      showAnnotateImagePageWalkthrough,
     },
   ] = useStateValue();
 
   const showWalkthrough =
     showLandingPageWalkthrough ||
     showUploadImagePageWalkthrough ||
-    showVerifyImagePageWalkthrough;
+    showVerifyImagePageWalkthrough ||
+    showAnnotateImagePageWalkthrough;
 
   return (
     <>

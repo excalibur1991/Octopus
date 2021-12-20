@@ -21,4 +21,5 @@ export const initialState = {
   showLandingPageWalkthrough: false,
   showUploadImagePageWalkthrough: false,
   showVerifyImagePageWalkthrough: false,
+  showAnnotateImagePageWalkthrough: false,
 };

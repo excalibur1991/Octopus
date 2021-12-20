@@ -305,7 +305,7 @@ import { TextPropTypes } from 'react-native';
   
   export const find_dimesions = (props, layout)=> {
     const {x, y, width, height} = layout;
-    props.setFrameDimension({width: width, height: Dimensions.get('window').height * 0.5});
+    props.setFrameDimension({width: width, height: Dimensions.get('window').height * 0.4});
     //props.setImageDimension({width:width, height: height});
     
     /*console.log(width, Dimensions.get('window').height * 0.5);

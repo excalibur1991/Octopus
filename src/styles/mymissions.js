@@ -147,6 +147,14 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     backgroundColor: theme.COLORS.DARK_BLUE,
   },
+  annotateTypeChip: {
+    marginTop: 5,
+    borderRadius: 30,
+    paddingVertical: 2,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+    backgroundColor: theme.COLORS.SKY_BLUE,
+  },
   typeText: {
     fontSize: 8,
     lineHeight: 10,

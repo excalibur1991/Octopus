@@ -6,19 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  uploadImageContainer: {
-    marginTop: 5,
-    borderWidth: 3,
-    borderRadius: 250,
-    borderColor: theme.COLORS.DARK_PURPLE,
-  },
-  verifyImageContainer: {
-    marginTop: 5,
-    borderWidth: 3,
-    borderRadius: 250,
-    borderColor: theme.COLORS.DARK_BLUE,
-  },
-  annotateImageContainer: {
+  imageContainer: {
     marginTop: 5,
     borderWidth: 3,
     borderRadius: 250,
@@ -33,8 +21,8 @@ export const styles = StyleSheet.create({
     top: 10,
     left: 10,
     right: 10,
-    position: 'absolute',
     alignItems: 'center',
+    position: 'absolute',
   },
   levelChip: {
     borderRadius: 30,
@@ -44,7 +32,7 @@ export const styles = StyleSheet.create({
   },
   levelText: {
     fontSize: 10,
-    lineHeight: 12,
+    lineHeight: 10,
     textAlign: 'center',
     fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
@@ -72,19 +60,7 @@ export const styles = StyleSheet.create({
   progressContainer: {
     marginTop: 20,
   },
-  progressChipUpload: {
-    borderRadius: 30,
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    backgroundColor: theme.COLORS.DARK_PURPLE,
-  },
-  progressChipVerify: {
-    borderRadius: 30,
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    backgroundColor: theme.COLORS.DARK_BLUE,
-  },
-  progressChipAnnotate: {
+  progressChip: {
     borderRadius: 30,
     paddingVertical: 5,
     paddingHorizontal: 30,
@@ -97,47 +73,14 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
-  doneText: {
-    fontSize: 36,
-    lineHeight: 41,
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-  },
+
   divider: {
     height: 2,
     width: '100%',
     marginVertical: 20,
     backgroundColor: theme.APP_COLOR_2,
   },
-  dividerCompletedUpload: {
-    height: 2,
-    width: '100%',
-    marginVertical: 20,
-    backgroundColor: theme.COLORS.DARK_PURPLE,
-  },
-  dividerCompletedVerify: {
-    height: 2,
-    width: '100%',
-    marginVertical: 20,
-    backgroundColor: theme.COLORS.DARK_BLUE,
-  },
-  dividerCompletedAnnotate: {
-    height: 2,
-    width: '100%',
-    marginVertical: 20,
-    backgroundColor: theme.COLORS.SKY_BLUE,
-  },
-  dividerShadow: {
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 70,
-    opacity: 0.5,
-    position: 'absolute',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
+
   statusContainer: {
     alignItems: 'center',
     paddingHorizontal: '4%',
@@ -160,74 +103,14 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
-  completedDescription: {
-    fontSize: 16,
-    lineHeight: 26,
-    textAlign: 'center',
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-  },
-  rewardContainer: {
-    marginTop: 15,
-  },
-  expContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'center',
-  },
-  rewardValue: {
-    fontSize: 48,
-    lineHeight: 56,
-    textAlign: 'center',
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-  },
-  rewardLabel: {
-    fontSize: 18,
-    marginLeft: 5,
-    lineHeight: 21,
-    textAlign: 'center',
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.WHITE,
-    textTransform: 'uppercase',
-  },
-  rewardSign: {
-    fontSize: 36,
-    marginRight: 8,
-    borderRadius: 25,
-    paddingVertical: 5,
-    overflow: 'hidden',
-    textAlign: 'center',
-    paddingHorizontal: 15,
-    fontFamily: 'Moon-Bold',
-    color: theme.APP_COLOR_1,
-    textTransform: 'uppercase',
-    backgroundColor: theme.COLORS.YELLOW,
-  },
-  xLabel: {
-    fontSize: 12,
-    lineHeight: 21,
-    marginRight: 5,
-    textAlign: 'center',
-    fontFamily: 'Moon-Bold',
-    textTransform: 'uppercase',
-    color: theme.COLORS.WHITE,
-  },
 
   actionsContainer: {
-    marginTop: 15,
+    marginTop: 50,
   },
   button: {
     marginTop: 10,
   },
   buttonIcon: {
-    marginRight: 10,
-  },
-  buttonIconImage: {
-    width: 26,
-    height: 20,
     marginRight: 10,
   },
   buttonOuter: {
@@ -271,13 +154,5 @@ export const styles = StyleSheet.create({
     fontFamily: 'Moon-Bold',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
-  },
-  closeButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.APP_COLOR_2,
   },
 });

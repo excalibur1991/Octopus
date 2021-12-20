@@ -11,6 +11,7 @@ export const theme = {
     AZALEA: '#F5C3CB',
     VOODOO: '#663B69',
     FIORD: '#405570',
+    FIORD_1: '#3A506B',
     REGENT_GRAY: '#8C98A9',
     BLACK_OPACITY_90P: '#000000E6',
     WHITE_OPACITY_3P: '#FFFFFF4D',
@@ -28,6 +29,7 @@ export const theme = {
     SKY_BLUE_DARK: '#4E9CF9',
     SKY_BLUE: '#5BAAFB',
     ROYAL_BLUE: '#5759E5',
+    CORNFLOWER_BLUE: '#56A0FA',
 
     DARK_PURPLE_1: '#8138D1',
     DARK_BLUE_1: '#4A4FCE',
@@ -35,6 +37,7 @@ export const theme = {
 
     GREY_80P: '#62646DCC',
     MID_GREY: '#62646D',
+    MID_GRAY: '#62646A',
 
     BLUR: '#34343480',
     GREY: '#505564',
@@ -43,6 +46,7 @@ export const theme = {
     LIGHT_RED_OPACITY_71P: '#EB5454B5',
 
     GREY_A5: '#A5A5A5',
+    SILVER_SAND: '#C8C9CA',
 
     LIGHT_PINK: '#ED8495',
     ERROR_COLOR: '#D60E18',

@@ -196,7 +196,9 @@ const BrowseMissions = ({navigation}) => {
                   navigation.navigate(
                     mission.type === 'upload'
                       ? 'ImageUploadMission'
-                      : 'ImageVerifyMission',
+                      : mission.type === 'verify'
+                      ? 'ImageVerifyMission'
+                      : 'ImageAnnotateMission',
                   )
                 }
               />

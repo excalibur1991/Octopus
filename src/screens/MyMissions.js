@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {useState} from 'react';
 import Ripple from '../components/Ripple';
 import {styles} from '../styles/mymissions';
@@ -70,9 +71,29 @@ const MyMissions = ({navigation}) => {
     {
       type: 'verify',
       image: MissionCard5,
-      level: 'Lv. 2',
+      level: 'Lv. 3',
       title1: 'Foods',
       title2: 'Liddl',
+      status: 'inprogress',
+      progressTotal: 5,
+      progressCompleted: 0,
+    },
+    {
+      type: 'annotate',
+      image: MissionCard1,
+      level: 'Lv. 2',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
+      status: 'inprogress',
+      progressTotal: 5,
+      progressCompleted: 4,
+    },
+    {
+      type: 'annotate',
+      image: MissionCard1,
+      level: 'Lv. 3',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
       status: 'inprogress',
       progressTotal: 5,
       progressCompleted: 0,
@@ -147,6 +168,36 @@ const MyMissions = ({navigation}) => {
       progressTotal: 5,
       progressCompleted: 5,
     },
+    {
+      type: 'annotate',
+      image: MissionCard1,
+      level: 'Lv. 7',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
+      status: 'pending',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'annotate',
+      image: MissionCard1,
+      level: 'Lv. 8',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
+      status: 'readytogetreward',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
+    {
+      type: 'annotate',
+      image: MissionCard1,
+      level: 'Lv. 10',
+      title1: 'Natureyou',
+      title2: 'Butterflies',
+      status: 'rewardgiven',
+      progressTotal: 5,
+      progressCompleted: 5,
+    },
   ]);
 
   const filteredMissions = missions.filter((m) =>
@@ -212,9 +263,13 @@ const MyMissions = ({navigation}) => {
                     <View style={styles.uploadTypeChip}>
                       <Text style={styles.typeText}>Image Upload</Text>
                     </View>
-                  ) : (
+                  ) : mission.type === 'verify' ? (
                     <View style={styles.verifyTypeChip}>
                       <Text style={styles.typeText}>Image Verify</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.annotateTypeChip}>
+                      <Text style={styles.typeText}>Image Annotate</Text>
                     </View>
                   )}
                   <View style={styles.statusContainer}>

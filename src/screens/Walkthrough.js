@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import LandingPageWalkthrough from '../components/LandingPageWalkthrough';
 import UploadImagePageWalkthrough from '../components/UploadImagePageWalkthrough';
 import VerifyImagePageWalkthrough from '../components/VerifyImagePageWalkthrough';
+import AnnotateImagePageWalkthrough from '../components/AnnotateImagePageWalkthrough';
 import {useStateValue} from '../services/State/State';
 import {actions} from '../services/State/Reducer';
 
@@ -16,6 +17,7 @@ const Walkthrough = ({navigation}) => {
       showLandingPageWalkthrough,
       showUploadImagePageWalkthrough,
       showVerifyImagePageWalkthrough,
+      showAnnotateImagePageWalkthrough,
     },
     dispatch,
   ] = useStateValue();
@@ -27,6 +29,8 @@ const Walkthrough = ({navigation}) => {
     ? 5
     : showVerifyImagePageWalkthrough
     ? 10
+    : showAnnotateImagePageWalkthrough
+    ? 7
     : 0;
 
   const onNext = () => {
@@ -82,6 +86,13 @@ const Walkthrough = ({navigation}) => {
 
       {showVerifyImagePageWalkthrough && (
         <VerifyImagePageWalkthrough
+          step={step}
+          onExitWalkthrough={exitWalkthrough}
+        />
+      )}
+
+      {showAnnotateImagePageWalkthrough && (
+        <AnnotateImagePageWalkthrough
           step={step}
           onExitWalkthrough={exitWalkthrough}
         />
