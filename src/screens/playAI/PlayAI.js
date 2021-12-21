@@ -90,7 +90,6 @@ const PlayAI = (props) => {
   };
 
   const fetchImage = async ()=>{
-    //if(imageId){
       try{
         dispatch({
           type: actions.SET_PROGRESS_SETTINGS,
@@ -131,7 +130,6 @@ const PlayAI = (props) => {
       annotations: annotations
     };
     const result = annotate(data).then((res)=>{
-      console.log(result);
       setAnnotateProgress(0.7);
 
       //retrieve playAI metadata 
@@ -243,7 +241,7 @@ const PlayAI = (props) => {
   useEffect(()=>{
     if(mode == enum_mode.MODE_PHOTO){
       initVariables();
-      //openCameraView();
+      openCameraView();
     }
   }, [mode]);
 

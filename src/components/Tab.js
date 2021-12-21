@@ -4,6 +4,7 @@ import {theme} from '../services/Common/theme';
 import {Transition, Transitioning} from 'react-native-reanimated';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+
 const icons = {
   About: (
     <MaterialIcon

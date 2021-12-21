@@ -22,8 +22,6 @@ import {withTranslation} from 'react-i18next';
 const MainScreen = (props) => {
     const {navigation, route} = props || {};
 
-    console.log(route);
-
     const [curPage, setCurPage] = useState('intro');
     const [tocChecked, setTocChecked] = useState(false);
  

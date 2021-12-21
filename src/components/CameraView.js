@@ -78,11 +78,9 @@ export const CameraView = (props) => {
 //                includeBase64: false,
             },
             (res)=>{
-                console.log(res);
                 if(res.didCancel){
                     onDismiss(res);
                 }else if(res.errorMessage || res.errorCode){
-                    console.log('err',res);
                     dispatch({
                         type: actions.SET_ALERT_SETTINGS,
                         alertSettings: {
@@ -174,7 +172,7 @@ export const CameraView = (props) => {
             });
           }
         }catch(err){
-            setProgress(0);
+          setProgress(0);
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {

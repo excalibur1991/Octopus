@@ -6,13 +6,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import ImageZoom from 'react-native-image-pan-zoom';
-import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {theme} from '../services/Common/theme';
 import {DragResizeBlock} from '../components/DragResizeBlock';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
+import Svg, { Defs, Pattern, Rect, Path, G, Circle} from 'react-native-svg';
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 
 export const EDIT_MODE = {
@@ -41,6 +41,8 @@ const DrawingPan = (props) => {
       editMode,
       mode,
       isAIEnabled = true,
+      tutMode = false,
+      tutImageData = null
     } = props || {};
 
   const [, dispatch] = useStateValue();
@@ -164,7 +166,6 @@ const DrawingPan = (props) => {
   
       const cropPosX = originX;
       const cropPosY = originY;
-      console.log('handleCentering', imageWidth, imageHeight, rectScale, cropWidth,cropHeight, cropPosX, cropPosY);
       setCropPosition({x: cropPosX / rectScale, y: cropPosY / rectScale});
       setRectScale(1.0);
       
@@ -173,11 +174,9 @@ const DrawingPan = (props) => {
     }
 
     const drawCanvas = (blob)=>{
-      console.log('drawCanvas');
       if(canvas == null) return;
       const image = new CanvasImage(canvas);
-      //const context = props.canvas.getContext('2d');
-      image.src = blob;
+      image.src =  blob;
       image.addEventListener('load', () => {
         //assume current drawingpan is landcape
         const width_ratio =  frameDimension.width / image.width;
@@ -196,19 +195,14 @@ const DrawingPan = (props) => {
         var width = Math.floor(frameDimension.width);
         var height = Math.floor(image.height * image_ratio);
   
-        //props.canvas.width = image.width;
-        //props.canvas.height = image.height;
         canvas.width = width;
         canvas.height = height;
   
         const context = canvas.getContext('2d');
-        //context.setTransform(1, 0, 0, 1, 0, 0);
         context.drawImage(image, 0, 0, width, height);
-        //context.scale(1, 1);
   
         zoomView.positionX = 0;
         zoomView.positionY = 0;
-        //props.setFrameDimension({width: width, height: Dimensions.get('window').height *0.5});
         setImageDimension({width: width, height: height});
         setRectScale(1.0);
         setImageRatio(image_ratio);
@@ -225,7 +219,6 @@ const DrawingPan = (props) => {
     [props.imageSource]);
 
     useEffect(()=>{
-      console.log(mode);
       if(props.imageSource){
         drawCanvas(props.imageSource);
       }
@@ -240,8 +233,8 @@ const DrawingPan = (props) => {
     setZoomView(zoomViewRef.current);
   }, [zoomViewRef]);
   
-    useEffect(()=>{
-    }, []);
+  useEffect(()=>{
+  }, []);
 
 
   
@@ -261,7 +254,12 @@ const DrawingPan = (props) => {
           onMove={(position)=>{handleOnMove(props, position)}}
           onClick={(position)=>{handleOnClick(props, position)}}
         >
-          <Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/>
+          {tutMode ? (
+          <>
+            <Image source={tutImageData} />
+          </>) 
+          : (<><Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/></>)}
+          
 
           {isAIEnabled && props.annoRect.filter(i=>i.isAI).map((rect, index)=>(
            <DragResizeBlock
@@ -380,6 +378,9 @@ DrawingPan.propTypes = {
   onDragEnd: PropTypes.func,
   curRectIndex: PropTypes.number,
   setCurRectIndex: PropTypes.func,
+  tutMode: PropTypes.bool,
+  tutImageData: PropTypes.any
+
 };
 
 export default DrawingPan;

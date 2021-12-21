@@ -760,7 +760,7 @@ export class DragResizeBlock extends Component {
           width: w,
 
           height: h,
-          zIndex: isSelected ? zIndex : zIndex,
+          zIndex:1000 //isSelected ? zIndex : zIndex,
         }}
       >
         <GradientBox width={w} height={h} stroke={5}>

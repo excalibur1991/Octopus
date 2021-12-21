@@ -219,12 +219,9 @@ const FullScreenHeader = (
   headerBackVisible:false,
   headerShown: true,
   headerTransparent: true,
-
-
   headerStyle: {
-    shadowOpacity: 0,
+    shadowOpacity: 1,
     elevation: isTransparent ? 0 : 4,
-    //backgroundColor: theme.APP_COLOR,
   },
   headerLeft: showAppIcon 
     ? () => (

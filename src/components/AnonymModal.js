@@ -120,11 +120,9 @@ const AnonymModal = props => {
                 color={skinColor ? skinColor: '#FFFFFF'}
                 swatchesOnly={false}
                 onColorChange={(color)=>{
-                    console.log(color);
                 }}
                 onColorChangeComplete={(color)=>{
                     setSkinColor(color)
-                    console.log(color);
                 }}
                 thumbSize={15}
                 sliderSize={15}

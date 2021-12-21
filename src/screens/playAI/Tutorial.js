@@ -50,7 +50,6 @@ const TutDesc = ({title, desc}) =>{
 }
 
 const handleNextTut = () =>{
-    console.log(tutStepIndex);
     if(tutStepIndex < tutStepDesc.length){
       setTutStepIndex(tutStepIndex+1);
       setTutStep(tutStepDesc[tutStepIndex + 1]);

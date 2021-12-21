@@ -113,7 +113,9 @@ export const MissionComplete = ({navigation}) => {
                             />
                             <View style={{marginTop: 28}}>
                                 <Ripple
-                                    onPress={() =>{}}
+                                    onPress={() =>{
+                                        navigation.goBack();
+                                    }}
                                     outerStyle={{
                                         borderRadius: 30,
                                         backgroundColor: dark_theme.COLORS.BG_GREY,

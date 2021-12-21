@@ -33,14 +33,14 @@ export const Mission = (props) => {
             flex: 1, 
             width: '100%', 
             height: '100%',
-            backgroundColor: '#121212',
+            backgroundColor: 'transparent',
             paddingTop: 80,
             }}>
                 <View style={{
                         width: '100%',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: 'transparent'
+                        backgroundColor: '#121212'
                     }}>
                     <View style={{
                         alignItems: 'center'

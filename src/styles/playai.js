@@ -4,7 +4,7 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: '25%',
+      //paddingTop: '25%',
       paddingHorizontal: 0,
       backgroundColor: theme.COLORS.BACKGROUND,
     },
@@ -74,6 +74,7 @@ export const styles = StyleSheet.create({
       flexGrow: 1,
       width: '100%',
       height: '100%',
+      paddingTop:'25%',
       paddingHorizontal: '5%',
     },
     readOnlyContainer: {
@@ -191,11 +192,27 @@ export const styles = StyleSheet.create({
       top: 0,
       left: 0,
       width: '100%',
-      height: Dimensions.get('window').height, //'100%',
+      flex: 1,
+      height: '100%',
+      //height:  Dimensions.get('window').height, //'100%',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'black',
       opacity: 0.78,
+      zIndex: 10
+    },
+    tut_overlay_completed: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      flex: 1,
+      height: '100%',
+      //height:  Dimensions.get('window').height, //'100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'black',
+      opacity: 0.4,
       zIndex: 999
     },
     tut_exit: {
@@ -205,12 +222,11 @@ export const styles = StyleSheet.create({
       top: 40,
     },
     tut_content: {
-      width: '80%',
+      width: '100%',
       height: '100%',
       flex: 1,
       justifyContent: 'center',
-      marginLeft: 0
-      
+      marginLeft: 0,
     },
     next_tut_btn: {
       position: 'absolute',
@@ -228,6 +244,28 @@ export const styles = StyleSheet.create({
       fontFamily: 'Moon-Light',
       fontSize: 12,
       lineHeight: 20,
+    },
+    tut_center: {
+      position: 'absolute',
+      flex: 1, 
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center', 
+      alignContent:'center', 
+      alignItems: 'center'
+    },
+    tut_text_big: {
+      color: '#FFF',
+      fontFamily: 'Moon-Bold',
+      fontSize: 32,
+      textAlign: 'center'
+    },
+    tut_text_big_desc: {
+      color: '#FFF',
+      fontFamily: 'Moon-Bold',
+      fontSize: 14,
+      textAlign: 'center',
+      marginVertical: 20
     }
   
   });

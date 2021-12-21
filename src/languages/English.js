@@ -368,7 +368,7 @@ export default {
     },
   },
   playAI: {
-    annotate: 'Annotate',
+    annotate: 'ANNOTATE',
     annotating: 'Annotating...',
     annotated: 'Annotated',
     cancel: 'Cancel',
@@ -379,6 +379,34 @@ export default {
     PlayAI: 'PlayAI',
     exit: 'Exit',
     playAIMission: 'PLAYAI MISSION',
+  },
+  playAITut: {
+    tutCompleted: "TUTORIAL\n COMPLETED",
+    tutCompletedDesc: 'EXIT TUTORIAL MODE BY\n CLICKING THE BUTTON BELOW',
+    tut_about_title: 'ABOUT PLAY AI',
+    tut_about_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet',
+    tut_howto_title: 'How to Play:',
+    tut_howto_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.',
+    tut_drawface_title: 'DRAW THE FACE',
+    tut_drawface_desc: 'Annotate the face by clicking on the boxes',
+    tut_press_annotate_title: 'PRESS \'ANNOTATE\'',
+    tut_press_annotate_desc: 'Press Annotate to finish',
+    tut_annotation_title: 'ANNOTATION',
+    tut_annotation_desc: 'Annotation is displayed in the coloured boxes',
+    tut_aiframe_title: 'AI FRAME',
+    tut_aiframe_desc: 'AI frame is displayed in the gradient square',
+    tut_need_editing_title: 'IMAGE NEEDS EDITING ?',
+    tut_need_editing_desc: 'If the AI framedoese not match the annotation, you can edit incoreect parts',
+    tut_edit_ai_title: 'EDIT AI',
+    tut_edit_ai_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
+    tut_edit_annotation_title: 'EDIT ANNOTATION',
+    tut_edit_annotation_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
+    tut_swipe_left_title: 'SWIPE LEFT TO REPORT',
+    tut_swipe_left_desc: 'If the image contains inappropriate content, You canallways report it to be removed.',
+    tut_swipe_right_title: 'SWIPE RIGHT TO VERIFY',
+    tut_swipe_right_desc: 'If the AI frame matches the annotation, you can verify.',
+
+
   }
   },
   

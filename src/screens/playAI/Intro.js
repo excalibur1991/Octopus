@@ -10,6 +10,7 @@ import {
 import { Avatar, Chip, Divider, ListItem } from "react-native-elements";
 import {useStateValue} from '../../services/State/State';
 import {actions} from '../../services/State/Reducer';
+import {getDataUsageFlag, setDataUsageFlag} from '../../services/DataManager';
 import { CommonStyles } from "../../services/Common/styles";
 import RoundButton from "../../components/RoundButton";
 import { NavigationContainer } from "@react-navigation/native";
@@ -56,7 +57,6 @@ const Intro = (props)=>{
                 <Avatar
                     style={{width: 80, height: 80}}
                     //size={'large'}
-                    title={'abc'}
                     source={require('../../assets/companyIcon.png')}
                 />
                 <ListItem.Content>
@@ -110,8 +110,10 @@ const Intro = (props)=>{
                     disabled={!dataUsageSettings}
                     type={dataUsageSettings ? 'primary': 'secondary'}
                     onPress={()=>{
-                        if(dataUsageSettings)
+                        if(dataUsageSettings){
+                            setDataUsageFlag();
                             onNext();
+                        }
                     }}
                 />
             </>
@@ -200,6 +202,7 @@ const Intro = (props)=>{
             flex: 1, 
             width: '100%', 
             height: '100%',
+            backgroundColor: '#121212'
             }}>
                 <View style={{
                     width: '100%',
