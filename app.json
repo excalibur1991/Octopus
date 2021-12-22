@@ -1,11 +1,20 @@
 {
   "expo": {
-    "ios": {
-      "bundleIdentifier": "com.dataunion"
-    },
+    "name": "com.dataunion",
+    "slug": "com.dataunion",
+    "scheme": "com.dataunion",
+    "version": "1.0.0",
+    "sdkVersion": "42.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "android": {
       "package": "com.dataunion"
     },
-    "scheme": "dataunion"
+    "ios": {
+      "bundleIdentifier": "com.dataunion"
+    }
   }
 }

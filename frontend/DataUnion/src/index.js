@@ -20,11 +20,11 @@ import UploadGuidelines from './screens/UploadGuidelines';
 import UploadImage from './screens/UploadImage';
 import RomanNumberUpload from './screens/RomanNumberUpload';
 import RomanNumberStats from './screens/RomanNumberStats';
-import AppWithProviders from '../../AppWithProviders'
-
+//import AppWithProviders from '../../AppWithProviders'
+import App from '../../App';
 //import Wallets from './screens/Wallets';
 //import MyWallet from '../wallet/App';
-//import myApp from '../myApp'
+//import CeloApp from '../../celoConnect/App';
 import walletEntry from '../walletEntry';
 import Staking from './screens/Staking';
 import MyStats from './screens/MyStats';
@@ -447,11 +447,11 @@ const SwipeAIStack = () => (
   </Stack.Navigator>
 );
 
-const BrowserStack = () => (
+const WConnectStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Browser"
-      component={AppWithProviders}
+      component={App}
       options={({navigation}) => {
         return Header(
           {
@@ -660,7 +660,7 @@ const BottomTabs = () => (
     />
     <Tab.Screen
       name="Browser"
-      component={BrowserStack}
+      component={WConnectStack}
       options={{
         unmountOnBlur: true,
         tabBarButton: (props) => <TabComponent label="Browser" {...props} />,
@@ -689,13 +689,15 @@ const BottomTabs = () => (
 
 const RootStack = () => (
   <Stack.Navigator>
-    <Stack.Screen
+    
+{/*     <Stack.Screen
       name="Loading"
-      component={Loading}
+      component={Loading}å
       options={{
         headerShown: false,
       }}
-    />
+    /> */}
+    
     <Stack.Screen
       name="Home"
       component={BottomTabs}

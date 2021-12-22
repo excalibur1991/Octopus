@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 25,
-    width: '70%',
+    width: '50%',
     alignSelf: 'center',
   },
   buttonText: {
@@ -55,5 +55,34 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.APP_COLOR,
     fontFamily: 'Cochin',
+  },
+  quickra: {
+    fontSize: 27,
+    fontWeight: '600',
+    lineHeight: 33,
+    color: theme.APP_COLOR,
+    fontFamily: 'Cochin',
+  },
+  boxText: {
+    marginTop: '4%',
+    width: 250,
+  },
+  parent: {
+    //flex: 1,
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: theme.APP_COLOR,
+    borderRadius: 8,
+    marginBottom: 20,
+    width: 300
+   // justifyContent: 'flex-start'
+  },
+  bigTextView: {
+    fontFamily: "Cochin",
+    fontSize: 15,
+    fontWeight: "bold",
+   // position:'relative',
+    //left:10,
+    //top:'-5%'
   },
 });

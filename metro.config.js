@@ -11,11 +11,18 @@ module.exports = {
       net: require.resolve("react-native-tcp"),
       os: require.resolve("react-native-os"),
       path: require.resolve("path-browserify"),
-      stream: require.resolve("stream-browserify"),
+      stream: require.resolve("react-native-stream"),
       vm: require.resolve("vm-browserify")
     },
+    sourceExts: ['js', 'json', 'ts', 'tsx']
   },
   transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: false,
+      },
+    }),
     assetPlugins: ['expo-asset/tools/hashAssetFiles'],
   },
 };

@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View,TextInput } from "react-native";
-import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
-import { useWalletConnect } from "./WalletConnect";
-//import Moralis from "moralis/types";
-import Button from './DataUnion/src/components/Button';
-import {styles} from './DataUnion/src/styles/wallet'
+import { HARDHAT_PORT, HARDHAT_PRIVATE_KEY } from '@env';
+import { useWalletConnect, withWalletConnect } from '@walletconnect/react-native-dapp';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import localhost from 'react-native-localhost';
+import Web3 from 'web3';
+import { Platform, LogBox } from 'react-native';
+import Hello from '../artifacts/contracts/Hello.sol/Hello.json';
+import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+import { styles } from './DataUnion/src/styles/wallet'
 import CButton from './DataUnion/src/components/CButton';
+import Button from './DataUnion/src/components/Button'
 import {   
   requestTxSig,
   waitForSignedTxs,
@@ -15,72 +19,47 @@ import {
 } from '@celo/dappkit'
 import {celoWeb3, kit} from './DataUnion/celoConfig'
 import { toTxResult } from "@celo/connect"
-import * as Linking from 'expo-linking'
-import HelloWorldContract from '../contracts/HelloWorld.json'
 import { getWalletData} from './DataUnion/src/services/DataManager';
 import * as Utils from './DataUnion/src/web3/utils'
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
+import * as Linking from 'expo-linking'
+
+
+
 
 const styles_ = StyleSheet.create({
-  center: { alignItems: "center", justifyContent: "center" },
-  white: { backgroundColor: "white" },
-  margin: { marginBottom: 20 },
-  marginLarge: { marginBottom: 35 },
+  center: { alignItems: 'center', justifyContent: 'center' },
+  // eslint-disable-next-line react-native/no-color-literals
+  white: { backgroundColor: 'white' },
 });
 
-function Web3ApiExample(): JSX.Element {
-  const { Moralis } = useMoralis();
+
+const {  scheme } = require('expo');
+
+export default withWalletConnect(App, {
+ 
+  redirectUrl: Platform.OS === 'web' ? window.location.origin : `${scheme}://`,
+  storageOptions: {
+    asyncStorage: AsyncStorage,
+  },
+})
+
+
+const shouldDeployContract = async (web3: Web3, abi: ({ inputs: any[]; stateMutability: string; type: string; name?: undefined; outputs?: undefined; } | { inputs: { internalType: string; name: string; type: string; }[]; name: string; outputs: { internalType: string; name: string; type: string; }[]; stateMutability: string; type: string; })[], data: string, from: string) => {
+  const deployment = new web3.eth.Contract(abi).deploy({ data });
+  const gas = await deployment.estimateGas();
   const {
-    account: { getTokenBalances },
-  } = useMoralisWeb3Api();
-  const { data, isFetching, error } = useMoralisWeb3ApiCall(getTokenBalances);
+    options: { address: contractAddress },
+  } = await deployment.send({ from, gas });
+  return new web3.eth.Contract(abi, contractAddress);
+};
 
-  useEffect(() => {
-    Moralis.Web3API.account.getTokenBalances({ address: "" }).then(console.log);
-  }, []);
-
-  if (isFetching) {
-    return (
-      <View style={styles_.marginLarge}>
-        <Text>Fetching token-balances...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles_.marginLarge}>
-        <Text>Error:</Text>
-        <Text>{JSON.stringify(error)}</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles_.marginLarge}>
-      <Text>Tokens</Text>
-      <Text>{JSON.stringify(data)}</Text>
-    </View>
-  );
-}
-
-function UserExample(): JSX.Element {
-  const { user } = useMoralis();
-
-  return (
-    <View style={styles_.marginLarge}>
-      <Text>UserName: {user.getUsername()}</Text>
-      <Text>Email: {user.getEmail() ?? "-"}</Text>
-      <Text>Address: {user.get("ethAddress")}</Text>
-    </View>
-  );
-}
-
-
-function App(): JSX.Element {
+export function App(): JSX.Element {
   const connector = useWalletConnect();
-  const { authenticate, authError, isAuthenticating, isAuthenticated, logout, Moralis } = useMoralis();
+
   const [ethAddress, setEthAddress] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [Address, setAddress] = useState('Not Logged In')
   const [celoAddress, setCeloAddress] = useState('Not Logged In')
   const [cUSDBalance, setUSDBalance] = useState('Not Logged In')
   const [celoBalance, setCeloBalance] = useState('Not Logged In')
@@ -89,8 +68,10 @@ function App(): JSX.Element {
   const [helloWorldContract, setHelloWorldContract] = useState(null)
   const [contractName, setContractName] = useState('')
   const [textInput,setTextInput] = useState('')
+  const [message, setMessage] = React.useState<string>('Loading...');
 
-  
+
+
   const fetchBalances = async() => {
     let celoBalance: BigNumber, celoUSDBalance: BigNumber
     let balances = {}
@@ -113,9 +94,6 @@ function App(): JSX.Element {
      setCeloAddress(celoAddress)
      setEthAddress(ethAddress)
      
-    
-
-  
      balances = {
          celoBalance: celoBalance,
          ethBal:ethBal,
@@ -127,121 +105,149 @@ function App(): JSX.Element {
      console.log({Balances:balances})
      return balances;
      
-     
-  
-    // this.setState({celoBalance: celoWeb3.utils.fromWei(celoBalance.toString())})
-     //this.setState({celoUSDBalance: celoWeb3.utils.fromWei(celoUSDBalance.toString())})
-     //this.setState({ethTokenBal: ethBal})
   }
 
-  useEffect(() => {
-    const login = async() => {
-          // Check the Celo network ID
-    const networkId = await celoWeb3.eth.net.getId();
+
+const login = async () => {
     
-    // Get the deployed HelloWorld contract info for the appropriate network ID
-    const deployedNetwork = HelloWorldContract.networks[networkId];
-
-   
-
-      // A string you can pass to DAppKit, that you can use to listen to the response for that request
-      const requestId = 'login'
-    
-      // A string that will be displayed to the user, indicating the DApp requesting access/signature
-      const dappName = 'Hello Celo'
-      
-      // The deeplink that the Celo Wallet will use to redirect the user back to the DApp with the appropriate payload.
-      //const callback = Linking.makeUrl('/my/path')
-
-      // Ask the Celo Alfajores Wallet for user info
-      requestAccountAddress({
-        requestId,
-        dappName,
-        callback: window.location.href,
-      })
+  // A string you can pass to DAppKit, that you can use to listen to the response for that request
+  const requestId = 'login'
   
-    // Wait for the Celo Wallet response
-    const dappkitResponse = await waitForAccountAuth(requestId)
-
+  // A string that will be displayed to the user, indicating the DApp requesting access/signature
+  const dappName = 'DataUnion'
   
-    
-    
-    console.log({ kit:kit})
-    // Update state
-   // this.setState({ cUSDBalance, 
-     //               isLoadingBalance: false,
-       //             address: dappkitResponse.address, 
-         //           phoneNumber: dappkitResponse.phoneNumber })
+  // The deeplink that the Celo Wallet will use to redirect the user back to the DApp with the appropriate payload.
+  const callback = Linking.makeUrl('/my/path')
 
-   // console.log({networkId:networkId, deployedNetwork:deployedNetwork})
-    }
- /**
-  *     address: 'Not logged in',
-    phoneNumber: 'Not logged in',
-    cUSDBalance: 'Not logged in',
-    helloWorldContract: {},
-    contractName: '',
-    textInput: ''
-  */
-   login();
-   fetchBalances();
-  },[])
+  // Ask the Celo Alfajores Wallet for user info
+  requestAccountAddress({
+    requestId,
+    dappName,
+    callback,
+  })
 
-  return (
-  <View style={styles.container}>          
-    <View>
-      <Text style={{ fontFamily: 'Cochin', fontSize: 15, marginBottom: 10, fontWeight: 'bold' }}> 
-        Connect to External Wallets and DApps</Text>
-    </View>
-   
-   <View>
-      {authError && (
-      <>
-        <Text>Authentication error:</Text>
-        <Text style={styles_.margin}>{authError.message}</Text>
-      </>
-      )}
-      {isAuthenticating && <Text style={styles_.margin}>Authenticating...</Text>}
-      {!isAuthenticated && (
-        // @ts-ignore
+  // Wait for the Celo Wallet response
+  const dappkitResponse = await waitForAccountAuth(requestId)
+  console.log({dappkitResponse:dappkitResponse,kitDefaultAcct:kit.defaultAccount,
+    dappkitResponseAddress:dappkitResponse.address})
 
-        <View>
-        <Button
-            color="#f2f2f2"
-            title={'WalletConnect'}
-            buttonStyle={styles.button}
-            onPress={() => authenticate({ connector })}
-            textStyle={styles.buttonText}
-          />
-        </View>
-      )}
-      {isAuthenticated && (
-        <TouchableOpacity onPress={() => logout()}>
-          <Text>Logout</Text>
-        </TouchableOpacity>
-      )}
-   </View>
-   <View>
-      {isAuthenticated && (
-        <View>
-          <UserExample />
-          <Web3ApiExample />
-        </View>
-      )}
-   </View> 
-   <View>
-     <Button
-            color="#f2f2f2"
-            title={'Connect to Valora'}
-            buttonStyle={styles.button}
-            onPress={() => { }}
-            textStyle={styles.buttonText}
-      />
-   </View>  
+  // Set the default account to the account returned from the wallet
+  kit.defaultAccount = dappkitResponse.address
 
-</View>
-  )
+  // Get the stabel token contract
+  const stableToken = await kit.contracts.getStableToken()
+
+  // Get the user account balance (cUSD)
+  const cUSDBalanceBig = await stableToken.balanceOf(kit.defaultAccount)
   
+  // Convert from a big number to a string by rounding it to the appropriate number of decimal places
+  const ERC20_DECIMALS = 18
+  let cUSDBalanceDec = cUSDBalanceBig.shiftedBy(-ERC20_DECIMALS).toFixed(2)
+  let cUSDBalance = cUSDBalanceDec.toString()
+  
+  // Update state
+  setUSDBalance(cUSDBalance)
+  setIsLoading(false)
+  setEthAddress(ethAddress)
+  setCeloAddress(dappkitResponse.address)
+  setMessage('Connected')
+  setEthBalance(ethBalance)
+  setPhoneNumber(dappkitResponse.phoneNumber)
+/*   this.setState({ cUSDBalance, 
+                  isLoadingBalance: false,
+                  address: dappkitResponse.address, 
+                  phoneNumber: dappkitResponse.phoneNumber })
+                   */
 }
 
-export default App;
+  useEffect(() => {
+
+
+   //login();
+  // fetchBalances();
+  },[])
+
+
+  const connectWallet = useCallback(async() => {
+      let result =  await connector.connect()
+      console.log({result})
+      if(result) {
+        setAddress(result.accounts[0])
+        setMessage(`Connected!`)
+        
+      }
+
+    return connector.connect();
+  }, [connector]);
+  
+  const signTransaction = useCallback(async () => {
+    try {
+       await connector.signTransaction({
+        data: '0x',
+        from: '0xbc28Ea04101F03aA7a94C1379bc3AB32E65e62d3',
+        gas: '0x9c40',
+        gasPrice: '0x02540be400',
+        nonce: '0x0114',
+        to: '0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359',
+        value: '0x00',
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [connector]);
+
+  const killSession = useCallback(() => {
+    setIsLoading(true)
+    setMessage(`Loading...`)
+    return connector.killSession();
+  }, [connector]);
+  
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={{ fontFamily: 'Cochin', fontSize: 15, marginBottom: 10, fontWeight: 'bold' }}> 
+        Connect to External Wallets and DApps</Text>   
+    </View>
+    <><Text style={styles.bigTextView}>ADDRESS</Text><View style={styles.parent}>
+          <Text numberOfLines={1} style={styles.boxText}>
+            {Address}
+          </Text>
+          <CButton text={Address} />
+        </View></>
+    
+        
+ 
+      <Text testID="tid-message">{message}</Text>
+      {!connector.connected && (
+        <View>
+          <Button
+              color="#f2f2f2"
+              title={'WalletConnect'}
+              buttonStyle={styles.button}
+              onPress={() => connectWallet()}
+              textStyle={styles.buttonText}
+            />
+        </View>
+
+      )}
+      {!!connector.connected && (
+        <>
+          <Button
+            color="#f2f2f2"
+            title={'Sign a Transaction'}
+            buttonStyle={styles.button}
+            onPress={() => signTransaction()}
+            textStyle={styles.buttonText}
+          />
+            <Button
+            color="#f2f2f2"
+            title={'Kill Session'}
+            buttonStyle={styles.button}
+            onPress={() => killSession()}
+            textStyle={styles.buttonText}
+          />
+        </>
+      )}
+    </View>
+  );
+}
