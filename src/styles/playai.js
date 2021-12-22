@@ -4,7 +4,6 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      //paddingTop: '25%',
       paddingHorizontal: 0,
       backgroundColor: theme.COLORS.BACKGROUND,
     },
@@ -168,10 +167,11 @@ export const styles = StyleSheet.create({
 
     },
     CardWrapper: {
-      height: '85%',
+      height: '70%',
       zIndex: 1000,
       justifyContent: 'space-between',
       flexDirection: 'row',
+      paddingTop:'25%',
     },
     leftbar: {
       zIndex: 0,

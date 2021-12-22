@@ -41,8 +41,6 @@ const DrawingPan = (props) => {
       editMode,
       mode,
       isAIEnabled = true,
-      tutMode = false,
-      tutImageData = null
     } = props || {};
 
   const [, dispatch] = useStateValue();
@@ -174,9 +172,11 @@ const DrawingPan = (props) => {
     }
 
     const drawCanvas = (blob)=>{
+      console.log('canvas', canvas);
       if(canvas == null) return;
       const image = new CanvasImage(canvas);
       image.src =  blob;
+      console.log(blob);
       image.addEventListener('load', () => {
         //assume current drawingpan is landcape
         const width_ratio =  frameDimension.width / image.width;
@@ -254,11 +254,7 @@ const DrawingPan = (props) => {
           onMove={(position)=>{handleOnMove(props, position)}}
           onClick={(position)=>{handleOnClick(props, position)}}
         >
-          {tutMode ? (
-          <>
-            <Image source={tutImageData} />
-          </>) 
-          : (<><Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/></>)}
+          <Canvas ref={canvasRef} style={{padding: 0, margin: 0}}/>
           
 
           {isAIEnabled && props.annoRect.filter(i=>i.isAI).map((rect, index)=>(
@@ -377,10 +373,7 @@ DrawingPan.propTypes = {
   onResizeEnd: PropTypes.func,
   onDragEnd: PropTypes.func,
   curRectIndex: PropTypes.number,
-  setCurRectIndex: PropTypes.func,
-  tutMode: PropTypes.bool,
-  tutImageData: PropTypes.any
-
+  setCurRectIndex: PropTypes.func
 };
 
 export default DrawingPan;

@@ -23,10 +23,13 @@ import {withTranslation} from 'react-i18next';
 import { theme, dark_theme } from "../../services/Common/theme";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Ripple from "../../components/Ripple";
+import AboutMission from "./AbouttMission";
+import AppBar from "../../components/AppBar";
 const Intro = (props)=>{
     const {t, navigation, onNext} = props || {};
     const [curPage, setCurPage] = useState('');
     const [tocChecked, setTocChecked] = useState(false);
+    const [isAboutMission, setIsAboutMission] = useState(false);
 
     const [{dataUsageSettings }, dispatch] = useStateValue();
 
@@ -127,7 +130,7 @@ const Intro = (props)=>{
                     title={'ABOUT MISSION'}
                     type={'secondary'}
                     icon={<Image source={require('../../assets/ico_list.png')} />}
-                    onPress={()=>{navigation.navigate('Mission')}}
+                    onPress={()=>{setIsAboutMission(true);}}
                 />
                 <RoundButton
                     title={'CLAIM MISSION'}
@@ -216,42 +219,46 @@ const Intro = (props)=>{
                         source={require('../../assets/bg_playai.png')}>
                     </ImageBackground>
                 </View>
-            <BottomSheet 
-                panelHeight={(curPage === 'toc_content') ? Dimensions.get('window').height * .9 : Dimensions.get('window').height * .6}
-            >
-            <View style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 34,
-                    justifyContent: 'center',
-                }}
-                >
-                {(curPage === '') && (
-                    <IntroSheetHeader {...props} />
-                )}
-                {(curPage === 'toc') && (
-                    <TocSheetHeader {...props} />
-                )}
-                {(curPage === 'toc_content') && (
-                    <TocSheetHeader {...props} />
-                )}
-                </View>
-                <Divider />
-                <View style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 34,
-                }}>
-                {curPage === '' && (
-                    <IntroSheetContent {...props} />
-                )}
-                {curPage === 'toc' && (
-                    <TocCheckSheetContent {...props} />
-                )}
-                {curPage === 'toc_content' && (
-                    <TocSheetContent {...props} />
-                )}
-                    
-                </View>
-            </BottomSheet>
+                {
+                    isAboutMission ? <AboutMission visible={true} onClose={()=>{setIsAboutMission(false);}} /> : (
+                        <BottomSheet 
+                            panelHeight={(curPage === 'toc_content') ? Dimensions.get('window').height * .9 : Dimensions.get('window').height * .6}
+                        >
+                            <View style={{
+                                paddingVertical: 40,
+                                paddingHorizontal: 34,
+                                justifyContent: 'center',
+                            }}
+                            >
+                            {(curPage === '') && (
+                                <IntroSheetHeader {...props} />
+                            )}
+                            {(curPage === 'toc') && (
+                                <TocSheetHeader {...props} />
+                            )}
+                            {(curPage === 'toc_content') && (
+                                <TocSheetHeader {...props} />
+                            )}
+                            </View>
+                            <Divider />
+                            <View style={{
+                                paddingVertical: 40,
+                                paddingHorizontal: 34,
+                            }}>
+                            {curPage === '' && (
+                                <IntroSheetContent {...props} />
+                            )}
+                            {curPage === 'toc' && (
+                                <TocCheckSheetContent {...props} />
+                            )}
+                            {curPage === 'toc_content' && (
+                                <TocSheetContent {...props} />
+                            )}
+                                
+                            </View>
+                        </BottomSheet>
+                    )
+                }
            
         </View>
     );

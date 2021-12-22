@@ -20,6 +20,7 @@ const RoundButton = props => {
     buttonStyle = {},
     disabled = false,
     isBottomButton = false,
+    backgroundColor = '#121212',
     height = 57,
     width = '100%',
     type= 'primary', // prmiary | secondary | light | outline
@@ -63,7 +64,7 @@ const RoundButton = props => {
               borderRadius: 30,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: '#121212'
+              backgroundColor: backgroundColor
             }}>
             <View
               style={{

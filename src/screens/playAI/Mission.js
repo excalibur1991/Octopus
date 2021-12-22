@@ -33,7 +33,7 @@ export const Mission = (props) => {
             flex: 1, 
             width: '100%', 
             height: '100%',
-            backgroundColor: 'transparent',
+            backgroundColor: '#121212',
             paddingTop: 80,
             }}>
                 <View style={{

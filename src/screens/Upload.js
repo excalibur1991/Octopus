@@ -8,6 +8,7 @@ import {actions} from '../services/State/Reducer';
 import { Appbar } from 'react-native-paper';
 import MainScreen from './playAI/MainSceen';
 import { Mission} from './playAI/Mission';
+import AppBar from '../components/AppBar';
 //later branch the Upload cases
 const Upload = (props) => {
   //set this true cause TOC first show always
@@ -21,7 +22,7 @@ const Upload = (props) => {
   }, []);
 
   return (
-      <View style={{flex:1, backgroundColor: '#ccc', height: '100%'}}>
+      <View style={{flex:1, backgroundColor: '#000', height: '100%'}}>
       {
         /*
        (dataUsageSettings == false) ? (
