@@ -72,11 +72,15 @@ export const styles = StyleSheet.create({
   },
   tag: {
     padding: 3,
+    marginRight: 5,
+    marginBottom: 5,
     borderRadius: 30,
     backgroundColor: theme.APP_COLOR_2,
   },
   tagActive: {
     borderWidth: 3,
+    marginRight: 5,
+    marginBottom: 5,
     borderRadius: 30,
     backgroundColor: theme.APP_COLOR_2,
     borderColor: theme.COLORS.SKY_BLUE,
@@ -147,6 +151,69 @@ export const styles = StyleSheet.create({
     backgroundColor: '#4E9CF9',
     borderRadius: 16,
     marginTop: 20,
+  },
+
+  clearButtonContainer: {
+    top: 5,
+    left: 5,
+    position: 'absolute',
+  },
+  saveButtonContainer: {
+    bottom: 5,
+    right: 5,
+    position: 'absolute',
+  },
+  rippleButton: {
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 0,
+    borderRadius: 30,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  rippleButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+
+  annotatingContainer: {
+    marginVertical: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cancelNextButton: {
+    flex: 0.3,
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 0,
+    borderRadius: 30,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.LIGHT_RED,
+  },
+  nextButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+  annotationProgressText: {
+    fontSize: 14,
+    textAlign: 'right',
+    fontFamily: 'Moon-Light',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
   },
 
   ageInput: {

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 
   step2_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.72 : 0.8),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.535 : 0.565),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     paddingBottom: '5%',
   },
@@ -49,24 +49,24 @@ const styles = StyleSheet.create({
   },
   step2_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '19%' : '19%',
+    marginTop: Platform.OS === 'ios' ? '19%' : '20%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2TextContainer: {
     paddingHorizontal: '10%',
-    paddingBottom: Platform.OS === 'ios' ? '10%' : '7%',
+    paddingBottom: Platform.OS === 'ios' ? '12.5%' : '12.5%',
   },
 
   step3_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.075 : 0.1),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.1 : 0.13),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step3_2: {
     flex: 1,
     paddingTop: '10%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-    marginTop: Platform.OS === 'ios' ? '83%' : '81%',
+    marginTop: Platform.OS === 'ios' ? '94%' : '92%',
   },
   step3Line: {
     top: 0,
@@ -80,121 +80,65 @@ const styles = StyleSheet.create({
   },
 
   step4_1: {
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
-  },
-  step4_1_inner: {
-    flex: 1,
-    marginTop: Platform.OS === 'ios' ? '60%' : '60%',
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.1 : 0.13),
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '45%' : '48%',
+    paddingTop: '10%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+    marginTop: Platform.OS === 'ios' ? '94%' : '92%',
+  },
+  step4Line: {
+    top: 0,
+  },
+  step4_2_inner: {
+    flex: 1,
   },
   step4TextContainer: {
     paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
+    paddingTop: Platform.OS === 'ios' ? '8.8%' : '9.5%',
   },
 
   step5_1: {
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.65 : 0.695),
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+    paddingBottom: '5%',
   },
   step5_1_inner: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '60%' : '60%',
+    justifyContent: 'flex-end',
   },
   step5_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '45%' : '48%',
+    marginTop: Platform.OS === 'ios' ? '19%' : '18.5%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step5TextContainer: {
     paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
+    paddingBottom: Platform.OS === 'ios' ? '14.5%' : '14%',
   },
 
   step6_1: {
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.65 : 0.695),
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+    paddingBottom: '5%',
   },
   step6_1_inner: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '60%' : '60%',
+    justifyContent: 'flex-end',
   },
   step6_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '45%' : '48%',
+    marginTop: Platform.OS === 'ios' ? '19%' : '18.5%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step6TextContainer: {
     paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
-  },
-
-  step7_1: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step7_1_inner: {
-    flex: 1,
-    marginTop: Platform.OS === 'ios' ? '119%' : '123%',
-  },
-  step7TextContainer: {
-    paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
-  },
-  addButtonContainer: {
-    position: 'absolute',
-    left: Platform.OS === 'ios' ? '4.4%' : '4.7%',
-    top: Platform.OS === 'ios' ? '51.2%' : '51.2%',
-  },
-  addButton: {
-    padding: 10,
-    borderRadius: 30,
-    backgroundColor: theme.APP_COLOR_2,
-  },
-
-  step8_1: {
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
-  },
-  step8_1_inner: {
-    flex: 1,
-    marginTop: Platform.OS === 'ios' ? '60%' : '60%',
-  },
-  step8_2: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-    marginTop: Platform.OS === 'ios' ? '15.3%' : '15.3%',
-  },
-  step8TextContainer: {
-    paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
-  },
-
-  step9_1: {
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
-  },
-  step9_1_inner: {
-    flex: 1,
-    marginTop: Platform.OS === 'ios' ? '60%' : '60%',
-  },
-  step9_2: {
-    flex: 1,
-    marginTop: Platform.OS === 'ios' ? '45%' : '48%',
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step9TextContainer: {
-    paddingHorizontal: '10%',
-    paddingTop: Platform.OS === 'ios' ? '9%' : '10%',
+    paddingBottom: Platform.OS === 'ios' ? '14.5%' : '14%',
   },
 
   lineTop: {
@@ -251,14 +195,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
   },
-  descriptionGreen: {
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.SUCCESS_COLOR,
-  },
-  descriptionRed: {
-    fontFamily: 'Moon-Bold',
-    color: theme.COLORS.ERROR_COLOR,
-  },
 
   completedComtainer: {
     flex: 1,
@@ -299,54 +235,30 @@ const styles = StyleSheet.create({
 
 const steps = [
   {
-    heading: 'About Verification',
+    heading: 'About Annotation',
     description:
-      'Verification helps DU ensure users upload correct kind of data and labeled them accurately. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. \n\nClick on next button to go through the steps.',
+      'Annotation missions helps DU ensure users upload correct kind of data and labeled them accurately. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet.\n\nClick on next button to go through the steps.',
   },
   {
-    heading: 'Step 1\nBounty and PII',
+    heading: 'Select a Tag',
+    description: 'Select a tag to annotate',
+  },
+  {
+    heading: 'Zoom In',
+    description: 'Zoom in with two fingers to enlarge an area of the image.',
+  },
+  {
+    heading: 'Cover the object',
     description:
-      'Select your verification mission and whether if the picture contains biometric information...etc',
+      'Zoom in and draw with one finger to cover all ‘butterfly’ objects in this image with green blocks.',
   },
   {
-    heading: 'Step 2\nSwipe the images',
-    description: (
-      <Text style={styles.description}>
-        {'Swipe image the '}
-        <Text style={styles.descriptionGreen}>green</Text>
-        {' area on the right to verify.\n\nSwipe left to the '}
-        <Text style={styles.descriptionRed}>red</Text>
-        {
-          ' area to report inappropriate/spam contents.\n\nYou can see your streak bar at the top. more verifications you do, closer you are to complete the mission !'
-        }
-      </Text>
-    ),
+    heading: 'Submit annotation ',
+    description: 'Click on the annotate button to submit your input.',
   },
   {
-    heading: 'Step 3\nTags',
-    description: 'Tags describe things in an image.',
-  },
-  {
-    heading: 'Step 4\nSpot incorrect tags',
-    description:
-      'The ‘nightlife’ tag is irrelevant in this image.\n\nHold and long press on tAG to delete it.',
-  },
-  {
-    heading: 'Step 4\nSpot incorrect tags',
-    description: 'The ‘nightlife’ tag now disappeared.',
-  },
-  {
-    heading: 'Step 5\nAdd missing tags',
-    description:
-      'Tags describe things in an image. If you see something missing, add and create your own tags by  pressing this icon.',
-  },
-  {
-    heading: '',
-    description: '',
-  },
-  {
-    heading: 'Step 5\nAdd missing tags',
-    description: 'The ‘cheeries’ tag is now added to the section.',
+    heading: 'Onto the next image',
+    description: 'Click on next to proceed to continue the mission.',
   },
 ];
 
@@ -398,7 +310,7 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
           </View>
           <View style={styles.step3TextContainer}>
             <Text style={styles.heading}>{steps[2].heading}</Text>
-            {steps[2].description}
+            <Text style={styles.description}>{steps[2].description}</Text>
           </View>
         </View>
       </View>
@@ -407,11 +319,12 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
 
   const step4 = (
     <>
-      <View style={styles.step4_1}>
-        <View style={styles.step4_1_inner}>
-          <View style={styles.divider1Bottom} />
-          <View style={styles.divider2Bottom} />
-          <View style={styles.lineBottom}>
+      <View style={styles.step4_1} />
+      <View style={styles.step4_2}>
+        <View style={styles.divider1Bottom} />
+        <View style={styles.divider2Bottom} />
+        <View style={styles.step4_2_inner}>
+          <View style={[styles.lineBottom, styles.step4Line]}>
             <View style={styles.lineBottomTip} />
           </View>
           <View style={styles.step4TextContainer}>
@@ -420,7 +333,6 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
           </View>
         </View>
       </View>
-      <View style={styles.step4_2} />
     </>
   );
 
@@ -428,16 +340,16 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
     <>
       <View style={styles.step5_1}>
         <View style={styles.step5_1_inner}>
-          <View style={styles.divider1Bottom} />
-          <View style={styles.divider2Bottom} />
-          <View style={styles.lineBottom}>
-            <View style={styles.lineBottomTip} />
+          <View style={styles.lineTop}>
+            <View style={styles.lineTopTip} />
           </View>
           <View style={styles.step5TextContainer}>
             <Text style={styles.heading}>{steps[4].heading}</Text>
             <Text style={styles.description}>{steps[4].description}</Text>
           </View>
         </View>
+        <View style={styles.divider2Top} />
+        <View style={styles.divider1Top} />
       </View>
       <View style={styles.step5_2} />
     </>
@@ -447,65 +359,18 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
     <>
       <View style={styles.step6_1}>
         <View style={styles.step6_1_inner}>
-          <View style={styles.divider1Bottom} />
-          <View style={styles.divider2Bottom} />
-          <View style={styles.lineBottom}>
-            <View style={styles.lineBottomTip} />
+          <View style={styles.lineTop}>
+            <View style={styles.lineTopTip} />
           </View>
           <View style={styles.step6TextContainer}>
             <Text style={styles.heading}>{steps[5].heading}</Text>
             <Text style={styles.description}>{steps[5].description}</Text>
           </View>
         </View>
+        <View style={styles.divider2Top} />
+        <View style={styles.divider1Top} />
       </View>
       <View style={styles.step6_2} />
-    </>
-  );
-
-  const step7 = (
-    <View style={styles.step7_1}>
-      <View style={styles.addButtonContainer}>
-        <View style={styles.addButton}>
-          <AntIcon name="plus" size={18} color={theme.COLORS.WHITE} />
-        </View>
-      </View>
-      <View style={styles.step7_1_inner}>
-        <View style={styles.divider1Bottom} />
-        <View style={styles.divider2Bottom} />
-        <View style={styles.lineBottom}>
-          <View style={styles.lineBottomTip} />
-        </View>
-        <View style={styles.step7TextContainer}>
-          <Text style={styles.heading}>{steps[6].heading}</Text>
-          <Text style={styles.description}>{steps[6].description}</Text>
-        </View>
-      </View>
-    </View>
-  );
-
-  const step8 = (
-    <>
-      <View style={styles.step8_1} />
-      <View style={styles.step8_2} />
-    </>
-  );
-
-  const step9 = (
-    <>
-      <View style={styles.step9_1}>
-        <View style={styles.step9_1_inner}>
-          <View style={styles.divider1Bottom} />
-          <View style={styles.divider2Bottom} />
-          <View style={styles.lineBottom}>
-            <View style={styles.lineBottomTip} />
-          </View>
-          <View style={styles.step9TextContainer}>
-            <Text style={styles.heading}>{steps[8].heading}</Text>
-            <Text style={styles.description}>{steps[8].description}</Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.step9_2} />
     </>
   );
 
@@ -538,12 +403,6 @@ const AnnotateImagePageWalkthrough = ({step, onExitWalkthrough}) => {
       case 5:
         return step6;
       case 6:
-        return step7;
-      case 7:
-        return step8;
-      case 8:
-        return step9;
-      case 9:
         return completed;
       default:
         return null;

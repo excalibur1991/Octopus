@@ -1,11 +1,5 @@
-import {
-  View,
-  ScrollView,
-  Pressable,
-  Text,
-  Dimensions,
-  TextInput,
-} from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {View, ScrollView, Text, Dimensions, TextInput} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {actions} from '../services/State/Reducer';
 import MultiSelect from '../components/BountyMultiselect';
@@ -28,21 +22,20 @@ import {
   rectHeight,
   drawCanvas,
   saveChange,
+  onNext,
+  onCancel,
 } from '../functions/annotation';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {styles} from '../styles/annotateimage';
 import {withTranslation} from 'react-i18next';
 import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
-import Canvas, {
-  Image as CanvasImage,
-  Path2D,
-  ImageData,
-} from 'react-native-canvas';
+import Canvas from 'react-native-canvas';
 
 const AnnotateImage = ({navigation, t}) => {
   const [, dispatch] = useStateValue();
-
+  const [annotating, setAnnotating] = useState(false);
+  const [annotatingProgress, setAnnotatingProgress] = useState(0);
   const [bounties, setBounties] = useState([]);
   const [selectedBounties, setSelectedBounties] = useState([]);
   const [bountyPlaceholder, setBountyPlaceholder] = useState('Bounties');
@@ -159,6 +152,10 @@ const AnnotateImage = ({navigation, t}) => {
     setIsInEdit,
     imageData,
     setImageData,
+    annotating,
+    setAnnotating,
+    annotatingProgress,
+    setAnnotatingProgress,
   };
 
   const handleAnnoModeSelection = (items) => {
@@ -210,18 +207,23 @@ const AnnotateImage = ({navigation, t}) => {
     setTempAnnoRect(_tempAnnoRect);
   }, [gender]);
 
+  const total = (metadata && metadata.length) || 0;
+  const completed = (curImageIndex || 0) + 1;
+
   return (
     <View style={styles.container}>
       <View style={styles.progressContainer}>
         <Progress.Bar
           height={8}
           width={150}
-          progress={0.2}
+          progress={completed / total}
           borderWidth={0}
           color={theme.COLORS.CORNFLOWER_BLUE}
           unfilledColor={theme.COLORS.MID_GRAY}
         />
-        <Text style={styles.progressText}>1 / 5 images</Text>
+        <Text style={styles.progressText}>
+          {completed} / {total} images
+        </Text>
       </View>
       <View
         onLayout={(event) => {
@@ -267,7 +269,7 @@ const AnnotateImage = ({navigation, t}) => {
             )}
             <G>
               {annoRect
-                .filter((data, index) => index != curRectIndex)
+                .filter((data, index) => index !== curRectIndex)
                 .map((data, data_index) =>
                   data.rects.map((rect, index) => (
                     <Rect
@@ -313,23 +315,22 @@ const AnnotateImage = ({navigation, t}) => {
           </Svg>
         </View>
         {isInEdit && (
-          <Button
-            mode={'contained'}
-            style={{
-              ...styles.button,
-              width: 80,
-              backgroundColor: '#4E9CF990',
-              right: 5,
-              bottom: 5,
-              position: 'absolute',
-              borderWidth: 0,
-              borderRadius: 0,
-              height: 35,
-            }}
-            uppercase={false}
-            onPress={() => saveChange(props)}>
-            Save
-          </Button>
+          <>
+            <View style={styles.saveButtonContainer}>
+              <Ripple
+                style={styles.rippleButton}
+                onPress={() => saveChange(props)}>
+                <Text style={styles.rippleButtonText}>Save</Text>
+              </Ripple>
+            </View>
+            <View style={styles.clearButtonContainer}>
+              <Ripple
+                style={styles.rippleButton}
+                onPress={() => setTempAnnoRect({rects: []})}>
+                <Text style={styles.rippleButtonText}>Clear</Text>
+              </Ripple>
+            </View>
+          </>
         )}
       </View>
       <ScrollView
@@ -359,26 +360,33 @@ const AnnotateImage = ({navigation, t}) => {
             styleInputGroup={styles.styleInputGroup}
           />
           {annotationTags.length > 0 && (
-            <View style={styles.tagWrapper}>
-              {annotationTags.map((annoTag) => (
-                <Chip
-                  key={annoTag.tag}
-                  style={curTag !== annoTag.tag ? styles.tag : styles.tagActive}
-                  title={annoTag.tag}
-                  textStyle={styles.tagText}
-                  icon={() => null}
-                  onLongPress={() => {}}
-                  onPress={() => {
-                    handlePressAnnoTag(props, annoTag);
-                  }}
-                  selected={annoTag.checked}
-                  closeIconAccessibilityLabel={'Close'}>
-                  {annoTag.tag}
-                </Chip>
-              ))}
-            </View>
+            <>
+              <View style={styles.tagWrapper}>
+                {annotationTags.map((annoTag) => (
+                  <Chip
+                    key={annoTag.tag}
+                    style={
+                      curTag !== annoTag.tag ? styles.tag : styles.tagActive
+                    }
+                    title={annoTag.tag}
+                    textStyle={styles.tagText}
+                    icon={() => null}
+                    onLongPress={() => {}}
+                    onPress={() => {
+                      handlePressAnnoTag(props, annoTag);
+                    }}
+                    selected={annoTag.checked}
+                    closeIconAccessibilityLabel={'Close'}>
+                    {annoTag.tag}
+                  </Chip>
+                ))}
+              </View>
+              <Text style={styles.tagsNote}>
+                Choose a tag to add annotations.
+              </Text>
+            </>
           )}
-          <Text style={styles.tagsNote}>Choose a tag to add annotations.</Text>
+
           {isAnonymization && (
             <View>
               <TextInput
@@ -478,11 +486,43 @@ const AnnotateImage = ({navigation, t}) => {
             </View>
           )}
 
-          <Ripple
-            onPress={() => saveAnnotation(props)}
-            style={styles.annotateButton}>
-            <Text style={styles.buttonText}>{t('Annotations.save')}</Text>
-          </Ripple>
+          {annotating || annotatingProgress > 0 ? (
+            <View style={styles.annotatingContainer}>
+              <View style={styles.row}>
+                {annotatingProgress === 1 ? (
+                  <Ripple
+                    onPress={() => onNext(props)}
+                    style={styles.cancelNextButton}>
+                    <Text style={styles.nextButtonText}>Next</Text>
+                  </Ripple>
+                ) : (
+                  <Ripple
+                    onPress={() => onCancel(props)}
+                    style={styles.cancelNextButton}>
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </Ripple>
+                )}
+                <Progress.Bar
+                  height={13}
+                  progress={annotatingProgress}
+                  borderWidth={0}
+                  borderRadius={30}
+                  color={theme.COLORS.CORNFLOWER_BLUE}
+                  width={Dimensions.get('window').width * 0.68}
+                  unfilledColor={theme.COLORS.SKY_BLUE_DARK_OPACITY_20P}
+                />
+              </View>
+              <Text style={styles.annotationProgressText}>
+                {annotating ? 'Annotating...' : 'Annotated'}
+              </Text>
+            </View>
+          ) : (
+            <Ripple
+              onPress={() => saveAnnotation(props)}
+              style={styles.annotateButton}>
+              <Text style={styles.buttonText}>{t('Annotations.save')}</Text>
+            </Ripple>
+          )}
 
           <LinearGradient
             end={{x: 1, y: 0}}

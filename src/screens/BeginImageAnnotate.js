@@ -70,14 +70,14 @@ const BeginImageAnnotate = ({navigation, route}) => {
         <View style={styles.button}>
           <Ripple
             onPress={() => {
-              // navigation.navigate('AnnotateImageWalkthrough');
-              // setTimeout(
-              //   () =>
-              //     dispatch({
-              //       type: actions.SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH,
-              //     }),
-              //   100,
-              // );
+              navigation.navigate('AnnotateImageWalkthrough');
+              setTimeout(
+                () =>
+                  dispatch({
+                    type: actions.SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH,
+                  }),
+                100,
+              );
             }}
             style={styles.buttonOuter}>
             <EntypoIcon

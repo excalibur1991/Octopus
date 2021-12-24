@@ -27,6 +27,7 @@ export const theme = {
     DARK_PURPLE: '#7C56BE',
     DARK_BLUE: '#3B6BD0',
     SKY_BLUE_DARK: '#4E9CF9',
+    SKY_BLUE_DARK_OPACITY_20P: '#4E9CF933',
     SKY_BLUE: '#5BAAFB',
     ROYAL_BLUE: '#5759E5',
     CORNFLOWER_BLUE: '#56A0FA',
@@ -34,6 +35,7 @@ export const theme = {
     DARK_PURPLE_1: '#8138D1',
     DARK_BLUE_1: '#4A4FCE',
     SILVER: '#C4C4C4',
+    HARLEQUIN_OPACITY_54P: '#24FF008A',
 
     GREY_80P: '#62646DCC',
     MID_GREY: '#62646D',

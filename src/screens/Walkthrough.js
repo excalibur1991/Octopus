@@ -18,7 +18,9 @@ const Walkthrough = ({navigation}) => {
       showUploadImagePageWalkthrough,
       showVerifyImagePageWalkthrough,
       showAnnotateImagePageWalkthrough,
+      walkthroughCurrentStep,
     },
+
     dispatch,
   ] = useStateValue();
   const [step, setStep] = useState(0);
@@ -100,23 +102,38 @@ const Walkthrough = ({navigation}) => {
 
       {/* Next Button */}
       {step < totalSteps - 1 && (
-        <View style={styles.nextContainer}>
-          <LinearGradient
-            end={{x: 1, y: 0.9}}
-            start={{x: 0.15, y: 0}}
-            colors={[theme.COLORS.LIGHT_BLUE, theme.COLORS.LIGHT_PURPLE]}
-            style={styles.nextButton}>
-            <Ripple onPress={onNext} style={styles.buttonInner}>
-              <View style={styles.buttonIconContainer}>
-                <MaterialCommunityIcon
-                  size={20}
-                  color={theme.COLORS.WHITE}
-                  name="chevron-double-right"
+        <>
+          <View style={styles.nextContainer}>
+            <LinearGradient
+              end={{x: 1, y: 0.9}}
+              start={{x: 0.15, y: 0}}
+              colors={[theme.COLORS.LIGHT_BLUE, theme.COLORS.LIGHT_PURPLE]}
+              style={styles.nextButton}>
+              <Ripple onPress={onNext} style={styles.buttonInner}>
+                <View style={styles.buttonIconContainer}>
+                  <MaterialCommunityIcon
+                    size={20}
+                    color={theme.COLORS.WHITE}
+                    name="chevron-double-right"
+                  />
+                </View>
+              </Ripple>
+            </LinearGradient>
+          </View>
+          {!showLandingPageWalkthrough && (
+            <View style={styles.dotsContainer}>
+              {Array.from(Array(totalSteps - 1).keys()).map((_, index) => (
+                <View
+                  style={
+                    index <= walkthroughCurrentStep
+                      ? styles.dotActive
+                      : styles.dot
+                  }
                 />
-              </View>
-            </Ripple>
-          </LinearGradient>
-        </View>
+              ))}
+            </View>
+          )}
+        </>
       )}
     </View>
   );
@@ -175,5 +192,28 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  dotsContainer: {
+    left: 0,
+    right: 0,
+    bottom: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    justifyContent: 'center',
+  },
+  dot: {
+    width: 13,
+    height: 13,
+    borderRadius: 30,
+    marginHorizontal: 4,
+    backgroundColor: theme.COLORS.SKY_BLUE_DARK_OPACITY_20P,
+  },
+  dotActive: {
+    width: 13,
+    height: 13,
+    borderRadius: 30,
+    marginHorizontal: 4,
+    backgroundColor: theme.COLORS.SKY_BLUE_DARK,
   },
 });

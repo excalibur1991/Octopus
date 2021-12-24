@@ -1,77 +1,238 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
 import {
   View,
-  Image,
-  StyleSheet,
-  ScrollView,
+  Text,
   Dimensions,
+  StyleSheet,
+  Image,
   Platform,
-  TextInput,
 } from 'react-native';
+import React, {useState} from 'react';
 import {useStateValue} from '../services/State/State';
 import {Chip} from 'react-native-paper';
-import SwipeCards from 'react-native-swipe-cards';
+import Svg, {Defs, Pattern, Rect, Path, G} from 'react-native-svg';
 import {theme} from '../services/Common/theme';
 import * as Progress from 'react-native-progress';
-import MultiSelectDropDown from '../components/MultiSelectDropDown';
-import AntIcon from 'react-native-vector-icons/AntDesign';
+import Ripple from '../components/Ripple';
+const annotateImage1 = require('../assets/annotate_image_1.png');
+const annotateImage2 = require('../assets/annotate_image_2.png');
+const annotationTags = ['butterfly', 'flower', 'leaf'];
 
-const AnnotateImageWalkthrough = ({navigation}) => {
-  const [{showVerifyImagePageWalkthrough, walkthroughCurrentStep}] =
+const AnnotateImage = () => {
+  const [{showAnnotateImagePageWalkthrough, walkthroughCurrentStep}] =
     useStateValue();
 
-  const tagsWithIrrelevantTag = [
-    'Avocado',
-    'Fruit',
-    'Cereal',
-    'Honey',
-    'Nightlife',
-    'Breakfast',
-    'Berry',
-    'Spoon',
-  ];
+  const butterflyRects = Platform.select({
+    android: [
+      {x: 0, y: 90, width: 30, height: 30},
+      {x: 0, y: 120, width: 30, height: 30},
+      {x: 0, y: 150, width: 30, height: 30},
 
-  const tagsWithRrelevantTag = [
-    'Avocado',
-    'Fruit',
-    'Cereal',
-    'Honey',
-    'Breakfast',
-    'Berry',
-    'Spoon',
-  ];
+      {x: 30, y: 90, width: 30, height: 30},
+      {x: 30, y: 120, width: 30, height: 30},
+      {x: 30, y: 150, width: 30, height: 30},
 
-  const tagsWithNewTag = [
-    'Avocado',
-    'Fruit',
-    'Cereal',
-    'Honey',
-    'Breakfast',
-    'Berry',
-    'Spoon',
-    'Cherries',
-  ];
+      {x: 60, y: 90, width: 30, height: 30},
+      {x: 60, y: 120, width: 30, height: 30},
+      {x: 60, y: 150, width: 30, height: 30},
+      {x: 60, y: 180, width: 30, height: 30},
+      {x: 60, y: 210, width: 30, height: 30},
 
-  const highlightIrrelevantTag =
-    showVerifyImagePageWalkthrough &&
+      {x: 90, y: 90, width: 30, height: 30},
+      {x: 90, y: 120, width: 30, height: 30},
+      {x: 90, y: 150, width: 30, height: 30},
+      {x: 90, y: 180, width: 30, height: 30},
+      {x: 90, y: 210, width: 30, height: 30},
+
+      {x: 120, y: 90, width: 30, height: 30},
+      {x: 120, y: 120, width: 30, height: 30},
+      {x: 120, y: 150, width: 30, height: 30},
+      {x: 120, y: 180, width: 30, height: 30},
+      {x: 120, y: 210, width: 30, height: 30},
+
+      {x: 150, y: 120, width: 30, height: 30},
+      {x: 150, y: 150, width: 30, height: 30},
+      {x: 150, y: 180, width: 30, height: 30},
+      {x: 150, y: 210, width: 30, height: 30},
+
+      {x: 180, y: 90, width: 30, height: 30},
+      {x: 180, y: 120, width: 30, height: 30},
+      {x: 180, y: 150, width: 30, height: 30},
+      {x: 180, y: 180, width: 30, height: 30},
+      {x: 180, y: 210, width: 30, height: 30},
+
+      {x: 210, y: 90, width: 30, height: 30},
+      {x: 210, y: 120, width: 30, height: 30},
+      {x: 210, y: 150, width: 30, height: 30},
+      {x: 210, y: 180, width: 30, height: 30},
+      {x: 210, y: 210, width: 30, height: 30},
+
+      {x: 240, y: 90, width: 30, height: 30},
+      {x: 240, y: 120, width: 30, height: 30},
+      {x: 240, y: 150, width: 30, height: 30},
+      {x: 240, y: 180, width: 30, height: 30},
+      {x: 240, y: 210, width: 30, height: 30},
+
+      {x: 270, y: 90, width: 30, height: 30},
+      {x: 270, y: 120, width: 30, height: 30},
+      {x: 270, y: 150, width: 30, height: 30},
+      {x: 270, y: 180, width: 30, height: 30},
+
+      {x: 300, y: 90, width: 30, height: 30},
+      {x: 300, y: 120, width: 30, height: 30},
+      {x: 300, y: 150, width: 30, height: 30},
+
+      {x: 330, y: 90, width: 30, height: 30},
+      {x: 330, y: 120, width: 30, height: 30},
+      {x: 330, y: 150, width: 30, height: 30},
+    ],
+    ios: [
+      {x: 0, y: 90, width: 30, height: 30},
+      {x: 0, y: 120, width: 30, height: 30},
+      {x: 0, y: 150, width: 30, height: 30},
+
+      {x: 30, y: 90, width: 30, height: 30},
+      {x: 30, y: 120, width: 30, height: 30},
+      {x: 30, y: 150, width: 30, height: 30},
+
+      {x: 60, y: 90, width: 30, height: 30},
+      {x: 60, y: 120, width: 30, height: 30},
+      {x: 60, y: 150, width: 30, height: 30},
+      {x: 60, y: 180, width: 30, height: 30},
+      {x: 60, y: 210, width: 30, height: 30},
+
+      {x: 90, y: 90, width: 30, height: 30},
+      {x: 90, y: 120, width: 30, height: 30},
+      {x: 90, y: 150, width: 30, height: 30},
+      {x: 90, y: 180, width: 30, height: 30},
+      {x: 90, y: 210, width: 30, height: 30},
+
+      {x: 120, y: 120, width: 30, height: 30},
+      {x: 120, y: 150, width: 30, height: 30},
+      {x: 120, y: 180, width: 30, height: 30},
+      {x: 120, y: 210, width: 30, height: 30},
+      {x: 120, y: 240, width: 30, height: 30},
+
+      {x: 150, y: 120, width: 30, height: 30},
+      {x: 150, y: 150, width: 30, height: 30},
+      {x: 150, y: 180, width: 30, height: 30},
+      {x: 150, y: 210, width: 30, height: 30},
+      {x: 150, y: 240, width: 30, height: 30},
+
+      {x: 180, y: 120, width: 30, height: 30},
+      {x: 180, y: 150, width: 30, height: 30},
+      {x: 180, y: 180, width: 30, height: 30},
+      {x: 180, y: 210, width: 30, height: 30},
+      {x: 180, y: 240, width: 30, height: 30},
+
+      {x: 210, y: 90, width: 30, height: 30},
+      {x: 210, y: 120, width: 30, height: 30},
+      {x: 210, y: 150, width: 30, height: 30},
+      {x: 210, y: 180, width: 30, height: 30},
+      {x: 210, y: 210, width: 30, height: 30},
+      {x: 210, y: 240, width: 30, height: 30},
+
+      {x: 240, y: 90, width: 30, height: 30},
+      {x: 240, y: 120, width: 30, height: 30},
+      {x: 240, y: 150, width: 30, height: 30},
+      {x: 240, y: 180, width: 30, height: 30},
+      {x: 240, y: 210, width: 30, height: 30},
+      {x: 240, y: 240, width: 30, height: 30},
+
+      {x: 270, y: 90, width: 30, height: 30},
+      {x: 270, y: 120, width: 30, height: 30},
+      {x: 270, y: 150, width: 30, height: 30},
+      {x: 270, y: 180, width: 30, height: 30},
+      {x: 270, y: 210, width: 30, height: 30},
+
+      {x: 300, y: 90, width: 30, height: 30},
+      {x: 300, y: 120, width: 30, height: 30},
+      {x: 300, y: 150, width: 30, height: 30},
+      {x: 300, y: 180, width: 30, height: 30},
+      {x: 300, y: 210, width: 30, height: 30},
+
+      {x: 330, y: 90, width: 30, height: 30},
+      {x: 330, y: 120, width: 30, height: 30},
+      {x: 330, y: 150, width: 30, height: 30},
+    ],
+  });
+
+  const butterfliesRects = Platform.select({
+    android: [
+      {x: 120, y: 90, width: 30, height: 30},
+      {x: 150, y: 90, width: 30, height: 30},
+      {x: 180, y: 90, width: 30, height: 30},
+      {x: 120, y: 120, width: 30, height: 30},
+      {x: 150, y: 120, width: 30, height: 30},
+      {x: 180, y: 120, width: 30, height: 30},
+
+      {x: 210, y: 120, width: 30, height: 30},
+      {x: 240, y: 120, width: 30, height: 30},
+      {x: 150, y: 150, width: 30, height: 30},
+      {x: 180, y: 150, width: 30, height: 30},
+      {x: 210, y: 150, width: 30, height: 30},
+      {x: 240, y: 150, width: 30, height: 30},
+
+      {x: 90, y: 210, width: 30, height: 30},
+      {x: 120, y: 210, width: 30, height: 30},
+      {x: 150, y: 210, width: 30, height: 30},
+      {x: 180, y: 210, width: 30, height: 30},
+
+      {x: 120, y: 240, width: 30, height: 30},
+      {x: 150, y: 240, width: 30, height: 30},
+      {x: 180, y: 240, width: 30, height: 30},
+    ],
+    ios: [
+      {x: 180, y: 100, width: 30, height: 20},
+      {x: 130, y: 120, width: 20, height: 30},
+      {x: 150, y: 120, width: 30, height: 30},
+      {x: 180, y: 120, width: 30, height: 30},
+
+      {x: 180, y: 150, width: 30, height: 30},
+      {x: 180, y: 180, width: 30, height: 30},
+      {x: 210, y: 150, width: 30, height: 30},
+      {x: 210, y: 180, width: 30, height: 30},
+      {x: 240, y: 150, width: 30, height: 30},
+      {x: 240, y: 180, width: 30, height: 30},
+      {x: 270, y: 150, width: 30, height: 30},
+
+      {x: 120, y: 240, width: 30, height: 30},
+      {x: 120, y: 270, width: 30, height: 10},
+      {x: 150, y: 240, width: 30, height: 30},
+      {x: 150, y: 270, width: 30, height: 20},
+      {x: 180, y: 240, width: 30, height: 30},
+      {x: 180, y: 270, width: 30, height: 20},
+      {x: 210, y: 230, width: 20, height: 40},
+    ],
+  });
+
+  const annotationImage =
+    showAnnotateImagePageWalkthrough &&
     walkthroughCurrentStep &&
-    walkthroughCurrentStep === 4;
+    walkthroughCurrentStep === 3
+      ? annotateImage2
+      : annotateImage1;
 
-  const showTagInput =
-    showVerifyImagePageWalkthrough &&
-    walkthroughCurrentStep &&
-    walkthroughCurrentStep === 7;
+  const showClearButton =
+    (showAnnotateImagePageWalkthrough &&
+      walkthroughCurrentStep &&
+      (walkthroughCurrentStep === 3 || walkthroughCurrentStep === 4)) ||
+    false;
 
-  const tags =
-    ((showVerifyImagePageWalkthrough &&
-    (walkthroughCurrentStep || walkthroughCurrentStep === 0) &&
-    walkthroughCurrentStep === 8
-      ? tagsWithNewTag
-      : walkthroughCurrentStep > 4
-      ? tagsWithRrelevantTag
-      : tagsWithIrrelevantTag): []) || tagsWithIrrelevantTag;
+  const showAnnotating =
+    (showAnnotateImagePageWalkthrough &&
+      walkthroughCurrentStep &&
+      walkthroughCurrentStep > 4) ||
+    false;
 
-  const IRRELEVANT_TAG_INDEX = 4;
+  const annoRect =
+    showAnnotateImagePageWalkthrough && walkthroughCurrentStep
+      ? walkthroughCurrentStep === 3
+        ? butterflyRects
+        : walkthroughCurrentStep > 3
+        ? butterfliesRects
+        : []
+      : [];
 
   return (
     <View style={styles.container}>
@@ -81,103 +242,111 @@ const AnnotateImageWalkthrough = ({navigation}) => {
           width={150}
           progress={0.2}
           borderWidth={0}
-          color={theme.COLORS.DARK_BLUE}
-          unfilledColor={theme.COLORS.MID_GREY}
+          color={theme.COLORS.CORNFLOWER_BLUE}
+          unfilledColor={theme.COLORS.MID_GRAY}
         />
+        <Text style={styles.progressText}>1 / 5 images</Text>
       </View>
-      <View style={styles.swipeContainer}>
+      <View style={styles.imageContainer}>
         <Image
           resizeMode="stretch"
-          style={styles.leftBar}
-          source={require('../assets/left.png')}
+          style={styles.image}
+          source={annotationImage}
         />
-        <SwipeCards
-          cards={['.']}
-          renderCard={() => (
-            <View style={styles.swipeCard}>
-              <Image
-                resizeMode="stretch"
-                style={styles.swipeCardthumbnail}
-                source={require('../assets/verify_walkthrough.png')}
-              />
-            </View>
-          )}
-        />
-        <Image
-          resizeMode="stretch"
-          style={styles.rightBar}
-          source={require('../assets/right.png')}
-        />
-      </View>
-      <View style={styles.divider} />
-      <ScrollView
-        style={styles.scrollContainer}
-        contentContainerStyle={styles.scrollContentContainer}
-        showsVerticalScrollIndicator={false}>
-        {showTagInput ? (
-          <TextInput value={'CHERRIES'} style={styles.tagInput} />
-        ) : (
-          <View style={styles.tagsContainer}>
-            <View style={styles.addButtonContainer}>
-              <View style={styles.addButton}>
-                <AntIcon name="plus" size={18} color={theme.COLORS.WHITE} />
-              </View>
-            </View>
-            {tags &&
-              tags.length > 0 &&
-              tags.map((tag, index) => (
-                <Chip
-                  title={tag}
-                  textStyle={styles.tagText}
-                  style={[
-                    styles.tag,
-                    {
-                      backgroundColor:
-                        highlightIrrelevantTag && index === IRRELEVANT_TAG_INDEX
-                          ? theme.COLORS.LIGHT_RED_OPACITY_71P
-                          : theme.APP_COLOR_2,
-                    },
-                  ]}>
-                  {tag}
-                </Chip>
+        <View style={styles.imageOverlay} pointerEvents={'none'}>
+          <Svg
+            width={'100%'}
+            height={Dimensions.get('window').height * 0.4}
+            style={styles.svgRect}>
+            <G>
+              <Defs>
+                <Pattern
+                  id="grid"
+                  width={30}
+                  height={30}
+                  patternUnits="userSpaceOnUse">
+                  <Path
+                    d="M 30 0 L 0 0 0 30"
+                    fill="none"
+                    stroke="gray"
+                    stroke-width="1"
+                  />
+                </Pattern>
+              </Defs>
+              <Rect width="100%" height="100%" fill="url(#grid)" />
+            </G>
+            <G>
+              {annoRect.map((rect, index) => (
+                <Rect
+                  key={'annoRect' + index}
+                  x={(rect.x - 0) * 1.0}
+                  y={(rect.y - 0) * 1.0}
+                  width={rect.width * 1.0}
+                  height={rect.height * 1.0}
+                  fill={theme.COLORS.HARLEQUIN_OPACITY_54P}
+                  stroke="none"
+                  strokeWidth="0"
+                />
               ))}
+            </G>
+          </Svg>
+        </View>
+        {showClearButton && (
+          <View style={styles.clearButtonContainer}>
+            <Ripple style={styles.rippleButton}>
+              <Text style={styles.rippleButtonText}>Clear</Text>
+            </Ripple>
           </View>
         )}
-      </ScrollView>
-      <View style={styles.divider} />
-      <View style={styles.actionsContainer}>
-        <View style={styles.dropDownContainer}>
-          <View style={styles.dropDownBounty}>
-            <MultiSelectDropDown
-              options={[]}
-              placeholder="CHOOSE BOUNTIES"
-              textColor={theme.COLORS.WHITE}
-              selectedIndices={[]}
-              onSelect={() => {}}
-              color={theme.COLORS.DARK_BLUE}
-            />
-          </View>
-          <View style={styles.dropDownPii}>
-            <MultiSelectDropDown
-              options={[]}
-              placeholder="PII"
-              textColor={theme.COLORS.WHITE}
-              selectedIndices={[]}
-              onSelect={() => {}}
-              color={theme.COLORS.DARK_BLUE}
-            />
-          </View>
+      </View>
+
+      <View style={styles.scrollContainer}>
+        <View style={styles.tagWrapper}>
+          {annotationTags.map((annoTag, index) => (
+            <Chip
+              key={annoTag}
+              style={index === 0 ? styles.tagActive : styles.tag}
+              textStyle={styles.tagText}>
+              {annoTag}
+            </Chip>
+          ))}
         </View>
+        <Text style={styles.tagsNote}>Choose a tag to add annotations.</Text>
+
+        {!showAnnotating ? (
+          <Ripple style={styles.annotateButton}>
+            <Text style={styles.buttonText}>Annotate</Text>
+          </Ripple>
+        ) : (
+          <View style={styles.annotatingContainer}>
+            <View style={styles.row}>
+              <Ripple style={styles.cancelNextButton}>
+                <Text style={styles.nextButtonText}>Next</Text>
+              </Ripple>
+              <Progress.Bar
+                height={13}
+                progress={1}
+                borderWidth={0}
+                borderRadius={30}
+                color={theme.COLORS.CORNFLOWER_BLUE}
+                width={Dimensions.get('window').width * 0.68}
+                unfilledColor={theme.COLORS.SKY_BLUE_DARK_OPACITY_20P}
+              />
+            </View>
+            <Text style={styles.annotationProgressText}>Annotated</Text>
+          </View>
+        )}
       </View>
     </View>
   );
 };
 
-export default AnnotateImageWalkthrough;
+export default AnnotateImage;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 17,
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   progressContainer: {
@@ -185,99 +354,138 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  swipeContainer: {
-    marginVertical: 15,
-    height: Dimensions.get('window').height * 0.35,
+  progressText: {
+    fontSize: 12,
+    marginTop: 5,
+    lineHeight: 14,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
-  divider: {
-    height: 2,
-    marginVertical: 1,
-    backgroundColor: theme.APP_COLOR_2,
+  imageContainer: {
+    marginTop: 20,
   },
-  leftBar: {
+  image: {
+    width: '100%',
+    height: Dimensions.get('window').height * 0.4,
+  },
+  imageOverlay: {
     top: 0,
     left: 0,
-    bottom: 0,
-    height: '100%',
-    position: 'absolute',
-  },
-  rightBar: {
-    top: 0,
     right: 0,
     bottom: 0,
-    height: '100%',
     position: 'absolute',
   },
-  swipeCard: {
-    borderRadius: 40,
-    overflow: 'hidden',
-    width: Dimensions.get('window').width * 0.8,
-    height: Dimensions.get('window').height * 0.35,
-    elevation: 1,
-  },
-  swipeCardthumbnail: {
-    width: Dimensions.get('window').width * 0.8,
-    height: Dimensions.get('window').height * 0.35,
+  svgRect: {
+    left: 0,
+    right: 0,
+    position: 'absolute',
   },
   scrollContainer: {
-    paddingHorizontal: 10,
+    marginTop: 20,
   },
-  scrollContentContainer: {
-    paddingBottom: 10,
-  },
-  tagInput: {
-    height: 40,
-    width: '30%',
-    marginTop: 10,
-    color: 'white',
-    borderRadius: 50,
-    alignSelf: 'center',
-    textAlign: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: '#25262B',
-  },
-  tagsContainer: {
-    marginTop: 10,
+  tagWrapper: {
+    borderWidth: 1,
+    borderRadius: 8,
     flexWrap: 'wrap',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  actionsContainer: {
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    flexDirection: 'row',
+    paddingHorizontal: 14,
+    justifyContent: 'flex-start',
+    borderColor: theme.COLORS.FIORD_1,
   },
-  dropDownContainer: {
+  tag: {
+    padding: 3,
+    marginRight: 5,
+    borderRadius: 30,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  tagActive: {
+    borderWidth: 3,
+    marginRight: 5,
+    borderRadius: 30,
+    backgroundColor: theme.APP_COLOR_2,
+    borderColor: theme.COLORS.SKY_BLUE,
+  },
+  tagText: {
+    fontSize: 14,
+    color: theme.COLORS.WHITE,
+  },
+  tagsNote: {
+    marginTop: 5,
+    fontSize: 12,
+    marginLeft: 2,
+    lineHeight: 14,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+
+  annotateButton: {
+    margin: 3,
+    marginVertical: 20,
+    borderRadius: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: '5%',
+    paddingHorizontal: '1%',
+    justifyContent: 'center',
+    backgroundColor: theme.COLORS.SKY_BLUE_DARK,
+  },
+  buttonText: {
+    fontSize: 18,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+  clearButtonContainer: {
+    top: 5,
+    left: 5,
+    position: 'absolute',
+  },
+  rippleButton: {
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 0,
+    borderRadius: 30,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  rippleButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+
+  annotatingContainer: {
+    marginVertical: 20,
+  },
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  dropDownBounty: {
-    width: '70%',
-  },
-  dropDownPii: {
-    width: '25%',
-  },
-  addButtonContainer: {
-    left: Platform.OS === 'ios' ? '4.4%' : '4.7%',
-  },
-  addButton: {
+  cancelNextButton: {
     padding: 10,
-    marginRight: 10,
+    minWidth: 70,
+    borderWidth: 0,
     borderRadius: 30,
     backgroundColor: theme.APP_COLOR_2,
   },
-  tag: {
-    marginHorizontal: 5,
-    marginVertical: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    borderRadius: 30,
+  nextButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
   },
-  tagText: {
-    fontSize: 15,
-    color: '#ffffff',
+  annotationProgressText: {
+    fontSize: 14,
+    textAlign: 'right',
     fontFamily: 'Moon-Light',
     textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
   },
 });
