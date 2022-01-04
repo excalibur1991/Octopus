@@ -69,6 +69,8 @@ const PlayAITutorial = (props) => {
     const [tutImageData, setTutImageData] = useState(require('../../assets/tut/tut_image_playai.png'));
     const [isCompleted, setIsCompleted] = useState(false);
 
+    const [cropRect, setCropRect] = useState({x: 0, y: 0, width: 0, height: 0, pageX:0, pageY:0});
+
     const { navigation, t } = props || {};
     const { onExitTutorial } = navigation.params || {};
 
@@ -247,15 +249,26 @@ const PlayAITutorial = (props) => {
 
     const TutDrawingPan = (props) => {
         const {
-            aiOverlay= false,
             tutImageSource = null,
             rectWidth = 30,
             rectHeight = 30,
             annoRect = [],
             cropPosition = { x: 0, y: 0 },
-            rectScale = 1.0
+            rectScale = 1.0,
+            cropRect = {},
+            getCropRect = ()=>{}
 
         } = props || {};
+
+        const rectRef = createRef();
+        useEffect(()=>{
+            if (rectRef && !cropRect.pageX  && !cropRect.pageY) {
+                rectRef.current.measure((x, y, width, height, pageX, pageY) => {
+                          getCropRect({x, y, width, height, pageX, pageY});
+                 });
+              }
+        }, [rectRef]);
+
         return (
             <View style={{
                 backgroundColor: '#ffffff',
@@ -264,7 +277,10 @@ const PlayAITutorial = (props) => {
                 borderWidth: 1,
                 width: '100%',
                 height: Dimensions.get('screen').height * 0.5
-            }}>
+            }}
+            ref={rectRef}
+           
+            >
                 <Image
                     source={tutImageSource}
                     style={{
@@ -356,9 +372,10 @@ const PlayAITutorial = (props) => {
         const {
             rotateLeft = false,
             rotateRight = false,
-            aiOverlay= false,
             annoRect = [],
-            tutImageSource = ''
+            tutImageSource = '',
+            cropRect = {},
+            getCropRect = ()=>{}
         } = props || {};
         return (
             <View style={{
@@ -377,11 +394,12 @@ const PlayAITutorial = (props) => {
                     }}
                 />
                 <View style={
-                rotateLeft ? {transform: [{translateY: -20},{rotate: '-15deg'}], width: '80%'} : rotateRight? {transform: [{translateX: 20},{rotate:'15deg'}], width: '80%'} : {width: '80%', zIndex: 1000}}>
+                rotateLeft ? {transform: [{translateY: -20},{rotate: '-10deg'}], width: '80%'} : rotateRight? {transform: [{translateX: 20},{rotate:'10deg'}], width: '80%'} : {width: '80%', zIndex: 1000}}>
                     <TutDrawingPan
-                        aiOverlay={aiOverlay}
                         annoRect={annoRect}
                         tutImageSource={tutImageSource}
+                        cropRect={cropRect}
+                        getCropRect={getCropRect}
                     />
                 </View>
                 <Image
@@ -574,7 +592,7 @@ const PlayAITutorial = (props) => {
             }}>
                 <Chip
                     style={{
-                        backgroundColor: '#3A506B',
+                        backgroundColor: '#25262B',
                         paddingHorizontal: 15,
                         paddingVertical: 10,
                         borderRadius: 25,
@@ -598,7 +616,7 @@ const PlayAITutorial = (props) => {
                 >{t('playAI.editAI')}</Chip>
                 <Chip
                     style={{
-                        backgroundColor: '#3A506B',
+                        backgroundColor: '#25262B',
                         paddingHorizontal: 15,
                         paddingVertical: 10,
                         borderRadius: 25,
@@ -677,7 +695,7 @@ const PlayAITutorial = (props) => {
     }
     const PlayAIView = (props) => {
         return (
-            <>
+            <View style={{width: '100%', height: '100%'}}> 
                 {(tutStep === 'tut_description' ||
                     tutStep === 'tut_drawface') && (
                         <View style={styles.uploadScrollContainer}>
@@ -722,67 +740,123 @@ const PlayAITutorial = (props) => {
                     )
                 }
                 {
-                    (tutStep === 'tut_annotation') && (
-                        <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
+                    (tutStep === 'tut_annotation') && [
                         <View style={{ paddingTop: '25%'}}>
                             <TutSwipeCard
-                                aiOverlay={true}
                                 annoRect={annoRectData}
+                                cropRect={cropRect}
+                                getCropRect={(rect)=>{ setCropRect(rect);}}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
-                        </View>
-                        <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
-                            <EditAIorAnnotate
-                                highlight={true}
-                            />
+                        </View>,
+                        <View style={{paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
+                        <EditAIorAnnotate />
                             <ExitButton />
-                        </View>
-                    </View>
-                    )
+                        </View>,
+                        (cropRect.pageX != 0 && cropRect.pageY != 0 )&& (
+                            <Svg
+                            width={cropRect.width}
+                            height={cropRect.height}
+
+                            style={{
+                                zIndex: 1000,
+                                position: 'absolute',
+                                left: cropRect.pageX,
+                                top: cropRect.pageY,
+                            }}
+                        >
+                            <G>
+                                {
+                                    annoRectData.filter(i => !i.isAI).map((rect, index) => (
+                                        <Rect
+                                            key={'annoRect' + index}
+                                            x={(rect.x) + 2}
+                                            y={(rect.y) + 2}
+                                            width={rect.width - 4}
+                                            height={rect.height - 4}
+                                            fill="#95615280"
+                                            stroke="none"
+                                            strokeWidth="0"
+                                        />
+                                    ))
+                                }
+                            </G>
+                        </Svg>
+                        )
+                        
+                    ]
                 }
-                {(tutStep === 'tut_aiframe') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
+                {(tutStep === 'tut_aiframe') && [
                         <View style={{ paddingTop: '25%'}}>
                             <TutSwipeCard
-                                aiOverlay={true}
                                 annoRect={annoRectData}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
-                        </View>
+                        </View>,
+                        <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
+                            <EditAIorAnnotate />
+                            <ExitButton />
+                        </View>,
+                        (cropRect.pageX != 0 && cropRect.pageY != 0 )&& (
+                        <View style={{
+                            zIndex: 1000,
+                            position: 'absolute',
+                            left: cropRect.pageX,
+                            top: cropRect.pageY,
+                            width: cropRect.width,
+                            height: cropRect.height
+                        }}>
+                        {annoRectData.filter(i=>i.isAI).map((rect, index)=>(
+                            <DragResizeBlock
+                                key={'annoRect' + index}
+                                index={index}
+                                x={rect.x}
+                                y={rect.y}
+                                w={rect.width}
+                                h={rect.height}
+                                >
+                            <View
+                                style={{
+                                width: '100%',
+                                height: '100%',
+                                }}
+                            />
+                            {rect.isAI &&
+                                <Text style={{
+                                    position: 'absolute',
+                                    color: '#72B5CB',
+                                    fontSize: 18,
+                                    fontWeight: '700',
+                                    right: -25,
+                                    bottom: -10,
+                                }}>AI</Text>
+                            }
+                            
+                            </DragResizeBlock>
+                            ))}
+                        </View>)
+                ]}
+                {(tutStep === 'tut_need_editing') && [
+                        <View style={{ paddingTop: '25%'}}>
+                            <TutSwipeCard
+                                annoRect={annoRectData}
+                                tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
+                            />
+                        </View>,
                         <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
                             <EditAIorAnnotate
                                 highlight={true}
                             />
                             <ExitButton />
                         </View>
-                    </View>
-                )}
-                {(tutStep === 'tut_need_editing') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
+                ]}
+                {(tutStep === 'tut_edit_ai') && [
                         <View style={{ paddingTop: '25%'}}>
                             <TutSwipeCard
-                                aiOverlay={true}
                                 annoRect={annoRectData}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
-                        </View>
-                        <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
-                            <EditAIorAnnotate
-                                highlight={true}
-                            />
-                            <ExitButton />
-                        </View>
-                    </View>
-                )}
-                {(tutStep === 'tut_edit_ai') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
-                        <View style={{ paddingTop: '25%'}}>
-                            <TutSwipeCard
-                                aiOverlay={true}
-                                annoRect={annoRectData}
-                                tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
-                            />
-                        </View>
+                        </View>,
                         <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
                             <EditAIorAnnotate
                                 highlight={true}
@@ -790,17 +864,14 @@ const PlayAITutorial = (props) => {
                             />
                             <ExitButton />
                         </View>
-                    </View>
-                )}
-                {(tutStep === 'tut_edit_annotation') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
+                ]}
+                {(tutStep === 'tut_edit_annotation') && [
                         <View style={{ paddingTop: '25%'}}>
                             <TutSwipeCard
-                                aiOverlay={true}
                                 annoRect={annoRectData}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
-                        </View>
+                        </View>,
                         <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%'}} >
                             <EditAIorAnnotate
                                 highlight={true}
@@ -808,41 +879,34 @@ const PlayAITutorial = (props) => {
                             />
                             <ExitButton />
                         </View>
+                ]}
+                {(tutStep === 'tut_swipe_left') && [
+                    <View style={{ paddingTop: '25%', zIndex: 20}} pointerEvents='none'>
+                        <TutSwipeCard
+                            rotateLeft={true}
+                            annoRect={annoRectData}
+                            tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
+                        />
+                    </View>,
+                    <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%' }} >
+                        <EditAIorAnnotate />
+                        <ExitButton />
                     </View>
-                )}
-                {(tutStep === 'tut_swipe_left') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
-                        <View style={{ paddingTop: '25%'}}>
-                            <TutSwipeCard
-                                rotateLeft={true}
-                                aiOverlay={true}
-                                annoRect={annoRectData}
-                                tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
-                            />
-                        </View>
-                        <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%' }} >
-                            <EditAIorAnnotate />
-                            <ExitButton />
-                        </View>
-                   </View>
-                )}
-                {(tutStep === 'tut_swipe_right') && (
-                    <View style={{ height: '100%', flex: 1 }} pointerEvents='none'>
-                        <View style={{ paddingTop: '25%'}}>
+                ]}
+                {(tutStep === 'tut_swipe_right') && [
+                        <View style={{ paddingTop: '25%', zIndex: isCompleted? 0: 20}} pointerEvents='none'>
                             <TutSwipeCard
                                 rotateRight={true}
-                                aiOverlay={true}
                                 annoRect={annoRectData}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
-                        </View>
+                        </View>,
                         <View style={{ paddingHorizontal: '5%', alignItems: 'center', flex: 1, marginVertical: '10%' }} >
                             <EditAIorAnnotate />
                             <ExitButton />
                         </View>
-                   </View>
-                )}
-            </>
+                ]}
+            </View>
         );
     }
 
@@ -877,6 +941,7 @@ const PlayAITutorial = (props) => {
     return (
         <>
             <View style={styles.container}>
+                
                 <PlayAIView />
                 <TutorialView />
                 {isCompleted && (

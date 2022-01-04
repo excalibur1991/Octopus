@@ -78,15 +78,15 @@ const AboutMission = (props) => {
                             showPageIndicator={true}
                             >
                             <View key="1" style={styles.pageview}>
-                                <Text style={styles.heading}>Title1</Text>
+                                <Text style={styles.heading}>TITLE</Text>
                                 <Text style={styles.desc}>LOREM IPSUM COLOR AMET CONSECTETUR ADIFICInG ELIT AENEANET TELLUS JUSTO SED NEC SODALES EST NUNC VENENATIS TELLUS AT LEO POSUERE VITAE INTERDuM MI CONSEQUAT PELLENTESQUE NECLACUS</Text>
-                                <Text style={styles.heading}>REWAORDS</Text>
+                                <Text style={styles.heading}>REWARRDS</Text>
                                 <Text style={styles.desc}>LOREM IPSUM COLOR AMET CONSECTETUR ADIFICInG ELIT AENEANET TELLUS JUSTO SED NEC SODALES EST NUNC VENENATIS TELLUS AT LEO POSUERE VITAE INTERDuM MI CONSEQUAT PELLENTESQUE NECLACUS</Text>
                             </View>
                             <View key="2" style={styles.pageview}>
-                                <Text style={styles.heading}>Title1</Text>
+                                <Text style={styles.heading}>TITLE</Text>
                                 <Text style={styles.desc}>LOREM IPSUM COLOR AMET CONSECTETUR ADIFICInG ELIT AENEANET TELLUS JUSTO SED NEC SODALES EST NUNC VENENATIS TELLUS AT LEO POSUERE VITAE INTERDuM MI CONSEQUAT PELLENTESQUE NECLACUS</Text>
-                                <Text style={styles.heading}>REWAORDS</Text>
+                                <Text style={styles.heading}>REWARRDS</Text>
                                 <Text style={styles.desc}>LOREM IPSUM COLOR AMET CONSECTETUR ADIFICInG ELIT AENEANET TELLUS JUSTO SED NEC SODALES EST NUNC VENENATIS TELLUS AT LEO POSUERE VITAE INTERDuM MI CONSEQUAT PELLENTESQUE NECLACUS</Text>
                             </View>
                         </PagerView>
