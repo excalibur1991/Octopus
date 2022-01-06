@@ -17,6 +17,7 @@ export const settings = {
     uploadImage: 'api/v1/upload-file',
     annotateImage: 'api/v1/annotate',
     getRomanNumberStats: '/api/v1/stats/tags?bounty=roman-letter-bounty',
+    
   },
 
   metadata: {
@@ -29,7 +30,12 @@ export const settings = {
     myMetadata: '/api/get/my-metadata',
     getTags: '/staticdata/tags?type=$[word_type]'
   },
-
+  rewards:{
+    rewardsAmount: '/api/v1/rewards/?entity_type=image',  
+    rewardsList: '/api/v1/rewards/list?entity_type=image&page=1',   
+    totalRewards: '/api/v1/rewards/total-rewards', 
+    claimRewards: '/api/v1/rewards/claim' 
+  },
 
   //Authentification
   auth: {

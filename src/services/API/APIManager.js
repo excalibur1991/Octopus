@@ -4,12 +4,41 @@ import {
   postData,
   getUserData,
   postUserData,
+  getUserRewards,
+  postRewards
 } from './CoreAPICalls';
+import { refreshTokenAPI } from './CoreAPICalls';
 import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
   try {
     const response = await getUserData(s.taxonomy.getImages);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getTotalReward = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.totalRewards);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getRewardAmount = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsAmount);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+export const getRewardList = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsList);
     return response;
   } catch (err) {
     return null;
@@ -168,6 +197,15 @@ export const verifyImage = async(image_id, annotation, verification) => {
 export const uploadImage = async (data) => {
   try {
     const response = await postUserData(s.taxonomy.uploadImage, data, true);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const claimRwards = async () => {
+  try {
+    const response = await postRewards(s.rewards.claimRewards);
     return response;
   } catch (err) {
     return null;

@@ -1,7 +1,7 @@
 import {  processColor } from 'react-native'
 import {actions} from '../services/State/Reducer';
 
-import {getUserStats} from '../services/API/APIManager';
+import {getUserStats, getRewardAmount,getRewardList,getTotalReward} from '../services/API/APIManager';
 import {
   calcUploadsCumu,
   calcAnnoDescCumu,
@@ -262,6 +262,7 @@ const updateChart = (
 
 };
 
+
 export const fetchOverall = async (
   dispatch,
   setAnnotations,
@@ -298,6 +299,11 @@ export const fetchOverall = async (
     //const start = date.toISOString().replace(/T.*/, '').split('-').reverse().join('-');
     const start = '14-05-2021';
     const response = await getUserStats(start, end);
+ 
+    const totrewards = await getTotalReward()
+    const rewardList = await getRewardList()
+    const rewardsAmount = await getRewardAmount()
+    console.log({List:rewardList, Amount: rewardsAmount, totalRewards:totrewards})
     if (response && response.result) {
       let sum_anno_description = 0;
       let sum_anno_tags = 0;

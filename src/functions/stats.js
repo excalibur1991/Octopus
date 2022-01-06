@@ -1,13 +1,20 @@
 import {  processColor } from 'react-native'
 import {actions} from '../services/State/Reducer';
 
-import {getOverall} from '../services/API/APIManager';
+import {
+  getOverall, 
+  getTotalReward,
+  getRewardAmount,
+  getRewardList
+} from '../services/API/APIManager';
+
 import {
   calcUploadsCumu,
   calcAnnoDescCumu,
   calcAnnoTagCumu,
   calcVeriCumu,
 } from '../services/Common/CommonFunctions';
+
 import i18n from '../languages/i18n';
 import update from 'immutability-helper';
 
@@ -326,6 +333,7 @@ export const fetchOverall = async (
         0,
       );
       sum_anno = sum_anno_tags + sum_anno_description;
+    
       let sum_upload = 0;
       sum_upload += response.result.uploads.reduce(
         (total, item) => total + Number(item),
