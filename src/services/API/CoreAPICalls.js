@@ -132,12 +132,12 @@ export const postRewards = async (
       `Bearer ${refreshToken.access_token}`,
     },
   };
-  //if (data) {
-  //  config.body = isFormData ? data : JSON.stringify(data);
- // }
+  if (data) {
+    config.body = isFormData ? data : JSON.stringify(data);
+   }
   try {
     const response = await fetch(url, config)
-      .then(res => JSON.stringify(res.json()))
+      .then(res => res.json())
       .then(res => res)
       .catch(error => error);
     return response;

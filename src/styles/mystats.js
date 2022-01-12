@@ -107,4 +107,14 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Inter-Bold',
   },
+  rewardbtn: {
+    alignItems: "center",
+    backgroundColor: '#4E9CF9',
+    padding: 10,
+    borderRadius: 25,
+    width: '70%',
+    alignSelf: 'center',
+    marginTop: '5%',
+    
+  }
 });

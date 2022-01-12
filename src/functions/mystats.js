@@ -1,7 +1,13 @@
 import {  processColor } from 'react-native'
 import {actions} from '../services/State/Reducer';
 
-import {getUserStats, getRewardAmount,getRewardList,getTotalReward} from '../services/API/APIManager';
+import {
+  getUserStats, 
+  getRewardAmount,
+  getRewardList,
+  getTotalReward
+} from '../services/API/APIManager';
+
 import {
   calcUploadsCumu,
   calcAnnoDescCumu,
@@ -267,6 +273,9 @@ export const fetchOverall = async (
   dispatch,
   setAnnotations,
   setUploads,
+  setTotalRewards,
+  setClaimableRewards,
+  setAlreadyClaimed,
   setVerifications,
   _arr_date,
   _arr_uploads,
@@ -300,10 +309,25 @@ export const fetchOverall = async (
     const start = '14-05-2021';
     const response = await getUserStats(start, end);
  
-    const totrewards = await getTotalReward()
+    const sumRewards = await getTotalReward()
     const rewardList = await getRewardList()
     const rewardsAmount = await getRewardAmount()
-    console.log({List:rewardList, Amount: rewardsAmount, totalRewards:totrewards})
+    let sum_rewards = 0;
+    let already_claimed = 0;
+    let claimable_rewards = 0;
+    console.log({ Amount: rewardsAmount, totalRewards:sumRewards, rewardList:rewardList})
+
+    if(sumRewards !== null && rewardsAmount !== null) {
+      sum_rewards = (sumRewards.result).toExponential(1);
+      claimable_rewards = (rewardsAmount.amount).toExponential(1) 
+      already_claimed = (sum_rewards-claimable_rewards).toExponential(1)
+    }
+    setTotalRewards(sum_rewards);
+    setClaimableRewards(claimable_rewards);
+    setAlreadyClaimed(already_claimed);
+     
+
+    
     if (response && response.result) {
       let sum_anno_description = 0;
       let sum_anno_tags = 0;
@@ -315,6 +339,8 @@ export const fetchOverall = async (
       _arr_verifications = [];
 
       _arr_date = [...response.result.dates];
+
+  
 
       //retrieve total sumup
       sum_anno_tags += response.result.tag_annotations.reduce(
@@ -345,6 +371,7 @@ export const fetchOverall = async (
       setAnnotations(sum_anno);
       setUploads(sum_upload);
       setVerifications(sum_verification);
+ 
 
       let upload_rra = calcUploadsCumu(sum_upload);
       let anno_rra =

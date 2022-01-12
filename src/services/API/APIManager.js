@@ -22,7 +22,7 @@ export const getAllImages = async () => {
 export const getTotalReward = async () => {
   try {
     const response = await getUserRewards(s.rewards.totalRewards);
-    return response;
+    return response ?? { result: 0 };
   } catch (err) {
     return null;
   }
@@ -31,7 +31,8 @@ export const getTotalReward = async () => {
 export const getRewardAmount = async () => {
   try {
     const response = await getUserRewards(s.rewards.rewardsAmount);
-    return response;
+    //return [response].filter(a=>a);
+    return response ?? { amount: 0 };
   } catch (err) {
     return null;
   }
@@ -203,9 +204,10 @@ export const uploadImage = async (data) => {
   }
 };
 
-export const claimRwards = async () => {
+
+export const claimRwards = async (data) => {
   try {
-    const response = await postRewards(s.rewards.claimRewards);
+    const response = await postRewards(s.rewards.claimRewards, data);
     return response;
   } catch (err) {
     return null;
