@@ -165,7 +165,6 @@ export const verifyImage = async(image_id, annotation, verification) => {
   }
 };
 
-
 /**
  * POST
  * {photos: [{photo_id: "fffff1000010787c"}]}

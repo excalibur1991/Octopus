@@ -9,28 +9,28 @@ import {
   StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useStateValue} from '../../services/State/State';
-import  Button from '../../components/Button';
-import {theme} from '../../services/Common/theme';
-import {actions} from '../../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
+import  Button from '../components/Button';
+import {theme} from '../services/Common/theme';
+import {actions} from '../services/State/Reducer';
 import {
 annotate,
 annotateImage,
 getImageById,
-} from '../../services/API/APIManager';
-import DrawingPan, {EDIT_MODE} from '../../components/DrawingPan';
-import {styles} from '../../styles/playai';
+} from '../services/API/APIManager';
+import DrawingPan, {EDIT_MODE} from '../components/DrawingPan';
+import {styles} from '../styles/playai';
 import {withTranslation} from 'react-i18next';
 import {
 Chip,
 } from 'react-native-paper';
-import DottedProgressBar from '../../components/DottedProgressBar';
-import SwipeCards from '../../components/SwipeCards';
-import Ripple from '../../components/Ripple';
-import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
-import { CommonStyles } from '../../services/Common/styles';
-import Tag from '../../components/Tag';
-import RoundButton from '../../components/RoundButton';
+import DottedProgressBar from '../components/DottedProgressBar';
+import SwipeCards from '../components/SwipeCards';
+import Ripple from '../components/Ripple';
+import { setPrivacyAndTermsAccepted } from '../services/DataManager';
+import { CommonStyles } from '../services/Common/styles';
+import Tag from '../components/Tag';
+import RoundButton from '../components/RoundButton';
 /**
 * play AI
 * 1. upload photo
@@ -253,12 +253,12 @@ return (
   <>
   <View style={styles.container}>
     {isAnnoAI ? (
-      <>
+      <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.CardWrapper}>
           <Image
             resizeMode='stretch'
             style={styles.leftbar}
-            source={require('../../assets/left.png')}
+            source={require('../assets/left.png')}
           />
           <View style={styles.CardView}>
             <SwipeCards
@@ -301,13 +301,14 @@ return (
           <Image
             style={styles.rightbar}
             resizeMode='stretch'
-            source={require('../../assets/right.png')}
+            source={require('../assets/right.png')}
             />
         </View>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
+          paddingTop: '5%',
           paddingHorizontal: '5%'
         }}>
         <Chip
@@ -371,12 +372,14 @@ return (
           <RoundButton
             title={t('playAI.exit')}
             type={'outline'}
-            tail={<Image source={require('../../assets/exit.png')} />}
+            tail={<Image source={require('../assets/exit.png')} />}
             onPress={()=>{navigation.goBack();}}
           />
         </View>
-      </>
-    ) : (<View
+        </ScrollView>
+    ) : (
+      <ScrollView showsVerticalScrollIndicator={false}>
+    <View
         style={styles.uploadScrollContainer}>
       <View style={styles.readOnlyContainer}>
         <DrawingPan
@@ -409,8 +412,24 @@ return (
             <RoundButton
               title={t('playAI.exit')}
               type={'outline'}
-              tail={<Image source={require('../../assets/exit.png')} />}
-              onPress={()=>{navigation.goBack();}}
+              tail={<Image source={require('../assets/exit.png')} />}
+              onPress={()=>{
+                dispatch({
+                  type: actions.SET_ALERT_SETTINGS,
+                  alertSettings: {
+                    show: true,
+                    type: 'warn',
+                    message:
+                      'ARE YOU SURE YOU WANT TO EXIT THE MISSION NOW? YOU MAY GO TO ‘MY MISSIONS’ TO CONTINUE UNFINISHED MISSIONS.',
+                    confirmText: 'EXIT',
+                    title: 'EXIT MISSION',
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    onConfirmPressed: () => setOpenModal(true),
+                    onCancelPressed: () => {},
+                  },
+                });
+              }}
               />
               </>
           ) : (
@@ -436,13 +455,15 @@ return (
                     progress={annotateProgress}
                     hideLable={true}
                   />
-                  <Text style={{textAlign: 'right'}}>{t('playAI.annotating')}</Text>
+                  <Text style={{textAlign: 'right', color: 'white'}}>{t('playAI.annotating')}</Text>
                 </View>
               </View>
             </View>
           )
         }
-      </View>)}
+      </View>
+      </ScrollView>
+      )}
       
   </View>
   </>

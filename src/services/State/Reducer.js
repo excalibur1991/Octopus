@@ -13,6 +13,12 @@ export const actions = {
   SET_CAMERASETTINGS: 'SET_CAMERASETTINGS',
   SET_PLAYAISETTINGS: 'SET_PLAYAISETTINGS',
   SET_HEADERSETTINGS: 'SET_HEADERSETTINGS',
+  SET_SHOW_LANDING_PAGE_WALKTHROUGH: 'SET_SHOW_LANDING_PAGE_WALKTHROUGH',
+  SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH: 'SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH',
+  SET_SHOW_VERIFY_IMAGE_WALKTHROUGH: 'SET_SHOW_VERIFY_IMAGE_WALKTHROUGH',
+  SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH: 'SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH',
+  SET_WALKTHROUGH_CURRENT_STEP: 'SET_WALKTHROUGH_CURRENT_STEP',
+  EXIT_WALKTHROUGH: 'EXIT_WALKTHROUGH',
 };
 
 export const reducer = (state, action) => {
@@ -67,7 +73,7 @@ export const reducer = (state, action) => {
     case actions.SET_DATAUSAGE:
       return {
         ...state,
-        dataUsageSettings: action.dataUsageSettings 
+        dataUsageSettings: action.dataUsageSettings,
       };
     case actions.SET_VERIFYSETTING:
       return {
@@ -89,6 +95,40 @@ export const reducer = (state, action) => {
       return {
         ...state,
         headerSettings: action.headerSettings
+      };
+    case actions.SET_SHOW_LANDING_PAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showLandingPageWalkthrough: true,
+      };
+    case actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showUploadImagePageWalkthrough: true,
+      };
+    case actions.SET_SHOW_VERIFY_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showVerifyImagePageWalkthrough: true,
+      };
+    case actions.SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showAnnotateImagePageWalkthrough: true,
+      };
+    case actions.SET_WALKTHROUGH_CURRENT_STEP:
+      return {
+        ...state,
+        walkthroughCurrentStep: action.walkthroughCurrentStep,
+      };
+    case actions.EXIT_WALKTHROUGH:
+      return {
+        ...state,
+        showLandingPageWalkthrough: false,
+        showUploadImagePageWalkthrough: false,
+        showVerifyImagePageWalkthrough: false,
+        showAnnotateImagePageWalkthrough: false,
+        walkthroughCurrentStep: 0,
       };
     default:
       return state;

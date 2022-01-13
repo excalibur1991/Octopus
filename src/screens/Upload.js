@@ -10,21 +10,18 @@ import MainScreen from './playAI/MainSceen';
 import { Mission} from './playAI/Mission';
 import AppBar from '../components/AppBar';
 //later branch the Upload cases
+
+
 const Upload = (props) => {
   //set this true cause TOC first show always
   const [{dataUsageSettings }, dispatch] = useStateValue();
 
-  const {navigation} = props || {};
-  
-
   useEffect(() => {
-    
   }, []);
 
   return (
-      <View style={{flex:1, backgroundColor: '#000', height: '100%'}}>
+      <>
       {
-        /*
        (dataUsageSettings == false) ? (
        <UploadGuidelines 
        isDataUsageAvailable={dataUsageSettings}
@@ -36,13 +33,10 @@ const Upload = (props) => {
           });
         }} 
        />) : (
-        //<UploadImage {...props} />
-        <MainScreen {...props} />
-        //<PlayAI {...props} />
-       )*/
+        <UploadImage {...props} />
+       )
       }
-      <MainScreen {...props} />
-      </View>
+      </>
   );
 };
 export default Upload;

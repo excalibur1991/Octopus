@@ -115,7 +115,7 @@ const Upload = ({navigation, ...props}) => {
               setChecked(!checked);
               if (e) {
                 setDataUsageAvailable();
-                /*    
+                /*    s
                 const res = await saveUsageFlag({flag: 'ACCEPTED'});
                 if (
                   res &&

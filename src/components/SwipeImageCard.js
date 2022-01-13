@@ -8,47 +8,38 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-
-
 export const NoMoreCards = (props) => {
-
   return (
     <View style={styles.card}>
       <Text>No more Images.</Text>
     </View>
   );
-
 };
 
 export const SwipeImageCard = (props) => {
-    const {
-        images = [], 
-        image_id=''
-    } = props || {};
+  const {images = [], image_id = ''} = props || {};
 
     const findImage = () => {
-        var card = null;
-        images.map((data)=>{
-          if(data.image_id == image_id){
-            card = data;
-          }
-        })
-        return card ? {uri:card.image} : require('../assets/loading.gif')
-      }
-    
+      var card = null;
+      images.map((data)=>{
+        if(data.image_id == image_id){
+          card = data;
+        }
+      })
+      return card ? {uri:card.image} : require('../assets/loading.gif')
+    }
 
-    return (
+  return (
     <View style={styles.card}>
-        <Image 
-        resizeMode='stretch'
-            style={styles.thumbnail}
-            source={ 
-                findImage(props)
-            } />
+      <Image 
+      resizeMode='stretch'
+          style={styles.thumbnail}
+          source={ 
+              findImage(props)
+          } />
     </View>
-    );
+  );
 };
-
 
 const styles = StyleSheet.create({
     card: {
@@ -69,6 +60,6 @@ const styles = StyleSheet.create({
   })
 
 SwipeImageCard.propTypes = {
-    images : PropTypes.array,
-    image_id: PropTypes.string,
+  images: PropTypes.array,
+  image_id: PropTypes.string,
 };

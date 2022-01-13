@@ -1,136 +1,92 @@
 import React, {useRef} from 'react';
+import {Image, View, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {theme} from '../services/Common/theme';
 import {Transition, Transitioning} from 'react-native-reanimated';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
+const indicator = require('../assets/active-tab.png');
+const dashboardIcon = require('../assets/dashboard.png');
+const browseMissionsIcon = require('../assets/browseMissions.png');
+const myMissionsIcon = require('../assets/MyMissions.png');
+const myWalletIcon = require('../assets/MyWallet.png');
+const statsIcon = require('../assets/Stats.png');
+
+const styles = StyleSheet.create({
+  indicatorContainer: {
+    bottom: 1,
+    width: '100%',
+    marginBottom: -30,
+    position: 'absolute',
+  },
+  indicator: {
+    height: 25,
+    width: '100%',
+  },
+  dashboardIcon: {
+    width: 24,
+    height: 24,
+  },
+  browseMissionsIcon: {
+    width: 20,
+    height: 28,
+  },
+  myMissionsIconContainer: {
+    padding: 10,
+    borderRadius: 25,
+  },
+  myMissionsIcon: {
+    width: 31,
+    height: 31,
+  },
+  myWalletIcon: {
+    width: 26,
+    height: 20,
+  },
+  statsIcon: {
+    width: 26,
+    height: 20,
+  },
+});
 
 const icons = {
-  About: (
-    <MaterialIcon
-      name="info"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
+  Dashboard: (
+    <Image
+      resizeMode="stretch"
+      source={dashboardIcon}
+      style={styles.dashboardIcon}
     />
   ),
-  AboutFocused: (
-    <MaterialIcon
-      name="info"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
+  BrowseMissions: (
+    <Image
+      resizeMode="stretch"
+      source={browseMissionsIcon}
+      style={styles.browseMissionsIcon}
+    />
+  ),
+  MyMissions: (
+    <LinearGradient
+      end={{x: 1, y: 0}}
+      start={{x: 0.15, y: 0}}
+      style={styles.myMissionsIconContainer}
+      colors={[theme.COLORS.DARK_BLUE, theme.COLORS.MEDIUM_PURPLE_1]}>
+      <Image
+        resizeMode="stretch"
+        source={myMissionsIcon}
+        style={styles.myMissionsIcon}
+      />
+    </LinearGradient>
+  ),
+  MyWallet: (
+    <Image
+      resizeMode="stretch"
+      source={myWalletIcon}
+      style={styles.myWalletIcon}
     />
   ),
   Stats: (
-    <MaterialIcon
-      name="analytics"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  StatsFocused: (
-    <MaterialIcon
-      name="analytics"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  SwipeAI: (
-    <MaterialIcon
-      name="swipe"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  SwipeAIFocused: (
-    <MaterialIcon
-      name="swipe"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  Learn: (
-    <MaterialIcon
-      name="subscriptions"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  LearnFocused: (
-    <MaterialIcon
-      name="subscriptions"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  Wallet: (
-    <MaterialIcon
-      name="account-balance-wallet"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  WalletFocused: (
-    <MaterialIcon
-      name="account-balance-wallet"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  MyStats: (
-    <IonIcon
-      name="analytics-sharp"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  MyStatsFocused: (
-    <IonIcon
-      name="analytics-sharp"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  Verification: (
-    <MaterialIcon
-      name="fingerprint"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  VerificationFocused: (
-    <MaterialIcon
-      name="fingerprint"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  Annotation: (
-    <MaterialIcon
-      name="note-add"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  AnnotationFocused: (
-    <MaterialIcon
-      name="note-add"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
-  ),
-  Legal: (
-    <MaterialIcon
-      name="privacy-tip"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-    />
-  ),
-  LegalFocused: (
-    <MaterialIcon
-      name="privacy-tip"
-      size={24}
-      color={theme.COLORS.BOTTOM_TAB_ICON_FOCUSED}
-    />
+    <Image resizeMode="stretch" source={statsIcon} style={styles.statsIcon} />
   ),
   Upload: (
     <MaterialIcon
@@ -157,12 +113,12 @@ const Background = styled(Transitioning.View)`
   align-items: center;
   border-radius: 100px;
   justify-content: center;
-  background: ${props => (props.focused ? theme.APP_COLOR : 'transparent')};
+  background: ${(props) => (props.focused ? theme.APP_COLOR_1 : 'transparent')};
 `;
 
 function Tab({label, accessibilityState, onPress}) {
   const focused = accessibilityState.selected;
-  const icon = focused ? icons[label] : icons[`${label}Focused`];
+  const icon = icons[label];
 
   const transition = (
     <Transition.Sequence>
@@ -186,6 +142,15 @@ function Tab({label, accessibilityState, onPress}) {
         focused={focused}
         transition={transition}>
         {icon}
+        {focused && (
+          <View style={styles.indicatorContainer}>
+            <Image
+              source={indicator}
+              resizeMode="stretch"
+              style={styles.indicator}
+            />
+          </View>
+        )}
       </Background>
     </Container>
   );

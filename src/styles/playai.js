@@ -73,7 +73,6 @@ export const styles = StyleSheet.create({
       flexGrow: 1,
       width: '100%',
       height: '100%',
-      paddingTop:'25%',
       paddingHorizontal: '5%',
     },
     readOnlyContainer: {
@@ -167,11 +166,10 @@ export const styles = StyleSheet.create({
 
     },
     CardWrapper: {
-      height: '70%',
       zIndex: 1000,
       justifyContent: 'space-between',
       flexDirection: 'row',
-      paddingTop:'25%',
+      //paddingTop:'25%',
     },
     leftbar: {
       zIndex: 0,

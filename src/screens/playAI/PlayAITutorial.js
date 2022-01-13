@@ -19,7 +19,7 @@ import {
     getImageById,
 } from '../../services/API/APIManager';
 import DrawingPan, { EDIT_MODE } from '../../components/DrawingPan';
-import { styles } from '../../styles/playai';
+import { styles } from '../../styles/playaitutorial';
 import { withTranslation } from 'react-i18next';
 import {
     Chip, Divider,
@@ -37,6 +37,7 @@ import Tag from '../../components/Tag';
 import styled from 'styled-components/native';
 import { DragResizeBlock } from '../../components/DragResizeBlock';
 import CircleButton from '../../components/CircleButton';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 
 
 const PlayAITutorial = (props) => {
@@ -924,13 +925,19 @@ const PlayAITutorial = (props) => {
                 zIndex: 999}}>
             <Text style={styles.tut_text_big}>{t('playAITut.tutCompleted')}</Text>
             <Text style={styles.tut_text_big_desc}>{t('playAITut.tutCompletedDesc')}</Text>
-            <CircleButton
-                onPress={()=>{
+            <Ripple onPress={()=>{
                     navigation.goBack();
                 }}
-            >
-                <Image source={require('../../assets/ico_close.png')} />
-            </CircleButton>
+                 style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: theme.APP_COLOR_2,
+                 }}>
+                <AntIcon size={20} name="close" color={theme.COLORS.WHITE} />
+            </Ripple>
             </View>
         </>
         );

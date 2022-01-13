@@ -20,4 +20,9 @@ export const initialState = {
   cameraSettings: {show: false, onCallback: null},
   playAISettings: {tutorialMode: true},
   headerSettings: {showLeft: true},
+  walkthroughCurrentStep: 0,
+  showLandingPageWalkthrough: false,
+  showUploadImagePageWalkthrough: false,
+  showVerifyImagePageWalkthrough: false,
+  showAnnotateImagePageWalkthrough: false,
 };

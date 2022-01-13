@@ -18,7 +18,7 @@ const Tag = ({
       <View style={[styles.container, {backgroundColor: backgroundColor}]}>
         {onRemove ? (
           <IonIcon
-            size={18}
+            size={12}
             color={iconColor}
             onPress={onRemove}
             name="close-circle-outline"
@@ -54,17 +54,21 @@ export default Tag;
 const styles = StyleSheet.create({
   container: {
     height: 30,
+    marginBottom: 10,
+    marginRight: 8,
     borderRadius: 25,
     paddingVertical: 5,
-    marginHorizontal: 3,
-    paddingHorizontal: 18,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: 3,
+    paddingHorizontal: 18,
   },
   tagText: {
-    fontSize: 14,
-    fontWeight: '600',
-    fontFamily: 'Inter-Regular',
+    fontSize: 10,
     marginLeft: 3,
+    lineHeight: 12,
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
   },
 });

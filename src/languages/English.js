@@ -11,6 +11,7 @@ export default {
       wallet: 'Wallet',
       myStats: 'My Stats',
       swipeAI: 'Swipe AI',
+      playai: 'PlayAI',
       upload: 'Upload',
       verification: 'Verify',
       annotation: 'Annotate',

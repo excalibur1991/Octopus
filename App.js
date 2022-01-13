@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   StatusBar,
@@ -24,6 +26,8 @@ import i18next from 'i18next';
 import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
 import { CameraView } from './src/components/CameraView';
+import {ethers} from 'ethers';
+import {NftProvider} from 'use-nft';
 
 getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
@@ -44,17 +48,16 @@ const RootNavigator = () => {
     let isDataUsageAvailable = await getDataUsageFlag();
     dispatch({
       type: actions.SET_DATAUSAGE,
-      dataUsageSettings: isDataUsageAvailable
+      dataUsageSettings: isDataUsageAvailable,
     });
   };
 
-  const checkVerifySettings = async ()=>{
+  const checkVerifySettings = async () => {
     let verifyAvailable = await isPrivacyAndTermsAccepted();
     dispatch({
       type: actions.SET_VERIFYSETTING,
-      verifySettings: verifyAvailable
+      verifySettings: verifyAvailable,
     });
-
   };
 
   const checkLanguage = async () => {
@@ -121,8 +124,12 @@ const RootNavigator = () => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.WHITE}}>
-        <StatusBar backgroundColor={'transparent'} translucent={true} barStyle="dark-content" />
+      <SafeAreaView style={{flex: 0, backgroundColor: theme.APP_COLOR_1}} />
+      <SafeAreaView style={{flex: 1, backgroundColor: theme.APP_COLOR_1}}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={theme.APP_COLOR_1}
+        />
         <CameraView {...cameraSettings} />
         <AppAlert {...getAlertSettings()} />
         <ModalActivityIndicator modalVisible={show} />
@@ -133,16 +140,20 @@ const RootNavigator = () => {
 };
 
 const App = () => {
+  const fetcher = ['ethers', {ethers, provider: ethers.getDefaultProvider()}];
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <StateProvider initialState={initialState} reducer={reducer}>
-          <MenuProvider>
-            <I18nextProvider i18n={i18next}>
-              <RootNavigator />
-            </I18nextProvider>
-          </MenuProvider>
-        </StateProvider>
+        <NftProvider fetcher={fetcher}>
+          <StateProvider initialState={initialState} reducer={reducer}>
+            <MenuProvider>
+              <I18nextProvider i18n={i18next}>
+                <RootNavigator />
+              </I18nextProvider>
+            </MenuProvider>
+          </StateProvider>
+        </NftProvider>
       </PersistGate>
     </Provider>
   );

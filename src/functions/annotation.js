@@ -12,6 +12,7 @@ import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canv
 import groupBy from 'lodash.groupby'
 import { TextPropTypes } from 'react-native';
 
+
   export const initial_bounties = [
     {tag: 'anonymization bounty', desc: 'Anonymization Bounty (photos of faces)', checked: false, disabled: false},
     {tag: 'food bounty', desc: 'Food Bounty', checked: false, disabled: false},
@@ -237,10 +238,13 @@ import { TextPropTypes } from 'react-native';
     //save annotation
     if(props.curImageIndex >= props.metadata.length) return;
 
-    props.dispatch({
-      type: actions.SET_PROGRESS_SETTINGS,
-      show: true,
-    });
+    props.setAnnotating(true);
+    props.setAnnotatingProgress(0.6);
+
+    // props.dispatch({
+    //   type: actions.SET_PROGRESS_SETTINGS,
+    //   show: true,
+    // });
 
     const image_id = props.curMetadata.image_id;
     const originalImageWidth = props.zoomView.props.imageWidth;
@@ -294,11 +298,29 @@ import { TextPropTypes } from 'react-native';
 
     const response = await annotate({image_id: image_id, annotations: _rects});
     
+    // props.setCurImageIndex((props.curImageIndex+1));
+    // props.dispatch({
+    //   type: actions.SET_PROGRESS_SETTINGS,
+    //   show: false,
+    // });
+
+
+    props.setAnnotating(false);
+    props.setAnnotatingProgress(1);
+  };
+
+  export const onNext = (props)=>{
     props.setCurImageIndex((props.curImageIndex+1));
     props.dispatch({
       type: actions.SET_PROGRESS_SETTINGS,
       show: false,
     });
+    props.setAnnotatingProgress(0);
+  };
+
+  export const onCancel = (props)=>{
+    props.setAnnotating(false);
+    props.setAnnotatingProgress(0);
   };
 
   

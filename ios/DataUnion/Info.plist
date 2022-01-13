@@ -39,8 +39,6 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Inter-Regular.ttf</string>
-		<string>Inter-Bold.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -57,6 +55,8 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Moon-Bold.otf</string>
+		<string>Moon-Light.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

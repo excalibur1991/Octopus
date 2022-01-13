@@ -1,0 +1,188 @@
+import {StyleSheet} from 'react-native';
+import {theme} from '../services/Common/theme';
+
+export const styles = StyleSheet.create({
+  container: {
+    paddingTop: '5.5%',
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: '4.2%',
+    justifyContent: 'space-between',
+  },
+  typeBox: {
+    width: '30%',
+  },
+  typeBoxGradient: {
+    borderRadius: 15,
+  },
+  typeBoxButton: {
+    margin: 3,
+    borderRadius: 15,
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  badge: {
+    top: -10,
+    width: 30,
+    zIndex: 1,
+    height: 30,
+    right: -10,
+    borderRadius: 25,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeCount: {
+    fontSize: 16,
+    lineHeight: 18,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  uploadImageIcon: {
+    width: 43,
+    height: 43,
+  },
+  verifyImageIcon: {
+    width: 33,
+    height: 33,
+  },
+  annotateImageIcon: {
+    width: 28,
+    height: 34,
+  },
+  typeText: {
+    fontSize: 12,
+    marginTop: 6,
+    lineHeight: 14,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  filtersContainer: {
+    height: 40,
+    marginVertical: 28,
+    paddingHorizontal: '4.2%',
+  },
+  filterGradient: {
+    marginRight: 9,
+    borderRadius: 30,
+  },
+  filterButton: {
+    margin: 3,
+    borderRadius: 30,
+    paddingVertical: 10,
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  filterText: {
+    fontSize: 12,
+    lineHeight: 13.7,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  missionCardsContainer: {
+    paddingTop: '5%',
+    paddingBottom: '55%',
+  },
+  missionCard: {
+    marginBottom: 8,
+    paddingHorizontal: 16,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  cardCover: {
+    height: 127,
+    width: '100%',
+    marginTop: 8,
+  },
+  coverTitle: {
+    top: 24,
+    left: 16,
+    zIndex: 1,
+    width: '75%',
+    paddingVertical: 5,
+    position: 'absolute',
+    paddingHorizontal: 28,
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  uploadCoverTitle: {
+    backgroundColor: theme.COLORS.DARK_PURPLE,
+  },
+  verificationCoverTitle: {
+    backgroundColor: theme.COLORS.DARK_BLUE,
+  },
+  annotationCoverTitle: {
+    backgroundColor: theme.COLORS.SKY_BLUE,
+  },
+  coverTitleText: {
+    fontSize: 14,
+    lineHeight: 16,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  cardFooter: {
+    marginTop: 10,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardTitleDescription: {
+    width: '78%',
+  },
+  cardTitle: {
+    fontSize: 16,
+    lineHeight: 18.41,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  cardDescription: {
+    fontSize: 12,
+    marginTop: 4,
+    lineHeight: 14,
+    fontFamily: 'Moon-Light',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  cardValueGradient: {
+    borderRadius: 30,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+  },
+  cardValueSign: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.COLORS.YELLOW,
+  },
+  cardValueSignText: {
+    fontSize: 16,
+    lineHeight: 18,
+    fontFamily: 'Moon-Bold',
+    color: theme.APP_COLOR_1,
+    textTransform: 'uppercase',
+  },
+  cardValue: {
+    fontSize: 16,
+    lineHeight: 18,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+});
