@@ -152,4 +152,20 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
+  rewardbtn: {
+    alignItems: "center",
+    backgroundColor: theme.APP_COLOR_2,
+    padding: 15,
+    borderRadius: 25,
+    width: '70%',
+    alignSelf: 'center',
+
+  },
+  buttonText: {
+    fontSize: 18,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    textAlignVertical: 'center',
+  },
 });

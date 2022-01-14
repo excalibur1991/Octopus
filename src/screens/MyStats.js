@@ -29,6 +29,9 @@ const MyStats = ({t}) => {
       dispatch,
       setAnnotations,
       setUploads,
+      setTotalRewards,
+    //  setClaimableRewards,
+    //  setAlreadyClaimed,
       setVerifications,
       _arr_date,
       _arr_uploads,
@@ -49,6 +52,9 @@ const MyStats = ({t}) => {
 
   const [annotations, setAnnotations] = useState(0);
   const [uploads, setUploads] = useState(0);
+  const [totalRewards, setTotalRewards] = useState(0);
+  const [claimableRewards, setClaimableRewards] = useState(0);
+  const [alreadyClaimed, setAlreadyClaimed] = useState(0);
   const [verifications, setVerifications] = useState(0);
 
   const [uploadsQuicrra, setUploadsQuicrra] = useState(0);
@@ -64,9 +70,32 @@ const MyStats = ({t}) => {
   const [curChartdata, setCurChartdata] = useState({});
   const [curChartdata_new, setCurChartdataNew] = useState({});
   const [curCumuChartdata, setCurCumuChartdata] = useState({});
+  const [msgLog, setMsgLog] = useState('');
+  const [successLog, setSuccessLog] = useState('');
+  const [isLoading, setIsLoading]= useState(false)
 
   //authToken
   const [, dispatch] = useStateValue();
+
+
+  const postUserClaims = async() => {
+    const requestBody = {
+      "entity_type": "image"
+    } 
+    const response = await claimRwards(requestBody)
+    setIsLoading(true)
+    if (response && response.transaction_hash) {
+      setIsLoading(false)
+      setSuccessLog(`${response.transaction_hash}!`)
+      console.log(`Success! Hash: ${response.transaction_hash}`)
+      return <Text>{`Success! Hash: ${response.transaction_hash}`}</Text>
+     //  return response
+    }
+    setIsLoading(false)
+    console.log({rewardRes: response, msg: response.messages})
+    setMsgLog(`${response.messages}!`)
+     return response.messages
+  }
 
   return (
     <View style={styles.container}>
@@ -121,6 +150,32 @@ const MyStats = ({t}) => {
         <View style={styles.fullWidthBox}>
           <Text style={styles.fullWidthBoxValue}>{cumuQuicrra}</Text>
           <Text style={styles.miniBoxFooter}>{t('myStats.datatoken')}</Text>
+        </View>
+        <View style={styles.topContainer}>
+          <View style={styles.boxContainer}>
+            <View style={styles.boxMini}>
+              <Text style={styles.itemTitle}>{t('Total Rewards Claimed')}</Text>
+              <Text style={styles.miniBoxValue}>{totalRewards}</Text>
+              <Text style={styles.miniBoxFooter}>{t('WEI')}</Text>
+            </View>
+          </View>
+       
+        </View>
+        <View>
+       <TouchableOpacity
+          style={styles.rewardbtn}
+          onPress={() => postUserClaims()}
+          // disabled={claimableRewards == '0' ? true: false}
+        >
+        <Text>Claim Reward</Text>
+        </TouchableOpacity> 
+        
+        <View>
+          <Text style={{ color:'red', alignSelf: 'center'}}>{msgLog}</Text>
+        </View>
+        <View>
+          <Text style={{ color:'green', alignSelf: 'center'}}>{successLog}</Text>
+        </View>
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.graphContainer}>
