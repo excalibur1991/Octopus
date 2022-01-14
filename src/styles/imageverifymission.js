@@ -197,7 +197,6 @@ export const styles = StyleSheet.create({
   },
   dots: {
     flexWrap: 'wrap',
-    alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: '2%',
     paddingVertical: '1.25%',

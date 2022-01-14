@@ -128,7 +128,8 @@ const RootNavigator = () => {
       <SafeAreaView style={{flex: 1, backgroundColor: theme.APP_COLOR_1}}>
         <StatusBar
           barStyle="light-content"
-          backgroundColor={theme.APP_COLOR_1}
+          translucent={true}
+          backgroundColor={'transparent'}
         />
         <CameraView {...cameraSettings} />
         <AppAlert {...getAlertSettings()} />
