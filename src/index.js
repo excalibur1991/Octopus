@@ -136,6 +136,7 @@ const Header = (
     title = null,
     showBackButton = false,
     isTransparent = false,
+    isFullScreenHeader = false,
     showRightButton = false,
     rightButtonIcon = null,
     rightButtonOnPress = () => {},
@@ -158,6 +159,8 @@ const Header = (
     elevation: isTransparent ? 0 : 4,
     backgroundColor: isTransparent ? 'transparent' : theme.APP_COLOR_1,
   },
+  headerShown: true,
+  headerTransparent: isFullScreenHeader ? true : false,
   headerLeftContainerStyle: {
     marginLeft: 20,
   },
@@ -474,6 +477,7 @@ const BrowseMissionsStack = () => (
             title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -669,8 +673,10 @@ const MyMissionsStack = () => (
         return Header(
           {
             title: 'PlayAI Mission',
+            showBackButton: true,
             isTransparent: true
-          }
+          },
+          navigation
         );
       }}
     />
@@ -747,13 +753,12 @@ const MyMissionsStack = () => (
       name="PlayAIImageWalkthrough"
       component={PlayAITutorial}
       options={({navigation}) => {
-        return FullScreenHeader(
+        return Header(
           {
             title: i18n.t('playAI.playAIMission'),
-            showTitle: true,
-            showAppIcon: false,
             showBackButton: true,
-            isTransparent: true
+            isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -1027,6 +1032,15 @@ const WalletStack = () => (
 //   </Stack.Navigator>
 // );
 
+/**
+ * check 
+ * @param {*} navigation 
+ * @returns 
+ */
+const getTabBarVisible=(navigation) =>{
+  return (navigation.route.state && navigation.route.state.index != 0) ? false: true;
+};
+
 const BottomTabs = ({navigation}) => {
   const [
     {
@@ -1078,22 +1092,28 @@ const BottomTabs = ({navigation}) => {
         <Tab.Screen
           name="BrowseMissions"
           component={BrowseMissionsStack}
-          options={{
+          options={(navigation)=>{
+            return {
             unmountOnBlur: true,
+            tabBarVisible: getTabBarVisible(navigation),
             tabBarButton: (props) => (
               <TabComponent label="BrowseMissions" {...props} />
             ),
+          };
           }}
         />
         <Tab.Screen
           name="MyMissions"
           component={MyMissionsStack}
-          options={{
-            unmountOnBlur: true,
-            tabBarButton: (props) => (
-              <TabComponent label="MyMissions" {...props} />
-            ),
-          }}
+          options={(navigation)=>{
+            return {
+              unmountOnBlur: true,
+              tabBarVisible: getTabBarVisible(navigation),
+              tabBarButton: (props) => (
+                <TabComponent label="MyMissions" {...props} />
+              ),
+            }
+          } }
         />
         <Tab.Screen
           name="Stats"

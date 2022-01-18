@@ -64,7 +64,7 @@ const [curRectIndex, setCurRectIndex] = useState(-1);
 const [imageDimension, setImageDimension] = useState({width: 0, height: 0});
 
 //camera mode, 
-const [mode, setMode] = useState(null);
+const [mode, setMode] = useState(enum_mode.MODE_PHOTO);
 const [response, setResponse] = useState(null);
 
 const [annotateProgress, setAnnotateProgress] = useState(0);
@@ -73,7 +73,6 @@ const [isAnnoAI, setIsAnnoAI] =useState(false);
 const [cards, setCards] = useState([]);
 const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
 const [tutStep, setTutStep] = useState('tut_description');
-
 
 const {isTutorial, navigation, t} = props || '';
 
@@ -84,7 +83,6 @@ const initVariables = () =>{
   setBounds([]);
   setImageId(null);
   setImageData(null);
-  setMode(enum_mode.MODE_PHOTO);
 };
 
 const fetchImage = async ()=>{
@@ -425,7 +423,7 @@ return (
                     title: 'EXIT MISSION',
                     showConfirmButton: true,
                     showCancelButton: true,
-                    onConfirmPressed: () => setOpenModal(true),
+                    onConfirmPressed: () => {},
                     onCancelPressed: () => {},
                   },
                 });
