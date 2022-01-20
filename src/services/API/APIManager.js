@@ -4,12 +4,51 @@ import {
   postData,
   getUserData,
   postUserData,
+  getUserRewards,
+  postRewards
 } from './CoreAPICalls';
 import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
   try {
     const response = await getUserData(s.taxonomy.getImages);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getTotalReward = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.totalRewards);
+    return response ?? { result: 0 };
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getRewardAmount = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsAmount);
+    //return [response].filter(a=>a);
+    return response ?? { amount: 0 };
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getRewardList = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsList);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const postClaims = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsList);
     return response;
   } catch (err) {
     return null;
@@ -164,6 +203,18 @@ export const verifyImage = async(image_id, annotation, verification) => {
     return null;
   }
 };
+
+
+
+export const claimRewards = async (data) => {
+  try {
+    const response = await postRewards(s.rewards.claimRewards, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 
 /**
  * POST

@@ -39,7 +39,14 @@ export const settings = {
 
   },
 
+  rewards:{
+    rewardsAmount: '/api/v1/rewards/?entity_type=image',  
+    rewardsList: '/api/v1/rewards/list?entity_type=image&page=1',   
+    totalRewards: '/api/v1/rewards/total-rewards', 
+    claimRewards: '/api/v1/rewards/claim' 
+  },
 
+  
   //Authentification
   auth: {
     refreshToken: '/refresh',

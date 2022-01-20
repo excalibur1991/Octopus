@@ -7,6 +7,7 @@ import {
   View,
   processColor,
   StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import {useStateValue} from '../services/State/State';
 import {styles} from '../styles/stats';
@@ -17,6 +18,9 @@ import {fetchOverall as fetchOverallGlobalStats} from '../functions/stats';
 import {fetchOverall as fetchOverallMyStats} from '../functions/mystats';
 import {withTranslation} from 'react-i18next';
 import Ripple from '../components/Ripple';
+import { claimRewards } from '../services/API/APIManager';
+import Button from '../components/Button';
+import { theme } from '../services/Common/theme';
 
 var _arr_date = [];
 var _arr_uploads = [];
@@ -38,6 +42,7 @@ const Tab = ({title, value, isSelected, setTab}) => {
     </Ripple>
   );
 };
+
 
 const Stats = ({t, navigation}) => {
   useEffect(() => {
@@ -65,6 +70,9 @@ const Stats = ({t, navigation}) => {
 
   const [annotations, setAnnotations] = useState(0);
   const [uploads, setUploads] = useState(0);
+  const [totalRewards, setTotalRewards] = useState(0);
+  const [claimableRewards, setClaimableRewards] = useState(0);
+  const [alreadyClaimed, setAlreadyClaimed] = useState(0);
   const [verifications, setVerifications] = useState(0);
   const [uploadsQuicrra, setUploadsQuicrra] = useState(0);
   const [annotationsQuicrra, setAnnotationsQuicrra] = useState(0);
@@ -78,6 +86,28 @@ const Stats = ({t, navigation}) => {
   const [curCumuChartdata, setCurCumuChartdata] = useState({});
   const [, dispatch] = useStateValue();
   const [tab, setTab] = useState('GlobalStats');
+  const [msgLog, setMsgLog] = useState('');
+  const [successLog, setSuccessLog] = useState('');
+  const [isLoading, setIsLoading]= useState(false)
+
+  const postUserClaims = async() => {
+    const requestBody = {
+      "entity_type": "image"
+    } 
+    const response = await claimRewards(requestBody)
+    setIsLoading(true)
+    if (response && response.transaction_hash) {
+      setIsLoading(false)
+      setSuccessLog(`${response.transaction_hash?? ''}!`)
+      console.log(`Success! Hash: ${response.transaction_hash}`)
+     // return <Text>{`Success! Hash: ${response.transaction_hash?? ''}`}</Text>
+     //  return response
+    }
+    setIsLoading(false)
+    console.log({rewardRes: response, msg: response.messages})
+    setMsgLog(`${response.messages?? ''}!`)
+     return response.messages
+  }
 
   const onTabChange = (tabVale, tabTitle) => {
     setTab(tabVale);
@@ -122,6 +152,9 @@ const Stats = ({t, navigation}) => {
         dispatch,
         setAnnotations,
         setUploads,
+        setTotalRewards,
+        setClaimableRewards,
+        setAlreadyClaimed,
         setVerifications,
         _arr_date,
         _arr_uploads,
@@ -203,7 +236,39 @@ const Stats = ({t, navigation}) => {
           <Text style={styles.quicra}>{t('stats.datatoken')}</Text>
         </View>
       </View>
-      <View style={styles.mainDivider} />
+      <View style={styles.uavContainer}>
+          <View style={styles.uavItem}>
+            <Text style={styles.uavItemTitle}>{'Total Claimed'}</Text>
+            <Text style={styles.uavItemQuicraValue}>{totalRewards}</Text>
+            <Text style={styles.uavItemQuicra}>{'WEI'}</Text>
+          </View>
+          <View style={styles.uavItemDivider} />
+          <View style={styles.uavCenterItem}>
+            <Text style={styles.uavItemTitle}>{'Claimable Rewards'}</Text>
+            <Text style={styles.uavItemQuicraValue}>{claimableRewards}</Text>
+            <Text style={styles.uavItemQuicra}>{'WEI'}</Text>
+          </View>
+          <View style={styles.uavItemDivider} />
+          <View style={styles.uavItem}>
+            <Text style={styles.uavItemTitle}>{'Already Claimed'}</Text>
+            <Text style={styles.uavItemQuicraValue}>{alreadyClaimed}</Text>
+            <Text style={styles.uavItemQuicra}>{'WEI'}</Text>
+          </View>
+        </View>
+      <View>
+        <TouchableOpacity
+          style={styles.rewardbtn}
+          onPress={() => postUserClaims()}
+        >
+        <Text style={styles.buttonText}>Claim Rewards</Text>
+        </TouchableOpacity> 
+        <View>
+          <Text style={{ color:'red', alignSelf: 'center'}}>{msgLog}</Text>
+        </View>
+        <View>
+          <Text style={{ color:'green', alignSelf: 'center'}}>{successLog}</Text>
+        </View>
+      </View>
       <Text style={styles.graph}>Graphs</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.graphContainer}>
