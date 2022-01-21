@@ -1,7 +1,12 @@
 import {  processColor } from 'react-native'
 import {actions} from '../services/State/Reducer';
+import {
+  getUserStats, 
+  getRewardAmount,
+  getRewardList,
+  getTotalReward
+} from '../services/API/APIManager';
 
-import {getUserStats} from '../services/API/APIManager';
 import {
   calcUploadsCumu,
   calcAnnoDescCumu,
@@ -37,7 +42,7 @@ const sumCumuData = (
       calcVeriCumu(verifcation) +
       calcAnnoTagCumu(tag_annotation) +
       calcAnnoDescCumu(text_annotation);
-    _chartDataY.push({x:index, y:curCumuValue, marker: `${value}\r\nEarnings:${curCumuValue.toFixed(4)}`}); 
+    _chartDataY.push({x:index, y:curCumuValue, marker: `${value}\r\Rewards:${curCumuValue.toFixed(4)}`}); 
     _chartDataX.push(value.split('-')[2] || '');
   });
 
@@ -59,7 +64,7 @@ const sumCumuData = (
       dataSets: [
         {
           values: _chartDataY,
-          label: 'Earnings',
+          label: 'Rewards',
           config: {
             lineWidth: 1,
             drawFilled: true,
@@ -266,6 +271,9 @@ export const fetchOverall = async (
   dispatch,
   setAnnotations,
   setUploads,
+  setTotalRewards,
+  setClaimableRewards,
+  setAlreadyClaimed,
   setVerifications,
   _arr_date,
   _arr_uploads,
@@ -298,6 +306,24 @@ export const fetchOverall = async (
     //const start = date.toISOString().replace(/T.*/, '').split('-').reverse().join('-');
     const start = '14-05-2021';
     const response = await getUserStats(start, end);
+    const sumRewards = await getTotalReward()
+    const rewardList = await getRewardList()
+    const rewardsAmount = await getRewardAmount()
+    let sum_rewards = 0;
+    let already_claimed = 0;
+    let claimable_rewards = 0;
+    console.log({ Amount: rewardsAmount, totalRewards:sumRewards})
+
+    if(sumRewards !== null && rewardsAmount !== null) {
+      sum_rewards = (sumRewards.result).toExponential(1);
+      claimable_rewards = (rewardsAmount.amount).toExponential(1) 
+      already_claimed = (sum_rewards-claimable_rewards).toExponential(1)
+      console.log({sum_rewards:sum_rewards, claimable_rewards:claimable_rewards, already_claimed:already_claimed})
+    }
+    setTotalRewards(sum_rewards);
+    setClaimableRewards(claimable_rewards);
+    setAlreadyClaimed(already_claimed);
+
     if (response && response.result) {
       let sum_anno_description = 0;
       let sum_anno_tags = 0;

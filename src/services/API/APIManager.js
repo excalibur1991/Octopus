@@ -4,12 +4,51 @@ import {
   postData,
   getUserData,
   postUserData,
+  getUserRewards,
+  postRewards
 } from './CoreAPICalls';
 import {settings as s} from './Settings';
 
 export const getAllImages = async () => {
   try {
     const response = await getUserData(s.taxonomy.getImages);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getTotalReward = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.totalRewards);
+    return response ?? { result: 0 };
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getRewardAmount = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsAmount);
+    //return [response].filter(a=>a);
+    return response ?? { amount: 0 };
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getRewardList = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsList);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const postClaims = async () => {
+  try {
+    const response = await getUserRewards(s.rewards.rewardsList);
     return response;
   } catch (err) {
     return null;
@@ -108,24 +147,25 @@ export const userLogout = async () => {
 /**
  * queryMetadata
  * @param {*} page 
- * @param {*} status 
- * @param {*} fields 
+ * @param {*} type (optional) BoundingBox, TextTag, Anonymization
+ * @param {*} tags (optional) ["birdhouse"]
+ * @param {*} fields (optional) ["image_id","descriptions","tags"],
+ * 
  * @returns 
+ * 
  */
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
-export const queryMetadata = async(
-  page, 
-  status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"]) => {
+export const queryMetadata = async(data) => {
 
-    const data = {page: page, status: status, fields: fields}
-
-    try {
-      const response = await postUserData(s.metadata.queryMetadata, data);
-      return response;
-    } catch (err) {
-      return null;
-    }
+  //const data = {page: page, status: status, fields: fields, type: type};
+  //check if tags empty, then what result?
+  
+  try {
+    const response = await postUserData(s.metadata.queryMetadata, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
 }
 
 export const getImageById = async(imageId) => {
@@ -164,27 +204,16 @@ export const verifyImage = async(image_id, annotation, verification) => {
   }
 };
 
-export const uploadImage = async (data) => {
+
+
+export const claimRewards = async (data) => {
   try {
-    const response = await postUserData(s.taxonomy.uploadImage, data, true);
-    console.log('error uploadImage', response)
+    const response = await postRewards(s.rewards.claimRewards, data);
     return response;
   } catch (err) {
-    console.log('error uploadImage', err)
     return null;
   }
 };
-
-export const annotateImage = async (data) => {
-  try {
-    const response = await postUserData(s.taxonomy.annotateImage, data); 
-    console.log('error annotateImage', response)
-    return response;
-  } catch (err) {
-    console.log('error annotateImage', err)
-    return null;
-  }
-}
 
 
 /**
@@ -226,36 +255,65 @@ export const annotate = async(data)=>{
   return null;
 };
 
-export const getUsageFlag = async()=>{
+
+export const uploadImage = async (data) => {
   try {
-    const response = await getUserData(s.auth.usageFlag);
-    console.log('getUsageFlag', response)
+    const response = await postUserData(s.metadata.uploadImage, data, true);
     return response;
-  } catch(err) {
-    console.log('error getUsageFlag', err)
+  } catch (err) {
     return null;
   }
 };
 
-export const saveUsageFlag = async(data)=>{
+export const annotateImage = async (data) => {
   try {
-    const response = await postUserData(s.auth.usageFlag, data);
-    console.log('saveUsageFlag', response)
+    const response = await postUserData(s.metadata.annotateImage, data);
     return response;
-  } catch(err) {
-    console.log('error saveUsageFlag', err)
+  } catch (err) {
+    return null;
+  }
+};
+
+
+// {image_id: "1234356789"}
+export const getPlayAIAnnotation = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.getPlayAIAnnotation, data);
+    return response;
+  } catch (err) {
+    return null;
+  } 
+};
+
+export const setPlayAIAnnotation = async (data) => {
+  try {
+    const response = await postUserData(s.metadata.setPlayAIAnnotation, data);
+    return response;
+  }catch(err) {
+    return null;
+  }
+};
+
+/**
+ * 
+ * @param {*} data {
+ * "image_ids":["00000cf8fc7c3cd8"],
+ * "annotations" :["BoundingBox", "GeoLocation"]}
+ * @returns 
+ */
+export const queryAnnotation =async(data) => {
+  try {
+    const response = await postUserData(s.metadata.query,data);
+    return response;
+  }catch(err){
     return null;
   }
 }
-
-
 export const getUsageFlag = async()=>{
   try {
     const response = await getUserData(s.auth.usageFlag);
-    console.log('getUsageFlag', response)
     return response;
   } catch(err) {
-    console.log('error getUsageFlag', err)
     return null;
   }
 }
@@ -263,10 +321,8 @@ export const getUsageFlag = async()=>{
 export const saveUsageFlag = async(data)=>{
   try {
     const response = await postUserData(s.auth.usageFlag, data);
-    console.log('saveUsageFlag', response)
     return response;
   } catch(err) {
-    console.log('error saveUsageFlag', err)
     return null;
   }
 }

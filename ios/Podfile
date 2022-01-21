@@ -17,6 +17,8 @@ target 'DataUnion' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
   target 'DataUnionTests' do
     inherit! :complete
     # Pods for testing

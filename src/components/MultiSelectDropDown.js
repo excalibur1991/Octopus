@@ -16,7 +16,8 @@ const MultiSelect = ({
   options = [],
   selectedIndices = [],
   onSelect = () => {},
-  textColor = theme.APP_COLOR,
+  textColor = theme.APP_COLOR_1,
+  color = theme.COLORS.BLUE,
 }) => {
   return (
     <Menu renderer={renderers.ContextMenu}>
@@ -24,6 +25,7 @@ const MultiSelect = ({
         customStyles={{
           triggerOuterWrapper: {
             ...styles.container,
+            backgroundColor: color || theme.COLORS.BLUE,
             overflow: 'hidden',
           },
         }}>
@@ -48,19 +50,17 @@ const MultiSelect = ({
           )}
           <EntypoIcon
             size={20}
-            color="#A2A2A2"
-            style={styles.icon}
             name="chevron-down"
+            color={theme.COLORS.WHITE}
           />
         </View>
       </MenuTrigger>
       <MenuOptions
         customStyles={{
           optionsContainer: {
-            width: '85%',
-            borderWidth: 1,
-            borderColor: 'lightgray',
+            width: '90%',
             borderRadius: 10,
+            backgroundColor: theme.APP_COLOR_2,
           },
         }}>
         {options &&
@@ -73,7 +73,9 @@ const MultiSelect = ({
                 <CheckBox
                   title={item}
                   textColor={
-                    selectedIndices.includes(index) ? textColor : '#8C98A9'
+                    selectedIndices.includes(index)
+                      ? textColor
+                      : theme.COLORS.REGENT_GRAY
                   }
                   fontSize={14}
                   onChange={() => onSelect(index)}
@@ -91,33 +93,31 @@ export default MultiSelect;
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: 8,
     marginVertical: 5,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#DADADA',
   },
   box: {
     paddingVertical: 13,
-    paddingHorizontal: 10,
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   option: {
-    paddingVertical: 5,
     paddingHorizontal: 3,
+    justifyContent: 'center',
   },
   placeholderText: {
     flex: 1,
-    fontSize: 14,
-    color: '#A2A2A2',
-    fontFamily: 'Inter-Regular',
-  },
-  icon: {
-    alignSelf: 'flex-end',
+    fontSize: 16,
+    lineHeight: 22,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
   },
   valueText: {
     flex: 1,
-    fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    fontFamily: 'Moon-Bold',
   },
   valueContainer: {
     flex: 1,

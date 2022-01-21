@@ -12,6 +12,7 @@ export default StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE,
   },
   scrollContainer: {
+    width: '100%',
     flex: 1,
   },
   header: {

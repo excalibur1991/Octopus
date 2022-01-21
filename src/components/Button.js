@@ -1,9 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, ActivityIndicator, View} from 'react-native';
 import Ripple from './Ripple';
 import PropTypes from 'prop-types';
 
-const Button = props => {
+const Button = (props) => {
   const {
     title = '',
     onPress = () => {},
@@ -23,57 +24,61 @@ const Button = props => {
 
   return (
     <View style={style}>
-      <Ripple
-        outerStyle={{
-          width: '100%',
-          borderWidth: !disabled && isOutlined ? 2 : 0,
-          borderColor: color,
-          backgroundColor: disabled ? '#cccccc' : isOutlined ? '#fff' : color,
-          borderRadius: isBottomButton ? 0 : 5,
+      <View
+        style={{
           marginVertical: 5,
+          borderRadius: isBottomButton ? 0 : 5,
           ...buttonStyle,
-        }}
-        innerStyle={{
-          height: height,
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingVertical: 10,
-          paddingHorizontal: 10,
-        }}
-        onPress={onPress}
-        disabled={disabled}>
-        {loading ? (
-          <ActivityIndicator color={isOutlined ? '#000' : '#fff'} />
-        ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+        }}>
+        <Ripple
+          style={{
+            borderWidth: !disabled && isOutlined ? 2 : 0,
+            borderColor: color,
+            backgroundColor: disabled ? '#cccccc' : isOutlined ? '#fff' : color,
+            height: height,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+            borderRadius: buttonStyle.borderRadius
+              ? buttonStyle.borderRadius
+              : 0,
+          }}
+          onPress={onPress}
+          disabled={disabled}>
+          {loading ? (
+            <ActivityIndicator color={isOutlined ? '#000' : '#fff'} />
+          ) : (
             <View
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 10,
-                bottom: 0,
+                flexDirection: 'row',
+                width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              {icon}
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 10,
+                  bottom: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {icon}
+              </View>
+              <Text
+                style={{
+                  color: disabled ? '#90a2bb' : isOutlined ? color : '#fff',
+                  fontSize: 13,
+                  ...textStyle,
+                }}>
+                {title}
+              </Text>
             </View>
-            <Text
-              style={{
-                color: disabled ? '#90a2bb' : isOutlined ? color : '#fff',
-                fontSize: 13,
-                ...textStyle,
-              }}>
-              {title}
-            </Text>
-          </View>
-        )}
-      </Ripple>
+          )}
+        </Ripple>
+      </View>
     </View>
   );
 };

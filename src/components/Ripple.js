@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const Ripple = (props) => {
+const Ripple = ({style = {}, children = null, ...props}) => {
   const makeTouchable = (TouchableComponent) => {
     const Touchable =
       TouchableComponent ||
@@ -24,31 +24,16 @@ const Ripple = (props) => {
 
   const {Touchable, defaultTouchableProps} = makeTouchable();
 
-  const {outerStyle = {}, innerStyle = {}, children = null} = props || {};
+  const outerStyle = {
+    borderRadius: style.borderRadius ? style.borderRadius : 0,
+    overflow: 'hidden',
+  };
 
-  const touchable = (
-    <Touchable {...defaultTouchableProps} {...props}>
-      <View style={innerStyle}>{children}</View>
-    </Touchable>
-  );
-
-  return Platform.OS === 'android' ? (
-    <View
-      style={{
-        ...outerStyle,
-        overflow: 'hidden',
-      }}>
-      {touchable}
-    </View>
-  ) : (
+  return (
     <View style={outerStyle}>
-      <View
-        style={{
-          overflow: 'hidden',
-          borderRadius: outerStyle.borderRadius ? outerStyle.borderRadius : 0,
-        }}>
-        {touchable}
-      </View>
+      <Touchable {...defaultTouchableProps} {...props}>
+        <View style={style}>{children}</View>
+      </Touchable>
     </View>
   );
 };

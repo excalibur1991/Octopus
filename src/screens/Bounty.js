@@ -13,9 +13,6 @@ import {theme} from '../services/Common/theme';
 import {withTranslation} from 'react-i18next';
 import HTML from 'react-native-render-html';
 
-import MultiSelect from '../components/Multiselect'
-
-
 
 const Bounty = ({navigation, t}) => {
 
@@ -105,7 +102,7 @@ const Bounty = ({navigation, t}) => {
         h1: {
             color: '#000000',
             textAlign: 'center',
-            marginBottom: 10
+            marginBottom: '2%'
         },
         h4: {
             color: '#41474E',
@@ -114,9 +111,8 @@ const Bounty = ({navigation, t}) => {
         img: {
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginTop: 20,
-            width: Dimensions.get('window').width * .75,
-            backgroundColor: 'red'
+            marginTop: '4%',
+            width: Dimensions.get('window').width * .8,
         },
         label: {
             color: '#41474E',
@@ -163,7 +159,7 @@ const Bounty = ({navigation, t}) => {
                             <HTML 
                             source={{html: item.item.content}} 
                             imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                            staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                            staticContentMaxWidth={Dimensions.get('window').width * .8 }
                             tagsStyles={tagsStyles}
                             classesStyles={classesStyles}
                             renderersProps={renderersProps}
@@ -177,8 +173,8 @@ const Bounty = ({navigation, t}) => {
                                 borderTopLeftRadius: 15,
                                 borderTopRightRadius: 15,
                                 backgroundColor: '#8b98a9',
-                                paddingHorizontal: 20,
-                                marginTop: 20,
+                                paddingHorizontal: '4%',
+                                marginTop: '4%',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
@@ -186,18 +182,18 @@ const Bounty = ({navigation, t}) => {
                                 <HTML 
                                     source={{html: item.item.header}} 
                                     imagesMaxWidth={Dimensions.get('window').width * .9 } 
-                                    staticContentMaxWidth={Dimensions.get('window').width * .9 }
+                                    staticContentMaxWidth={Dimensions.get('window').width * .8 }
                                     tagsStyles={tagsStyles}
                                     classesStyles={classesStyles}
                                     renderersProps={renderersProps}
-                                    contentWidth={Dimensions.get('window').width * .9}
+                                    contentWidth={Dimensions.get('window').width * .8}
                                 />
                             </View>
                             <View 
                             style={{
                                 backgroundColor: '#f2f2f2',
-                                paddingHorizontal: 20,
-                                paddingVertical: 10,
+                                paddingHorizontal: '4%',
+                                paddingVertical: '2%',
                             }}>
                                 <HTML 
                                     source={{html: item.item.content}} 
@@ -227,7 +223,7 @@ const styles = StyleSheet.create({
       width: '100%',
       marginTop: '2%',
       paddingTop: '5%',
-      paddingHorizontal: 25,
+      paddingHorizontal: '4%',
       alignItems: 'center',
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
@@ -237,11 +233,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold'
 
-    },
-    column: {
-        width: '100%', 
-         flex: 1,
-         height: 100
     },
     headerLink: {
         color:'#ff4092'

@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, TextInput as TI, StyleSheet} from 'react-native';
+import {View, TextInput as TI, StyleSheet, Text, Platform} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 const TextInput = ({
   isTextArea = false,
   placeholder = '',
   value = '',
+  label = '',
   onChangeText = '',
   ...props
 }) => {
@@ -20,14 +21,17 @@ const TextInput = ({
           {...props}
         />
       ) : (
-        <TI
-          multiline
-          value={value}
-          style={styles.inputMultiline}
-          placeholder={placeholder}
-          onChangeText={onChangeText}
-          {...props}
-        />
+        <>
+          <Text style={styles.label}>{label}</Text>
+          <TI
+            multiline
+            value={value}
+            style={styles.inputMultiline}
+            placeholder={placeholder}
+            onChangeText={(val) => onChangeText(val.toUpperCase())}
+            {...props}
+          />
+        </>
       )}
     </View>
   );
@@ -39,20 +43,32 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 5,
     borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#DADADA',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderColor: theme.COLORS.BLUE,
+  },
+  label: {
+    fontSize: 10,
+    lineHeight: 12,
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
   },
   inputSingleline: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    color: theme.COLORS.BLACK,
+    color: theme.COLORS.WHITE,
   },
   inputMultiline: {
-    minHeight: 120,
-    maxHeight: 120,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    padding: 0,
+    fontSize: 11,
+    minHeight: 95,
+    maxHeight: 95,
+    marginTop: 10,
+    lineHeight: 16,
     textAlignVertical: 'top',
-    color: theme.COLORS.BLACK,
+    color: theme.COLORS.WHITE,
+    fontFamily: 'Inter-Regular',
+    fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
   },
 });

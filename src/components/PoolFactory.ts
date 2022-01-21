@@ -33,12 +33,12 @@ export class PoolFactory {
    */
   async createPool(account: string): Promise<TransactionReceipt> {
     if (web3 === null) {
-      console.log('ERROR: Web3 object is null')
+      //console.log('ERROR: Web3 object is null')
       return null
     }
 
     if (this.factoryAddress === null) {
-      console.log('ERROR: bfactoryAddress is null')
+      //console.log('ERROR: bfactoryAddress is null')
       return null
     }
 
@@ -61,7 +61,7 @@ export class PoolFactory {
       txid = await factory.methods.newBPool().send({ from: account, gas: estGas + 1 })
       // pooladdress = transactiondata.events.BPoolRegistered.returnValues[0]
     } catch (e) {
-      console.log(`ERROR: Failed to create new pool: ${e.message}`)
+      //console.log(`ERROR: Failed to create new pool: ${e.message}`)
     }
     return txid
   }

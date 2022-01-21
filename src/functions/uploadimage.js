@@ -78,15 +78,6 @@ export const verifyFields = (
   for (const [index, fileUploadResponse] of fileUploadResponses.entries()) {
     if (fileUploadResponse && fileUploadResponse.id) {
       let message = '';
-      if (!(descriptions && descriptions[index])) {
-        message += 'Description';
-      }
-      if (!(tags && tags[index] && tags[index].length > 0)) {
-        if (message) {
-          message += '\n';
-        }
-        message += 'Tags (atleast one)';
-      }
       if (message) {
         setSelectedIndex(index);
         dispatch({
@@ -263,7 +254,7 @@ export const submitMultipleImageTags = async (
       dispatch({
         type: actions.SET_ALERT_SETTINGS,
         alertSettings: {
-          show: true,
+          show: false,
           type: 'success',
           title: 'Success!',
           message: 'Description & Tags Submitted',

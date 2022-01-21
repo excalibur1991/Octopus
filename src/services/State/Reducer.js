@@ -8,6 +8,17 @@ export const actions = {
   SET_NEW_MESSAGE: 'SET_NEW_MESSAGE',
   SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
   SET_LANGUAGE: 'SET_LANGUAGE',
+  SET_DATAUSAGE: 'SET_DATAUSAGE',
+  SET_VERIFYSETTING: 'SET_VERIFYSETTING',
+  SET_CAMERASETTINGS: 'SET_CAMERASETTINGS',
+  SET_PLAYAISETTINGS: 'SET_PLAYAISETTINGS',
+  SET_HEADERSETTINGS: 'SET_HEADERSETTINGS',
+  SET_SHOW_LANDING_PAGE_WALKTHROUGH: 'SET_SHOW_LANDING_PAGE_WALKTHROUGH',
+  SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH: 'SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH',
+  SET_SHOW_VERIFY_IMAGE_WALKTHROUGH: 'SET_SHOW_VERIFY_IMAGE_WALKTHROUGH',
+  SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH: 'SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH',
+  SET_WALKTHROUGH_CURRENT_STEP: 'SET_WALKTHROUGH_CURRENT_STEP',
+  EXIT_WALKTHROUGH: 'EXIT_WALKTHROUGH',
 };
 
 export const reducer = (state, action) => {
@@ -58,6 +69,66 @@ export const reducer = (state, action) => {
       return {
         ...state,
         selectedLanguage: action.selectedLanguage,
+      };
+    case actions.SET_DATAUSAGE:
+      return {
+        ...state,
+        dataUsageSettings: action.dataUsageSettings,
+      };
+    case actions.SET_VERIFYSETTING:
+      return {
+        ...state,
+        verifySettings: action.verifySettings
+      };
+    case actions.SET_CAMERASETTINGS:
+      return {
+        ...state,
+        cameraSettings: action.cameraSettings
+      };
+    case actions.SET_PLAYAISETTINGS:
+      return {
+        ...state,
+        playAISettings: action.playAISettings
+      };
+    
+    case action.SET_HEADERSETTINGS:
+      return {
+        ...state,
+        headerSettings: action.headerSettings
+      };
+    case actions.SET_SHOW_LANDING_PAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showLandingPageWalkthrough: true,
+      };
+    case actions.SET_SHOW_UPLOAD_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showUploadImagePageWalkthrough: true,
+      };
+    case actions.SET_SHOW_VERIFY_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showVerifyImagePageWalkthrough: true,
+      };
+    case actions.SET_SHOW_ANNOTATE_IMAGE_WALKTHROUGH:
+      return {
+        ...state,
+        showAnnotateImagePageWalkthrough: true,
+      };
+    case actions.SET_WALKTHROUGH_CURRENT_STEP:
+      return {
+        ...state,
+        walkthroughCurrentStep: action.walkthroughCurrentStep,
+      };
+    case actions.EXIT_WALKTHROUGH:
+      return {
+        ...state,
+        showLandingPageWalkthrough: false,
+        showUploadImagePageWalkthrough: false,
+        showVerifyImagePageWalkthrough: false,
+        showAnnotateImagePageWalkthrough: false,
+        walkthroughCurrentStep: 0,
       };
     default:
       return state;

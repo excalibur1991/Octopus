@@ -8,6 +8,7 @@ const KEYS = {
   AUTH_TOKEN: 'AUTH_TOKEN',
   WALLET_KEY: '@save_Keys',
   LANGUAGE: 'LANGUAGE',
+  DATA_USAGE_FLAG: 'DATA_USAGE_FLAG'
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -55,6 +56,33 @@ export const isPrivacyAndTermsAccepted = async () => {
     return false;
   }
 };
+
+export const setDataUsageFlag = async ()=> {
+  try {
+    await AsyncStorage.setItem(
+      KEYS.DATA_USAGE_FLAG,
+      '1'
+    );
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const getDataUsageFlag = async () => {
+  try {
+    const response = await AsyncStorage.getItem(
+      KEYS.DATA_USAGE_FLAG,
+    );
+    if (response && response === '1') {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return false;
+  }
+};
+
 
 export const setLastActivity = async () => {
   try {

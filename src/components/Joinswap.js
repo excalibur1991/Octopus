@@ -33,34 +33,36 @@ async function Joinswap (
  
      let count = (await web3.eth.getTransactionCount(account, 'latest')) + 1 
      const accountNonce =  (web3.eth.getTransactionCount(account) + 1).toString(16)
-     console.log({account:account, nonce:count})
+     //console.log({account:account, nonce:count})
 
 
-     web3.eth.getBlock("latest").then(res => {console.log('gasLimit:', res.gasLimit)});
+     web3.eth.getBlock("latest").then(res => {
+       //console.log('gasLimit:', res.gasLimit)
+      });
 
     const maxAmount = await StakesUtil.getMaxAddLiquidity(poolAddress, tokenIn)
 
-    console.log({account:account, tokenAmountIn: tokenAmountIn, 
-      minPoolAmountOut:minPoolAmountOut, MaxLiq: maxAmount})
+     //console.log({account:account, tokenAmountIn: tokenAmountIn, 
+      //minPoolAmountOut:minPoolAmountOut, MaxLiq: maxAmount})
 
     if (new Decimal(tokenAmountIn).greaterThan(maxAmount)) {
-      console.log('ERROR: Too much reserve to add')
+      //console.log('ERROR: Too much reserve to add')
       return null
     }
     else {
-      console.log('Great!: TokenAmountIn is not greater than reserve!')
+      //console.log('Great!: TokenAmountIn is not greater than reserve!')
     }
 
    //check approval: ask oceanToken contract to approve...
     const approval = await ApproveLiquidity(account, poolAddress, tokenIn, tokenAmountIn)
       
-    console.log({approvalReceipt: approval})
+    //console.log({approvalReceipt: approval})
     
     
     
     if (approval.status == true) {
         //result = receipt.hash
-        console.log({approvalHash: approval.transactionHash})
+        //console.log({approvalHash: approval.transactionHash})
 
         //join the pool if it's approved
         const tx = contractInstance.methods.joinswapExternAmountIn(poolAddress,web3.utils.toWei(tokenAmountIn),web3.utils.toWei(minPoolAmountOut))
@@ -84,7 +86,7 @@ async function Joinswap (
          //     console.log(`ERROR: Failed to pay tokens in order to join the pool: ${e.message}`)
           // }
           // result = receipt
-          console.log("poolJoinReceipt:", result)
+          //console.log("poolJoinReceipt:", result)
        //})
       //console.log({TxStatus: result})
       //return result;
@@ -93,7 +95,7 @@ async function Joinswap (
 
       }
        else {
-        console.log('ERROR: DT approve failed/joining Pool failed!')
+        //console.log('ERROR: DT approve failed/joining Pool failed!')
          return null
       }
     

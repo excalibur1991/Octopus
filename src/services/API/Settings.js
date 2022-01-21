@@ -1,8 +1,11 @@
 export const settings = {
   // development
-  baseUrl: 'https://dev.dataunion.app:8082/',
+  //baseUrl: 'https://crab.dev.dataunion.app',
   //production
-  // baseUrl: 'https://alpha.dataunion.app:4430',
+  //baseUrl: 'https://crab.dataunion.app/',
+  // baseUrl: 'https://crab.dev.dataunion.app/',
+  //production
+  baseUrl: 'https://crab.dataunion.app/',
   taxonomy: {
     getImages: '/api/v1/taxonomy/data',
     storeUserResponse: '/api/v1/taxonomy/store',
@@ -20,17 +23,30 @@ export const settings = {
   },
 
   metadata: {
-    queryMetadata: '/api/v1/query-metadata',
+    queryMetadata: "/api/v1/query-metadata",
     getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',
-    annotate: 'api/v1/metadata/annotation',
+    annotate: '/api/v1/metadata/annotation',
     reportImages: '/api/v1/report-images',
     verifyImage: '/api/v1/verify-image',
     myMetadata: '/api/get/my-metadata',
-    getTags: '/staticdata/tags?type=$[word_type]'
+    getTags: '/staticdata/tags?type=$[word_type]',
+    uploadImage: '/api/v1/upload-file',
+    annotateImage: '/api/v1/annotate',
+    getPlayAIAnnotation: '/api/v1/get_playai_annotate',
+    setPlayAIAnnotation:'/api/v1/set_playai_annotate',
+    query: '/api/v1/metadata/query'
+
   },
 
+  rewards:{
+    rewardsAmount: '/api/v1/rewards/?entity_type=image',  
+    rewardsList: '/api/v1/rewards/list?entity_type=image&page=1',   
+    totalRewards: '/api/v1/rewards/total-rewards', 
+    claimRewards: '/api/v1/rewards/claim' 
+  },
 
+  
   //Authentification
   auth: {
     refreshToken: '/refresh',

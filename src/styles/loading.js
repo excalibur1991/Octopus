@@ -4,14 +4,13 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
-    color: theme.APP_COLOR,
-    fontFamily: 'Inter-Regular',
     fontSize: 19,
-    fontWeight: '600',
+    fontFamily: 'Moon-Bold',
+    color: theme.APP_COLOR_1,
   },
   image: {
     height: 60,
@@ -23,6 +22,6 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    backgroundColor: '#F3F0F3',
+    backgroundColor: theme.COLORS.WHITE,
   },
 });

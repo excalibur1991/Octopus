@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   StatusBar,
@@ -14,7 +16,7 @@ import {useStateValue} from './src/services/State/State';
 import ModalActivityIndicator from './src/components/ModalActivityIndicator';
 import AppAlert from './src/components/AppAlert';
 import {theme} from './src/services/Common/theme';
-import {getLanguage, getUserInfo} from './src/services/DataManager';
+import {getLanguage, getUserInfo, getDataUsageFlag, isPrivacyAndTermsAccepted} from './src/services/DataManager';
 import {store} from './src/store/store.js';
 import {getWeb3_} from './src/web3/getWeb3';
 import {Provider} from 'react-redux';
@@ -23,6 +25,9 @@ import {PersistGate} from 'redux-persist/integration/react';
 import i18next from 'i18next';
 import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
+import { CameraView } from './src/components/CameraView';
+import {ethers} from 'ethers';
+import {NftProvider} from 'use-nft';
 
 getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
@@ -31,11 +36,29 @@ const RootNavigator = () => {
   useEffect(() => {
     checkLanguage();
     checkStatus();
+    checkDataUsageSettings();
+    checkVerifySettings();
   }, []);
 
-  const [{progressSettings, alertSettings}, dispatch] = useStateValue();
+  const [{progressSettings, alertSettings, cameraSettings}, dispatch] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
+
+  const checkDataUsageSettings = async () => {
+    let isDataUsageAvailable = await getDataUsageFlag();
+    dispatch({
+      type: actions.SET_DATAUSAGE,
+      dataUsageSettings: isDataUsageAvailable,
+    });
+  };
+
+  const checkVerifySettings = async () => {
+    let verifyAvailable = await isPrivacyAndTermsAccepted();
+    dispatch({
+      type: actions.SET_VERIFYSETTING,
+      verifySettings: verifyAvailable,
+    });
+  };
 
   const checkLanguage = async () => {
     let language = await getLanguage();
@@ -101,9 +124,14 @@ const RootNavigator = () => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 0, backgroundColor: theme.APP_COLOR}} />
-      <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.WHITE}}>
-        <StatusBar backgroundColor={theme.APP_COLOR} barStyle="dark-content" />
+      <SafeAreaView style={{flex: 0, backgroundColor: theme.APP_COLOR_1}} />
+      <SafeAreaView style={{flex: 1, backgroundColor: theme.APP_COLOR_1}}>
+        <StatusBar
+          barStyle="light-content"
+          translucent={true}
+          backgroundColor={'transparent'}
+        />
+        <CameraView {...cameraSettings} />
         <AppAlert {...getAlertSettings()} />
         <ModalActivityIndicator modalVisible={show} />
         <CreateRootNavigator />
@@ -113,16 +141,20 @@ const RootNavigator = () => {
 };
 
 const App = () => {
+  const fetcher = ['ethers', {ethers, provider: ethers.getDefaultProvider()}];
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <StateProvider initialState={initialState} reducer={reducer}>
-          <MenuProvider>
-            <I18nextProvider i18n={i18next}>
-              <RootNavigator />
-            </I18nextProvider>
-          </MenuProvider>
-        </StateProvider>
+        <NftProvider fetcher={fetcher}>
+          <StateProvider initialState={initialState} reducer={reducer}>
+            <MenuProvider>
+              <I18nextProvider i18n={i18next}>
+                <RootNavigator />
+              </I18nextProvider>
+            </MenuProvider>
+          </StateProvider>
+        </NftProvider>
       </PersistGate>
     </Provider>
   );

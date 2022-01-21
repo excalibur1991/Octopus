@@ -109,7 +109,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to setup a pool: ${e.message}`)
+      //console.log(`ERROR: Failed to setup a pool: ${e.message}`)
     }
     return result
   }
@@ -130,9 +130,9 @@ export class Pool extends PoolFactory {
       from: spender
     })
     const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-    console.log('getting allowance for both datatoken and ocean...')
-    console.log({AllowanceTxReceipt: web3.utils.fromWei(trxReceipt), owner: owner,
-       spender:spender, tokenAddres: tokenAdress })
+    //console.log('getting allowance for both datatoken and ocean...')
+    //console.log({AllowanceTxReceipt: web3.utils.fromWei(trxReceipt), owner: owner,
+    //   spender:spender, tokenAddres: tokenAdress })
     return web3.utils.fromWei(trxReceipt)
   }
 
@@ -181,7 +181,7 @@ export class Pool extends PoolFactory {
     })
     if (!force) {
       const currentAllowence = await this.allowance(tokenAddress, account, spender)
-      console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
+      //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
         return null
@@ -194,7 +194,7 @@ export class Pool extends PoolFactory {
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+        //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -222,12 +222,12 @@ export class Pool extends PoolFactory {
 
   let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
   transaction.sign(privateKey)
-  console.log('getting approval...')
+  //console.log('getting approval...')
   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
-  console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
+  //console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+  //console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+      //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
     }
     return result
   }
@@ -244,9 +244,9 @@ export class Pool extends PoolFactory {
       const token = new web3.eth.Contract(this.poolABI, poolAddress)
       const balance = await token.methods.balanceOf(account).call()
       result = web3.utils.fromWei(balance)
-      console.log({user_shares_of_pool_balance: result, account:account, poolAddress:poolAddress})
+      //console.log({user_shares_of_pool_balance: result, account:account, poolAddress:poolAddress})
     } catch (e) {
-      console.log(`ERROR: Failed to get shares of pool : ${e.message}`)
+      //console.log(`ERROR: Failed to get shares of pool : ${e.message}`)
     }
     return result
   }
@@ -288,7 +288,7 @@ export class Pool extends PoolFactory {
             gasPrice: await getFairGasPrice(web3)
           })
       } catch (e) {
-        console.log(`ERROR: Failed to add tokens to pool: ${e.message}`)
+        //console.log(`ERROR: Failed to add tokens to pool: ${e.message}`)
       }
     }
   }
@@ -315,7 +315,7 @@ export class Pool extends PoolFactory {
         gasPrice: await getFairGasPrice(web3)
       })
     } catch (e) {
-      console.log(`ERROR: Failed to set pool swap fee: ${e.message}`)
+      //console.log(`ERROR: Failed to set pool swap fee: ${e.message}`)
     }
     return result
   }
@@ -337,7 +337,7 @@ export class Pool extends PoolFactory {
         gasPrice: await getFairGasPrice(web3)
       })
     } catch (e) {
-      console.log(`ERROR: Failed to finalize pool: ${e.message}`)
+      //console.log(`ERROR: Failed to finalize pool: ${e.message}`)
     }
     return result
   }
@@ -353,7 +353,7 @@ export class Pool extends PoolFactory {
     try {
       result = await pool.methods.getNumTokens().call()
     } catch (e) {
-      console.log(`ERROR: Failed to get number of tokens: ${e.message}`)
+      //console.log(`ERROR: Failed to get number of tokens: ${e.message}`)
     }
     return result
   }
@@ -366,13 +366,13 @@ export class Pool extends PoolFactory {
   async getPoolSharesTotalSupply(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let amount = null
-    console.log('geting total supply of pool shares...')
+    //console.log('geting total supply of pool shares...')
     try {
       const result = await pool.methods.totalSupply().call()
       amount = web3.utils.fromWei(result)
-      console.log('total supply of pool shares:', amount)
+      //console.log('total supply of pool shares:', amount)
     } catch (e) {
-      console.log(`ERROR: Failed to get total supply of pool shares: ${e.message}`)
+      //console.log(`ERROR: Failed to get total supply of pool shares: ${e.message}`)
     }
     return amount
   }
@@ -387,10 +387,10 @@ export class Pool extends PoolFactory {
     let result = null
     try {
       result = await pool.methods.getCurrentTokens().call()
-      console.log("getting tokens composing this pool...")
-      console.log('pool tokens:', result)
+      //console.log("getting tokens composing this pool...")
+      //console.log('pool tokens:', result)
     } catch (e) {
-      console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
+      //console.log(`ERROR: Failed to get tokens composing this pool: ${e.message}`)
     }
     return result
   }
@@ -406,7 +406,7 @@ export class Pool extends PoolFactory {
     try {
       result = await pool.methods.getFinalTokens().call()
     } catch (e) {
-      console.log(`ERROR: Failed to get the final tokens composing this pool`)
+      //console.log(`ERROR: Failed to get the final tokens composing this pool`)
     }
     return result
   }
@@ -422,7 +422,7 @@ export class Pool extends PoolFactory {
     try {
       result = await pool.methods.getController().call()
     } catch (e) {
-      console.log(`ERROR: Failed to get pool controller address: ${e.message}`)
+      //console.log(`ERROR: Failed to get pool controller address: ${e.message}`)
     }
     return result
   }
@@ -448,7 +448,7 @@ export class Pool extends PoolFactory {
         .setController(controllerAddress)
         .send({ from: account, gas: this.GASLIMIT_DEFAULT })
     } catch (e) {
-      console.log(`ERROR: Failed to set pool controller: ${e.message}`)
+      //console.log(`ERROR: Failed to set pool controller: ${e.message}`)
     }
     return result
   }
@@ -465,8 +465,8 @@ export class Pool extends PoolFactory {
     try {
       result = await pool.methods.isBound(token).call()
     } catch (e) {
-      console.log(`ERROR: Failed to check whether a token \
-      bounded to a pool. ${e.message}`)
+      //console.log(`ERROR: Failed to check whether a token \
+      //bounded to a pool. ${e.message}`)
     }
     return result
   }
@@ -479,15 +479,15 @@ export class Pool extends PoolFactory {
    */
   async getReserve(poolAddress: string, token: string): Promise<string> {
     let amount = null
-    console.log('geting pool reserve(how many tokens are in the pool...)')
+    //console.log('geting pool reserve(how many tokens are in the pool...)')
     try {
       const pool = new web3.eth.Contract(this.poolABI, poolAddress)
       const result = await pool.methods.getBalance(token).call()
       amount = web3.utils.fromWei(result)
-      console.log('poolReserve(amount of tokens in pool):', amount)
+      //console.log('poolReserve(amount of tokens in pool):', amount)
     } catch (e) {
-      console.log(`ERROR: Failed to get how many tokens \
-      are in the pool: ${e.message}`)
+      //console.log(`ERROR: Failed to get how many tokens \
+      //are in the pool: ${e.message}`)
     }
     return amount
   }
@@ -503,7 +503,7 @@ export class Pool extends PoolFactory {
     try {
       result = await pool.methods.isFinalized().call()
     } catch (e) {
-      console.log(`ERROR: Failed to check whether pool is finalized: ${e.message}`)
+      //console.log(`ERROR: Failed to check whether pool is finalized: ${e.message}`)
     }
     return result
   }
@@ -516,13 +516,13 @@ export class Pool extends PoolFactory {
   async getSwapFee(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let fee = null
-    console.log('getting pool swap fee..')
+    //console.log('getting pool swap fee..')
     try {
       const result = await pool.methods.getSwapFee().call()
       fee = web3.utils.fromWei(result)
-      console.log('pool swap fee:', fee)
+      //console.log('pool swap fee:', fee)
     } catch (e) {
-      console.log(`ERROR: Failed to get pool fee: ${e.message}`)
+      //console.log(`ERROR: Failed to get pool fee: ${e.message}`)
     }
     return fee
   }
@@ -540,7 +540,7 @@ export class Pool extends PoolFactory {
       const result = await pool.methods.getNormalizedWeight(token).call()
       weight = web3.utils.fromWei(result)
     } catch (e) {
-      console.log(`ERROR: Failed to get normalized weight of a token: ${e.message}`)
+      //console.log(`ERROR: Failed to get normalized weight of a token: ${e.message}`)
     }
     return weight
   }
@@ -554,13 +554,13 @@ export class Pool extends PoolFactory {
   async getDenormalizedWeight(poolAddress: string, token: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let weight = null
-    console.log('getting DenormalizedWeight of a token in pool...')
+    //console.log('getting DenormalizedWeight of a token in pool...')
     try {
       const result = await pool.methods.getDenormalizedWeight(token).call()
       weight = web3.utils.fromWei(result)
-      console.log('DenormalizedWeight of a token in pool:', weight)
+      //console.log('DenormalizedWeight of a token in pool:', weight)
     } catch (e) {
-      console.log('ERROR: Failed to get denormalized weight of a token in pool')
+      //console.log('ERROR: Failed to get denormalized weight of a token in pool')
     }
     return weight
   }
@@ -573,13 +573,13 @@ export class Pool extends PoolFactory {
   async getTotalDenormalizedWeight(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let weight = null
-    console.log('getting TotalDenormalizedWeight in pool...')
+    //console.log('getting TotalDenormalizedWeight in pool...')
     try {
       const result = await pool.methods.getTotalDenormalizedWeight().call()
       weight = web3.utils.fromWei(result)
-      console.log('TotalDenormalizedWeight in pool:', weight)
+      //console.log('TotalDenormalizedWeight in pool:', weight)
     } catch (e) {
-      console.log('ERROR: Failed to get total denormalized weight in pool')
+      //console.log('ERROR: Failed to get total denormalized weight in pool')
     }
     return weight
   }
@@ -621,8 +621,8 @@ export class Pool extends PoolFactory {
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
     } catch (e) {
-      this.logger.log('Error estimate gas swapExactAmountIn')
-      this.logger.log(e)
+      //this.logger.log('Error estimate gas swapExactAmountIn')
+      //this.logger.log(e)
       estGas = gasLimitDefault
     }
     try {
@@ -640,7 +640,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
+      //console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
     }
     return result
   }
@@ -701,7 +701,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to swap exact amount out: ${e.message}`)
+      //console.log(`ERROR: Failed to swap exact amount out: ${e.message}`)
     }
     return result
   }
@@ -750,7 +750,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to join pool: ${e.message}`)
+      //console.log(`ERROR: Failed to join pool: ${e.message}`)
     }
     return result
   }
@@ -793,7 +793,7 @@ export class Pool extends PoolFactory {
         .exitPool(web3.utils.toWei(poolAmountIn), weiMinAmountsOut)
         .send({ from: account, gas: estGas, gasPrice: await getFairGasPrice(web3) })
     } catch (e) {
-      console.log(`ERROR: Failed to exit pool: ${e.message}`)
+      //console.log(`ERROR: Failed to exit pool: ${e.message}`)
     }
     return result
   }
@@ -828,8 +828,8 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minPoolAmountOut)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log('Joining the liquidity pool..')
-        console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
+        //console.log('Joining the liquidity pool..')
+        //console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -871,12 +871,12 @@ export class Pool extends PoolFactory {
      let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
      transaction.sign(privateKey)
      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-     console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
-     console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
+     //console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+     //console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
       
     } catch (e) {
-      console.log(`ERROR: Failed to pay tokens in order to \
-      join the pool: ${e.message}`)
+      //console.log(`ERROR: Failed to pay tokens in order to \
+      //join the pool: ${e.message}`)
     }
     return result
   }
@@ -927,7 +927,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log('ERROR: Failed to join swap pool amount out')
+      //console.log('ERROR: Failed to join swap pool amount out')
     }
     return result
   }
@@ -978,7 +978,7 @@ export class Pool extends PoolFactory {
           gasPrice: await getFairGasPrice(web3)
         })
     } catch (e) {
-      console.log(`ERROR: Failed to pay pool shares into the pool: ${e.message}`)
+      //console.log(`ERROR: Failed to pay pool shares into the pool: ${e.message}`)
     }
     return result
   }
@@ -1015,9 +1015,9 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(maxPoolAmountIn)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        console.log('Exiting the liquidity pool..')
-        console.log({ExitGasEstimate: estGas, account:account, tokenOut:tokenOut,
-          tokenAmountOut:tokenAmountOut, maxPoolAmountIn: maxPoolAmountIn, poolAddress:poolAddress })
+        //console.log('Exiting the liquidity pool..')
+        //console.log({ExitGasEstimate: estGas, account:account, tokenOut:tokenOut,
+        //  tokenAmountOut:tokenAmountOut, maxPoolAmountIn: maxPoolAmountIn, poolAddress:poolAddress })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -1060,11 +1060,11 @@ export class Pool extends PoolFactory {
      let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
      transaction.sign(privateKey)
      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-     console.log('Success!!. You have succeeded paying the fees and exiting the liquidity pool....')
-     console.log({ExitswapStatus: result.status, ExitReceipt: result})
+     //console.log('Success!!. You have succeeded paying the fees and exiting the liquidity pool....')
+     //console.log({ExitswapStatus: result.status, ExitReceipt: result})
 
     } catch (e) {
-      console.log('ERROR: Failed to exitswapExternAmountOut')
+      //console.log('ERROR: Failed to exitswapExternAmountOut')
     }
     return result
   }
@@ -1087,7 +1087,7 @@ export class Pool extends PoolFactory {
       const result = await pool.methods.getSpotPrice(tokenIn, tokenOut).call()
       price = web3.utils.fromWei(result)
     } catch (e) {
-      console.log('ERROR: Failed to get spot price of swapping tokenIn to tokenOut')
+      //console.log('ERROR: Failed to get spot price of swapping tokenIn to tokenOut')
     }
     return price
   }
@@ -1110,7 +1110,7 @@ export class Pool extends PoolFactory {
       const result = await pool.methods.getSpotPriceSansFee(tokenIn, tokenOut).call()
       price = web3.utils.fromWei(result)
     } catch (e) {
-      console.log('ERROR: Failed to getSpotPriceSansFee')
+      //console.log('ERROR: Failed to getSpotPriceSansFee')
     }
     return price
   }
@@ -1137,7 +1137,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log('ERROR: Failed to call calcSpotPrice')
+      //console.log('ERROR: Failed to call calcSpotPrice')
     }
     return amount
   }
@@ -1167,7 +1167,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log('ERROR: Failed to calcInGivenOut')
+      //console.log('ERROR: Failed to calcInGivenOut')
     }
     return amount
   }
@@ -1196,7 +1196,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log('ERROR: Failed to calcOutGivenIn')
+      //console.log('ERROR: Failed to calcOutGivenIn')
     }
     return amount
   }
@@ -1225,7 +1225,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log(`ERROR: Failed to calculate PoolOutGivenSingleIn : ${e.message}`)
+      //console.log(`ERROR: Failed to calculate PoolOutGivenSingleIn : ${e.message}`)
     }
     return amount
   }
@@ -1254,7 +1254,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log(`ERROR: Failed to calculate SingleInGivenPoolOut : ${e.message}`)
+      //console.log(`ERROR: Failed to calculate SingleInGivenPoolOut : ${e.message}`)
     }
     return amount
   }
@@ -1283,7 +1283,7 @@ export class Pool extends PoolFactory {
         .call()
       amount = web3.utils.fromWei(result)
     } catch (e) {
-      console.log(`ERROR: Failed to calculate SingleOutGivenPoolIn : ${e.message}`)
+      //console.log(`ERROR: Failed to calculate SingleOutGivenPoolIn : ${e.message}`)
     }
     return amount
   }
@@ -1299,7 +1299,7 @@ export class Pool extends PoolFactory {
   ): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let amount = null
-    console.log('calculating PoolInGivenSingleOut....')
+    //console.log('calculating PoolInGivenSingleOut....')
     try {
       const result = await pool.methods
         .calcPoolInGivenSingleOut(
@@ -1312,9 +1312,9 @@ export class Pool extends PoolFactory {
         )
         .call()
       amount = web3.utils.fromWei(result)
-      console.log('PoolInGivenSingleOut:', amount)
+      //console.log('PoolInGivenSingleOut:', amount)
     } catch (e) {
-      console.log(`ERROR: Failed to calculate PoolInGivenSingleOut : ${e.message}`)
+      //console.log(`ERROR: Failed to calculate PoolInGivenSingleOut : ${e.message}`)
     }
     return amount
   }
