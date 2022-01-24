@@ -23,6 +23,7 @@ import Home from './src/WalletHome';
 import WalletSettings from './src/screens/WalletSettings';
 import WalletActions from './src/screens/WalletActions';
 import {withTranslation} from 'react-i18next';
+import ExtConnections from './src/screens/ExtConnections';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,11 @@ class App extends Component {
         <Stack.Screen
           name="Wallet"
           component={WalletSettings}
+          navigation={this.props.navigation}
+        />
+        <Stack.Screen
+          name="ExtConnections"
+          component={ExtConnections}
           navigation={this.props.navigation}
         />
       </Stack.Navigator>
