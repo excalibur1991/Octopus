@@ -22,6 +22,8 @@ import Wallet from './screens/Wallet';
 // import RomanNumberUpload from './screens/RomanNumberUpload';
 // import RomanNumberStats from './screens/RomanNumberStats';
 import WalletSettings from './screens/WalletSettings';
+import ExtConnections from './screens/ExtConnections';
+//import CeloApp from './extConnect/CeloApp'
 // import MyStats from './screens/MyStats';
 // import Bounty from './screens/Bounty';
 import BrowseMissions from './screens/BrowseMissions';
@@ -46,12 +48,13 @@ import Walkthrough from './screens/Walkthrough';
 // import ImageCategorization from './screens/ImageCategorization';
 // import TOS from './screens/TOS';
 // import PrivacyInformation from './screens/PrivacyInformation';
-// import Legal from './screens/Legal';
+// import Legal from './screens/Legal'; 
 import Ripple from './components/Ripple';
 import {dark_theme, theme} from './services/Common/theme';
 import i18n from './languages/i18n';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import IonIcons from 'react-native-vector-icons/Ionicons'
 import {useStateValue} from './services/State/State';
 import {actions} from './services/State/Reducer';
 import {setLanguage} from './services/DataManager';
@@ -902,7 +905,7 @@ const WalletStack = () => (
             isTransparent: true,
             showRightButton: true,
             rightButtonIcon: (
-              <IonIcon
+              <IonIcons
                 size={25}
                 name="settings-outline"
                 color={theme.COLORS.WHITE}
@@ -920,14 +923,39 @@ const WalletStack = () => (
       options={({navigation}) => {
         return Header(
           {
-            title: 'Wallet Settings',
+            title: 'Wallet Setting',
             showBackButton: true,
             isTransparent: true,
+            showRightButton: true,
+            rightButtonIcon: (
+              <MaterialIcon
+                size={25}
+                name="connect-without-contact"
+                color={theme.COLORS.WHITE}
+              />
+            ),
+            rightButtonOnPress: () => navigation.navigate('ExtConnections'),
           },
           navigation,
         );
       }}
     />
+     <Stack.Screen
+      name="ExtConnections"
+      component={ExtConnections}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'External Connections',
+            showBackButton: true,
+            isTransparent: true,
+            showRightButton: true,
+    
+          },
+          navigation,
+        );
+      }}
+     />
   </Stack.Navigator>
 );
 

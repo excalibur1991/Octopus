@@ -35,7 +35,8 @@ import {
 import {withTranslation} from 'react-i18next';
 import {theme} from '../services/Common/theme.js';
 
-const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
+
+export const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
   const handleOnFocus = () => setFocused(title);
 
   return (
@@ -234,11 +235,12 @@ class WalletSettings extends Component {
         <Button
           height={60}
           onPress={() => {}}
-          title="Delete Info"
+          title="Delete Wallet"
           color={theme.APP_COLOR_2}
           textStyle={styles.buttonText}
           buttonStyle={styles.buttonStyle}
         />
+        
       </ScrollView>
     );
   }
