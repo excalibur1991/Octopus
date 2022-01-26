@@ -1,6 +1,6 @@
 /* eslint-disable no-lone-blocks */
 //import '../../shim.js'
-import React, {Component, useState} from 'react';
+import React, { Component, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,20 +10,21 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ToastAndroid,
+  Keyboard
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import {connect} from 'react-redux';
-import {STPupdateAccounts, STPupdateSeedPhrase} from '../actions/actions.js';
+import { connect } from 'react-redux';
+import { STPupdateAccounts, STPupdateSeedPhrase } from '../actions/actions.js';
 import * as Utils from '../web3/utils';
 import Dialog from 'react-native-dialog';
 //import lightwallet from 'eth-lightwallet'
 import bip39 from 'react-native-bip39';
-import {hdPathString, localStorageKey} from '../web3/constants';
+import { hdPathString, localStorageKey } from '../web3/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/Button';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import CButton from '../components/CButton';
-import {styles} from '../styles/walletsettings';
+import { styles } from '../styles/walletsettings';
 import {
   chkNetwork,
   webThreeReturned,
@@ -32,27 +33,58 @@ import {
   handleNewAccount,
   handleWalletDelete,
 } from '../functions/walletsettings';
-import {withTranslation} from 'react-i18next';
-import {theme} from '../services/Common/theme.js';
+import { withTranslation } from 'react-i18next';
+import { theme } from '../services/Common/theme.js';
+import Feather from 'react-native-vector-icons/Feather';
 
 
-export const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
+
+export const ReadOnlyBox = ({ title, value, isFocused, setFocused }) => {
   const handleOnFocus = () => setFocused(title);
+
+  const [data, setData] = useState({ secureTextEntry: true });
+
+  const updateSecureTextEntry = () => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry
+    });
+  }
 
   return (
     <TouchableOpacity
       style={[styles.readOnlyBox, isFocused ? styles.readOnlyBoxShadow : {}]}
-      onPressIn={handleOnFocus}>
+    // onPressIn={updateSecureTextEntry}
+    >
       <View style={styles.titleCopyButton}>
         <Text style={styles.textBoxTitle}>{title}</Text>
-        <CButton text={value} onCopied={handleOnFocus} />
+        <CButton text={value} onCopied={(value) => (value)} />
       </View>
-      <Text numberOfLines={2} style={styles.textBoxValue}>
-        {value}
-      </Text>
+      <TextInput
+        numberOfLines={2}
+        style={styles.textBoxValue}
+        value={value}
+        maxLength={42}
+        //showSoftInputOnFocus={false}
+        onFocus = {()=> Keyboard.dismiss()}
+        secureTextEntry={data.secureTextEntry ? true : false}
+      />
+      <View style={styles.secureFeather}>
+        <TouchableOpacity
+          onPress={updateSecureTextEntry}
+        >
+          {
+            data.secureTextEntry ?
+            <Feather name="eye" color="grey" size={20} /> :
+            <Feather name="eye-off" color="grey" size={20} />
+          }
+        </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 };
+
+
 
 class WalletSettings extends Component {
   constructor(props) {
@@ -103,7 +135,7 @@ class WalletSettings extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
 
     return (
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -149,36 +181,28 @@ class WalletSettings extends Component {
         <ReadOnlyBox
           value={this.state.mnemonics}
           title={t('walletSettings.mnemonicPhrase')}
-          setFocused={(val) => this.setState({focused: val})}
+          setFocused={(val) => this.setState({ focused: val })}
           isFocused={this.state.focused === t('walletSettings.mnemonicPhrase')}
         />
         <ReadOnlyBox
           value={this.state.pword}
           title={t('walletSettings.password')}
-          setFocused={(val) => this.setState({focused: val})}
+          setFocused={(val) => this.setState({ focused: val })}
           isFocused={this.state.focused === t('walletSettings.password')}
         />
         <ReadOnlyBox
           value={this.state.publicKey}
           title={t('walletSettings.publicKey')}
-          setFocused={(val) => this.setState({focused: val})}
+          setFocused={(val) => this.setState({ focused: val })}
           isFocused={this.state.focused === t('walletSettings.publicKey')}
         />
         <ReadOnlyBox
           value={this.state.privateKey}
           title={t('walletSettings.privateKey')}
-          setFocused={(val) => this.setState({focused: val})}
+          setFocused={(val) => this.setState({ focused: val })}
           isFocused={this.state.focused === t('walletSettings.privateKey')}
         />
-        <Button
-          height={60}
-          onPress={() => {}}
-          title="Delete Wallet"
-          color={theme.APP_COLOR_2}
-          textStyle={styles.buttonText}
-          buttonStyle={styles.buttonStyle}
-        />
-        
+
       </ScrollView>
     );
   }

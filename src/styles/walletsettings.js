@@ -57,4 +57,8 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: theme.COLORS.LIGHT_RED,
   },
+  secureFeather: {
+     marginTop: -40,
+     paddingLeft: 318
+ }
 });

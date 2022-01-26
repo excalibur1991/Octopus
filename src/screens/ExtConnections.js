@@ -1,7 +1,7 @@
 //import { useWalletConnect, withWalletConnect } from '@walletconnect/react-native-dapp';
 import { useWalletConnect, withWalletConnect } from '../extConnect/WalletConnectLib';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import Web3 from 'web3';
 import { Platform, LogBox } from 'react-native';
 //import Hello from '../artifacts/contracts/Hello.sol/Hello.json';
@@ -25,11 +25,7 @@ import * as Linking from 'expo-linking'
 import { ReadOnlyBox } from './WalletSettings';
 import { theme } from '../services/Common/theme';
 import { color } from 'react-native-reanimated';
-
-
-//import { scheme } from 'expo';
-//const {  scheme } = require('expo');
-
+import Feather from 'react-native-vector-icons/Feather';
 
 
 export default withWalletConnect(ExtConnections, {
@@ -57,13 +53,22 @@ export function ExtConnections({ t, ...props }) {
     const [textInput, setTextInput] = useState('')
     const [message, setMessage] = useState('Loading...');
 
+    const [data, setData] = React.useState({
+        secureTextEntry: true,
+    });
 
+    const updateSecureTextEntry = () => {
+        setData({
+            ...data,
+            secureTextEntry: !data.secureTextEntry
+        });
+    }
 
     const connectWallet = useCallback(async () => {
         let result = await connector.connect()
         console.log({ result })
         console.log({ desc: result.peerMeta.description, name: result.peerMeta.name, url: result.peerMeta.url })
-        if (result) {
+        if (result )  {
             setAddress(result.accounts[0])
             setMessage(`Connected to ${result.peerMeta.name}`)
 
@@ -71,22 +76,7 @@ export function ExtConnections({ t, ...props }) {
 
         return connector.connect();
     }, [connector]);
-    /** 
-        {
-          "result": {
-            "accounts": ["0x18346dd0864eE8211bF9996b729a05b1D20A3D5F"],
-            "chainId": 1,
-            "peerId": "29c5e9e2-4fd5-417d-b796-1e1f65bb4c31",
-            "peerMeta": {
-              "description": "MetaMask Mobile app", 
-              "icons": [Array], 
-              "name": "MetaMask",
-               "ssl": true, 
-               "url": "https://metamask.io"
-              }
-            }
-        }
-    */
+
     const signTransaction = useCallback(async () => {
         try {
             await connector.signTransaction({
@@ -110,55 +100,49 @@ export function ExtConnections({ t, ...props }) {
     }, [connector]);
 
     return (
-
-
+  
+        <>
         <View style={styles.container}>
-            {
-                connector.connected ?
-                    (<><>
-                    <View>
+                {connector.connected ?
+                    (<>
                         <View>
-                            <Text style={styles.textBoxValue}>Connected to {connector.peerMeta.name}!</Text>
-                        </View>
-                        <ReadOnlyBox
-                            value={connector.accounts[0]}
-                            title={'Public Addresss'} />
-                    </View>
-                    </>
-                        <View>
+                            <View>
+                                <Text style={styles.textBoxTitle}>Connected to {connector.peerMeta.name}!</Text>
+                            </View>
+                            <ReadOnlyBox
+                             title='Pubic Address'
+                             value={connector.accounts[0]}
+                            />
                             <Button
                                 height={60}
                                 onPress={() => killSession()}
                                 title="Disconnect"
                                 color={theme.APP_COLOR_2}
                                 textStyle={styles.buttonText}
-                                buttonStyle={styles.buttonStyle}
-                            />
+                                buttonStyle={styles.buttonStyle} 
+                             />
                             <Button
                                 height={60}
                                 onPress={() => signTransaction()}
                                 title="Sign a Transaction"
                                 color={theme.APP_COLOR_2}
                                 textStyle={styles.buttonText}
-                                buttonStyle={styles.buttonStyle}
-                            />
+                                buttonStyle={styles.buttonStyle} />
                         </View></>
-                        ) :
-                        (<View>
-                            <Button
-                                height={60}
-                                onPress={() => connectWallet()}
-                                title="WalletConnect"
-                                color={theme.APP_COLOR_2}
-                                textStyle={styles.buttonText}
-                                buttonStyle={styles.buttonStyle}
-                            />
-                        </View>
-                        )
-            }
-        </View>
+                    ) :
+                    (<View>
+                        <Button
+                            height={60}
+                            onPress={() => connectWallet()}
+                            title="WalletConnect"
+                            color={theme.APP_COLOR_2}
+                            textStyle={styles.buttonText}
+                            buttonStyle={styles.buttonStyle} />
+                    </View>
+                    )}
+            </View></>
 
 
     )
 
-}    
+}   
