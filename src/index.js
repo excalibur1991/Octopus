@@ -70,7 +70,6 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { MissionComplete } from './screens/playAI/MissionComplete';
 import PlayAITutorial from './screens/playAI/PlayAITutorial';
 

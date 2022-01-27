@@ -23,7 +23,6 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
     const open = React.useCallback(async (uri, cb) => {
         if (Platform.OS === 'android') {
             const canOpenURL = await Linking.canOpenURL(uri);
-         /**
             if (!canOpenURL) {
                 
                // Linking.openURL('https://walletconnect.org/wallets');
@@ -31,7 +30,6 @@ export default function WalletConnectProvider({ children, renderQrcodeModal: may
 
                 throw new Error('No wallets found.');
             }
-             */
             await Linking.openURL(uri);
         }
         setState({
