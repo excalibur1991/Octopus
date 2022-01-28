@@ -169,20 +169,17 @@ const login = async () => {
 
 
   const connectWallet = useCallback(async() => {
-      let result =  await connector.connect()
-      console.log({result})
-      if(result) {
-        setAddress(result.accounts[0])
-        setMessage(`Connected!`)
-        
-      }
-
-    return connector.connect();
+      connector.connect().then((result)=>{
+        if(result) {
+          setAddress(result.accounts[0])
+          setMessage(`Connected!`)
+        }
+      });
   }, [connector]);
   
   const signTransaction = useCallback(async () => {
     try {
-       await connector.signTransaction({
+       connector.signTransaction({
         data: '0x',
         from: '0xbc28Ea04101F03aA7a94C1379bc3AB32E65e62d3',
         gas: '0x9c40',
@@ -190,6 +187,8 @@ const login = async () => {
         nonce: '0x0114',
         to: '0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359',
         value: '0x00',
+      }).then((ret)=>{
+        //handle signTransaction result
       });
     } catch (e) {
       console.error(e);
