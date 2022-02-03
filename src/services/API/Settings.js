@@ -20,16 +20,15 @@ export const settings = {
   },
 
   metadata: {
-    queryMetadata: "/api/v1/query-metadata",
+    queryMetadata: '/api/v1/query-metadata',
     getImageById: '/api/v1/get-image-by-id?id=$[image_id]',
     queryTags: '/api/v1/query-tags',
     annotate: 'api/v1/metadata/annotation',
     reportImages: '/api/v1/report-images',
     verifyImage: '/api/v1/verify-image',
     myMetadata: '/api/get/my-metadata',
-    getTags: '/staticdata/tags?type=$[word_type]'
+    getTags: '/staticdata/tags?type=$[word_type]',
   },
-
 
   //Authentification
   auth: {
@@ -38,6 +37,19 @@ export const settings = {
     logout: '/logout',
     get_nounce: '/get-nonce?public_address=$[public_address]',
     register: '/register',
-    usageFlag: '/usage-flag'
+    usageFlag: '/usage-flag',
+  },
+
+  alchemy: {
+    key: 'https://eth-ropsten.alchemyapi.io/v2/z5z5j5QhacIsJ9zlbpsOxTBR_TAvIcn2',
+    getNfts: 'https://eth-ropsten.g.alchemy.com/demo/v1/getNFTs?owner=$[owner]',
+    getNFTMetadata:
+      'https://eth-ropsten.g.alchemy.com/demo/v1/getNFTMetadata?contractAddress=$[contractAddress]&tokenId=$[tokenId]&tokenType=erc721&refreshCache=true',
+  },
+  pinata: {
+    key: '819593f12b19ebc0c341',
+    secret: 'e2176bd2a3549588cfc624d36742003c81e1bf9dc80cab59a67dbc509df9fcaa',
+    pinFileToIPFS: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+    pinJSONToIPFS: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
   },
 };

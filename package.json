@@ -12,7 +12,7 @@
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ."
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.0.2",
+    "@alch/alchemy-web3": "^1.1.12",
     "@oceanprotocol/lib": "^0.16.0",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/clipboard": "^1.5.1",
@@ -84,6 +84,7 @@
     "react-native-udp": "^2.7.0",
     "react-native-vector-icons": "^8.1.0",
     "react-native-webview": "^11.6.5",
+    "react-native-wheel-color-picker": "^1.1.0",
     "react-native-youtube-iframe": "^2.0.1",
     "react-redux": "^7.2.0",
     "readable-stream": "^1.0.33",
@@ -102,8 +103,7 @@
     "util": "^0.10.4",
     "vm-browserify": "0.0.4",
     "watchman": "^1.0.0",
-    "web3": "^1.2.8",
-    "react-native-wheel-color-picker": "^1.1.0"
+    "web3": "^1.2.8"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

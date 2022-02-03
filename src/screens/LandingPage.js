@@ -1,12 +1,12 @@
 import React from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
-import {Text, View, FlatList, Image, ActivityIndicator} from 'react-native';
+import {Text, View, FlatList, Image} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
-import {useNft} from 'use-nft';
+import Nft from '../components/Nft';
 
 const LandingPage = ({navigation, t}) => {
   const options = [
@@ -36,11 +36,6 @@ const LandingPage = ({navigation, t}) => {
     },
   ];
 
-  const {nft, loading} = useNft(
-    '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d',
-    '102',
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.centered}>
@@ -63,20 +58,7 @@ const LandingPage = ({navigation, t}) => {
             color={theme.COLORS.DARK_BLUE}
           />
           <View style={styles.imageContainer}>
-            {loading ? (
-              <ActivityIndicator color={theme.COLORS.WHITE} size="large" />
-            ) : (
-              <Image
-                borderRadius={100}
-                resizeMode="stretch"
-                style={styles.image}
-                source={
-                  nft && nft.image
-                    ? {uri: nft.image}
-                    : require('../assets/app-logo.png')
-                }
-              />
-            )}
+            <Nft />
           </View>
         </View>
         <Text style={styles.levelChip}>LV. 3</Text>
