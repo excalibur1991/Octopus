@@ -12,9 +12,7 @@
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ."
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.0.2",
-    "@celo/contractkit": "^1.1.0",
-    "@celo/dappkit": "^1.1.0",
+    "@alch/alchemy-web3": "^1.1.12",
     "@oceanprotocol/lib": "^0.16.0",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/clipboard": "^1.5.1",
