@@ -157,6 +157,7 @@ const Nft = () => {
               nfts.length > 0 &&
               nfts.map((nft, index) => (
                 <MenuOption
+                  key={`NftMenu${index}`}
                   onSelect={() =>
                     fetchNftMetadata(nft.contract.address, nft.id.tokenId)
                   }
