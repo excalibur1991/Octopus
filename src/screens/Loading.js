@@ -7,7 +7,7 @@ import {styles} from '../styles/loading';
 import {LoginProc} from '../functions/loading';
 import {withTranslation} from 'react-i18next';
 const logo = require('../assets/icon.png');
-const oceanIcon = require('../assets/ocean.png');
+const oceanIcon = require('../assets/ocean_white.png');
 
 const Loading = ({navigation, t}) => {
   const web3 = useSelector((state) => state.web3);
