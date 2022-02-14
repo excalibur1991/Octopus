@@ -2,7 +2,7 @@
 import 'react-native-gesture-handler';
 import {enableScreens} from 'react-native-screens';
 enableScreens();
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -94,16 +94,25 @@ const styles = StyleSheet.create({
     backgroundColor: theme.APP_COLOR_2,
   },
   languageButtonOuter: {
-    borderRadius: 30,
+    borderRadius: 15,
     overflow: 'hidden',
     backgroundColor: theme.APP_COLOR_2,
   },
+  languageButtonOuterOpen: {
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: theme.APP_COLOR_2,
+  },
+
   rightButton: {
     padding: 5,
     borderRadius: 30,
   },
   languageOptionsContainer: {
-    borderRadius: 15,
+    marginTop: -7,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     backgroundColor: theme.COLORS.BLACK,
   },
   flagIcon: {
@@ -133,6 +142,70 @@ const styles = StyleSheet.create({
   },
 });
 
+const LanguageMenu = (props) => {
+  const { 
+    selectedLanguage, 
+    languageOptions, 
+    dispatch 
+  } = props;
+  const langMenuRef = useRef();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <Menu
+      ref={langMenuRef}
+      onOpen={()=>{ setIsMenuOpen(true); }}
+      onClose={()=>{ setIsMenuOpen(false); }}
+      renderer={renderers.Popover}
+      rendererProps={{anchorStyle: {backgroundColor: 'transparent'}}}>
+      <MenuTrigger
+        customStyles={{triggerOuterWrapper: isMenuOpen? styles.languageButtonOuterOpen: styles.languageButtonOuter}}>
+        <View style={styles.languageBox}>
+          <Image
+            resizeMode="stretch"
+            style={styles.flagIcon}
+            source={selectedLanguage.icon}
+          />
+          <EntypoIcon
+            size={20}
+            name="chevron-down"
+            color={theme.COLORS.WHITE}
+          />
+        </View>
+      </MenuTrigger>
+      <MenuOptions optionsContainerStyle={styles.languageOptionsContainer}>
+        {languageOptions.map((item, index) => (
+          <MenuOption
+            key={index}
+            style={{
+              ...styles.languageOption,
+              borderBottomWidth:
+                index < languageOptions.length - 1 ? 0.3 : 0,
+            }}
+            onSelect={async () => {
+              await setLanguage(item.value);
+              dispatch({
+                type: actions.SET_LANGUAGE,
+                selectedLanguage: item.value,
+              });
+            }}>
+            <View style={styles.row}>
+              <Image
+                source={item.icon}
+                resizeMode="stretch"
+                style={styles.flagIcon}
+              />
+              <Text style={styles.languageOptionText}>
+                {item.value.toUpperCase()}
+              </Text>
+            </View>
+          </MenuOption>
+        ))}
+      </MenuOptions>
+    </Menu>
+  );
+}
+
 const Header = (
   {
     title = null,
@@ -151,6 +224,7 @@ const Header = (
 ) => ({
   title: title ? title : null,
   headerTitleStyle: {
+    fontSize: 18,
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
     fontFamily: 'Moon-Bold',
@@ -182,54 +256,11 @@ const Header = (
     : null,
   headerRight: showLanguageDropdown
     ? () => (
-        <Menu
-          renderer={renderers.Popover}
-          rendererProps={{anchorStyle: {backgroundColor: 'transparent'}}}>
-          <MenuTrigger
-            customStyles={{triggerOuterWrapper: styles.languageButtonOuter}}>
-            <View style={styles.languageBox}>
-              <Image
-                resizeMode="stretch"
-                style={styles.flagIcon}
-                source={selectedLanguage.icon}
-              />
-              <EntypoIcon
-                size={20}
-                name="chevron-down"
-                color={theme.COLORS.WHITE}
-              />
-            </View>
-          </MenuTrigger>
-          <MenuOptions optionsContainerStyle={styles.languageOptionsContainer}>
-            {languageOptions.map((item, index) => (
-              <MenuOption
-                key={index}
-                style={{
-                  ...styles.languageOption,
-                  borderBottomWidth:
-                    index < languageOptions.length - 1 ? 0.3 : 0,
-                }}
-                onSelect={async () => {
-                  await setLanguage(item.value);
-                  dispatch({
-                    type: actions.SET_LANGUAGE,
-                    selectedLanguage: item.value,
-                  });
-                }}>
-                <View style={styles.row}>
-                  <Image
-                    source={item.icon}
-                    resizeMode="stretch"
-                    style={styles.flagIcon}
-                  />
-                  <Text style={styles.languageOptionText}>
-                    {item.value.toUpperCase()}
-                  </Text>
-                </View>
-              </MenuOption>
-            ))}
-          </MenuOptions>
-        </Menu>
+      <LanguageMenu 
+        selectedLanguage={selectedLanguage}
+        languageOptions={languageOptions}
+        dispatch={dispatch}
+      />
       )
     : showRightButton
     ? () => (
@@ -294,7 +325,8 @@ const LandingPageStack = () => {
       label: i18n.t('landing.english'),
       value: 'en',
     },
-    /*{
+    /*
+    {
       icon: Chinese,
       label: i18n.t('landing.chinese'),
       value: 'zh',
@@ -479,7 +511,6 @@ const BrowseMissionsStack = () => (
             title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -568,6 +599,7 @@ const MyMissionsStack = () => (
             title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -609,6 +641,7 @@ const MyMissionsStack = () => (
             title: 'Verifying Images',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -704,6 +737,7 @@ const MyMissionsStack = () => (
             title: 'Annotating Images Lv.2',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -717,7 +751,8 @@ const MyMissionsStack = () => (
           {
             title: 'PlayAI Mission',
             showBackButton: true,
-            isTransparent: true
+            isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
