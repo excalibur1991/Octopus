@@ -6,7 +6,7 @@ import { EventData, Filter } from 'web3-eth-contract'
 import BigNumber from 'bignumber.js'
 import { SubscribablePromise, Logger, didNoZeroX, didPrefixed } from '../utils'
 import Decimal from 'decimal.js'
-import {web3} from '../web3/utils'
+import {contracts, web3} from '../web3/utils'
 
 declare type PoolTransactionType = 'swap' | 'join' | 'exit'
 
@@ -713,19 +713,34 @@ export class OceanPool extends Pool {
    * @param {String} amount datatoken amount
    * @return {TransactionReceipt}
    */
+
+  
   public async addDTLiquidity(
     account: string,
     poolAddress: string,
     amount: string
-  ): Promise<TransactionReceipt> {
-    const dtAddress = await this.getDTAddress(poolAddress)
-    const maxAmount = await this.getMaxAddLiquidity(poolAddress, dtAddress)
-    //console.log({dtAddress: dtAddress, maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
-    //account:account})
+  ): Promise<TransactionReceipt> { 
+    // const dtAddress = await  this.getDTAddress(poolAddress) //[1]:0x8967BCF84170c91B0d24D4302C2376283b0B3a07
+      const currToken = await this.getCurrentTokens(poolAddress)
+      const dtAddress = currToken[0]
+      const oceanAddress = currToken[1]
+    // const dtAddress_ =  currToken[1] //: 0x8967BCF84170c91B0d24D4302C2376283b0B3a07
+    // const oceanAddress = currToken[0] //: 0xE793a47892854260B42449291953dADbdDb4226d
+     const maxAmount = await this.getMaxAddLiquidity(poolAddress,currToken[0]) // we use this here
+    // const maxAmount_ = await this.getMaxAddLiquidity(poolAddress,currToken[1]) // add ocean
+    //const dtAddress = await this.getDTAddress(poolAddress) //[1] bug:fetches ocean address instead
+    
+    // console.log({dtAddress: dtAddress, maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
+    // account:account, oceanAddress:oceanAddress, currToken:currToken})
+
+   
     if (new Decimal(amount).greaterThan(maxAmount)) {
       //console.log('ERROR: Too much reserve to add')
       return null
     }
+
+     console.log('you can add dtToken to pool...')
+
     const txid = await super.approve(
       account,
       dtAddress,
@@ -813,17 +828,25 @@ export class OceanPool extends Pool {
     amount: string
   ): Promise<TransactionReceipt> {
     if (this.oceanAddress == null) {
-      //console.log('ERROR: oceanAddress is not defined')
-      return null
+      console.log('ERROR: oceanAddress is not defined')
     }
-    const maxAmount = await this.getOceanMaxAddLiquidity(poolAddress)
+ // const dtAddress = await  this.getDTAddress(poolAddress) //[1]:0x8967BCF84170c91B0d24D4302C2376283b0B3a07
+    const currToken = await this.getCurrentTokens(poolAddress)
+    const dtAddress = currToken[0]
+    const oceanAddress = currToken[1]
+    // const dtAddress_ =  currToken[1] //: 0x8967BCF84170c91B0d24D4302C2376283b0B3a07
+    // const oceanAddress = currToken[0] //: 0xE793a47892854260B42449291953dADbdDb4226d
+    const maxAmount = await this.getMaxAddLiquidity(poolAddress,currToken[1]) // we use this here
+
     if (new Decimal(amount).greaterThan(maxAmount)) {
-      //console.log('ERROR: Too much reserve to add')
+      console.log('ERROR: Too much reserve to add')
       return null
     }
+    console.log('you can add oceans..')
     const txid = await super.approve(
       account,
-      this.oceanAddress,
+     // this.oceanAddress,
+      oceanAddress,
       poolAddress,
       web3.utils.toWei(amount)
     )
@@ -834,11 +857,12 @@ export class OceanPool extends Pool {
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
-      this.oceanAddress,
+      //this.oceanAddress,
+      oceanAddress,
       amount,
       '0'
     )
-    return result
+     return result
   }
 
   /**

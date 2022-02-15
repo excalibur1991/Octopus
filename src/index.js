@@ -22,6 +22,8 @@ import Wallet from './screens/Wallet';
 // import RomanNumberUpload from './screens/RomanNumberUpload';
 // import RomanNumberStats from './screens/RomanNumberStats';
 import WalletSettings from './screens/WalletSettings';
+//import Trade from './market-main/src/components/organisms/AssetActions/Trade'
+//import ImageAnnotateMission from './screens/ImageAnnotateMission';
 // import MyStats from './screens/MyStats';
 // import Bounty from './screens/Bounty';
 import BrowseMissions from './screens/BrowseMissions';
@@ -928,6 +930,7 @@ const WalletStack = () => (
         );
       }}
     />
+
   </Stack.Navigator>
 );
 

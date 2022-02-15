@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     marginTop: '-8%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    backgroundColor: theme.APP_COLOR_1,
+    backgroundColor: theme.APP_COLOR_2,// edited
   },
   companyInfoContentContainer: {
     paddingBottom: '10%',
@@ -96,6 +96,16 @@ export const styles = StyleSheet.create({
     fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
+  },
+  approveSendButtonStyle: {
+    alignItems: "center",
+    backgroundColor: theme.COLORS.BLUE,
+    padding: 20,
+    borderRadius: 30,
+    width: Dimensions.get('screen').width * 0.44,
+    alignSelf: 'center',
+    //marginTop: '5%',
+    height: 55
   },
   tcText: {
     padding: 38,

@@ -34,6 +34,7 @@ import {
 } from '../functions/walletsettings';
 import {withTranslation} from 'react-i18next';
 import {theme} from '../services/Common/theme.js';
+import { useRoute } from '@react-navigation/native';
 
 const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
   const handleOnFocus = () => setFocused(title);

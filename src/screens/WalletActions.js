@@ -26,6 +26,9 @@ const WalletActions = ({t, ...props}) => {
 
   const walletParams = props.route.params;
 
+  console.log({walletParams: walletParams, privateKey:walletParams.privateKey,
+    publicKey:walletParams.publicKey})
+
   useEffect(() => {
     const init = async () => {
       const web3 = getWeb3();
@@ -34,6 +37,9 @@ const WalletActions = ({t, ...props}) => {
       const tokenBal = await web3.eth
         .getBalance(newAccount)
         .then((bal) => web3.utils.fromWei(bal, 'ether'));
+
+        
+console.log({web3:web3, newAccount:newAccount, newPKey:newPKey, tokenBal:tokenBal})
 
       setWeb3(web3);
       setNewAccount(newAccount);

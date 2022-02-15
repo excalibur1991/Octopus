@@ -176,17 +176,23 @@ export class Pool extends PoolFactory {
         type: 'function'
       }
     ] as AbiItem[]
+
     const token = new web3.eth.Contract(minABI, tokenAddress, {
       from: account
     })
+
     if (!force) {
       const currentAllowence = await this.allowance(tokenAddress, account, spender)
-      //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
+      console.log({currentAllowance: currentAllowence, currAllow: new Decimal(currentAllowence),
+         amountToAdd: amount, account: account, force: force})
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
+        console.log('we have enough..')
         return null
       }
+      console.log('You can add to the pool..')
     }
+
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
     let estGas
@@ -194,40 +200,58 @@ export class Pool extends PoolFactory {
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+        console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
     } catch (e) {
       estGas = gasLimitDefault
     }
 
-    try {
-    //  result = await token.methods.approve(spender, amount)
-          //  .send({
-      //  from: account,
-      //  gas: estGas + 1,
-      //  gasPrice: await getFairGasPrice(web3)
-     // })
+      try {
+    //    result = await token.methods.approve(spender, amount)
+    //        .send({
+    //    from: account,
+    //    gas: estGas + 1,
+    //    gasPrice: await getFairGasPrice(web3)
+    //  })
          //check approval: ask oceanToken contract to approve...
-    let Tx = require('ethereumjs-tx').Transaction;
+     let Tx = require('ethereumjs-tx').Transaction;
      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
      let count = await web3.eth.getTransactionCount(account);
- 
-     let rawTransaction = {
-      "from":account,
-      "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
-      "gasLimit": web3.utils.toHex(estGas + 1),
-      "to":tokenAddress,
-      "data":token.methods.approve(spender, amount).encodeABI(),
-      "nonce":web3.utils.toHex(count)
-  };
+     
+      web3.eth.estimateGas({
+        from: account,
+        to: tokenAddress,
+        'gasLimit': web3.utils.toHex(210000),
+        'gasPrice': web3.utils.toHex(5000000000),
+        'nonce': web3.utils.toHex(count),
+        'data': token.methods.approve(spender, amount).encodeABI() 
+  })
 
+  //    let rawTransaction = {
+  //     "from":account,
+  //     "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
+  //     "gasLimit": web3.utils.toHex(estGas + 1),
+  //     "to":tokenAddress,
+  //     //"data":token.methods.approve(spender, amount).encodeABI(),
+  //     'data': token.methods.approve(spender, amount).encodeABI(), 
+  //     "nonce":web3.utils.toHex(count)
+  // }
+
+  let rawTransaction = {
+    "from":account,
+    "gasPrice":web3.utils.toHex(5000000000),
+    "gasLimit":web3.utils.toHex(210000),
+    "to":tokenAddress,
+    "data":token.methods.approve(spender, amount).encodeABI(),
+    "nonce":web3.utils.toHex(count)
+};
   let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
   transaction.sign(privateKey)
-  //console.log('getting approval...')
+   console.log('getting approval...')
   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  //console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
-  //console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
+   console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+   console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
-      //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
     }
     return result
   }
@@ -871,7 +895,7 @@ export class Pool extends PoolFactory {
      let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
      transaction.sign(privateKey)
      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-     //console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+     console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
      //console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
       
     } catch (e) {

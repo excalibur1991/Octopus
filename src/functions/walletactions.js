@@ -1,3 +1,6 @@
+import { connectAdvanced } from "react-redux";
+import { web3 } from "../web3/utils";
+
 export const handleSendSignedTx = async (
   amount,
   web3,
@@ -48,3 +51,16 @@ export const handleSendSignedTx = async (
     },
   );
 };
+
+export const calculateTokenBal = async (contract, address) => {
+    const tokenBal  = contract.methods
+              .balanceOf(address)
+                  .call((error, balance) => balance);
+ 
+    return tokenBal;
+}
+
+
+
+
+

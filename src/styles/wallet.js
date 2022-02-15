@@ -117,4 +117,14 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: theme.COLORS.LIGHT_RED,
   },
+  approveSendButtonStyle: {
+    alignItems: "center",
+    backgroundColor: theme.COLORS.BLUE,
+    padding: 20,
+    borderRadius: 30,
+    width: Dimensions.get('screen').width * 0.44,
+    alignSelf: 'center',
+    //marginTop: '5%',
+    height: 55
+  }
 });
