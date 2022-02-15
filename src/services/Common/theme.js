@@ -3,9 +3,14 @@ export const theme = {
   APP_COLOR_1: '#121212',
   APP_COLOR_2: '#25262B',
   COLORS: {
-    TRANSPARENT: 'transparent',
     WHITE: '#FFF',
     BLACK: '#000',
+    TRANSPARENT: 'transparent',
+    TULIP_TREE: '#EBB13D',
+    WELL_READ: '#B73930',
+    BLACK_OPACITY_90P: '#000000E6',
+    BLACK_OPACITY_49P: '#0000007D',
+
     BLACK_04: '#040404',
     COD_GRAY_OPACITY_50P: '#12121280',
     AZALEA: '#F5C3CB',
@@ -13,7 +18,6 @@ export const theme = {
     FIORD: '#405570',
     FIORD_1: '#3A506B',
     REGENT_GRAY: '#8C98A9',
-    BLACK_OPACITY_90P: '#000000E6',
     WHITE_OPACITY_3P: '#FFFFFF4D',
     WHITE_OPACITY_40P: '#FFFFFF66',
     PURPLE: '#B592FF',

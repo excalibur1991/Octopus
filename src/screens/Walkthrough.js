@@ -1,52 +1,46 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import LandingPageWalkthrough from '../components/LandingPageWalkthrough';
-import UploadImagePageWalkthrough from '../components/UploadImagePageWalkthrough';
-import VerifyImagePageWalkthrough from '../components/VerifyImagePageWalkthrough';
-import AnnotateImagePageWalkthrough from '../components/AnnotateImagePageWalkthrough';
 import {useStateValue} from '../services/State/State';
 import {actions} from '../services/State/Reducer';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 
 const Walkthrough = ({navigation}) => {
-  const [
-    {
-      showLandingPageWalkthrough,
-      showUploadImagePageWalkthrough,
-      showVerifyImagePageWalkthrough,
-      showAnnotateImagePageWalkthrough,
-      walkthroughCurrentStep,
-    },
-
-    dispatch,
-  ] = useStateValue();
+  const [{showLandingPageWalkthrough, walkthroughCurrentStep}, dispatch] =
+    useStateValue();
   const [step, setStep] = useState(0);
 
-  const totalSteps = showLandingPageWalkthrough
-    ? 9
-    : showUploadImagePageWalkthrough
-    ? 5
-    : showVerifyImagePageWalkthrough
-    ? 10
-    : showAnnotateImagePageWalkthrough
-    ? 7
-    : 0;
+  const totalSteps = showLandingPageWalkthrough ? 4 : 0;
 
   const onNext = () => {
-    if (step > totalSteps - 1) {
+    if (step === totalSteps - 1) {
       setStep(0);
       dispatch({
         type: actions.SET_WALKTHROUGH_CURRENT_STEP,
         walkthroughCurrentStep: 0,
       });
+      exitWalkthrough();
     } else {
       setStep(step + 1);
       dispatch({
         type: actions.SET_WALKTHROUGH_CURRENT_STEP,
         walkthroughCurrentStep: step + 1,
+      });
+    }
+  };
+
+  const onBack = () => {
+    if (step === 0) {
+      exitWalkthrough();
+    } else {
+      setStep(step - 1);
+      dispatch({
+        type: actions.SET_WALKTHROUGH_CURRENT_STEP,
+        walkthroughCurrentStep: step - 1,
       });
     }
   };
@@ -58,19 +52,16 @@ const Walkthrough = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {/* Exit Walkthrough Button */}
-      {step < totalSteps - 1 && (
-        <View style={styles.exitContainer}>
-          <Ripple style={styles.exitButton} onPress={exitWalkthrough}>
-            <MaterialCommunityIcon
-              size={26}
-              name="login-variant"
-              color={theme.COLORS.GREY_A5}
-            />
-            <Text style={styles.exitButtonText}>Exit Walkthrough</Text>
-          </Ripple>
-        </View>
-      )}
+      {/* Back Button */}
+      <View style={styles.backButtonContainer}>
+        <Ripple onPress={onBack} style={styles.backButton}>
+          <EntypoIcon
+            size={25}
+            name="chevron-left"
+            color={theme.COLORS.WHITE}
+          />
+        </Ripple>
+      </View>
 
       {showLandingPageWalkthrough && (
         <LandingPageWalkthrough
@@ -79,35 +70,14 @@ const Walkthrough = ({navigation}) => {
         />
       )}
 
-      {showUploadImagePageWalkthrough && (
-        <UploadImagePageWalkthrough
-          step={step}
-          onExitWalkthrough={exitWalkthrough}
-        />
-      )}
-
-      {showVerifyImagePageWalkthrough && (
-        <VerifyImagePageWalkthrough
-          step={step}
-          onExitWalkthrough={exitWalkthrough}
-        />
-      )}
-
-      {showAnnotateImagePageWalkthrough && (
-        <AnnotateImagePageWalkthrough
-          step={step}
-          onExitWalkthrough={exitWalkthrough}
-        />
-      )}
-
       {/* Next Button */}
-      {step < totalSteps - 1 && (
+      {step < totalSteps && (
         <>
           <View style={styles.nextContainer}>
             <LinearGradient
               end={{x: 1, y: 0.9}}
               start={{x: 0.15, y: 0}}
-              colors={[theme.COLORS.LIGHT_BLUE, theme.COLORS.LIGHT_PURPLE]}
+              colors={[theme.COLORS.TULIP_TREE, theme.COLORS.WELL_READ]}
               style={styles.nextButton}>
               <Ripple onPress={onNext} style={styles.buttonInner}>
                 <View style={styles.buttonIconContainer}>
@@ -120,19 +90,6 @@ const Walkthrough = ({navigation}) => {
               </Ripple>
             </LinearGradient>
           </View>
-          {!showLandingPageWalkthrough && (
-            <View style={styles.dotsContainer}>
-              {Array.from(Array(totalSteps - 1).keys()).map((_, index) => (
-                <View
-                  style={
-                    index <= walkthroughCurrentStep
-                      ? styles.dotActive
-                      : styles.dot
-                  }
-                />
-              ))}
-            </View>
-          )}
         </>
       )}
     </View>
@@ -150,23 +107,19 @@ const styles = StyleSheet.create({
     zIndex: 10,
     position: 'absolute',
   },
-  exitContainer: {
-    top: 5,
-    right: 20,
+  backButtonContainer: {
+    left: 20,
     zIndex: 1,
     position: 'absolute',
+    top: Platform.OS === 'ios' ? 1 : 7,
   },
-  exitButton: {
-    alignItems: 'flex-end',
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    alignItems: 'center',
     justifyContent: 'center',
-  },
-  exitButtonText: {
-    fontSize: 10,
-    marginTop: 5,
-    textAlign: 'center',
-    fontFamily: 'Moon-Bold',
-    textTransform: 'uppercase',
-    color: theme.COLORS.GREY_A5,
+    backgroundColor: theme.APP_COLOR_2,
   },
   nextContainer: {
     top: 0,
@@ -192,28 +145,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  dotsContainer: {
-    left: 0,
-    right: 0,
-    bottom: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    justifyContent: 'center',
-  },
-  dot: {
-    width: 13,
-    height: 13,
-    borderRadius: 30,
-    marginHorizontal: 4,
-    backgroundColor: theme.COLORS.SKY_BLUE_DARK_OPACITY_20P,
-  },
-  dotActive: {
-    width: 13,
-    height: 13,
-    borderRadius: 30,
-    marginHorizontal: 4,
-    backgroundColor: theme.COLORS.SKY_BLUE_DARK,
   },
 });

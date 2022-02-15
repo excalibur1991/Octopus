@@ -1,57 +1,31 @@
-import {
-  Text,
-  View,
-  Image,
-  Platform,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
+import {Text, View, Platform, Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import LinearGradient from 'react-native-linear-gradient';
 
 const steps = [
   {
-    heading: 'Dashboard Metrics',
+    heading: 'About ncight',
     description:
-      'Keep track on your performance with a general overview of data.',
+      'Believe in using data as a tool, enabling businesses to unlock innovative revenues that drive growth.\n\nClick next to see more',
   },
   {
-    heading: 'Main Activities',
+    heading: 'Classify images',
     description:
-      'Quick access to main daily activities, including browsing new missions, view current missions, and check earnings from completing missions..',
+      'Image classification from domain experts help to train machine learning algorithms.  Contribute your expertise by selecting whether the displayed image is from a knee or shoulder arthroscopy. Your accuracy will be collected and you will receive a token credit for each correct answer.',
   },
   {
-    heading: 'Profile Status',
+    heading: 'Stats',
     description:
-      'Display profile pictures and keep track on expreience needed to level up.',
-  },
-  {
-    heading: 'Dashboard',
-    description:
-      'Ongoing and completed missions, earnings and everything about your profile is displayed here.',
-  },
-  {
-    heading: 'Find Missions',
-    description:
-      'Browse all types of missions including vrification, uploading and annotation, and mini quests.',
-  },
-  {
-    heading: 'My Missions',
-    description:
-      'View your list of ongoing and completed missions,and collect rewards.',
-  },
-  {
-    heading: 'Statistics',
-    description: 'View personal and global statistic data and analysis.',
+      'See the number of labels you have contributed and your accuracy results.',
   },
   {
     heading: 'My wallet',
-    description: 'View, convert and payout earnings.',
+    description:
+      'Receive rewards for accurately classifying images.  Your wallet show your accumulated earnings in Ocean cryptocurrency tokens.',
   },
 ];
 
@@ -60,60 +34,66 @@ const LandingPageWalkthrough = ({step, onExitWalkthrough}) => {
 
   const step1 = (
     <>
-      <View style={styles.step1_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
+      <View style={styles.step1_1} />
+      <View style={styles.step1_2}>
+        <View style={styles.lineBottom}>
+          <View style={styles.lineBottomTip} />
         </View>
         <View style={styles.step1_1_inner}>
           <Text style={styles.heading}>{steps[0].heading}</Text>
           <Text style={styles.description}>{steps[0].description}</Text>
         </View>
       </View>
-      <View style={styles.step1_2} />
     </>
   );
 
   const step2 = (
     <>
-      <View style={styles.step2_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
+      <View style={styles.step2_1} />
+      <View style={styles.step2_2}>
+        <View style={styles.lineBottom}>
+          <View style={styles.lineBottomTip} />
         </View>
         <View style={styles.step2_1_inner}>
           <Text style={styles.heading}>{steps[1].heading}</Text>
           <Text style={styles.description}>{steps[1].description}</Text>
         </View>
       </View>
-      <View style={styles.step2_2} />
     </>
   );
 
+  // const step2 = (
+  //   <>
+  //     <View style={styles.step2_1}>
+  //       <View style={styles.lineTop}>
+  //         <View style={styles.lineTopTip} />
+  //       </View>
+  //       <View style={styles.step2_1_inner}>
+  //         <Text style={styles.heading}>{steps[1].heading}</Text>
+  //         <Text style={styles.description}>{steps[1].description}</Text>
+  //       </View>
+  //     </View>
+  //     <View style={styles.step2_2} />
+  //   </>
+  // );
+
   const step3 = (
     <>
-      <View style={styles.step3_1} />
-      <View style={styles.step3_2}>
-        <View style={styles.lineBottom}>
-          <View style={styles.lineBottomTip} />
+      <View style={styles.step3_1}>
+        <View style={styles.lineTop}>
+          <View style={styles.lineTopTip} />
         </View>
         <View style={styles.step3_1_inner}>
           <Text style={styles.heading}>{steps[2].heading}</Text>
           <Text style={styles.description}>{steps[2].description}</Text>
         </View>
       </View>
+      <View style={styles.step3_2} />
     </>
   );
 
   const step4 = (
     <>
-      <View style={styles.step4_circle}>
-        <View style={styles.step4_circle_inner}>
-          <Image
-            resizeMode="stretch"
-            style={styles.step4MenuIcon}
-            source={require('../assets/dashboard.png')}
-          />
-        </View>
-      </View>
       <View style={styles.step4_1}>
         <View style={styles.lineTop}>
           <View style={styles.lineTopTip} />
@@ -124,108 +104,6 @@ const LandingPageWalkthrough = ({step, onExitWalkthrough}) => {
         </View>
       </View>
       <View style={styles.step4_2} />
-    </>
-  );
-
-  const step5 = (
-    <>
-      <View style={styles.step5_circle}>
-        <View style={styles.step5_circle_inner}>
-          <Image
-            resizeMode="stretch"
-            style={styles.step5MenuIcon}
-            source={require('../assets/browseMissions.png')}
-          />
-        </View>
-      </View>
-      <View style={styles.step5_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
-        </View>
-        <View style={styles.step5_1_inner}>
-          <Text style={styles.heading}>{steps[4].heading}</Text>
-          <Text style={styles.description}>{steps[4].description}</Text>
-        </View>
-      </View>
-      <View style={styles.step5_2} />
-    </>
-  );
-
-  const step6 = (
-    <>
-      <View style={styles.step6_circle}>
-        <View style={styles.step6_circle_inner}>
-          <LinearGradient
-            end={{x: 1, y: 0}}
-            start={{x: 0.15, y: 0}}
-            colors={['#3B6BD0', '#A147D7']}
-            style={styles.step6Gradient}>
-            <Image
-              resizeMode="stretch"
-              style={styles.step6MenuIcon}
-              source={require('../assets/MyMissions.png')}
-            />
-          </LinearGradient>
-        </View>
-      </View>
-      <View style={styles.step6_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
-        </View>
-        <View style={styles.step6_1_inner}>
-          <Text style={styles.heading}>{steps[5].heading}</Text>
-          <Text style={styles.description}>{steps[5].description}</Text>
-        </View>
-      </View>
-      <View style={styles.step6_2} />
-    </>
-  );
-
-  const step7 = (
-    <>
-      <View style={styles.step7_circle}>
-        <View style={styles.step7_circle_inner}>
-          <Image
-            resizeMode="stretch"
-            style={styles.step7MenuIcon}
-            source={require('../assets/Stats.png')}
-          />
-        </View>
-      </View>
-      <View style={styles.step7_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
-        </View>
-        <View style={styles.step7_1_inner}>
-          <Text style={styles.heading}>{steps[6].heading}</Text>
-          <Text style={styles.description}>{steps[6].description}</Text>
-        </View>
-      </View>
-      <View style={styles.step7_2} />
-    </>
-  );
-
-  const step8 = (
-    <>
-      <View style={styles.step8_circle}>
-        <View style={styles.step8_circle_inner}>
-          <Image
-            resizeMode="stretch"
-            style={styles.step8MenuIcon}
-            source={require('../assets/MyWallet.png')}
-          />
-        </View>
-      </View>
-      <View style={styles.step8_1}>
-        <View style={styles.lineTop}>
-          <View style={styles.lineTopTip} />
-        </View>
-        <View style={styles.step8_1_inner}>
-          <Text style={styles.heading}>{steps[7].heading}</Text>
-          <Text style={styles.description}>{steps[7].description}</Text>
-        </View>
-      </View>
-      <View style={styles.step8_2} />
     </>
   );
 
@@ -255,14 +133,6 @@ const LandingPageWalkthrough = ({step, onExitWalkthrough}) => {
         return step3;
       case 3:
         return step4;
-      case 4:
-        return step5;
-      case 5:
-        return step6;
-      case 6:
-        return step7;
-      case 7:
-        return step8;
       case 8:
         return completed;
       default:
@@ -277,317 +147,98 @@ export default LandingPageWalkthrough;
 
 const styles = StyleSheet.create({
   step1_1: {
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.41 : 0.48),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.08),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step1_1_inner: {
     flex: 1,
-    marginBottom: 6,
-    marginTop: '30%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
+    marginTop: 6,
+    paddingTop: '6%',
+    borderTopWidth: 0.5,
     paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
+    borderColor: theme.COLORS.TULIP_TREE,
   },
   step1_2: {
     flex: 1,
-    marginTop: '20%',
+    borderTopWidth: 0.5,
+    borderColor: theme.COLORS.WELL_READ,
+    marginTop: Platform.OS === 'ios' ? '88%' : '94%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step2_1: {
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.51 : 0.57),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.45 : 0.52),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2_1_inner: {
     flex: 1,
-    marginBottom: 6,
-    marginTop: '42%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
+    marginTop: 6,
+    paddingTop: '3.5%',
+    borderTopWidth: 0.5,
     paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
+    borderColor: theme.COLORS.TULIP_TREE,
   },
   step2_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '67%' : '70%',
+    borderTopWidth: 0.5,
+    borderColor: theme.COLORS.WELL_READ,
+    marginTop: Platform.OS === 'ios' ? '26%' : '25%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step3_1: {
+    borderBottomWidth: 0.5,
+    borderColor: theme.COLORS.WELL_READ,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.07),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.57 : 0.64),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step3_1_inner: {
-    flex: 1,
-    marginTop: 6,
-    marginBottom: '42%',
-    borderTopWidth: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
   },
   step3_2: {
     flex: 1,
-    borderTopWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-    marginTop: Platform.OS === 'ios' ? '74%' : '82%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+    marginTop: Platform.OS === 'ios' ? '24%' : '27%',
+  },
+  step3_1_inner: {
+    flex: 1,
+    marginBottom: 6,
+    paddingBottom: '19%',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: '10%',
+    justifyContent: 'flex-end',
+    borderColor: theme.COLORS.TULIP_TREE,
   },
 
   step4_1: {
-    paddingTop: '80%',
     borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
+    borderColor: theme.COLORS.WELL_READ,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.68 : 0.77),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4_2: {
     flex: 1,
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+    marginTop: Platform.OS === 'ios' ? '25%' : '26%',
   },
   step4_1_inner: {
     flex: 1,
     marginBottom: 6,
-    marginTop: '35%',
+    paddingBottom: '19%',
     borderBottomWidth: 0.5,
-    justifyContent: 'center',
     paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-  },
-  step4_circle: {
-    zIndex: 1,
-    width: 60,
-    height: 60,
-    padding: 5,
-    borderWidth: 0.5,
-    borderRadius: 30,
-    position: 'absolute',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-    left: Platform.OS === 'ios' ? '1.5%' : '1%',
-    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
-  },
-  step4_circle_inner: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-  },
-  step4MenuIcon: {
-    width: 24,
-    height: 24,
-  },
-
-  step5_1: {
-    paddingTop: '80%',
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step5_2: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step5_1_inner: {
-    flex: 1,
-    marginBottom: 6,
-    marginTop: '35%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-  },
-  step5_circle: {
-    zIndex: 1,
-    width: 60,
-    height: 60,
-    padding: 5,
-    borderWidth: 0.5,
-    borderRadius: 30,
-    position: 'absolute',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-    left: Platform.OS === 'ios' ? '20%' : '19.5%',
-    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
-  },
-  step5_circle_inner: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-  },
-  step5MenuIcon: {
-    width: 20,
-    height: 28,
-  },
-
-  step6_1: {
-    paddingTop: '80%',
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step6_2: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step6_1_inner: {
-    flex: 1,
-    marginBottom: 6,
-    marginTop: '31%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-  },
-  step6_circle: {
-    zIndex: 1,
-    width: 60,
-    height: 60,
-    padding: 5,
-    borderWidth: 0.5,
-    borderRadius: 30,
-    position: 'absolute',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-    left: Platform.OS === 'ios' ? '41.3%' : '40.6%',
-    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
-  },
-  step6_circle_inner: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-  },
-  step6Gradient: {
-    padding: 10,
-    borderRadius: 25,
-  },
-  step6MenuIcon: {
-    width: 31,
-    height: 31,
-  },
-
-  step7_1: {
-    paddingTop: '80%',
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step7_2: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step7_1_inner: {
-    flex: 1,
-    marginBottom: 6,
-    marginTop: '31%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-  },
-  step7_circle: {
-    zIndex: 1,
-    width: 60,
-    height: 60,
-    padding: 5,
-    borderWidth: 0.5,
-    borderRadius: 30,
-    position: 'absolute',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-    left: Platform.OS === 'ios' ? '63.6%' : '63.25%',
-    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
-  },
-  step7_circle_inner: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-  },
-  step7MenuIcon: {
-    width: 26,
-    height: 23,
-  },
-
-  step8_1: {
-    paddingTop: '80%',
-    borderBottomWidth: 0.5,
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-    height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.81 : 0.9),
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step8_2: {
-    flex: 1,
-    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
-  },
-  step8_1_inner: {
-    flex: 1,
-    marginBottom: 6,
-    marginTop: '27%',
-    borderBottomWidth: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: '10%',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-  },
-  step8_circle: {
-    zIndex: 1,
-    width: 60,
-    height: 60,
-    padding: 5,
-    borderWidth: 0.5,
-    borderRadius: 30,
-    position: 'absolute',
-    borderColor: theme.COLORS.MEDIUM_PURPLE,
-    left: Platform.OS === 'ios' ? '82.7%' : '82%',
-    bottom: Platform.OS === 'ios' ? '1%' : '1.3%',
-  },
-  step8_circle_inner: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.COLORS.SKY_BLUE_DARK,
-  },
-  step8MenuIcon: {
-    width: 26,
-    height: 20,
+    justifyContent: 'flex-end',
+    borderColor: theme.COLORS.TULIP_TREE,
   },
 
   lineTop: {
     width: 1,
     bottom: 7,
     left: '7%',
+    height: '25%',
     position: 'absolute',
-    backgroundColor: theme.COLORS.MEDIUM_PURPLE,
-    height: Platform.OS === 'ios' ? '37%' : '40%',
+    backgroundColor: theme.COLORS.TULIP_TREE,
   },
   lineTopTip: {
     top: 0,
@@ -599,15 +250,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     justifyContent: 'center',
-    backgroundColor: theme.COLORS.MEDIUM_PURPLE,
+    backgroundColor: theme.COLORS.TULIP_TREE,
   },
   lineBottom: {
     width: 1,
     top: 7,
     left: '7%',
     position: 'absolute',
-    backgroundColor: theme.COLORS.MEDIUM_PURPLE,
-    height: Platform.OS === 'ios' ? '28%' : '27%',
+    backgroundColor: theme.COLORS.TULIP_TREE,
+    height: Platform.OS === 'ios' ? '10%' : '10%',
   },
   lineBottomTip: {
     bottom: 0,
@@ -619,7 +270,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     justifyContent: 'center',
-    backgroundColor: theme.COLORS.MEDIUM_PURPLE,
+    backgroundColor: theme.COLORS.TULIP_TREE,
   },
   heading: {
     fontSize: 24,

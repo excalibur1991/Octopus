@@ -10,6 +10,7 @@ import TabComponent from './components/Tab';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
+// import ClassifyImage from './screens/ClassifyImage';
 // import About from './screens/About';
 import Information from './screens/Information';
 import Stats from './screens/Stats';
@@ -63,6 +64,8 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
+import Logo from './assets/ncight-logo.png';
+import LandingWalkthrough from './screens/LandingWalkthrough';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -122,12 +125,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 5,
+  },
 });
 
 const Header = (
   {
     title = null,
     showBackButton = false,
+    showAppIcon = false,
     isTransparent = false,
     showRightButton = false,
     rightButtonIcon = null,
@@ -144,6 +153,7 @@ const Header = (
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
     fontFamily: 'Moon-Bold',
+    fontSize: 18,
   },
   headerTitleAlign: 'center',
   headerStyle: {
@@ -167,6 +177,8 @@ const Header = (
           />
         </Ripple>
       )
+    : showAppIcon
+    ? () => <Image resizeMode="stretch" style={styles.logo} source={Logo} />
     : null,
   headerRight: showLanguageDropdown
     ? () => (
@@ -273,20 +285,24 @@ const LandingPageStack = () => {
               selectedLanguage: language,
               dispatch,
               languageOptions,
+              showAppIcon: true,
             },
             navigation,
           );
         }}
       />
       <Stack.Screen
-        name="Information"
-        component={Information}
+        name="LandingWalkthrough"
+        component={LandingWalkthrough}
         options={({navigation}) => {
           return Header(
             {
-              title: 'Information',
-              showBackButton: true,
+              title: 'Dashboard',
               isTransparent: true,
+              showLanguageDropdown: true,
+              selectedLanguage: language,
+              dispatch,
+              languageOptions,
             },
             navigation,
           );
@@ -639,6 +655,74 @@ const MyMissionsStack = () => (
   </Stack.Navigator>
 );
 
+const ClassifyImagesStack = () => {
+  const languageOptions = [
+    {
+      icon: English,
+      label: i18n.t('landing.english'),
+      value: 'en',
+    },
+    {
+      icon: Chinese,
+      label: i18n.t('landing.chinese'),
+      value: 'zh',
+    },
+    {
+      icon: Deutsch,
+      label: i18n.t('landing.deutsch'),
+      value: 'de',
+    },
+    {
+      icon: Japanese,
+      label: i18n.t('landing.japanese'),
+      value: 'ja',
+    },
+    {
+      icon: Spanish,
+      label: i18n.t('landing.spanish'),
+      value: 'es',
+    },
+  ];
+  const [{selectedLanguage}, dispatch] = useStateValue();
+  const language = languageOptions.find((l) => l.value === selectedLanguage);
+
+  return (
+    <Stack.Navigator>
+      {/* <Stack.Screen
+        name="ClassifyImage"
+        component={ClassifyImage}
+        options={({navigation}) => {
+          return Header(
+            {
+              title: 'Classify Images',
+              showBackButton: true,
+              isTransparent: true,
+              showLanguageDropdown: true,
+              selectedLanguage: language,
+              dispatch,
+              languageOptions,
+            },
+            navigation,
+          );
+        }}
+      /> */}
+      <Stack.Screen
+        name="MissionStatus"
+        component={MissionStatus}
+        options={({navigation}) => {
+          return Header(
+            {
+              title: 'Mission Status',
+              isTransparent: true,
+            },
+            navigation,
+          );
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 /*
 const UploadGuidelinesStack = () => (
   <Stack.Navigator>
@@ -926,6 +1010,7 @@ const BottomTabs = ({navigation}) => {
       <Tab.Navigator
         tabBarOptions={{
           style: {
+            display: showWalkthrough ? 'none' : 'flex',
             zIndex: 1,
             height: 80,
             backgroundColor: 'transparent',
@@ -936,7 +1021,7 @@ const BottomTabs = ({navigation}) => {
               height: 5,
             },
             shadowOpacity: 0.5,
-            paddingBottom: 20,
+            paddingBottom: 25,
             paddingVertical: 20,
           },
         }}>
@@ -951,31 +1036,13 @@ const BottomTabs = ({navigation}) => {
           }}
         />
         <Tab.Screen
-          name="BrowseMissions"
-          component={BrowseMissionsStack}
+          name="ClassifyImages"
+          component={ClassifyImagesStack}
           options={{
             unmountOnBlur: true,
             tabBarButton: (props) => (
-              <TabComponent label="BrowseMissions" {...props} />
+              <TabComponent label="ClassifyImages" {...props} />
             ),
-          }}
-        />
-        <Tab.Screen
-          name="MyMissions"
-          component={MyMissionsStack}
-          options={{
-            unmountOnBlur: true,
-            tabBarButton: (props) => (
-              <TabComponent label="MyMissions" {...props} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Stats"
-          component={StatsStack}
-          options={{
-            unmountOnBlur: true,
-            tabBarButton: (props) => <TabComponent label="Stats" {...props} />,
           }}
         />
         <Tab.Screen

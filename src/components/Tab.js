@@ -4,47 +4,40 @@ import styled from 'styled-components/native';
 import {theme} from '../services/Common/theme';
 import {Transition, Transitioning} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
-const indicator = require('../assets/active-tab.png');
-const dashboardIcon = require('../assets/dashboard.png');
-const browseMissionsIcon = require('../assets/browseMissions.png');
-const myMissionsIcon = require('../assets/MyMissions.png');
-const myWalletIcon = require('../assets/MyWallet.png');
-const statsIcon = require('../assets/Stats.png');
+const indicator = require('../assets/active_tab.png');
+const dashboardIcon = require('../assets/dashboard_white.png');
+const verifications = require('../assets/verification_white.png');
+const myWalletIcon = require('../assets/my_wallet_white.png');
 
 const styles = StyleSheet.create({
   indicatorContainer: {
     bottom: 1,
     width: '100%',
-    marginBottom: -30,
+    marginBottom: -35,
     position: 'absolute',
   },
   indicator: {
-    height: 25,
+    height: 30,
     width: '100%',
   },
   dashboardIcon: {
     width: 24,
     height: 24,
   },
-  browseMissionsIcon: {
+  classifyImagesIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  classifyImagesIcon: {
     width: 20,
-    height: 28,
-  },
-  myMissionsIconContainer: {
-    padding: 10,
-    borderRadius: 25,
-  },
-  myMissionsIcon: {
-    width: 31,
-    height: 31,
+    height: 20,
   },
   myWalletIcon: {
     width: 26,
-    height: 20,
-  },
-  statsIcon: {
-    width: 26,
-    height: 20,
+    height: 23,
   },
 });
 
@@ -56,23 +49,16 @@ const icons = {
       style={styles.dashboardIcon}
     />
   ),
-  BrowseMissions: (
-    <Image
-      resizeMode="stretch"
-      source={browseMissionsIcon}
-      style={styles.browseMissionsIcon}
-    />
-  ),
-  MyMissions: (
+  ClassifyImages: (
     <LinearGradient
-      end={{x: 1, y: 0}}
+      end={{x: 1, y: 1}}
       start={{x: 0.15, y: 0}}
-      style={styles.myMissionsIconContainer}
-      colors={[theme.COLORS.DARK_BLUE, theme.COLORS.MEDIUM_PURPLE_1]}>
+      style={styles.classifyImagesIconContainer}
+      colors={[theme.COLORS.TULIP_TREE, theme.COLORS.WELL_READ]}>
       <Image
         resizeMode="stretch"
-        source={myMissionsIcon}
-        style={styles.myMissionsIcon}
+        source={verifications}
+        style={styles.classifyImagesIcon}
       />
     </LinearGradient>
   ),
@@ -82,9 +68,6 @@ const icons = {
       source={myWalletIcon}
       style={styles.myWalletIcon}
     />
-  ),
-  Stats: (
-    <Image resizeMode="stretch" source={statsIcon} style={styles.statsIcon} />
   ),
 };
 

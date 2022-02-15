@@ -1,16 +1,21 @@
 import React from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
-import {Text, View, FlatList, Image, Dimensions} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  Dimensions,
+  StyleSheet,
+} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
-import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
 import VerificationWhite from '../assets/verification_white.png';
 
-const LandingPage = ({navigation, t}) => {
+const LandingWalkthrough = ({navigation}) => {
   const [, dispatch] = useStateValue();
   const options = [
     {
@@ -48,22 +53,12 @@ const LandingPage = ({navigation, t}) => {
             size={20}
             name="questioncircleo"
             color={theme.COLORS.WHITE}
-            onPress={() => {
-              navigation.navigate('LandingWalkthrough');
-              setTimeout(
-                () =>
-                  dispatch({
-                    type: actions.SET_SHOW_LANDING_PAGE_WALKTHROUGH,
-                  }),
-                100,
-              );
-            }}
           />
         </View>
         <View style={styles.upperContainerDivider} />
         <View style={styles.verificationTile}>
           <View style={styles.rowCenterBetween}>
-            <Text style={styles.verificationCount}>360</Text>
+            <Text style={styles.verificationCount}>230489</Text>
             <Image
               resizeMode="stretch"
               source={VerificationWhite}
@@ -120,4 +115,132 @@ const LandingPage = ({navigation, t}) => {
   );
 };
 
-export default withTranslation()(LandingPage);
+export default withTranslation()(LandingWalkthrough);
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: '3%',
+    paddingHorizontal: 16,
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+  },
+  upperContainer: {
+    borderRadius: 15,
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  userTile: {
+    marginVertical: 22,
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginHorizontal: 18,
+    justifyContent: 'space-between',
+  },
+  userTitle: {
+    fontSize: 13,
+    lineHeight: 15,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  upperContainerDivider: {
+    height: 4,
+    backgroundColor: theme.APP_COLOR_1,
+  },
+  verificationTile: {
+    marginVertical: 22,
+    marginHorizontal: 18,
+  },
+  verificationCount: {
+    fontSize: 36,
+    lineHeight: 41,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  rowCenterBetween: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  verificationIcon: {
+    height: 25,
+    width: 25,
+  },
+  myVerifications: {
+    fontSize: 15,
+    marginTop: 15,
+    lineHeight: 17,
+    textAlign: 'right',
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  successRateTile: {
+    marginVertical: 22,
+    marginHorizontal: 18,
+  },
+  successRateTileInner: {
+    marginTop: 16,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  successRatePercentage: {
+    fontSize: 36,
+    lineHeight: 41,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  successRate: {
+    fontSize: 15,
+    marginTop: 15,
+    lineHeight: 17,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  listContainer: {
+    paddingBottom: '3%',
+  },
+  menuContainer: {
+    marginTop: 17,
+  },
+  listItem: {
+    marginVertical: 12,
+  },
+  listItemButton: {
+    elevation: 5,
+    borderRadius: 15,
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    paddingVertical: 18,
+    shadowColor: '#000',
+    flexDirection: 'row',
+    shadowOffset: {width: 0, height: 4},
+    backgroundColor: theme.APP_COLOR_2,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '30%',
+  },
+  textContainer: {
+    width: '70%',
+  },
+  titleContainer: {
+    flex: 1,
+  },
+  titleText: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.TULIP_TREE,
+  },
+  subTitleText: {
+    fontSize: 9,
+    marginTop: 5,
+    lineHeight: 10,
+    fontFamily: 'Moon-Light',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+});
