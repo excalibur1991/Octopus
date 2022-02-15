@@ -6,6 +6,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
+
 import Nft from '../components/Nft';
 
 const LandingPage = ({navigation, t}) => {
@@ -47,7 +48,7 @@ const LandingPage = ({navigation, t}) => {
           onPress={() => navigation.navigate('Information')}
         />
         <View>
-          <Progress.Circle
+         <Progress.Circle
             size={200}
             progress={0.7}
             thickness={10}
@@ -56,6 +57,8 @@ const LandingPage = ({navigation, t}) => {
             unfilledColor="transparent"
             direction="counter-clockwise"
             color={theme.COLORS.DARK_BLUE}
+            fill={'transparent'}
+            
           />
           <View style={styles.imageContainer}>
             <Nft />

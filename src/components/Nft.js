@@ -123,9 +123,9 @@ const Nft = () => {
                 overflow: 'hidden',
               },
             }}>
-            <Image
-              borderRadius={100}
-              resizeMode="stretch"
+              <View style={styles.imageWrapper}>
+              <Image
+              borderRadius={160}
               style={styles.image}
               source={
                 nftMetadata &&
@@ -135,6 +135,8 @@ const Nft = () => {
                   : DataUnionLogo
               }
             />
+
+              </View>
           </MenuTrigger>
           <MenuOptions
             customStyles={{
@@ -190,9 +192,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  imageWrapper: {
+    width: 160, 
+    height: 160
+  },
   image: {
-    height: 160,
-    width: 160,
+    flex: 1,
+    height: undefined,
+    width: undefined
   },
   button: {
     elevation: 5,

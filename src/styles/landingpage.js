@@ -49,6 +49,8 @@ export const styles = StyleSheet.create({
   },
   expText: {
     marginTop: 12,
+    fontSize: 12,
+    fontWeight: '400',
     fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
   },
