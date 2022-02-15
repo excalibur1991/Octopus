@@ -113,7 +113,7 @@ export default StyleSheet.create({
     marginVertical: '10%',
   },
   uploadText: {
-    color: theme.APP_COLOR,
+    color: theme.COLORS.WHITE,
     fontSize: 12,
     textAlign: 'center',
     fontFamily: 'Moon-Light',
@@ -173,6 +173,9 @@ export default StyleSheet.create({
     maxHeight: 100,
   },
   text: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '300',
     fontFamily: 'Moon-Light',
   },
 

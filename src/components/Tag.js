@@ -11,12 +11,13 @@ const Tag = ({
   textColor = '#FFF',
   iconColor = '#4E9CF9',
   isGradient = false,
+  showRemoveIcon = false
 }) => {
   return (
     (!isGradient) ? (
       <TouchableWithoutFeedback onPress={onRemove}>
       <View style={[styles.container, {backgroundColor: backgroundColor}]}>
-        {onRemove ? (
+        {showRemoveIcon ? (
           <IonIcon
             size={12}
             color={iconColor}

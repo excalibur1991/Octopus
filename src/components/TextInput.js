@@ -8,6 +8,8 @@ const TextInput = ({
   value = '',
   label = '',
   onChangeText = '',
+  textColor = theme.COLORS.WHITE,
+  placeholderTextColor = theme.COLORS.WHITE,
   ...props
 }) => {
   return (
@@ -17,6 +19,7 @@ const TextInput = ({
           value={value}
           style={styles.inputSingleline}
           placeholder={placeholder}
+          placeholderTextColor={theme.COLORS.WHITE}
           onChangeText={onChangeText}
           {...props}
         />
@@ -27,6 +30,7 @@ const TextInput = ({
             multiline
             value={value}
             style={styles.inputMultiline}
+            placeholderTextColor={theme.COLORS.WHITE}
             placeholder={placeholder}
             onChangeText={(val) => onChangeText(val.toUpperCase())}
             {...props}

@@ -32,7 +32,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const Upload = ({navigation}) => {
-  const [files, setFiles] = useState(['a']);
+  const [files, setFiles] = useState([]);
   const [descriptions, setDescriptions] = useState([]);
   const [tags, setTags] = useState([]);
   const [commonTags, setCommonTags] = useState([]);
@@ -212,7 +212,8 @@ const Upload = ({navigation}) => {
                 )} */}
                 <>
                   <Image
-                    source={Test}
+                    source={{uri: files[selectedIndex].uri}}
+                    //source={Test}
                     resizeMode="stretch"
                     style={styles.uploadImage}
                   />
@@ -318,7 +319,7 @@ const Upload = ({navigation}) => {
                             title: 'EXIT MISSION',
                             showConfirmButton: true,
                             showCancelButton: true,
-                            onConfirmPressed: () => {},
+                            onConfirmPressed: () => {navigation.goBack()},
                             onCancelPressed: () => {},
                           },
                         });

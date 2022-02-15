@@ -17,6 +17,7 @@ export const onPickFile = async (
       const allFiles = files.slice();
       pickedFiles.forEach((file) => allFiles.push(file));
       setFiles(allFiles);
+
       uploadMultipleFiles(
         pickedFiles,
         fileUploadResponses,
@@ -106,6 +107,7 @@ const uploadMultipleFiles = async (
 ) => {
   try {
     if (pickedFiles && pickedFiles.length > 0) {
+      console.log(pickedFiles);
       const allFileUploadResponses = fileUploadResponses.slice();
       for (const [index, file] of pickedFiles.entries()) {
         setUploadingImageIndex(
