@@ -104,10 +104,11 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   rewardItem: {
+    flexWrap: 'wrap',
     marginTop: 13,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   exp: {
     borderRadius: 30,
@@ -120,6 +121,13 @@ export const styles = StyleSheet.create({
     fontFamily: 'Moon-Bold',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
+  },
+  rewardItemTitle: {
+    flexDirection: 'row',
+    flex: 0.3,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+
   },
   x: {
     fontSize: 10,

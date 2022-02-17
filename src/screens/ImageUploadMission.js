@@ -11,6 +11,8 @@ const UploadMission = require('../assets/image_upload_mission_test.png');
 const CompanyIcon = require('../assets/company_icon.png');
 
 import { TCModal } from '../components/TCModal';
+import { MissionCounter } from '../components/MissionCounter';
+import { Reward } from '../components/Reward';
 
 const RadioButton = ({checked, onCheckChange}) => {
   return (
@@ -43,21 +45,7 @@ const ImageUploadMission = ({navigation}) => {
           source={UploadMission}
           style={styles.cardCover}
         />
-        <View style={styles.countdownContainer}>
-          <AntIcon name="clockcircleo" size={22} color={theme.COLORS.WHITE} />
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Days</Text>
-            <Text style={styles.countdownvalue}>03</Text>
-          </View>
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Hours</Text>
-            <Text style={styles.countdownvalue}>16</Text>
-          </View>
-          <View style={styles.countdownItem}>
-            <Text style={styles.countdownLabel}>Minutes</Text>
-            <Text style={styles.countdownvalue}>59</Text>
-          </View>
-        </View>
+        <MissionCounter remainTime={((19 * 24 + 8) * 60 + 53) * 60} />
         <ScrollView
           style={styles.companyInfoContainer}
           showsVerticalScrollIndicator={false}
@@ -84,23 +72,7 @@ const ImageUploadMission = ({navigation}) => {
                 </View>
               </View>
               <View style={styles.mainDivider} />
-              <View style={styles.rewardContainer}>
-                <Text style={styles.rewardTitle}>Rewards</Text>
-                <View style={styles.rewardItem}>
-                  <View style={styles.exp}>
-                    <Text style={styles.expText}>Exp</Text>
-                  </View>
-                  <Text style={styles.x}>x</Text>
-                  <Text style={styles.rewardTitle}>1000</Text>
-                </View>
-                <View style={styles.rewardItem}>
-                  <View style={styles.rewardSign}>
-                    <Text style={styles.rewardSignText}>$</Text>
-                  </View>
-                  <Text style={styles.x}>x</Text>
-                  <Text style={styles.rewardTitle}>1.21</Text>
-                </View>
-              </View>
+              <Reward exp={1000} rewardAmount={1.23} />
               <View style={styles.mainDivider} />
               <View style={styles.button}>
                 <Ripple

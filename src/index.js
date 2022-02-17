@@ -511,6 +511,7 @@ const BrowseMissionsStack = () => (
             title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -525,6 +526,7 @@ const BrowseMissionsStack = () => (
             title: 'Verifying Images',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -539,6 +541,7 @@ const BrowseMissionsStack = () => (
             title: 'Annotating Images Lv.2',
             showBackButton: true,
             isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -552,7 +555,8 @@ const BrowseMissionsStack = () => (
           {
             title: 'PlayAI Upload Lv.2',
             showBackButton: true,
-            isTransparent: true
+            isTransparent: true,
+            isFullScreenHeader: true,
           },
           navigation,
         );
