@@ -7,6 +7,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { AboutMissionModal } from '../components/AboutMissionModal';
+import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
+
 const UploadMission = require('../assets/image_upload_mission_test.png');
 const CompanyIcon = require('../assets/company_icon.png');
 
@@ -34,6 +37,7 @@ const ImageUploadMission = ({navigation}) => {
   const [showTCButton, setShowTCButton] = useState(false);
   const [tcAgreed, setTCAgreed] = useState(false);
   const [showTC, setShowTC] = useState(false);
+  const [, dispatch] = useStateValue();
 
   return (
     <>
@@ -131,7 +135,24 @@ const ImageUploadMission = ({navigation}) => {
                   style={styles.radius30}>
                   <Ripple
                     disabled={!tcAgreed}
-                    onPress={() => navigation.navigate('MyMissions')}
+                    onPress={() => {
+                      dispatch({
+                        type: actions.SET_ALERT_SETTINGS,
+                        alertSettings: {
+                          show: true,
+                          type: 'success',
+                          message: 'Mission has been added to your board.',
+                          confirmText: 'Got It',
+                          cancelText: 'Got It',
+                          title: 'New Mission Accepted!',
+                          showCancelButton: true,
+                          onCancelPressed: () => {
+                            //confirm action
+                            navigation.navigate('MyMissions');
+                          },
+                        },
+                      });
+                    }}
                     style={
                       tcAgreed ? styles.gradientButtonInner : styles.buttonOuter
                     }>

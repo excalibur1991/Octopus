@@ -144,10 +144,11 @@ const ImagePlayAIMission = ({navigation}) => {
                           cancelText: 'Got It',
                           title: 'New Mission Accepted!',
                           showCancelButton: true,
-                          onCancelPressed: () => {},
+                          onCancelPressed: () => {
+                            navigation.navigate('MyMissions');
+                          },
                         },
                       });
-                      navigation.navigate('MyMissions');
                     }}
                     style={
                       tcAgreed ? styles.gradientButtonInner : styles.buttonOuter

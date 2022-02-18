@@ -140,10 +140,12 @@ const ImageVerifyMission = ({navigation}) => {
                           cancelText: 'Got It',
                           title: 'New Mission Accepted!',
                           showCancelButton: true,
-                          onCancelPressed: () => {},
+                          onCancelPressed: () => {
+                            //confirm action
+                            navigation.navigate('MyMissions');
+                          },
                         },
                       });
-                      navigation.navigate('MyMissions');
                     }}
                     style={
                       tcAgreed ? styles.gradientButtonInner : styles.buttonOuter
