@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {useState} from 'react';
 import {View, StyleSheet, Platform} from 'react-native';
 import Ripple from '../components/Ripple';

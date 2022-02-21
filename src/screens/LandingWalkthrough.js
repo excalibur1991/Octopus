@@ -12,11 +12,9 @@ import {
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
-import {useStateValue} from '../services/State/State';
 import VerificationWhite from '../assets/verification_white.png';
 
 const LandingWalkthrough = ({navigation}) => {
-  const [, dispatch] = useStateValue();
   const options = [
     {
       title: 'Classify Images',

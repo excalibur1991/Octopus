@@ -14,28 +14,28 @@ const LandingPage = ({navigation, t}) => {
   const [, dispatch] = useStateValue();
   const options = [
     {
-      title: 'Classify Images',
-      subTitle: 'Whether the image is a knee or a shoulder',
-      screen: 'BrowseMissions',
-      icon: require('../assets/verification_yellow.png'),
       width: 25,
       height: 25,
+      screen: 'ClassifyImages',
+      title: 'Classify Images',
+      icon: require('../assets/verification_yellow.png'),
+      subTitle: 'Whether the image is a knee or a shoulder',
     },
     {
-      title: 'Stats',
-      subTitle: 'See your total verifications  and more',
-      screen: 'MyMissions',
-      icon: require('../assets/stats_yellow.png'),
       width: 36,
       height: 20,
+      title: 'Stats',
+      screen: 'Stats',
+      icon: require('../assets/stats_yellow.png'),
+      subTitle: 'See your total verifications  and more',
     },
     {
-      title: 'My wallet',
-      subTitle: 'See your earnings',
-      screen: 'Wallet',
-      icon: require('../assets/my_wallet_yellow.png'),
       width: 34,
       height: 30,
+      screen: 'Wallet',
+      title: 'My wallet',
+      subTitle: 'See your earnings',
+      icon: require('../assets/my_wallet_yellow.png'),
     },
   ];
 

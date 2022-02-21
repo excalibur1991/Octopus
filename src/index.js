@@ -10,9 +10,10 @@ import TabComponent from './components/Tab';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
-// import ClassifyImage from './screens/ClassifyImage';
+import ClassifyImage from './screens/ClassifyImage';
+import ClassifyImageReward from './screens/ClassifyImageReward';
 // import About from './screens/About';
-import Information from './screens/Information';
+// import Information from './screens/Information';
 import Stats from './screens/Stats';
 // import SwipeAI from './screens/SwipeAI';
 // import Learn from './screens/Learn';
@@ -688,7 +689,7 @@ const ClassifyImagesStack = () => {
 
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="ClassifyImage"
         component={ClassifyImage}
         options={({navigation}) => {
@@ -705,15 +706,20 @@ const ClassifyImagesStack = () => {
             navigation,
           );
         }}
-      /> */}
+      />
       <Stack.Screen
-        name="MissionStatus"
-        component={MissionStatus}
+        name="ClassifyImageReward"
+        component={ClassifyImageReward}
         options={({navigation}) => {
           return Header(
             {
-              title: 'Mission Status',
+              title: 'Classify Images',
+              showBackButton: true,
               isTransparent: true,
+              showLanguageDropdown: true,
+              selectedLanguage: language,
+              dispatch,
+              languageOptions,
             },
             navigation,
           );
@@ -1053,6 +1059,14 @@ const BottomTabs = ({navigation}) => {
             tabBarButton: (props) => (
               <TabComponent label="MyWallet" {...props} />
             ),
+          }}
+        />
+        <Tab.Screen
+          name="Stats"
+          component={StatsStack}
+          options={{
+            unmountOnBlur: true,
+            tabBarButton: () => null,
           }}
         />
         {/* <Tab.Screen

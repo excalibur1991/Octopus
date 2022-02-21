@@ -1,4 +1,4 @@
-import {StyleSheet, Platform, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingTop: '5.5%',
     paddingHorizontal: '4.2%',
+    // backgroundColor: 'white',
   },
   tabs: {
     flexDirection: 'row',
@@ -39,35 +40,33 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.APP_COLOR_2,
   },
   uavContainer: {
-    paddingVertical: 15,
+    paddingTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 13,
   },
   uavItem: {
-    width: '30%',
+    width: '50%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  uavCenterItem: {
-    width: '40%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  uavContentContainer: {
+    width: '83%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   uavItemDivider: {
     width: 1,
-    height: '105%',
-    marginTop: -22,
+    height: '98%',
+    marginTop: -40,
     marginBottom: -45,
     backgroundColor: theme.APP_COLOR_1,
   },
   imageIcon: {
-    height: 30,
-    width: 30,
+    height: 25,
+    width: 25,
   },
   uavItemTitle: {
     fontSize: 10,
-    marginTop: 9,
     lineHeight: 12,
     fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
@@ -78,6 +77,42 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     lineHeight: 15,
     fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  uavItemSRs: {
+    width: '50%',
+    height: '100%',
+    paddingHorizontal: 13,
+  },
+  uavItemHeading: {
+    fontSize: 12,
+    lineHeight: 14,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  uavSRProgressContainer: {
+    marginTop: 20,
+  },
+  uavSRContentContainer: {
+    width: '95%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  uavItemSRTitle: {
+    fontSize: 10,
+    marginLeft: 3,
+    lineHeight: 12,
+    marginBottom: 5,
+    fontFamily: 'Moon-Light',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  uavItemSRValue: {
+    fontSize: 10,
+    lineHeight: 12,
+    fontFamily: 'Moon-Light',
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
@@ -103,6 +138,32 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  successContainer: {
+    paddingVertical: 13,
+    paddingHorizontal: 22,
+  },
+  successTextValueContainer: {
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  successText: {
+    fontSize: 12,
+    lineHeight: 14,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+  successValue: {
+    fontSize: 14,
+    lineHeight: 16,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
+
   quicraValue: {
     fontSize: 17,
     lineHeight: 20.57,
