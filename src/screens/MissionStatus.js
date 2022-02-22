@@ -89,19 +89,11 @@ const MissionStatus = ({navigation, route}) => {
                 ? styles.dividerCompletedPlayAI
                 : styles.dividerCompletedAnnotate
             }>
-            <LinearGradient
-              style={styles.dividerShadow}
-              colors={[
-                theme.COLORS.TRANSPARENT,
-                isUploadType
-                  ? theme.COLORS.DARK_PURPLE
-                  : isVerifyType
-                  ? theme.COLORS.DARK_BLUE
-                  : isPlayaiType
-                  ? theme.COLORS.DARK_BLUE
-                  : theme.COLORS.SKY_BLUE,
-              ]}
-            />
+              <Image
+                resizeMode="stretch"
+                style={styles.dividerShadow}
+                source={require('../assets/ellipse_horizontal.png')}
+              />
           </View>
         </>
       )}
@@ -146,7 +138,7 @@ const MissionStatus = ({navigation, route}) => {
                 <View style={styles.expContainer}>
                   <Text style={styles.rewardSign}>$</Text>
                   <Text style={styles.xLabel}>x</Text>
-                  <Text style={styles.rewardValue}>1.21</Text>
+                  <Text style={styles.rewardValue2}>1.21</Text>
                   <Text style={styles.rewardLabel}>DU Coins</Text>
                 </View>
               </View>

@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   progressContainer: {
-    marginTop: 20,
+    marginTop: 20
   },
   progressChipUpload: {
     borderRadius: 30,
@@ -173,7 +173,7 @@ export const styles = StyleSheet.create({
   },
   expContainer: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   rewardValue: {
@@ -184,9 +184,18 @@ export const styles = StyleSheet.create({
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
   },
+  rewardValue2: {
+    fontSize: 41,
+    lineHeight: 56,
+    textAlign: 'center',
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+    textTransform: 'uppercase',
+  },
   rewardLabel: {
     fontSize: 18,
     marginLeft: 5,
+    marginTop: 16,
     lineHeight: 21,
     textAlign: 'center',
     fontFamily: 'Moon-Bold',
@@ -195,12 +204,14 @@ export const styles = StyleSheet.create({
   },
   rewardSign: {
     fontSize: 36,
+    lineHeight: 36,
     marginRight: 8,
+    marginBottom: 12,
     borderRadius: 25,
-    paddingVertical: 5,
+    paddingVertical: 4,
     overflow: 'hidden',
     textAlign: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: 13,
     fontFamily: 'Moon-Bold',
     color: theme.APP_COLOR_1,
     textTransform: 'uppercase',
@@ -209,6 +220,7 @@ export const styles = StyleSheet.create({
   xLabel: {
     fontSize: 12,
     lineHeight: 21,
+    marginTop: 20,
     marginRight: 5,
     textAlign: 'center',
     fontFamily: 'Moon-Bold',
