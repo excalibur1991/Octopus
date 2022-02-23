@@ -74,7 +74,7 @@ const [cards, setCards] = useState([]);
 const [editMode, setEditMode] = useState(EDIT_MODE.MODE_SWIPE);
 const [tutStep, setTutStep] = useState('tut_description');
 
-const {isTutorial, navigation, t} = props || '';
+const {isTutorial, navigation, t} = props || {};
 
 
 const initVariables = () =>{

@@ -131,7 +131,7 @@ const RadioButton = ({checked, onCheckChange}) => {
   );
 };
 
-const ReportModal = ({open = false, onClose = () => {}}) => {
+const ReportModal = ({open = false, onClose = () => {}, onReport = () => {}}) => {
   const [selectedReportOption, setSelectedReportOption] = useState(0);
   const [caseReported, setCaseReported] = useState(false);
 
@@ -140,6 +140,11 @@ const ReportModal = ({open = false, onClose = () => {}}) => {
     setCaseReported(false);
     onClose();
   };
+
+  const handleReport = () => {
+    onReport();
+    setCaseReported(true);
+  }
 
   return (
     <Modal transparent visible={open} statusBarTranslucent animationType="fade">
@@ -191,7 +196,7 @@ const ReportModal = ({open = false, onClose = () => {}}) => {
                 colors={[theme.COLORS.LIGHT_PURPLE, theme.COLORS.LIGHT_BLUE]}
                 style={styles.modalButtonGradient}>
                 <Ripple
-                  onPress={() => setCaseReported(true)}
+                  onPress={handleReport}
                   style={styles.modalButton}>
                   <Text style={styles.buttonText}>Report</Text>
                 </Ripple>
@@ -218,6 +223,7 @@ const ReportModal = ({open = false, onClose = () => {}}) => {
 };
 
 const VeriPage = (props) => {
+  const {navigation, t} = props || {};
   const [, dispatch] = useStateValue();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cards, setCards] = useState([]);
@@ -448,12 +454,10 @@ const VeriPage = (props) => {
     updateMetadata(cards, index);
   };
 
-  const handleReport = (card) => {
+  const handleReport = () => {
     let index = currentIndex;
     setCurrentIndex(++index);
-
     callReport(currentIndex);
-
     updateMetadata(cards, index);
   };
 
@@ -819,7 +823,11 @@ const VeriPage = (props) => {
    */
   return (
     <View style={styles.container}>
-      <ReportModal open={openModal} onClose={() => setOpenModal(false)} />
+      <ReportModal 
+        open={openModal} 
+        onClose={() => setOpenModal(false)} 
+        onReport={()=> handleReport() } 
+      />
       <View style={styles.progressContainer}>
         <Progress.Bar
           height={8}
@@ -846,7 +854,7 @@ const VeriPage = (props) => {
           yupText="Verified"
           stack={false}
           handleYup={(card) => handleVerify(card)}
-          handleNope={(card) => handleReport(card)}
+          handleNope={(card) => setOpenModal(true)}
           hasMaybeAction={false}
           cardRemoved={(index) => cardRemoved(index)}
           showYup={false}
@@ -940,7 +948,7 @@ const VeriPage = (props) => {
                     title: 'EXIT MISSION',
                     showConfirmButton: true,
                     showCancelButton: true,
-                    onConfirmPressed: () => setOpenModal(true),
+                    onConfirmPressed: () => navigation.goBack(),
                     onCancelPressed: () => {},
                   },
                 });
