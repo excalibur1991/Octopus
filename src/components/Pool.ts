@@ -7,8 +7,8 @@ import jsonpoolABI from '@oceanprotocol/contracts/artifacts/BPool.json'
 import defaultDatatokensABI from '@oceanprotocol/contracts/artifacts/DataTokenTemplate.json'
 import { PoolFactory } from './PoolFactory'
 import Decimal from 'decimal.js'
-import {web3} from '../web3/utils'
-import {PRIVATE_KEY, INFURA_KEY} from '../../env'
+import { web3 } from '../web3/utils'
+import { PRIVATE_KEY, INFURA_KEY } from '../../env'
 
 const MaxUint256 =
   '115792089237316195423570985008687907853269984665640564039457584007913129639934'
@@ -182,10 +182,15 @@ export class Pool extends PoolFactory {
     if (!force) {
       const currentAllowence = await this.allowance(tokenAddress, account, spender)
       //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
+      console.log({
+        currentAllowance: currentAllowence, currAllow: new Decimal(currentAllowence),
+        amountToAdd: amount, account: account, force: force
+      })
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
         return null
       }
+      console.log('you can add...')
     }
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
@@ -194,40 +199,40 @@ export class Pool extends PoolFactory {
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+      console.log({ ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
     } catch (e) {
       estGas = gasLimitDefault
     }
 
     try {
-    //  result = await token.methods.approve(spender, amount)
-          //  .send({
+      //  result = await token.methods.approve(spender, amount)
+      //  .send({
       //  from: account,
       //  gas: estGas + 1,
       //  gasPrice: await getFairGasPrice(web3)
-     // })
-         //check approval: ask oceanToken contract to approve...
-    let Tx = require('ethereumjs-tx').Transaction;
-     let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
-     let count = await web3.eth.getTransactionCount(account);
- 
-     let rawTransaction = {
-      "from":account,
-      "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
-      "gasLimit": web3.utils.toHex(estGas + 1),
-      "to":tokenAddress,
-      "data":token.methods.approve(spender, amount).encodeABI(),
-      "nonce":web3.utils.toHex(count)
-  };
+      // })
+      //check approval: ask oceanToken contract to approve...
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
 
-  let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
-  transaction.sign(privateKey)
-  //console.log('getting approval...')
-  result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  //console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
-  //console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
+      let rawTransaction = {
+        "from": account,
+        "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+        "gasLimit": web3.utils.toHex(estGas + 1),
+        "to": tokenAddress,
+        "data": token.methods.approve(spender, amount).encodeABI(),
+        "nonce": web3.utils.toHex(count)
+      };
+
+      let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+      transaction.sign(privateKey)
+      console.log('getting approval...')
+      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+      console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+      console.log({ ApprovalStatus: result.status, ApprovalReceipt: result })
     } catch (e) {
-      //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
     }
     return result
   }
@@ -246,7 +251,7 @@ export class Pool extends PoolFactory {
       result = web3.utils.fromWei(balance)
       //console.log({user_shares_of_pool_balance: result, account:account, poolAddress:poolAddress})
     } catch (e) {
-      //console.log(`ERROR: Failed to get shares of pool : ${e.message}`)
+      console.log(`ERROR: Failed to get shares of pool : ${e.message}`)
     }
     return result
   }
@@ -366,7 +371,7 @@ export class Pool extends PoolFactory {
   async getPoolSharesTotalSupply(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let amount = null
-    //console.log('geting total supply of pool shares...')
+   // console.log('geting total supply of pool shares...')
     try {
       const result = await pool.methods.totalSupply().call()
       amount = web3.utils.fromWei(result)
@@ -828,8 +833,8 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minPoolAmountOut)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        //console.log('Joining the liquidity pool..')
-        //console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
+      console.log('Joining the liquidity pool..')
+      console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -848,35 +853,35 @@ export class Pool extends PoolFactory {
         })
       */
 
-        let Tx = require('ethereumjs-tx').Transaction;
-        let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
-        let count = await web3.eth.getTransactionCount(account);
-    
-        let tx = pool.methods.joinswapExternAmountIn(
-          tokenIn,
-          web3.utils.toWei(tokenAmountIn),
-          web3.utils.toWei(minPoolAmountOut)
-        );
-        let encodededABI = tx.encodeABI()
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
 
-        let rawTransaction = {
-         "from":account,
-         "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
-         "gasLimit": web3.utils.toHex(estGas + 1),
-         "to":poolAddress,
-         "data":encodededABI,
-         "nonce":web3.utils.toHex(count)
-     };
-   
-     let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
-     transaction.sign(privateKey)
-     result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-     //console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
-     //console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
-      
+      let tx = pool.methods.joinswapExternAmountIn(
+        tokenIn,
+        web3.utils.toWei(tokenAmountIn),
+        web3.utils.toWei(minPoolAmountOut)
+      );
+      let encodededABI = tx.encodeABI()
+
+      let rawTransaction = {
+        "from": account,
+        "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+        "gasLimit": web3.utils.toHex(estGas + 1),
+        "to": poolAddress,
+        "data": encodededABI,
+        "nonce": web3.utils.toHex(count)
+      };
+
+      let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+      transaction.sign(privateKey)
+      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+      console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+      console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
+
     } catch (e) {
-      //console.log(`ERROR: Failed to pay tokens in order to \
-      //join the pool: ${e.message}`)
+      console.log(`ERROR: Failed to pay tokens in order to \
+      join the pool: ${e.message}`)
     }
     return result
   }
@@ -1015,56 +1020,58 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(maxPoolAmountIn)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-        //console.log('Exiting the liquidity pool..')
-        //console.log({ExitGasEstimate: estGas, account:account, tokenOut:tokenOut,
-        //  tokenAmountOut:tokenAmountOut, maxPoolAmountIn: maxPoolAmountIn, poolAddress:poolAddress })
+      //console.log('Exiting the liquidity pool..')
+      //console.log({ExitGasEstimate: estGas, account:account, tokenOut:tokenOut,
+      //  tokenAmountOut:tokenAmountOut, maxPoolAmountIn: maxPoolAmountIn, poolAddress:poolAddress })
     } catch (e) {
       estGas = gasLimitDefault
     }
 
     try {
-     /**
-      result = await pool.methods
-        .exitswapExternAmountOut(
-          tokenOut,
-          web3.utils.toWei(tokenAmountOut),
-          web3.utils.toWei(maxPoolAmountIn)
-        )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
-       */
+      /**
+       result = await pool.methods
+         .exitswapExternAmountOut(
+           tokenOut,
+           web3.utils.toWei(tokenAmountOut),
+           web3.utils.toWei(maxPoolAmountIn)
+         )
+         .send({
+           from: account,
+           gas: estGas + 1,
+           gasPrice: await getFairGasPrice(web3)
+         })
+        */
 
-        let Tx = require('ethereumjs-tx').Transaction;
-        let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
-        let count = await web3.eth.getTransactionCount(account);
-    
-        let tx = pool.methods.exitswapExternAmountOut(
-          tokenOut,
-          web3.utils.toWei(tokenAmountOut),
-          web3.utils.toWei(maxPoolAmountIn)
-        );
-        let encodededABI = tx.encodeABI()
+         // Repeated codes...will need to be refactored/moved to a separate file
 
-        let rawTransaction = {
-         "from":account,
-         "gasPrice": web3.utils.toHex (await getFairGasPrice(web3)),
-         "gasLimit": web3.utils.toHex(estGas + 1),
-         "to":poolAddress,
-         "data":encodededABI,
-         "nonce":web3.utils.toHex(count)
-     };
-   
-     let transaction = new Tx(rawTransaction, {'chain': 'rinkeby'}); //defaults to mainnet without specifying chain
-     transaction.sign(privateKey)
-     result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-     //console.log('Success!!. You have succeeded paying the fees and exiting the liquidity pool....')
-     //console.log({ExitswapStatus: result.status, ExitReceipt: result})
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
+
+      let tx = pool.methods.exitswapExternAmountOut(
+        tokenOut,
+        web3.utils.toWei(tokenAmountOut),
+        web3.utils.toWei(maxPoolAmountIn)
+      );
+      let encodededABI = tx.encodeABI()
+
+      let rawTransaction = {
+        "from": account,
+        "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+        "gasLimit": web3.utils.toHex(estGas + 1),
+        "to": poolAddress,
+        "data": encodededABI,
+        "nonce": web3.utils.toHex(count)
+      };
+
+      let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+      transaction.sign(privateKey)
+      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+      console.log('Success!!. You have succeeded paying the fees and exiting the liquidity pool....')
+      console.log({ExitswapStatus: result.status, ExitReceipt: result})
 
     } catch (e) {
-      //console.log('ERROR: Failed to exitswapExternAmountOut')
+      console.log('ERROR: Failed to exitswapExternAmountOut')
     }
     return result
   }

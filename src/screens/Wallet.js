@@ -15,8 +15,9 @@ import {contracts, web3} from '../web3/utils';
 import {OceanPool} from '../components/OceanPool';
 import {styles} from '../styles/wallet';
 import {withTranslation} from 'react-i18next';
+import { NavigationContainer } from '@react-navigation/native';
 
-const Wallet = ({t}) => {
+const Wallet = ({t, navigation}) => {
   const credentials = [
     {
       oneLine: false,
@@ -83,7 +84,7 @@ const Wallet = ({t}) => {
       style={styles.container}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}>
-      <View style={styles.quicraContainer}>
+      {/* <View style={styles.quicraContainer}>
         <Text style={styles.quicraText}>1.2 QUICRA-0</Text>
         <View style={styles.oceanPortfolioContainer}>
           <Text style={styles.oceanText}>7.2 Ocean</Text>
@@ -92,7 +93,7 @@ const Wallet = ({t}) => {
             <Text style={styles.percentText}>(+15.53%)</Text>
           </View>
         </View>
-      </View>
+      </View> */}
       <View style={styles.sendAmountInputContainer}>
         <Text style={styles.inputLabel}>{t('walletActions.sendTo')}</Text>
         <TextInput
@@ -121,7 +122,7 @@ const Wallet = ({t}) => {
         buttonStyle={styles.buttonStyle}
       />
       <View style={styles.mainDivider} />
-      <View style={styles.stakeUnstakeContainer}>
+      {/* <View style={styles.stakeUnstakeContainer}>
         <Text style={styles.inputLabel}>Amount</Text>
         <TextInput
           selectable={true}
@@ -130,20 +131,24 @@ const Wallet = ({t}) => {
           selectTextOnFocus={true}
           placeholderTextColor={theme.COLORS.WHITE}
         />
-      </View>
+      </View> */}
       <View style={styles.stakeUnstakeButtons}>
         <Button
           height={55}
-          title="UnStake"
-          onPress={() => UnStakeDT()}
+          // title="UnStake"
+          // onPress={() => UnStakeDT()}
+          title="Trade"
+          onPress={() => navigation.navigate('Trade')}
           color={theme.APP_COLOR_2}
-          textStyle={styles.unstakeButtonText}
+          textStyle={styles.stakeButtonText}
           buttonStyle={styles.stakeUnstakeButtonStyle}
         />
         <Button
           height={55}
-          title="Stake"
-          onPress={() => StakeDT()}
+          // title="Stake"
+          // onPress={() => StakeDT()}
+           title="Pool"
+           onPress={() => navigation.navigate('Pool')}
           color={theme.APP_COLOR_2}
           textStyle={styles.stakeButtonText}
           buttonStyle={styles.stakeUnstakeButtonStyle}

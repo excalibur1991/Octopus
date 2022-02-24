@@ -24,6 +24,8 @@ import Wallet from './screens/Wallet';
 import WalletSettings from './screens/WalletSettings';
 // import MyStats from './screens/MyStats';
 // import Bounty from './screens/Bounty';
+import PoolTabs from './screens/Pool/PoolTabs'
+import TradeTabs from './screens/Pool/TradeTabs';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import ImageVerifyMission from './screens/ImageVerifyMission';
@@ -921,6 +923,34 @@ const WalletStack = () => (
         return Header(
           {
             title: 'Wallet Settings',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="Pool"
+      component={PoolTabs}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Pool',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="Trade"
+      component={TradeTabs}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Trade',
             showBackButton: true,
             isTransparent: true,
           },

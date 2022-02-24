@@ -6,7 +6,8 @@ import { EventData, Filter } from 'web3-eth-contract'
 import BigNumber from 'bignumber.js'
 import { SubscribablePromise, Logger, didNoZeroX, didPrefixed } from '../utils'
 import Decimal from 'decimal.js'
-import {web3} from '../web3/utils'
+import { web3 } from '../web3/utils'
+import { FakeTransaction } from 'ethereumjs-tx'
 
 declare type PoolTransactionType = 'swap' | 'join' | 'exit'
 
@@ -60,7 +61,7 @@ export class OceanPool extends Pool {
   public startBlock: number
 
   constructor(
-   // web3: Web3,
+    // web3: Web3,
     logger: Logger,
     factoryABI: AbiItem | AbiItem[] = null,
     poolABI: AbiItem | AbiItem[] = null,
@@ -185,7 +186,7 @@ export class OceanPool extends Pool {
         // TODO: Potential timing attack, left side: true
         if (token !== this.oceanAddress) this.dtAddress = token
       }
-      //console.log('DataToken address in this pool:', this.dtAddress)
+    //console.log('DataToken address in this pool:', this.dtAddress)
     return this.dtAddress
   }
 
@@ -398,8 +399,10 @@ export class OceanPool extends Pool {
   ): Promise<string> {
     //console.log('geting PoolSharesRequiredToRemoveDT....')
     const dtAddress = await this.getDTAddress(poolAddress)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    //console.log({DTAdd:dtAddress, dtAddress:currToken[0]})
     //console.log('PoolSharesRequiredToRemoveDT:', await this.calcPoolInGivenSingleOut(poolAddress, dtAddress, dtAmount))
-    return this.calcPoolInGivenSingleOut(poolAddress, dtAddress, dtAmount)
+    return this.calcPoolInGivenSingleOut(poolAddress, currToken[0], dtAmount)
   }
 
   /**
@@ -411,8 +414,10 @@ export class OceanPool extends Pool {
     poolAddress: string,
     poolShares: string
   ): Promise<string> {
+    const currToken = await this.getCurrentTokens(poolAddress)
     const dtAddress = await this.getDTAddress(poolAddress)
-    return this.calcSingleOutGivenPoolIn(poolAddress, dtAddress, poolShares)
+    return this.calcSingleOutGivenPoolIn(poolAddress, currToken[0], poolShares)
+    //return this.calcSingleOutGivenPoolIn(poolAddress, dtAddress, poolShares)
   }
 
   /**
@@ -424,7 +429,10 @@ export class OceanPool extends Pool {
     poolAddress: string,
     oceanAmount: string
   ): Promise<string> {
-    return this.calcPoolInGivenSingleOut(poolAddress, this.oceanAddress, oceanAmount)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    return this.calcPoolInGivenSingleOut(poolAddress, currToken[1], oceanAmount)
+    console.log({ OceanAddr: currToken[1] })
+    //return this.calcPoolInGivenSingleOut(poolAddress, this.oceanAddress, oceanAmount)
   }
 
   /**
@@ -436,7 +444,9 @@ export class OceanPool extends Pool {
     poolAddress: string,
     poolShares: string
   ): Promise<string> {
-    return this.calcSingleOutGivenPoolIn(poolAddress, this.oceanAddress, poolShares)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    return this.calcSingleOutGivenPoolIn(poolAddress, currToken[1], poolShares)
+    //return this.calcSingleOutGivenPoolIn(poolAddress, this.oceanAddress, poolShares)
   }
 
   /**
@@ -461,6 +471,8 @@ export class OceanPool extends Pool {
         .div(totalPoolTokens)
         .mul(oceanReserve)
         .toString()
+      console.log({ totalPoolTokens: totalPoolTokens, dtReserve: dtReserve, oceanReserve: oceanReserve })
+      console.log({ dtAmount: dtAmount, oceanAmount: oceanAmount })
       return { dtAmount, oceanAmount }
     } catch (e) {
       //console.log(`ERROR: Unable to get token info. ${e.message}`)
@@ -512,6 +524,7 @@ export class OceanPool extends Pool {
     tokenAddress: string
   ): Promise<string> {
     const balance = await super.getReserve(poolAddress, tokenAddress)
+    //console.log({poolReserve_balance:parseFloat(balance) })
     if (parseFloat(balance) > 0) {
       return new Decimal(balance).mul(POOL_MAX_AMOUNT_OUT_LIMIT).toString()
     } else return '0'
@@ -761,35 +774,46 @@ export class OceanPool extends Pool {
     amount: string,
     maximumPoolShares: string
   ): Promise<TransactionReceipt> {
-    //console.log('removing DTLiquidity...')
+
+    console.log('removing DTLiquidity...')
+    //amount = '1'
+    let result = null
+    const currToken = await this.getCurrentTokens(poolAddress)
+    // const maxAmount = await this.getMaxAddLiquidity(poolAddress,currToken[1]) // [dtAddress, oceanAddress]
+
     const dtAddress = await this.getDTAddress(poolAddress)
-    const maxAmount = await this.getDTMaxRemoveLiquidity(poolAddress)
-    
+    //const maxAmount = await this.getDTMaxRemoveLiquidity(poolAddress)
+    const maxAmount = await this.getMaxRemoveLiquidity(poolAddress, currToken[0])// [dtAddress, oceanAddress]
+    console.log({ maxAmount_you_can_remove: maxAmount })
     if (new Decimal(amount).greaterThan(maxAmount)) {
-      //console.log('ERROR: Too much reserve to remove')
+      console.log('ERROR: Too much reserve to remove')
       return null
     }
     const usershares = await this.sharesBalance(account, poolAddress)
-    //console.log({usershares:usershares, maximumPoolShares:maximumPoolShares})
+    console.log({ usershares: new Decimal(usershares), maximumPoolShares: maximumPoolShares })
     // //maximumPoolShare: 50; userShares:0.58
     if (new Decimal(usershares).lessThan(maximumPoolShares)) {
-      //console.log('ERROR: Not enough poolShares')
+      console.log('ERROR: Not enough poolShares')
       return null
     }
+    console.log('enough user shares to remove DT...proceeding...')
     const sharesRequired = await this.getPoolSharesRequiredToRemoveDT(poolAddress, amount)
-    //console.log('sharesRequired:', sharesRequired)
+    console.log('sharesRequired:', sharesRequired)
     //maximumPoolShare: 50; sharesRequired:0.23
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired)) {
-      //console.log('ERROR: Not enough poolShares')
+      console.log('ERROR: Not enough poolShares')
       return null
     }
+    console.log('enough pool shares required to remove DT...proceeding...')
     // Balancer bug fix
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired))
       maximumPoolShares = new Decimal(maximumPoolShares).mul(0.9999).toString()
 
-      //console.log({account:account, poolAddress:poolAddress,amount:amount,maxAmount:maxAmount,
-      //  dtAddress:dtAddress, usershares:usershares, 
-      //  sharesRequired:sharesRequired, maximumPoolShares:new Decimal(maximumPoolShares)})
+    console.log({
+      account: account, poolAddress: poolAddress, amount: amount, maxAmount: maxAmount,
+      dtAddress: dtAddress, usershares: usershares,
+      sharesRequired: sharesRequired, maximumPoolShares: new Decimal(maximumPoolShares)
+    })
     // Balance bug fix
     return this.exitswapExternAmountOut(
       account,
@@ -798,6 +822,7 @@ export class OceanPool extends Pool {
       amount,
       maximumPoolShares
     )
+    return result;
   }
 
   /**
@@ -812,18 +837,22 @@ export class OceanPool extends Pool {
     poolAddress: string,
     amount: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: oceanAddress is not defined')
-      return null
-    }
-    const maxAmount = await this.getOceanMaxAddLiquidity(poolAddress)
+    // if (this.oceanAddress == null) {
+    //   //console.log('ERROR: oceanAddress is not defined')
+    //   return null
+    // }
+    const currToken = await this.getCurrentTokens(poolAddress)
+    const maxAmount = await this.getMaxAddLiquidity(poolAddress, currToken[1]) // [dtAddress, oceanAddress]
+    //const maxAmount = await this.getOceanMaxAddLiquidity(poolAddress)
     if (new Decimal(amount).greaterThan(maxAmount)) {
-      //console.log('ERROR: Too much reserve to add')
-      return null
+      console.log('ERROR: Too much reserve to add')
+      //return null
     }
+    console.log('not too much...can add...')
     const txid = await super.approve(
       account,
-      this.oceanAddress,
+      //this.oceanAddress,
+      currToken[1],
       poolAddress,
       web3.utils.toWei(amount)
     )
@@ -834,7 +863,8 @@ export class OceanPool extends Pool {
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
-      this.oceanAddress,
+      //this.oceanAddress,
+      currToken[1],
       amount,
       '0'
     )
@@ -888,36 +918,50 @@ export class OceanPool extends Pool {
     amount: string,
     maximumPoolShares: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: oceanAddress is not defined')
-      return null
-    }
-    const maxAmount = await this.getOceanMaxRemoveLiquidity(poolAddress)
+
+    // if (this.oceanAddress == null) {
+    //   //console.log('ERROR: oceanAddress is not defined')
+    //   return null
+    // }
+    const currToken = await this.getCurrentTokens(poolAddress)
+    // const maxAmount = await this.getOceanMaxRemoveLiquidity(poolAddress)
+    const maxAmount = await this.getMaxRemoveLiquidity(poolAddress, currToken[1]) // [dtAddress, oceanAddress]
+    console.log({ maxAmount_you_can_remove: maxAmount })
     if (new Decimal(amount).greaterThan(maxAmount)) {
       //console.log('ERROR: Too much reserve to remove')
       return null
     }
     const usershares = await this.sharesBalance(account, poolAddress)
+    console.log({ usershares: new Decimal(usershares), maximumPoolShares: maximumPoolShares })
     if (new Decimal(usershares).lessThan(maximumPoolShares)) {
       //console.log('ERROR: Not enough poolShares')
       return null
     }
+    console.log('enough user shares to remove OCEAN...proceeding...')
     const sharesRequired = await this.getPoolSharesRequiredToRemoveOcean(
       poolAddress,
       amount
     )
+    console.log('sharesRequired:', sharesRequired)
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired)) {
       //console.log('ERROR: Not enough poolShares')
       return null
     }
+    console.log('enough user shares to remove OCEAN...proceeding...')
     // Balancer bug fix
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired))
       maximumPoolShares = new Decimal(maximumPoolShares).mul(0.9999).toString()
     // Balance bug fix
+
+    console.log({
+      account: account, poolAddress: poolAddress, amount: amount, maxAmount: maxAmount,
+      usershares: usershares,
+      sharesRequired: sharesRequired, maximumPoolShares: new Decimal(maximumPoolShares)
+    })
     return super.exitswapExternAmountOut(
       account,
       poolAddress,
-      this.oceanAddress,
+      currToken[1],
       amount,
       maximumPoolShares
     )
