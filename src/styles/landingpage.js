@@ -6,6 +6,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginTop: '3%',
   },
+  container_walkthrough: {
+    flex: 1,
+    marginTop: '3%',
+    backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
+  },
   centered: {
     alignItems: 'center',
   },

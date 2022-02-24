@@ -62,7 +62,7 @@ const Information = ({navigation}) => {
               <Ripple
                 key={index}
                 onPress={() => {
-                  navigation.navigate('LandingPage');
+                  navigation.navigate('LandingPageWalkthrough');
                   setTimeout(
                     () =>
                       dispatch({

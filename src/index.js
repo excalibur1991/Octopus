@@ -10,6 +10,7 @@ import TabComponent from './components/Tab';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
+import LandingPageWalkthrough from './screens/LandingPageWalkthrough';
 // import About from './screens/About';
 import Information from './screens/Information';
 import Stats from './screens/Stats';
@@ -369,6 +370,25 @@ const LandingPageStack = () => {
           );
         }}
       />
+      <Stack.Screen
+        name="LandingPageWalkthrough"
+        component={LandingPageWalkthrough}
+        options={({navigation}) => {
+          return Header(
+            {
+              title: 'Dashboard',
+              isTransparent: true,
+              showLanguageDropdown: true,
+              selectedLanguage: language,
+              dispatch,
+              languageOptions,
+              isFullScreenHeader: true,
+            },
+            navigation,
+          );
+        }}
+      />
+      
       <Stack.Screen
         name="Information"
         component={Information}
