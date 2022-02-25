@@ -172,11 +172,9 @@ const DrawingPan = (props) => {
     }
 
     const drawCanvas = (blob)=>{
-      console.log('canvas', canvas);
       if(canvas == null) return;
       const image = new CanvasImage(canvas);
       image.src =  blob;
-      console.log(blob);
       image.addEventListener('load', () => {
         //assume current drawingpan is landcape
         const width_ratio =  frameDimension.width / image.width;

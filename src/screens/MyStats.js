@@ -87,12 +87,10 @@ const MyStats = ({t}) => {
     if (response && response.transaction_hash) {
       setIsLoading(false)
       setSuccessLog(`${response.transaction_hash}!`)
-      console.log(`Success! Hash: ${response.transaction_hash}`)
       return <Text>{`Success! Hash: ${response.transaction_hash}`}</Text>
      //  return response
     }
     setIsLoading(false)
-    console.log({rewardRes: response, msg: response.messages})
     setMsgLog(`${response.messages}!`)
      return response.messages
   }

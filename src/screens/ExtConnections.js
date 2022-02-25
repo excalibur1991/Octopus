@@ -66,8 +66,6 @@ export function ExtConnections({ t, ...props }) {
 
     const connectWallet = useCallback(async () => {
         let result = await connector.connect()
-        console.log({ result })
-        console.log({ desc: result.peerMeta.description, name: result.peerMeta.name, url: result.peerMeta.url })
         if (result )  {
             setAddress(result.accounts[0])
             setMessage(`Connected to ${result.peerMeta.name}`)

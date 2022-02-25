@@ -312,13 +312,11 @@ export const fetchOverall = async (
     let sum_rewards = 0;
     let already_claimed = 0;
     let claimable_rewards = 0;
-    console.log({ Amount: rewardsAmount, totalRewards:sumRewards})
 
     if(sumRewards !== null && rewardsAmount !== null) {
       sum_rewards = (sumRewards.result).toExponential(1);
       claimable_rewards = (rewardsAmount.amount).toExponential(1) 
       already_claimed = (sum_rewards-claimable_rewards).toExponential(1)
-      console.log({sum_rewards:sum_rewards, claimable_rewards:claimable_rewards, already_claimed:already_claimed})
     }
     setTotalRewards(sum_rewards);
     setClaimableRewards(claimable_rewards);

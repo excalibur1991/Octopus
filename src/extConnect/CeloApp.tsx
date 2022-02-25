@@ -102,7 +102,6 @@ export function App(): JSX.Element {
          ethAddress: ethAddress
          
      }
-     console.log({Balances:balances})
      return balances;
      
   }

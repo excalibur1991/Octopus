@@ -107,7 +107,6 @@ const uploadMultipleFiles = async (
 ) => {
   try {
     if (pickedFiles && pickedFiles.length > 0) {
-      console.log(pickedFiles);
       const allFileUploadResponses = fileUploadResponses.slice();
       for (const [index, file] of pickedFiles.entries()) {
         setUploadingImageIndex(

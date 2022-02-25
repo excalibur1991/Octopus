@@ -12,7 +12,6 @@ export const MissionCounter = (props) => {
     const minutes = (remainTime / 60 % 60).toFixed(0);
     const hours = (remainTime / 3600 % 24).toFixed(0);
     const days = (remainTime / 3600  / 24).toFixed(0);
-    console.log(days);
 
 
     return (

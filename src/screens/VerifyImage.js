@@ -867,10 +867,10 @@ const VeriPage = (props) => {
         />
       </View>
       <View style={styles.divider} />
-      <ScrollView
+      {/* <ScrollView
         style={styles.tagsContainer}
         contentContainerStyle={styles.tagsContentContainer}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}> */}
         {!bEditEnabled && <AddTag handleNewTag={handleNewTag} />}
         <TagInput
           bEditEnabled={bEditEnabled}
@@ -904,7 +904,7 @@ const VeriPage = (props) => {
             />
           </>
         )}
-      </ScrollView>
+      {/* </ScrollView> */}
       <View style={styles.divider} />
       <View style={styles.actionsContainer}>
         <View style={styles.dropDownContainer}>
