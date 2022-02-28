@@ -273,52 +273,6 @@ const Header = (
 });
 
 
-const FullScreenHeader = (
-  {
-    title = null,
-    showTitle = false,
-    showAppIcon = false,
-    isTransparent = false,
-    showRightButton = false,
-    showLanguageDropdown = false,
-    selectedLanguage = null,
-    dispatch = null,
-    languageOptions = [],
-  },
-  navigation,
-) => ({
-  title: showTitle ? title : null,
-  headerTitleAlign: 'center',
-  headerTitleStyle: {
-    color: theme.COLORS.WHITE,
-  },
-  headerBackVisible:false,
-  headerShown: true,
-  headerTransparent: true,
-  headerStyle: {
-    shadowOpacity: 1,
-    elevation: isTransparent ? 0 : 4,
-  },
-  headerLeft: showAppIcon 
-    ? () => (
-        <Ripple
-          onPress={() => navigation.navigate('LandingPage')}
-          outerStyle={{
-            borderRadius: 30,
-            marginLeft: 20,
-            backgroundColor: dark_theme.COLORS.BG_GREY
-          }}
-          innerStyle={styles.leftButtonInner}>
-            <MaterialIcon
-            name="chevron-left"
-            size={24}
-            color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
-          />
-        </Ripple>
-      )
-    : null,
-  });
-
 const LandingPageStack = () => {
   const languageOptions = [
     {
@@ -365,6 +319,7 @@ const LandingPageStack = () => {
               selectedLanguage: language,
               dispatch,
               languageOptions,
+              isFullScreenHeader: true,
             },
             navigation,
           );

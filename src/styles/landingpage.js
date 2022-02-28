@@ -4,11 +4,11 @@ import {theme} from '../services/Common/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '3%',
+    //paddingTop: 80,
   },
   container_walkthrough: {
     flex: 1,
-    marginTop: '3%',
+    //paddingTop: 80,
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   centered: {

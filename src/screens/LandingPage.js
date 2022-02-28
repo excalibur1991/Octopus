@@ -6,10 +6,13 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 import Nft from '../components/Nft';
 
 const LandingPage = ({navigation, t}) => {
+  const headerHeight = useHeaderHeight();
+
   const options = [
     {
       title: 'Browse Missions',
@@ -38,7 +41,7 @@ const LandingPage = ({navigation, t}) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: headerHeight}}>
       <View style={styles.centered}>
         <MaterialIcon
           size={40}

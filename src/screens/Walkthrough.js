@@ -10,6 +10,8 @@ import VerifyImagePageWalkthrough from '../components/VerifyImagePageWalkthrough
 import AnnotateImagePageWalkthrough from '../components/AnnotateImagePageWalkthrough';
 import {useStateValue} from '../services/State/State';
 import {actions} from '../services/State/Reducer';
+import { useHeaderHeight } from '@react-navigation/stack';
+
 
 const Walkthrough = ({navigation}) => {
   const [
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   exitContainer: {
-    top: 5,
+    top: 42,
     right: 20,
     zIndex: 1,
     position: 'absolute',

@@ -316,13 +316,13 @@ const styles = StyleSheet.create({
   },
   step2_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '67%' : '70%',
+    marginTop: Platform.OS === 'ios' ? '67%' : '62%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 
   step3_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.07),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.1),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step3_1_inner: {
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopWidth: 0.5,
     borderColor: theme.COLORS.SKY_BLUE_DARK,
-    marginTop: Platform.OS === 'ios' ? '74%' : '82%',
+    marginTop: Platform.OS === 'ios' ? '74%' : '74%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
 

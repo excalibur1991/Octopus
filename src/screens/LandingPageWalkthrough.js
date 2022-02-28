@@ -1,15 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
-import {Text, View, FlatList, Image} from 'react-native';
+import {Text, View, FlatList, Image, BackHandler} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../styles/landingpage';
 import {withTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
+import {useStateValue} from '../services/State/State';
+import {actions} from '../services/State/Reducer';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 import Nft from '../components/Nft';
 
 const LandingPage = ({navigation, t}) => {
+  const headerHeight = useHeaderHeight();
+  const [, dispatch] = useStateValue();
   const options = [
     {
       title: 'Browse Missions',
@@ -37,8 +42,24 @@ const LandingPage = ({navigation, t}) => {
     },
   ];
 
+  const handleBackButtonClick = () => {
+    dispatch({
+      type: actions.EXIT_WALKTHROUGH,
+    });
+
+    navigation.goBack();
+  
+  }
+
+  useEffect(()=>{
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
+
   return (
-    <View style={styles.container_walkthrough}>
+    <View style={{...styles.container_walkthrough, paddingTop: headerHeight }}>
       <View style={styles.centered}>
         <MaterialIcon
           size={40}
