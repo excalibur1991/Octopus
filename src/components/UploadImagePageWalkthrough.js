@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   step1_1_inner: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '25%' : '30%',
+    marginTop: Platform.OS === 'ios' ? '25%' : '25%',
   },
   step1_line: {
     top: 8,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
 
   step2_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.055 : 0.07),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.055 : 0.1),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2_2: {
@@ -194,12 +194,12 @@ const styles = StyleSheet.create({
 
   step3_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.26 : 0.3),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.26 : 0.32),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step3_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '39%' : '49%',
+    marginTop: Platform.OS === 'ios' ? '39%' : '57%',
     paddingTop: '10%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
 
   step4_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.455 : 0.55),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.455 : 0.65),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     paddingBottom: '5%',
   },
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   step4_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '58.5%' : '61.5%',
+    marginTop: Platform.OS === 'ios' ? '58.5%' : '33.5%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step4TextContainer: {
