@@ -54,6 +54,8 @@ export const theme = {
     GREY_A5: '#A5A5A5',
     SILVER_SAND: '#C8C9CA',
 
+    MATRIX: '#b15d5d',
+
     LIGHT_PINK: '#ED8495',
     ERROR_COLOR: '#D60E18',
     SUCCESS_COLOR: '#45B05D',

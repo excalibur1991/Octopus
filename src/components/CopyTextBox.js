@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, ToastAndroid} from 'react-native';
 import Ripple from '../components/Ripple';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const CopyTextBox = ({item}) => {

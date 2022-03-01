@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ToastAndroid,
+  Platform,
+  Alert,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import {connect} from 'react-redux';
 import {STPupdateAccounts, STPupdateSeedPhrase} from '../actions/actions.js';
 import * as Utils from '../web3/utils';
@@ -22,7 +23,6 @@ import {hdPathString, localStorageKey} from '../web3/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/Button';
 import {Picker} from '@react-native-picker/picker';
-import CButton from '../components/CButton';
 import {styles} from '../styles/walletsettings';
 import {
   chkNetwork,
@@ -34,9 +34,85 @@ import {
 } from '../functions/walletsettings';
 import {withTranslation} from 'react-i18next';
 import {theme} from '../services/Common/theme.js';
+import FingerprintScanner from 'react-native-fingerprint-scanner';
+import IonIcon from 'react-native-vector-icons/Feather';
+import Ripple from '../components/Ripple';
+import Clipboard from '@react-native-clipboard/clipboard';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
+const ReadOnlyBoxActionButton = ({
+  text,
+  onCopied = () => {},
+  isProtected = false,
+}) => {
+  const onCopy = () => {
+    if (isProtected) {
+      authenticate(() => {
+        handleCopy();
+      });
+    } else {
+      handleCopy();
+    }
+  };
+
+  const handleCopy = () => {
+    onCopied();
+    Clipboard.setString(text);
+    if (Platform.OS === 'ios') {
+      Alert.alert('Copied to clipboard');
+    } else {
+      ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
+    }
+  };
+
+  return (
+    <Ripple onPress={onCopy}>
+      <MaterialIcon
+        size={15}
+        name="content-copy"
+        color={theme.COLORS.TULIP_TREE}
+      />
+    </Ripple>
+  );
+};
+
+const authenticate = (onSuccess) => {
+  FingerprintScanner.authenticate({
+    description: 'Scan fingerprint or face',
+    fallbackEnabled: true,
+  }).then((isAuthenticated) => {
+    if (isAuthenticated) {
+      onSuccess();
+    }
+    FingerprintScanner.release();
+  });
+};
+
+const ReadOnlyBox = ({title, value, isFocused, setFocused, type = ''}) => {
+  const [showPhrase, setShowPhrase] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleOnFocus = () => setFocused(title);
+
+  const handleToggleMnemonicsPhrase = async () => {
+    if (showPhrase) {
+      setShowPhrase(false);
+    } else {
+      authenticate(() => {
+        setShowPhrase(true);
+      });
+    }
+  };
+
+  const handleTogglePassword = async () => {
+    if (showPassword) {
+      setShowPassword(false);
+    } else {
+      authenticate(() => {
+        setShowPassword(true);
+      });
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -44,11 +120,60 @@ const ReadOnlyBox = ({title, value, isFocused, setFocused}) => {
       onPressIn={handleOnFocus}>
       <View style={styles.titleCopyButton}>
         <Text style={styles.textBoxTitle}>{title}</Text>
-        <CButton text={value} onCopied={handleOnFocus} />
+        {type === 'password' ? (
+          <Ripple onPress={handleTogglePassword}>
+            <IonIcon
+              size={15}
+              color={theme.COLORS.TULIP_TREE}
+              name={showPassword ? 'eye' : 'eye-off'}
+            />
+          </Ripple>
+        ) : (
+          <ReadOnlyBoxActionButton
+            text={value}
+            onCopied={handleOnFocus}
+            isProtected={type !== 'publicKey'}
+          />
+        )}
       </View>
-      <Text numberOfLines={2} style={styles.textBoxValue}>
-        {value}
-      </Text>
+      {type === 'mnemonics' &&
+        (showPhrase ? (
+          <Text numberOfLines={4} style={styles.textBoxValue}>
+            {value}
+            {showPhrase}
+            <Text
+              onPress={handleToggleMnemonicsPhrase}
+              style={styles.textBoxPhraseValueAction}>
+              {' Click to hide mnemonic phrase'}
+            </Text>
+          </Text>
+        ) : (
+          <Text numberOfLines={4} style={styles.textBoxPhraseValue}>
+            ALWAYS KEEP YOUR MNEMONIC PHRASE SECRET ! ANYONE WITH THIS PHRASE
+            CAN ACCESS YOUR FUNDS AND REMOVE THEM PERMANENTLY
+            {showPhrase}
+            <Text
+              onPress={handleToggleMnemonicsPhrase}
+              style={styles.textBoxPhraseValueAction}>
+              {' Click to see mnemonic phrase'}
+            </Text>
+          </Text>
+        ))}
+      {type === 'password' && (
+        <Text numberOfLines={4} style={styles.textBoxValue}>
+          {showPassword ? value : '*****************'}
+        </Text>
+      )}
+      {type === 'publicKey' && (
+        <Text numberOfLines={4} style={styles.textBoxValue}>
+          {value}
+        </Text>
+      )}
+      {type === 'privateKey' && (
+        <Text numberOfLines={4} style={styles.textBoxValue}>
+          nCight does not have access to your private key
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -146,24 +271,28 @@ class WalletSettings extends Component {
           </View>
         </View>  */}
         <ReadOnlyBox
+          type="mnemonics"
           value={this.state.mnemonics}
           title={t('walletSettings.mnemonicPhrase')}
           setFocused={(val) => this.setState({focused: val})}
           isFocused={this.state.focused === t('walletSettings.mnemonicPhrase')}
         />
         <ReadOnlyBox
+          type="password"
           value={this.state.pword}
           title={t('walletSettings.password')}
           setFocused={(val) => this.setState({focused: val})}
           isFocused={this.state.focused === t('walletSettings.password')}
         />
         <ReadOnlyBox
+          type="publicKey"
           value={this.state.publicKey}
           title={t('walletSettings.publicKey')}
           setFocused={(val) => this.setState({focused: val})}
           isFocused={this.state.focused === t('walletSettings.publicKey')}
         />
         <ReadOnlyBox
+          type="privateKey"
           value={this.state.privateKey}
           title={t('walletSettings.privateKey')}
           setFocused={(val) => this.setState({focused: val})}

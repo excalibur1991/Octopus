@@ -13,11 +13,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: '9.2%',
-    borderColor: theme.COLORS.BLUE,
     backgroundColor: theme.APP_COLOR_1,
+    borderColor: theme.COLORS.TULIP_TREE,
   },
   readOnlyBoxShadow: {
-    shadowColor: theme.COLORS.BLUE,
+    shadowColor: theme.COLORS.TULIP_TREE,
     shadowRadius: 8,
     shadowOffset: {
       width: 0,
@@ -44,6 +44,18 @@ export const styles = StyleSheet.create({
     fontFamily: 'Moon-Light',
     textTransform: 'uppercase',
     color: theme.COLORS.WHITE,
+  },
+  textBoxPhraseValue: {
+    fontSize: 11,
+    lineHeight: 15.1,
+    marginTop: '3.5%',
+    fontFamily: 'Moon-Bold',
+    textTransform: 'uppercase',
+    color: theme.COLORS.WHITE,
+  },
+  textBoxPhraseValueAction: {
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.TULIP_TREE,
   },
   buttonStyle: {
     width: '70%',
