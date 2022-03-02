@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 
   step2_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.535 : 0.565),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.535 : 0.585),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     paddingBottom: '5%',
   },
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   step5_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '19%' : '18.5%',
+    marginTop: Platform.OS === 'ios' ? '19%' : '24%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step5TextContainer: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   step6_2: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? '19%' : '18.5%',
+    marginTop: Platform.OS === 'ios' ? '19%' : '20.5%',
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step6TextContainer: {

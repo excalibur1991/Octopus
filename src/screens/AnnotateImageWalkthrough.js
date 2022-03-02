@@ -6,20 +6,23 @@ import {
   StyleSheet,
   Image,
   Platform,
+  BackHandler
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useStateValue} from '../services/State/State';
 import {Chip} from 'react-native-paper';
 import Svg, {Defs, Pattern, Rect, Path, G} from 'react-native-svg';
 import {theme} from '../services/Common/theme';
 import * as Progress from 'react-native-progress';
 import Ripple from '../components/Ripple';
+import {actions} from '../services/State/Reducer';
+
 const annotateImage1 = require('../assets/annotate_image_1.png');
 const annotateImage2 = require('../assets/annotate_image_2.png');
 const annotationTags = ['butterfly', 'flower', 'leaf'];
 
-const AnnotateImage = () => {
-  const [{showAnnotateImagePageWalkthrough, walkthroughCurrentStep}] =
+const AnnotateImage = ({navigation}) => {
+  const [{showAnnotateImagePageWalkthrough, walkthroughCurrentStep}, dispatch] =
     useStateValue();
 
   const butterflyRects = Platform.select({
@@ -233,6 +236,23 @@ const AnnotateImage = () => {
         ? butterfliesRects
         : []
       : [];
+
+  
+  const handleBackButtonClick = () => {
+    dispatch({
+      type: actions.EXIT_WALKTHROUGH,
+    });
+
+    navigation.goBack();
+  
+  }
+
+  useEffect(()=>{
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
 
   return (
     <View style={styles.container}>

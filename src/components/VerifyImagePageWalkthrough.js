@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   step4_1: {
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.52),
   },
   step4_1_inner: {
     flex: 1,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   step5_1: {
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.52),
   },
   step5_1_inner: {
     flex: 1,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   step6_1: {
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.52),
   },
   step6_1_inner: {
     flex: 1,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   addButtonContainer: {
     position: 'absolute',
     left: Platform.OS === 'ios' ? '4.4%' : '4.7%',
-    top: Platform.OS === 'ios' ? '51.2%' : '51.2%',
+    top: Platform.OS === 'ios' ? '51.2%' : '54.2%',
   },
   addButton: {
     padding: 10,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   step8_1: {
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.52),
   },
   step8_1_inner: {
     flex: 1,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   step9_1: {
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.495),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.465 : 0.52),
   },
   step9_1_inner: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -7,6 +7,7 @@ import {
   Dimensions,
   Platform,
   TextInput,
+  BackHandler
 } from 'react-native';
 import {useStateValue} from '../services/State/State';
 import {Chip} from 'react-native-paper';
@@ -15,9 +16,11 @@ import {theme} from '../services/Common/theme';
 import * as Progress from 'react-native-progress';
 import MultiSelectDropDown from '../components/MultiSelectDropDown';
 import AntIcon from 'react-native-vector-icons/AntDesign';
+import {actions} from '../services/State/Reducer';
+
 
 const VerifyImageWalkthrough = ({navigation}) => {
-  const [{showVerifyImagePageWalkthrough, walkthroughCurrentStep}] =
+  const [{showVerifyImagePageWalkthrough, walkthroughCurrentStep}, dispatch] =
     useStateValue();
 
   const tagsWithIrrelevantTag = [
@@ -72,6 +75,22 @@ const VerifyImageWalkthrough = ({navigation}) => {
       : tagsWithIrrelevantTag): []) || tagsWithIrrelevantTag;
 
   const IRRELEVANT_TAG_INDEX = 4;
+
+  const handleBackButtonClick = () => {
+    dispatch({
+      type: actions.EXIT_WALKTHROUGH,
+    });
+
+    navigation.goBack();
+  
+  }
+
+  useEffect(()=>{
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
