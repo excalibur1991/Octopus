@@ -28,6 +28,8 @@ import DottedProgressBar from '../../components/DottedProgressBar';
 import SwipeCards from '../../components/SwipeCards';
 import Ripple from '../../components/Ripple';
 import { setPrivacyAndTermsAccepted } from '../../services/DataManager';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
 import { CommonStyles } from '../../services/Common/styles';
 import RoundButton from '../../components/RoundButton';
 import ImageZoom from 'react-native-image-pan-zoom';
@@ -685,10 +687,27 @@ const PlayAITutorial = (props) => {
                     <View style={styles.tut_content}>
                         <TutorialOverlay />
                     </View>
-                    <View style={styles.next_tut_btn}>
+                    {/* <View style={styles.next_tut_btn}>
                         <Ripple onPress={() => handleNextTut()}>
                             <Image source={require('../../assets/btn_tut_next.png')} />
                         </Ripple>
+                    </View> */}
+                    <View style={styles.nextContainer}>
+                        <LinearGradient
+                        end={{x: 1, y: 0.9}}
+                        start={{x: 0.15, y: 0}}
+                        colors={[theme.COLORS.LIGHT_BLUE, theme.COLORS.LIGHT_PURPLE]}
+                        style={styles.nextButton}>
+                        <Ripple onPress={handleNextTut} style={styles.buttonInner}>
+                            <View style={styles.buttonIconContainer}>
+                            <MaterialCommunityIcon
+                                size={20}
+                                color={theme.COLORS.WHITE}
+                                name="chevron-double-right"
+                            />
+                            </View>
+                        </Ripple>
+                        </LinearGradient>
                     </View>
                 </View>
             </>

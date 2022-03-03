@@ -228,6 +228,31 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       marginLeft: 0,
     },
+    nextContainer: {
+      top: 0,
+      bottom: 0,
+      right: -40,
+      position: 'absolute',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    nextButton: {
+      borderRadius: 50,
+      transform: [{scaleY: 2}],
+    },
+    buttonInner: {
+      width: 75,
+      height: 150,
+      borderRadius: 50,
+    },
+    buttonIconContainer: {
+      top: 0,
+      left: 10,
+      bottom: 0,
+      position: 'absolute',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     next_tut_btn: {
       position: 'absolute',
       right: -40
