@@ -36,6 +36,7 @@ import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
 import BeginImageUpload from './screens/BeginImageUpload';
 import UploadImage from './screens/UploadImage';
+import UploadImageWalkthrough from './screens/UploadImageWalkthrough';
 import BeginImageVerify from './screens/BeginImageVerify';
 import VerifyImage from './screens/VerifyImage';
 import BeginImageAnnotate from './screens/BeginImageAnnotate';
@@ -604,7 +605,7 @@ const MyMissionsStack = () => (
       options={({navigation}) => {
         return Header(
           {
-            title: 'Image Uploads',
+            title: i18n.t('uploadImage.uploadImage'),
             isTransparent: true,
           },
           navigation,
@@ -772,6 +773,21 @@ const MyMissionsStack = () => (
         return Header(
           {
             title: i18n.t('playAI.playAIMission'),
+            showBackButton: true,
+            isTransparent: true,
+            isFullScreenHeader: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="UploadImageWalkthrough"
+      component={UploadImageWalkthrough}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: i18n.t('uploadImage.uploadImage'),
             showBackButton: true,
             isTransparent: true,
             isFullScreenHeader: true,

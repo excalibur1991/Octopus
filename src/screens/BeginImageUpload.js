@@ -70,7 +70,7 @@ const BeginImageUpload = ({navigation, route}) => {
         <View style={styles.button}>
           <Ripple
             onPress={() => {
-              navigation.navigate('ImageUpload');
+              navigation.navigate('UploadImageWalkthrough');
               setTimeout(
                 () =>
                   dispatch({

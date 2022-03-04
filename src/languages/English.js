@@ -294,121 +294,122 @@ export default {
       }
     },
     
-  ImageCategorization: {
-    mainHeader: {
-        tag: 'header',
-        content: 
-        `
-        <h1 class="PageHeader-module--title--2n3-e">Image Categorization</h1>
-        <p class="PageHeader-module--description--3wPgD">Please read about your security responsibilities when uploading images. If you upload confidential or copyright information without knowing the rules, you could get in trouble.</p>
-        `
+    ImageCategorization: {
+      mainHeader: {
+          tag: 'header',
+          content: 
+          `
+          <h1 class="PageHeader-module--title--2n3-e">Image Categorization</h1>
+          <p class="PageHeader-module--description--3wPgD">Please read about your security responsibilities when uploading images. If you upload confidential or copyright information without knowing the rules, you could get in trouble.</p>
+          `
+      },
+      info: {
+          tag: 'info',
+          content: 
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">What is personal data?</h2>
+          <p>Personal data means any information relating to an identified or identifiable natural person. So if a person is somehow identifiable, we consider the data to be personal. The identifier can be anything, such as a name, an identification number, address, a phone number, a license plate, an email address, and so forth. Of course, because persons are identifiable through their face, this is considered personal data too. If an image of a face fulfills certain properties, we consider it to be <b>biometric</b>.</p></div>
+          `
+      },
+      why:{
+          tag: 'why',
+          content: 
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">Why is this important?</h2>
+          <p>We at Dataunion.app care about your privacy. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. However, if you choose to upload images containing personal data, we need to make sure to process and store them securely. To do so, we need your help to categorize images that contain personal data and, even more important, biometric data.</p>
+          `
+      },
+      how: {
+          tag: 'how',
+          content: 
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">How do I categorize images?</h2>
+          <p>If you see faces that are clearly recognizable, such as portraits, selfies and faces from a medium distance, or if you think a face recognition software would be able to identify a person based on the image, we consider them biometric. Of course, the distinction isn’t always clear, so we will show you samples you can take as a guide.<br>If you see personal information on a picture, you simply categorize it as “PII”. Things to look for are distant faces that are not immediately recognizable, license plates, names, addresses, computer or smartphone screens (and screenshots) displaying personal information, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data.
+          <br>
+          If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
+          `
+      },
+      biometric: {
+          tag: 'biometric',
+          content: 
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Biometric</h2><img src="https://alpha.dataunion.app/samples_PII_biometric.jpg">
+          <p>The images show faces that are clearly recognizable. They are sufficiently large and show faces from a front perspective or with a slight tilt. A face recognition software would be able to identify a person based on the image, which means that we consider them <b>biometric</b>.</p>
+          `
+      },
+      faces: {
+          tag: 'faces',
+          content:
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Faces</h2>
+          <img src="https://alpha.dataunion.app/samples_PII_faces.jpg">
+          <p>The images show faces that are difficult to recognize, shown from a distant point of view, and in a size or manner that do not fulfill biometric properties. We categorize this as “<b>PII</b>”. Please be aware that the distinction between biometric and non-biometric also depends on the resolution of the image. Hence, if you see distant faces on a  high-resolution image, they could be considered biometric if the face is clearly recognizable. If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
+          `
+      },
+      nonFaces: {
+          tag: 'nonFaces',
+          content:
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Non-Faces</h2><img src="https://alpha.dataunion.app/samples_PII_no_faces.jpg"><p>The personal data to look for are license plates, names, addresses, computer or smartphone screens displaying personal information, screenshots, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data. We categorize this as “<b>PII</b>”.</p>
+          `
+      },
+      nonPII: {
+          tag: 'nonPII',
+          content: 
+          `
+          <hr>
+          <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize any of the items described before, you don't have to add one of these tags.</p>
+          `
+      },
     },
-    info: {
-        tag: 'info',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">What is personal data?</h2>
-        <p>Personal data means any information relating to an identified or identifiable natural person. So if a person is somehow identifiable, we consider the data to be personal. The identifier can be anything, such as a name, an identification number, address, a phone number, a license plate, an email address, and so forth. Of course, because persons are identifiable through their face, this is considered personal data too. If an image of a face fulfills certain properties, we consider it to be <b>biometric</b>.</p></div>
-        `
+    playAI: {
+      annotate: 'ANNOTATE',
+      annotating: 'Annotating...',
+      annotated: 'Annotated',
+      cancel: 'Cancel',
+      next: 'Next',
+      userAnnotationAndAI: 'User Annotation & AI',
+      editAI: 'Edit AI',
+      editAnnotation: 'Edit Annotation',
+      PlayAI: 'PlayAI',
+      exit: 'EXIT',
+      playAIMission: 'PLAYAI MISSION',
     },
-    why:{
-        tag: 'why',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">Why is this important?</h2>
-        <p>We at Dataunion.app care about your privacy. We follow a “privacy-first” and “privacy-by-design” approach and collect minimal data. However, if you choose to upload images containing personal data, we need to make sure to process and store them securely. To do so, we need your help to categorize images that contain personal data and, even more important, biometric data.</p>
-        `
+    playAITut: {
+      tutCompleted: "TUTORIAL\n COMPLETED",
+      tutCompletedDesc: 'EXIT TUTORIAL MODE BY\n CLICKING THE BUTTON BELOW',
+      tut_about_title: 'ABOUT PLAY AI',
+      tut_about_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet',
+      tut_howto_title: 'How to Play:',
+      tut_howto_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.',
+      tut_drawface_title: 'DRAW THE FACE',
+      tut_drawface_desc: 'Annotate the face by clicking on the boxes',
+      tut_press_annotate_title: 'PRESS \'ANNOTATE\'',
+      tut_press_annotate_desc: 'Press Annotate to finish',
+      tut_annotation_title: 'ANNOTATION',
+      tut_annotation_desc: 'Annotation is displayed in the coloured boxes',
+      tut_aiframe_title: 'AI FRAME',
+      tut_aiframe_desc: 'AI frame is displayed in the gradient square',
+      tut_need_editing_title: 'IMAGE NEEDS EDITING ?',
+      tut_need_editing_desc: 'If the AI framedoese not match the annotation, you can edit incoreect parts',
+      tut_edit_ai_title: 'EDIT AI',
+      tut_edit_ai_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
+      tut_edit_annotation_title: 'EDIT ANNOTATION',
+      tut_edit_annotation_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
+      tut_swipe_left_title: 'SWIPE LEFT TO REPORT',
+      tut_swipe_left_desc: 'If the image contains inappropriate content, You canallways report it to be removed.',
+      tut_swipe_right_title: 'SWIPE RIGHT TO VERIFY',
+      tut_swipe_right_desc: 'If the AI frame matches the annotation, you can verify.',
     },
-    how: {
-        tag: 'how',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">How do I categorize images?</h2>
-        <p>If you see faces that are clearly recognizable, such as portraits, selfies and faces from a medium distance, or if you think a face recognition software would be able to identify a person based on the image, we consider them biometric. Of course, the distinction isn’t always clear, so we will show you samples you can take as a guide.<br>If you see personal information on a picture, you simply categorize it as “PII”. Things to look for are distant faces that are not immediately recognizable, license plates, names, addresses, computer or smartphone screens (and screenshots) displaying personal information, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data.
-        <br>
-        If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
-        `
-    },
-    biometric: {
-        tag: 'biometric',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Biometric</h2><img src="https://alpha.dataunion.app/samples_PII_biometric.jpg">
-        <p>The images show faces that are clearly recognizable. They are sufficiently large and show faces from a front perspective or with a slight tilt. A face recognition software would be able to identify a person based on the image, which means that we consider them <b>biometric</b>.</p>
-        `
-    },
-    faces: {
-        tag: 'faces',
-        content:
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Faces</h2>
-        <img src="https://alpha.dataunion.app/samples_PII_faces.jpg">
-        <p>The images show faces that are difficult to recognize, shown from a distant point of view, and in a size or manner that do not fulfill biometric properties. We categorize this as “<b>PII</b>”. Please be aware that the distinction between biometric and non-biometric also depends on the resolution of the image. Hence, if you see distant faces on a  high-resolution image, they could be considered biometric if the face is clearly recognizable. If in doubt, we advise you to “round up” and go for the option with stronger privacy protection.</p>
-        `
-    },
-    nonFaces: {
-        tag: 'nonFaces',
-        content:
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">PII - Non-Faces</h2><img src="https://alpha.dataunion.app/samples_PII_no_faces.jpg"><p>The personal data to look for are license plates, names, addresses, computer or smartphone screens displaying personal information, screenshots, bills, invoices, envelopes, post and business cards, bank and credit cards, and anything else you may find that contains similar data. We categorize this as “<b>PII</b>”.</p>
-        `
-    },
-    nonPII: {
-        tag: 'nonPII',
-        content: 
-        `
-        <hr>
-        <h2 class="ImageCategorizationView-module--heading--1IcR9">Non-PII</h2><img src="https://alpha.dataunion.app/samples_non-PII.jpg"><p>If you don’t recognize any of the items described before, you don't have to add one of these tags.</p>
-        `
-    },
-  },
-  playAI: {
-    annotate: 'ANNOTATE',
-    annotating: 'Annotating...',
-    annotated: 'Annotated',
-    cancel: 'Cancel',
-    next: 'Next',
-    userAnnotationAndAI: 'User Annotation & AI',
-    editAI: 'Edit AI',
-    editAnnotation: 'Edit Annotation',
-    PlayAI: 'PlayAI',
-    exit: 'EXIT',
-    playAIMission: 'PLAYAI MISSION',
-  },
-  playAITut: {
-    tutCompleted: "TUTORIAL\n COMPLETED",
-    tutCompletedDesc: 'EXIT TUTORIAL MODE BY\n CLICKING THE BUTTON BELOW',
-    tut_about_title: 'ABOUT PLAY AI',
-    tut_about_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet',
-    tut_howto_title: 'How to Play:',
-    tut_howto_desc: 'Play AI is a game where Sed sed interdum est. Donec iaculis et tortor non porta. Donec suscipit fermentum purus, in dictum mi consequat ut. Mauris vulputate turpis vestibulum tortor pretium condimentum. Donec leo elit, luctus et feugiat sit amet, vulputate nec est. Mauris bibendum ante ultrices tellus laoreet, in pharetra risus.',
-    tut_drawface_title: 'DRAW THE FACE',
-    tut_drawface_desc: 'Annotate the face by clicking on the boxes',
-    tut_press_annotate_title: 'PRESS \'ANNOTATE\'',
-    tut_press_annotate_desc: 'Press Annotate to finish',
-    tut_annotation_title: 'ANNOTATION',
-    tut_annotation_desc: 'Annotation is displayed in the coloured boxes',
-    tut_aiframe_title: 'AI FRAME',
-    tut_aiframe_desc: 'AI frame is displayed in the gradient square',
-    tut_need_editing_title: 'IMAGE NEEDS EDITING ?',
-    tut_need_editing_desc: 'If the AI framedoese not match the annotation, you can edit incoreect parts',
-    tut_edit_ai_title: 'EDIT AI',
-    tut_edit_ai_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
-    tut_edit_annotation_title: 'EDIT ANNOTATION',
-    tut_edit_annotation_desc: 'If the annotation does not match the AI frame annotation, you can reannotate the face.',
-    tut_swipe_left_title: 'SWIPE LEFT TO REPORT',
-    tut_swipe_left_desc: 'If the image contains inappropriate content, You canallways report it to be removed.',
-    tut_swipe_right_title: 'SWIPE RIGHT TO VERIFY',
-    tut_swipe_right_desc: 'If the AI frame matches the annotation, you can verify.',
-
-
-  }
+    uploadImage: {
+      uploadImage: "Image Uploads"
+    }
   },
   
 
