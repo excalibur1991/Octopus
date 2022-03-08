@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.41 : 0.48),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.4 : 0.48),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step1_1_inner: {
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: theme.COLORS.SKY_BLUE_DARK,
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.51 : 0.57),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.47 : 0.57),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step2_1_inner: {
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
 
   step3_1: {
     height:
-      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.06 : 0.1),
+      Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.05 : 0.1),
     backgroundColor: theme.COLORS.BLACK_OPACITY_90P,
   },
   step3_1_inner: {

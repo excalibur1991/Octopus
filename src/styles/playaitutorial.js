@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions, Platform} from 'react-native';
 import {theme} from '../services/Common/theme';
 
 export const styles = StyleSheet.create({
@@ -219,7 +219,7 @@ export const styles = StyleSheet.create({
       position: 'absolute',
       alignItems: 'flex-end',
       right: 24,
-      top: 40,
+      top: Platform.OS === 'ios' ? 6: 42,
     },
     tut_content: {
       width: '100%',

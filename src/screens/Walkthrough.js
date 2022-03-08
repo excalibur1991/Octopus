@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 import Ripple from '../components/Ripple';
 import {theme} from '../services/Common/theme';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   exitContainer: {
-    top: 42,
+    top: Platform.OS === 'ios' ? 8: 42,
     right: 20,
     zIndex: 1,
     position: 'absolute',

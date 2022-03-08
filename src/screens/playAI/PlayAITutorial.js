@@ -7,6 +7,7 @@ import {
     Modal,
     requireNativeComponent,
     StyleSheet,
+    Platform
 } from 'react-native';
 import React, { createRef, useEffect, useState } from 'react';
 import { useStateValue } from '../../services/State/State';
@@ -444,7 +445,7 @@ const PlayAITutorial = (props) => {
                                 justifyContent: 'flex-end',
                                 position: 'absolute',
                                 width: '100%',
-                                top: Dimensions.get('window').height* .68
+                                top: Dimensions.get('window').height* (Platform.OS === 'ios' ? .64 : .68)
                             }}>
                             <TutDesc
                                 title={t('playAITut.tut_drawface_title')}
@@ -461,7 +462,7 @@ const PlayAITutorial = (props) => {
                             justifyContent: 'flex-end',
                             position: 'absolute',
                             width: '100%',
-                            top: Dimensions.get('window').height* .56
+                            top: Dimensions.get('window').height* (Platform.OS === 'ios' ? .53 : .56)
                         }}>
                             <TutDesc
                                 decoDown={true}
@@ -508,7 +509,7 @@ const PlayAITutorial = (props) => {
                         justifyContent: 'flex-end',
                         position: 'absolute',
                         width: '100%',
-                        top: Dimensions.get('window').height* .59,
+                        top: Platform.OS === 'ios' ?  Dimensions.get('window').height* .59 - 40: Dimensions.get('window').height* .59,
                     }}>
                         <TutDesc
                             decoDown={true}
@@ -524,7 +525,7 @@ const PlayAITutorial = (props) => {
                         justifyContent: 'flex-end',
                         position: 'absolute',
                         width: '100%',
-                        top: Dimensions.get('window').height* .8,
+                        top: Platform.OS === 'ios' ?  Dimensions.get('window').height* .8 - 55: Dimensions.get('window').height* .8,
                     }}>
                         <TutDesc
                             title={t('playAITut.tut_edit_ai_title')}
@@ -538,7 +539,7 @@ const PlayAITutorial = (props) => {
                         justifyContent: 'flex-end',
                         position: 'absolute',
                         width: '100%',
-                        top: Dimensions.get('window').height* .8,
+                        top: Platform.OS === 'ios' ?  Dimensions.get('window').height* .8 - 55: Dimensions.get('window').height* .8,
                     }}>
                         <TutDesc
                             title={t('playAITut.tut_edit_annotation_title')}
@@ -552,7 +553,7 @@ const PlayAITutorial = (props) => {
                         justifyContent: 'flex-end',
                         position: 'absolute',
                         width: '100%',
-                        top: Dimensions.get('window').height* .70,
+                        top: Platform.OS === 'ios' ?  Dimensions.get('window').height* .7 - 55: Dimensions.get('window').height* .7,
                     }}>
                         <TutDesc
                             space={80}
@@ -567,7 +568,7 @@ const PlayAITutorial = (props) => {
                         justifyContent: 'flex-end',
                         position: 'absolute',
                         width: '100%',
-                        top: Dimensions.get('window').height* .70,
+                        top: Platform.OS === 'ios' ?  Dimensions.get('window').height* .7 - 55: Dimensions.get('window').height* .7,
                     }}>
                         <TutDesc
                             title={t('playAITut.tut_swipe_right_title')}
@@ -810,6 +811,8 @@ const PlayAITutorial = (props) => {
                         <View style={{ paddingTop: '25%'}}>
                             <TutSwipeCard
                                 annoRect={annoRectData}
+                                cropRect={cropRect}
+                                getCropRect={(rect)=>{ setCropRect(rect);}}
                                 tutImageSource={require('../../assets/tut/tut_image_playai2.png')}
                             />
                         </View>,
@@ -822,7 +825,7 @@ const PlayAITutorial = (props) => {
                             zIndex: 1000,
                             position: 'absolute',
                             left: cropRect.pageX,
-                            top: cropRect.pageY,
+                            top: Platform.OS === 'ios' ? cropRect.pageY - 46 : cropRect.pageY,
                             width: cropRect.width,
                             height: cropRect.height
                         }}>
