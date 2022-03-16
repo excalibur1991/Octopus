@@ -25,12 +25,14 @@ import {PersistGate} from 'redux-persist/integration/react';
 import i18next from 'i18next';
 import {I18nextProvider} from 'react-i18next';
 import {MenuProvider} from 'react-native-popup-menu';
-import { CameraView } from './src/components/CameraView';
+import {CameraView} from './src/components/CameraView';
 import {ethers} from 'ethers';
 import {NftProvider} from 'use-nft';
+import {QueryClientProvider, QueryClient} from 'react-query';
 
 getWeb3_.catch((err) => console.warn('Error in web3 initialization.', err));
 const persistor = persistStore(store);
+const queryClient = new QueryClient();
 
 const RootNavigator = () => {
   useEffect(() => {
@@ -148,11 +150,13 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <NftProvider fetcher={fetcher}>
           <StateProvider initialState={initialState} reducer={reducer}>
-            <MenuProvider>
-              <I18nextProvider i18n={i18next}>
-                <RootNavigator />
-              </I18nextProvider>
-            </MenuProvider>
+            <QueryClientProvider client={queryClient}>
+              <MenuProvider>
+                <I18nextProvider i18n={i18next}>
+                  <RootNavigator />
+                </I18nextProvider>
+              </MenuProvider>
+            </QueryClientProvider>
           </StateProvider>
         </NftProvider>
       </PersistGate>

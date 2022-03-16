@@ -1,10 +1,25 @@
-import React, {useState} from 'react';
-import {Text, View, ScrollView, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  ScrollView,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import {useInfiniteQuery} from 'react-query';
+import LinearGradient from 'react-native-linear-gradient';
+
 import {theme} from '../services/Common/theme';
 import {styles} from '../styles/browsemissions';
 import Ripple from '../components/Ripple';
-import LinearGradient from 'react-native-linear-gradient';
+import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
+import {getMissionInfo} from '../services/API/APIManager';
+import {decryptData} from '@celo/utils/lib/commentEncryption';
 
+import {useQueryClient} from 'react-query';
+ 
 const UploadIcon = require('../assets/mission_upload.png');
 const AnnotateIcon = require('../assets/mission_annotate.png');
 const VerifyIcon = require('../assets/mission_verify.png');
@@ -14,7 +29,7 @@ const AnnotationMission = require('../assets/mission_annotation_test.png');
 
 const filters = ['Nature', 'Popular', 'Scenery & Views', 'Popular'];
 
-const missions = [
+/* const missions = [
   {
     value: 1.5,
     type: 'upload',
@@ -39,7 +54,7 @@ const missions = [
     title: 'Company Name - Butterfly',
     description: 'Description Text Here',
   },
-];
+]; */
 
 const TypeBox = ({icon, title, badgeCount, isSelected, onSelect}) => {
   return (
@@ -138,9 +153,101 @@ const MissionCard = ({
   );
 };
 
-const BrowseMissions = ({navigation}) => {
-  const [type, setType] = useState('Upload');
+const MissionListView = ({navigation, type, status}) => {
+  const queryClient = useQueryClient();
+
+  const {data, fetchMore, canFetchMore, isFetchingNextPage} = useInfiniteQuery(
+    'mission',
+    //
+    async (key, page = 1) => {
+      const response = await getMissionInfo(type, status, page);
+      return {items: response, page};
+    },
+    {
+      getFetchMore: ({items, page}) => {
+        if (items.length) {
+          return page + 1; // This will be sent as the LAST parameter to your query function
+        }
+        return false;
+      },
+    },
+  );
+
+  useEffect(() => {
+    queryClient.resetQueries('mission');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type]);
+
+  const renderData = (row) => {
+    const mission = row.item;
+    return (
+      <MissionCard
+        type={mission.type}
+        cover={
+          mission.cover
+            ? mission.cover
+            : mission.type === 'upload'
+            ? UploadMission
+            : mission.type === 'verify'
+            ? VerificationMission
+            : mission.type === 'annotation'
+            ? AnnotationMission
+            : UploadMission
+        }
+        title={mission.title || 'Company Name - Butterfly'}
+        value={mission.value || '1'}
+        coverTitle={
+          mission.type === 'upload'
+            ? 'Image Upload'
+            : mission.type === 'verify'
+            ? 'Verify'
+            : mission.type === 'annotation'
+            ? 'Annotation'
+            : ''
+        }
+        description={mission.description}
+        onPress={() =>
+          navigation.navigate(
+            mission.type === 'upload'
+              ? 'ImageUploadMission'
+              : mission.type === 'verify'
+              ? 'ImageVerifyMission'
+              : 'ImageAnnotateMission',
+          )
+        }
+      />
+    );
+  };
+
+  const loadMore = () => {
+    if (canFetchMore) {
+      fetchMore();
+    }
+  };
+
+  const renderSpinner = () => {
+    return <ActivityIndicator color="emerald.500" size="small" />;
+  };
+
+  return (
+    <FlatList
+      contentContainerStyle={styles.missionCardsContainer}
+      data={
+        data && data.pages ? data.pages.map((page) => page.items).flat() : []
+      }
+      renderItem={renderData}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.3}
+      ListFooterComponent={isFetchingNextPage ? renderSpinner : null}
+    />
+  );
+};
+
+const BrowseMissions = (props) => {
+  const {navigation} = props;
+  const [type, setType] = useState('upload');
   const [filter, setFilter] = useState(filters[0]);
+  const [, dispatch] = useStateValue();
 
   return (
     <View style={styles.container}>
@@ -149,21 +256,21 @@ const BrowseMissions = ({navigation}) => {
           title="Upload"
           badgeCount={2}
           icon={UploadIcon}
-          onSelect={setType}
+          onSelect={() => setType('upload')}
           isSelected={type === 'Upload'}
         />
         <TypeBox
           title="Verify"
           badgeCount={0}
           icon={VerifyIcon}
-          onSelect={setType}
+          onSelect={() => setType('verify')}
           isSelected={type === 'Verify'}
         />
         <TypeBox
           title="Annotate"
           badgeCount={0}
           icon={AnnotateIcon}
-          onSelect={setType}
+          onSelect={() => setType('annotation')}
           isSelected={type === 'Annotate'}
         />
       </View>
@@ -179,31 +286,7 @@ const BrowseMissions = ({navigation}) => {
           />
         ))}
       </ScrollView>
-      <ScrollView contentContainerStyle={styles.missionCardsContainer}>
-        {missions &&
-          missions.length > 0 &&
-          missions
-            .filter((m) => m.type.toLowerCase() === type.toLowerCase())
-            .map((mission) => (
-              <MissionCard
-                type={mission.type}
-                cover={mission.cover}
-                title={mission.title}
-                value={mission.value}
-                coverTitle={mission.coverTitle}
-                description={mission.description}
-                onPress={() =>
-                  navigation.navigate(
-                    mission.type === 'upload'
-                      ? 'ImageUploadMission'
-                      : mission.type === 'verify'
-                      ? 'ImageVerifyMission'
-                      : 'ImageAnnotateMission',
-                  )
-                }
-              />
-            ))}
-      </ScrollView>
+      <MissionListView status={'ready_to_start'} type={type} {...props} />
     </View>
   );
 };

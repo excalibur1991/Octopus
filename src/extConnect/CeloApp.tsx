@@ -127,8 +127,6 @@ const login = async () => {
 
   // Wait for the Celo Wallet response
   const dappkitResponse = await waitForAccountAuth(requestId)
-  console.log({dappkitResponse:dappkitResponse,kitDefaultAcct:kit.defaultAccount,
-    dappkitResponseAddress:dappkitResponse.address})
 
   // Set the default account to the account returned from the wallet
   kit.defaultAccount = dappkitResponse.address

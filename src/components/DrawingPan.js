@@ -265,7 +265,7 @@ const DrawingPan = (props) => {
             y={(rect.y - cropPosition.y) * rectScale}
             w={rect.width * rectScale}
             h={rect.height * rectScale}
-            onPress={(event)=>{console.log(event)}}
+            onPress={(event)=>{}}
             onLongPress={(event)=>{
               if(props.onLongPressRect){
                 //delete operation
