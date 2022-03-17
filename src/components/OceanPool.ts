@@ -8,6 +8,7 @@ import { SubscribablePromise, Logger, didNoZeroX, didPrefixed } from '../utils'
 import Decimal from 'decimal.js'
 import { web3 } from '../web3/utils'
 import { FakeTransaction } from 'ethereumjs-tx'
+import { retrievedCurrTokens } from '../functions/walletactions';
 
 declare type PoolTransactionType = 'swap' | 'join' | 'exit'
 
@@ -622,28 +623,34 @@ export class OceanPool extends Pool {
     OceanAmount: string,
     maxPrice?: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: undefined ocean token contract address')
-      return null
-    }
+    // if (this.oceanAddress == null) {
+    //   //console.log('ERROR: undefined ocean token contract address')
+    //   return null
+    // }
+    // this.getMaxBuyQuantity(poolAddress, await this.getDTAddress(poolAddress))
+    const currToken = await this.getCurrentTokens(poolAddress)
     const dtAddress = await this.getDTAddress(poolAddress)
     if (
       new Decimal(minimumdtAmountWanted).greaterThan(
-        await this.getDTMaxBuyQuantity(poolAddress)
+        //  await this.getDTMaxBuyQuantity(poolAddress)
+        await this.getMaxBuyQuantity(poolAddress,currToken[0])
       )
     ) {
-      //console.log('ERROR: Buy quantity exceeds quantity allowed')
+      console.log('ERROR: Buy quantity exceeds quantity allowed')
       return null
     }
+    console.log('BuyQuantity okay.Proceeding...')
     const calcInGivenOut = await this.getOceanNeeded(poolAddress, minimumdtAmountWanted)
     if (new Decimal(calcInGivenOut).greaterThan(OceanAmount)) {
-      //console.log('ERROR: Not enough Ocean Tokens')
+      console.log('ERROR: Not enough Ocean Tokens')
       return null
     }
     // TODO - check balances first
+    
     const txid = await super.approve(
       account,
-      this.oceanAddress,
+      // this.oceanAddress,
+      (await retrievedCurrTokens(poolAddress)).oceanAddress,
       poolAddress,
       web3.utils.toWei(OceanAmount)
     )
@@ -654,12 +661,26 @@ export class OceanPool extends Pool {
     const tx = await super.swapExactAmountIn(
       account,
       poolAddress,
-      this.oceanAddress,
+      // this.oceanAddress,
+      (await retrievedCurrTokens(poolAddress)).oceanAddress,
+      // currToken[1],
       OceanAmount,
-      dtAddress,
+     // dtAddress,
+     (await retrievedCurrTokens(poolAddress)).tokenAddress,
       minimumdtAmountWanted,
       maxPrice
     )
+    // const tx_ = await super.swapExactAmountIn(
+    //   account,
+    //   poolAddress,
+    //   // this.oceanAddress,
+    //   currToken[1],
+    //   OceanAmount,
+    //  // dtAddress,
+    //   currToken[0],
+    //   minimumdtAmountWanted,
+    //   maxPrice
+    // )
     return tx
   }
 
@@ -726,22 +747,27 @@ export class OceanPool extends Pool {
    * @param {String} amount datatoken amount
    * @return {TransactionReceipt}
    */
-  public async addDTLiquidity(
+   public async addDTLiquidity(
     account: string,
     poolAddress: string,
     amount: string
   ): Promise<TransactionReceipt> {
-    const dtAddress = await this.getDTAddress(poolAddress)
-    const maxAmount = await this.getMaxAddLiquidity(poolAddress, dtAddress)
-    //console.log({dtAddress: dtAddress, maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
-    //account:account})
+    // const dtAddress = await this.getDTAddress(poolAddress)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    const maxAmount = await this.getMaxAddLiquidity(poolAddress, currToken[0]) // [dtAddress, oceanAddress]
+    // const maxAmount = await this.getMaxAddLiquidity(poolAddress, dtAddress)
+    console.log({
+      dtAddress: currToken[0], maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
+      account: account
+    })
     if (new Decimal(amount).greaterThan(maxAmount)) {
       //console.log('ERROR: Too much reserve to add')
       return null
     }
     const txid = await super.approve(
       account,
-      dtAddress,
+      currToken[0],
+      // dtAddress,
       poolAddress,
       web3.utils.toWei(amount)
     )
@@ -753,7 +779,8 @@ export class OceanPool extends Pool {
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
-      dtAddress,
+      currToken[0],
+      // dtAddress,
       amount,
       '0'
     )
@@ -1031,12 +1058,17 @@ export class OceanPool extends Pool {
 
   public async getOceanNeeded(poolAddress: string, dtRequired: string): Promise<string> {
     const dtAddress = await this.getDTAddress(poolAddress)
+    const currToken = await this.getCurrentTokens(poolAddress)
     if (
-      new Decimal(dtRequired).greaterThan(await this.getDTMaxBuyQuantity(poolAddress))
+      new Decimal(dtRequired).greaterThan(
+        // await this.getDTMaxBuyQuantity(poolAddress)
+        await this.getMaxBuyQuantity(poolAddress,currToken[0]) //datatoken
+        )
     ) {
       return '0'
     }
-    return this.calcInGivenOut(poolAddress, this.oceanAddress, dtAddress, dtRequired)
+   // return this.calcInGivenOut(poolAddress, this.oceanAddress, dtAddress, dtRequired)
+    return this.calcInGivenOut(poolAddress, currToken[0], dtAddress, dtRequired)
   }
 
   /**

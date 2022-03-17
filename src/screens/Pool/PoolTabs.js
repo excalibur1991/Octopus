@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, useWindowDimensions } from 'react-native';
+import { View, Text, useWindowDimensions, RefreshControl, ScrollView, StyleSheet } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { theme } from '../../services/Common/theme';
 import FormAddLiquidity from './FormAddLiquidity';
@@ -7,6 +7,11 @@ import FormRemoveLiquidity from './FormRemoveLiquidity';
 import { getAllCalculations } from './AddLiquidity';
 import { useStateValue } from '../../services/State/State';
 import { styles } from '../../styles/wallet';
+import { BalanceBox } from '../../components/BalanceBox';
+import { getWalletBalances } from './AddLiquidity';
+import { retrievedCoins } from '../../functions/walletactions';
+import { POOL_ADDRESS } from '../../../env';
+import {  useIsFocused } from '@react-navigation/native';
 
 
 const renderScene = SceneMap({
@@ -14,95 +19,80 @@ const renderScene = SceneMap({
   second: FormRemoveLiquidity,
 });
 
-export default function PoolTabs({...props}) {
+export default function PoolTabs({ ...props }) {
   const layout = useWindowDimensions();
-
+  const isFocused = useIsFocused();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: 'Add Liquidity' },
     { key: 'second', title: 'Remove Liquidity' },
   ]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
-    getAllCalculations(
+    getWalletBalances(
       dispatch,
-      setUserInfo,
       setEthBal,
       setTokenBal,
       setOceanBal,
-      setOceanAddress,
-      setDtAddress,
-      setSymbolList,
-      setUserLiquidity,
-      setTotalTokens,
-      setTotalPoolTokens,
-      setWeightDt,
-      setWeightOcean,
-      setSwapFee,
-      setDtReserve,
-      setOceanReserve
+      setUserLiquidity
+    )
+  }, [isFocused])
 
-    );
-  }, []);
-
-  const [ethBal, setEthBal] = useState('');
-  const [tokenBal, setTokenBal] = useState('');
-  const [oceanBal, setOceanBal] = useState('');
-  const [userInfo, setUserInfo] = useState('');
-  const [oceanAddress, setOceanAddress] = useState('')
-  const [dtAddress, setDtAddress] = useState('')
-  const [symbolList, setSymbolList] = useState([])
+  const [ethBal, setEthBal] = useState('0');
+  const [tokenBal, setTokenBal] = useState('0');
+  const [oceanBal, setOceanBal] = useState('0');
   const [, dispatch] = useStateValue();
-  const [userLiquidity, setUserLiquidity] = useState('0')
-  const [totalTokens, setTotalTokens] = useState('0')
-  const [totalPoolTokens, setTotalPoolTokens] = useState('0')
-  const [weightDt, setWeightDt] = useState('0')
-  const [weightOcean, setWeightOcean] = useState('0')
-  const [swapFee, setSwapFee] = useState('0')
-  const [dtReserve, setDtReserve] = useState('0')
-  const [oceanReserve, setOceanReserve] = useState('0')
+  const [userLiquidity, setUserLiquidity] = useState('0');
 
-   console.log({ mmyOceanBal: oceanBal, })
 
-  const onTabChange = () => {
-    getAllCalculations(
-        dispatch,
-        setUserInfo,
-        setEthBal,
-        setTokenBal,
-        setOceanBal,
-        setOceanAddress,
-        setDtAddress,
-        setSymbolList,
-       
+  // console.log({ mmyOceanBal: oceanBal, })
+  // console.log({ PTuserLiquidity: userLiquidity })
+  // console.log({ PTethBal: ethBal, PTtokenBal:tokenBal, PToceanBal:oceanBal })
 
-      );
- 
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
   }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getWalletBalances(
+      dispatch,
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+      setUserLiquidity
+    )
+    wait(9000).then(() => setRefreshing(false));
+  }, [isFocused]);
+
+
   const renderTabBar = props => (
     <View>
-      <View style={styles.quicraContainer}>
-        <Text style={styles.oceanText}>{ethBal} <Text style={styles.percentText}> {'ETH'}</Text></Text>
-        <Text style={styles.oceanText}>{tokenBal} <Text style={styles.percentText}> {'PHECOR-0'}</Text></Text>
-        <View style={styles.oceanPortfolioContainer}>
-          <Text style={styles.oceanText}>{oceanBal} <Text style={styles.percentText}> {'OCEAN'}</Text></Text>
-          <View>
-            <Text style={styles.portfolioText}>24h Portfolio</Text>
-            <Text style={styles.percentText}>(+15.53%)</Text>
-          </View>
-        </View>
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        < BalanceBox
+          ethTitle={'ETH'}
+          ethValue={ethBal}
+          oceanTitle={'OCEAN'}
+          oceanValue={oceanBal}
+          tokenTitle={'PHECOR-0'}
+          tokenValue={tokenBal}
+        />
+      </ScrollView>
       <TabBar
         {...props}
         indicatorStyle={{ backgroundColor: 'white' }}
         style={{ backgroundColor: theme.APP_COLOR_2 }}
-        onTabPress={({ route }) => {
-          onTabChange();
-        }} />
-
+      />
     </View>
-
-
   );
 
 
@@ -118,21 +108,33 @@ export default function PoolTabs({...props}) {
       />
 
       <View style={styles.liquidityContainer}>
-       
-         <View style={styles.inputDivider} />
+
+        <View style={styles.inputDivider} />
         <Text style={styles.liquidityHText}>{'Your Liquidity'}</Text>
-        <Text style={styles.oceanText}>{Number(userLiquidity).toFixed(2)}<Text style={styles.liquidityText}>   pool shares</Text></Text>
+        <Text style={styles.oceanText}>{userLiquidity}<Text style={styles.liquidityText}>   pool shares</Text></Text>
         <View style={styles.inputDivider} />
         {/* <Text style={styles.liquidityHText}>{'Pool Liquidity'}</Text>
         <Text style={styles.oceanText}>{Number(totalPoolTokens).toFixed(2)}<Text style={styles.liquidityText}>  pool shares</Text></Text>
         <Text style={styles.oceanText}>{Number(swapFee).toFixed(2)} <Text style={styles.liquidityText}>  % swap fee</Text></Text>
         <View style={styles.inputDivider} />  */}
-       
+
         {/* <Text style={styles.oceanText}>{Number(oceanReserve).toFixed(2)} <Text style={styles.oceanPoolText}>  OCEAN</Text></Text>
         <Text style={styles.oceanText}>{Number(dtReserve).toFixed(2)} <Text style={styles.oceanPoolText}>  PHECOR-0</Text></Text> */}
       </View>
-      
-      </>
+
+    </>
 
   );
 }
+
+const styles_ = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

@@ -1,8 +1,8 @@
-import React from 'react';
-import {Text, View, ScrollView, TextInput} from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { Text, View, ScrollView, TextInput } from 'react-native';
 import Button from '../components/Button';
 import CopyTextBox from '../components/CopyTextBox';
-import {theme} from '../services/Common/theme';
+import { theme } from '../services/Common/theme';
 import CButton from '../components/CButton';
 //import sendOnlyone from '../components/SendTokens'
 import ApproveLiquidity from '../components/ApproveLiquidity';
@@ -11,13 +11,33 @@ import getCurrentTokens from '../components/AddDTLiquidity';
 import Joinswap from '../components/Joinswap';
 import JoinswapExternAmountIn from '../components/JoinswapExternAmountIn';
 import * as StakesUtil from '../components/AddDTLiquidity';
-import {contracts, web3} from '../web3/utils';
-import {OceanPool} from '../components/OceanPool';
-import {styles} from '../styles/wallet';
-import {withTranslation} from 'react-i18next';
-import { NavigationContainer } from '@react-navigation/native';
+import { contracts, web3 } from '../web3/utils';
+import { OceanPool } from '../components/OceanPool';
+import { styles } from '../styles/wallet';
+import { withTranslation } from 'react-i18next';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { BalanceBox } from '../components/BalanceBox';
+import { getWalletBalances } from './Pool/AddLiquidity';
+import { useStateValue } from '../services/State/State';
+import { ethers } from 'ethers'
 
-const Wallet = ({t, navigation}) => {
+const Wallet = ({ t, navigation }) => {
+  const isFocused = useIsFocused();
+  
+  useEffect(() => {
+    getWalletBalances(
+      dispatch,
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+    );
+  }, [isFocused]);
+
+  const [ethBal, setEthBal] = useState('0');
+  const [tokenBal, setTokenBal] = useState('0');
+  const [oceanBal, setOceanBal] = useState('0');
+  const [, dispatch] = useStateValue();
+
   const credentials = [
     {
       oneLine: false,
@@ -37,7 +57,7 @@ const Wallet = ({t, navigation}) => {
         '20',
         '0.5',
       );
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const StakeDT = async () => {
@@ -76,7 +96,7 @@ const Wallet = ({t, navigation}) => {
         '50',
       );
       //)
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -84,6 +104,14 @@ const Wallet = ({t, navigation}) => {
       style={styles.container}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}>
+      < BalanceBox
+        ethTitle={'ETH'}
+        ethValue={ethBal}
+        oceanTitle={'OCEAN'}
+        oceanValue={oceanBal}
+        tokenTitle={'PHECOR-0'}
+        tokenValue={tokenBal}
+      />
       {/* <View style={styles.quicraContainer}>
         <Text style={styles.quicraText}>1.2 QUICRA-0</Text>
         <View style={styles.oceanPortfolioContainer}>
@@ -116,7 +144,7 @@ const Wallet = ({t, navigation}) => {
       <Button
         height={55}
         title="Send"
-        onPress={() => {}}
+        onPress={() => { }}
         color={theme.APP_COLOR_2}
         textStyle={styles.buttonText}
         buttonStyle={styles.buttonStyle}
@@ -147,8 +175,8 @@ const Wallet = ({t, navigation}) => {
           height={55}
           // title="Stake"
           // onPress={() => StakeDT()}
-           title="Pool"
-           onPress={() => navigation.navigate('Pool')}
+          title="Pool"
+          onPress={() => navigation.navigate('Pool')}
           color={theme.APP_COLOR_2}
           textStyle={styles.stakeButtonText}
           buttonStyle={styles.stakeUnstakeButtonStyle}

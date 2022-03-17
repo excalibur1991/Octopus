@@ -7,15 +7,17 @@ export const styles = StyleSheet.create({
     paddingTop: '5.5%',
     paddingHorizontal: '4.2%',
   },
-  readOnlyBox: {
-    padding: 10,
-    minHeight: 94,
+  writeInputBox: {
+    // padding: 10,
+    // minHeight: 94,
+    height: 70,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: '9.2%',
     borderColor: theme.COLORS.BLUE,
     backgroundColor: theme.APP_COLOR_1,
   },
+
   readOnlyBoxShadow: {
     shadowColor: theme.COLORS.BLUE,
     shadowRadius: 8,

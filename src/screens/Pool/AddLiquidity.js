@@ -5,169 +5,190 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { STORAGE_KEY } from '../../functions/walletsettings';
 import { POOL_ADDRESS } from '../../../env';
 import { web3 } from '../../web3/utils';
-import { calculateTokenBal } from '../../functions/walletactions';
+import { calculateTokenBal, retrievedContracts } from '../../functions/walletactions';
 import { OceanPool } from '../../components/OceanPool'
 import minABI from '../../abis/minABI.json'
+import { oceanHelper } from '../../functions/walletactions';
+import { retrievedCurrTokens } from '../../functions/walletactions';
+import { retrievedCoins } from '../../functions/walletactions';
+import { currWalletBals } from '../../functions/walletactions';
+import { calcSharesBal } from '../../functions/walletactions';
+import { retrievedCoins_ } from '../../functions/walletactions';
 
-
-async function calculateValues(
+const calculateAdd = async (
   setUserInfo,
-  setEthBal,
-  setTokenBal,
-  setOceanBal,
   setOceanAddress,
   setDtAddress,
   setSymbolList,
-  setUserLiquidity,
-  setPoolTokens,
-  setTotalPoolTokens,
   setWeightDt,
   setWeightOcean,
   setSwapFee,
   setDtReserve,
-  setOceanReserve
+  setOceanReserve,
+  setTotalPoolTokens
 
 
-) {
-  const helper = new OceanPool();
+) => {
+
   const userInfo = JSON.parse(await AsyncStorage.getItem(STORAGE_KEY));
-  let oceanBal;
-  let tokenBal;
-  let oceanBalance;
-  let tokenBalance;
 
-try {
-  if (userInfo !== null) {
-    setUserInfo(userInfo);
-    // setOcean(helper)
-    //   setNewAccount({...userInfo.publicKey})
-    //  console.log({MyNewAccount:userInfo.publicKey})
+  try {
+    if (userInfo !== null) {
+      setUserInfo(userInfo);
 
-    const poolDtToken = await helper.getDTAddress(POOL_ADDRESS) //bug, gives oceanAddress instead of dtAddress
-    const currTokens = await helper.getCurrentTokens(POOL_ADDRESS)
-    // console.log({currTokens:currTokens}) // [dtAddress, oceanAddress]
-    const tokenInstance = new web3.eth.Contract(minABI, currTokens[0]);
-    const oceanInstance = new web3.eth.Contract(minABI, currTokens[1]);
-    const oceanSymbol = await oceanInstance.methods.symbol().call()
-    const tokenSymbol = await tokenInstance.methods.symbol().call()
-    setSymbolList([oceanSymbol, tokenSymbol]);
+      const poolDtToken = await oceanHelper().getDTAddress(POOL_ADDRESS) //bug, gives oceanAddress instead of dtAddress
+      const coins = await retrievedCoins(web3, minABI, POOL_ADDRESS)
 
-    const ethBal = await web3.eth.getBalance(userInfo.publicKey).then((bal) =>
-      Number(web3.utils.fromWei(bal, 'ether')).toFixed(2));
+      const address = await retrievedCurrTokens(POOL_ADDRESS)
 
-    tokenBal = await calculateTokenBal(tokenInstance, userInfo.publicKey)
-    tokenBalance = Number(web3.utils.fromWei(tokenBal)).toFixed(2)
-    setTokenBal(tokenBalance)
-
-    oceanBal = await calculateTokenBal(oceanInstance, userInfo.publicKey)
-    oceanBalance = Number(web3.utils.fromWei(oceanBal)).toFixed(2)
-    setOceanBal(oceanBalance)
-
-    setEthBal(ethBal)
-    setDtAddress(currTokens[0])
-    setOceanAddress(currTokens[1])
-
-    // Get everything the user has put into the pool (My Liquidity)
-    const userShares = await helper.sharesBalance(
-      userInfo.publicKey, // accountId,
-      POOL_ADDRESS //price.address
-    )
-    setUserLiquidity(userShares)
+      setSymbolList(coins);
+      setDtAddress(address.tokenAddress)
+      setOceanAddress(address.oceanAddress)
 
 
-    // Get everything which is in the pool
-    const totalPoolTokens = await helper.getPoolSharesTotalSupply(
-      POOL_ADDRESS //price.address
-    )
-    setTotalPoolTokens(totalPoolTokens)
+      // Get everything which is in the pool
+      const totalPoolTokens = await oceanHelper().getPoolSharesTotalSupply(
+        POOL_ADDRESS //price.address
+      )
+      setTotalPoolTokens(Number(totalPoolTokens).toFixed(2))
 
-    // Get everything the user has put into the pool
-    const poolTokens = await helper.sharesBalance( //already calc as usershares...
-      userInfo.publicKey, // accountId,
-      POOL_ADDRESS //price.address
-    )
-    setPoolTokens(poolTokens)
 
-    // calculate user's provided liquidity based on pool tokens
-    const userOceanBalance =
-      (Number(poolTokens) / Number(totalPoolTokens))
-      * Number(oceanBal) // * price.ocean ???
+      // Get swap fee
+      const swapFee = await oceanHelper().getSwapFee(POOL_ADDRESS)
+      setSwapFee(`${Number(swapFee) * 100}`)
 
-    const userDtBalance =
-      (Number(poolTokens) / Number(totalPoolTokens))
-      * Number(tokenBal)// * price.datatoken  ???
+      // Get weights
+      const weightDt = await oceanHelper().getDenormalizedWeight(
+        POOL_ADDRESS, // price.address, 
+        currTokens[0] // ddo.dataToken 
+      )
+      setWeightDt(`${Number(weightDt) * 10}`)
+      setWeightOcean(`${100 - Number(weightDt) * 10}`)
 
-    const myLiquidity = {
-      ocean: Number(userOceanBalance) / (10**18),
-      datatoken: Number(userDtBalance) / (10**18),
+      const dtReserve = await oceanHelper().getReserve(POOL_ADDRESS, currTokens[0])
+      const oceanReserve = await oceanHelper().getReserve(POOL_ADDRESS, currTokens[1])
+      setDtReserve(dtReserve)
+      setOceanReserve(oceanReserve)
+
+
+    }
+  }
+  catch (e) {
+
+  }
+
+}
+
+const calcWalletBals = async (
+  setEthBal,
+  setTokenBal,
+  setOceanBal,
+  setUserLiquidity,
+  setTotalPoolTokens,
+) => {
+  // const userInfo = JSON.parse(await AsyncStorage.getItem(STORAGE_KEY));
+
+  // if (userInfo !== null) {
+  //  console.log({oceanHelper: oceanHelper(), retrievedCurrTokens: await retrievedCurrTokens(POOL_ADDRESS)})
+  // console.log({retrievedCoins:await retrievedCoins(web3,minABI,POOL_ADDRESS),retrievedContracts:await retrievedContracts(web3,minABI,POOL_ADDRESS)})
+  //  console.log({currWalletBals:await currWalletBals(web3, minABI, POOL_ADDRESS)}) 
+
+  try {
+    const ethBal = (await currWalletBals(web3, minABI, POOL_ADDRESS)).ethBal
+    const oceanBal = (await currWalletBals(web3, minABI, POOL_ADDRESS)).oceanBal
+    const tokenBal = (await currWalletBals(web3, minABI, POOL_ADDRESS)).tokenBal
+    const userShares = await calcSharesBal(POOL_ADDRESS)
+    // console.log({ userShares: userShares })
+   
+    
+
+    if (ethBal && oceanBal && tokenBal || userShares !== null) {
+      setEthBal(ethBal);
+      setOceanBal(oceanBal);
+      setTokenBal(tokenBal)
+      setUserLiquidity(userShares)
     }
 
-    // Get swap fee
-    const swapFee = await helper.getSwapFee(POOL_ADDRESS)
-    setSwapFee(`${Number(swapFee) * 100}`)
 
-    // Get weights
-    const weightDt = await helper.getDenormalizedWeight(
-      POOL_ADDRESS, // price.address, 
-      currTokens[0] // ddo.dataToken 
-    )
-    setWeightDt(`${Number(weightDt) * 10}`)
-    setWeightOcean(`${100 - Number(weightDt) * 10}`)
-   
-    const dtReserve = await helper.getReserve(POOL_ADDRESS, currTokens[0])
-    const oceanReserve = await helper.getReserve(POOL_ADDRESS, currTokens[1])
-    setDtReserve(dtReserve)
-    setOceanReserve(oceanReserve)
 
-   
+
   }
+  catch (error) {
+    // console.log(`error:${error}`)
+  }
+
+  //  console.log({ethBal:ethBal, oceanBal:oceanBal, tokenBal:tokenBal})
+
+
+
+  // }
+
 }
-catch(e) {
 
-} 
-
-}
-
-
-export const getAllCalculations = async (
+export const getAllAddCalcs = async (
   dispatch,
   setUserInfo,
-  setEthBal,
-  setTokenBal,
-  setOceanBal,
   setOceanAddress,
   setDtAddress,
   setSymbolList,
-  setUserLiquidity,
-  setTotalTokens,
-  setTotalPoolTokens,
   setWeightDt,
   setWeightOcean,
   setSwapFee,
   setDtReserve,
-  setOceanReserve
+  setOceanReserve,
+  setTotalPoolTokens
 
 ) => {
   try {
     dispatch({
       type: actions.SET_OVERALL,
     });
-    calculateValues(
+    calculateAdd(
       setUserInfo,
-      setEthBal,
-      setTokenBal,
-      setOceanBal,
       setOceanAddress,
       setDtAddress,
       setSymbolList,
-      setUserLiquidity,
-      setTotalTokens,
-      setTotalPoolTokens,
       setWeightDt,
       setWeightOcean,
       setSwapFee,
       setDtReserve,
-      setOceanReserve
+      setOceanReserve,
+      setTotalPoolTokens
+    )
+
+
+  } catch (error) {
+    dispatch({
+      type: actions.SET_ALERT_SETTINGS,
+      alertSettings: {
+        show: true,
+        type: 'error',
+        title: i18n.t('messages.errorOccured'),
+        message: i18n.t('messages.tryAgainLater'),
+        showConfirmButton: true,
+        confirmText: i18n.t('messages.ok'),
+      },
+    });
+  }
+};
+
+export const getWalletBalances = async (
+  dispatch,
+  setEthBal,
+  setTokenBal,
+  setOceanBal,
+  setUserLiquidity
+
+) => {
+  try {
+    dispatch({
+      type: actions.SET_OVERALL,
+    });
+    calcWalletBals(
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+      setUserLiquidity
     )
 
 

@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
   },
   inputDivider: {
     height: 1,
-    marginVertical: 18,
+    marginVertical: 10,
     backgroundColor: theme.COLORS.BLUE,
   },
   mainDivider: {

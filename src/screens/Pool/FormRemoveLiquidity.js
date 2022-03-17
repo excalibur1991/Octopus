@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useStateValue } from '../../services/State/State';
 import { styles } from '../../styles/wallet';
-import { getAllCalculations } from './AddLiquidity';
+import { getAllAddCalcs } from './AddLiquidity';
 import { withTranslation } from 'react-i18next';
 import { MessageBox } from '../../components/CustomInput';
 import { POOL_ADDRESS } from '../../../env';
@@ -22,21 +22,36 @@ import { OceanPool } from '../../components/OceanPool';
 import ModalActivityIndicator from '../../components/ModalActivityIndicator';
 import Decimal from 'decimal.js'
 import Slider from '@react-native-community/slider';
+import { getWalletBalances } from './AddLiquidity';
+
 
 const FormRemoveLiquidity = ({ t, navigation }) => {
   useEffect(() => {
-    getAllCalculations(
+    getAllAddCalcs(
       dispatch,
       setUserInfo,
-      setEthBal,
-      setTokenBal,
-      setOceanBal,
       setOceanAddress,
       setDtAddress,
       setSymbolList,
-      setUserLiquidity
+      setWeightDt,
+      setWeightOcean,
+      setSwapFee,
+      setDtReserve,
+      setOceanReserve,
+      setTotalPoolTokens
+    
     );
   }, []);
+
+  useEffect(() => {
+    getWalletBalances(
+      dispatch,
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+      setUserLiquidity
+    )
+  }, [])
 
   const [ethBal, setEthBal] = useState('');
   const [tokenBal, setTokenBal] = useState('');
@@ -51,6 +66,7 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
   const [liquidityError, setLiquidityError] = useState('')
   const [loading, setLoading] = useState(false);
   const [helper] = useState(() => new OceanPool())
+  const [totalPoolTokens, setTotalPoolTokens] = useState('0')
   const [amountPercent, setAmountPercent] = useState('0')
   const [amountMaxPercent, setAmountMaxPercent] = useState(100)
   const [amountMaxRemove, setAmountMaxRemove] = useState('0')
@@ -60,8 +76,15 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
   const [userLiquidity, setUserLiquidity] = useState('0')
   const [amountMaxDt, setAmountMaxDt] = useState('0')
   const [isAdvanced, setIsAdvanced] = useState(false)
+  const [weightDt, setWeightDt] = useState('0')
+  const [weightOcean, setWeightOcean] = useState('0')
+  const [swapFee, setSwapFee] = useState('0')
+  const [dtReserve, setDtReserve] = useState('0')
+  const [oceanReserve, setOceanReserve] = useState('0')
 
-
+  // console.log({ FRethBal: ethBal, FRtokenBal:tokenBal, FRoceanBal:oceanBal })
+  // console.log({ FRuserLiquidity: userLiquidity })
+  // console.log({ FRuserLiquidity: userLiquidity, FRtotalPoolTokens:totalPoolTokens })  
   async function handleRemoveLiquidity() {
     try {
       setLoading(true)
@@ -85,7 +108,6 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
       setLoading(false)
       console.log({ myresult: result })
       if (result.status === true) {
-        getAllCalculations(setEthBal, setTokenBal, setOceanBal, setUserLiquidity)
         setLiquidityHash(`${result.transactionHash}`)
         dispatch({
           type: actions.SET_ALERT_SETTINGS,
@@ -135,7 +157,7 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
         dtReserve = new Decimal(dtReserve).mul(POOL_MAX_AMOUNT_OUT_LIMIT).toString()
         oceanReserve = new Decimal(oceanReserve).mul(POOL_MAX_AMOUNT_OUT_LIMIT).toString()
       }
-
+      // console.log({ dtAddress: dtAddress, oceanAddress: oceanAddress, dtReserve: dtReserve, oceanReserve: oceanReserve })
       const oceanAmountMaxPoolShares = await helper.getPoolSharesRequiredToRemoveOcean( //remove OCEAN and get DT
         POOL_ADDRESS,
         oceanReserve
@@ -163,6 +185,8 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
         POOL_ADDRESS,
         amountPoolShares
       )
+      // console.log({amountOcean_:amountOcean})
+      // console.log({amountPoolShares_:amountPoolShares})
       const amountDT = await helper.getDTRemovedforPoolShares(
         POOL_ADDRESS,
         amountPoolShares
@@ -174,14 +198,15 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
     getValues();
   })
 
-
+  // console.log({amountOcean:amountOcean, amountMaxPercent: amountMaxPercent})
+  // console.log({amountPercent:amountPercent, amountPoolShares:amountPoolShares})
   // Set amountPoolShares based on set slider value
   function handleAmountPercentChange(value) {
 
     setAmountPercent(value.toFixed(0))
     if (!userLiquidity) return
-
     const amountPoolShares = (Number(value) / 100) * Number(userLiquidity)
+
     setAmountPoolShares(`${amountPoolShares.toFixed(2)}`)
   }
 
@@ -244,7 +269,7 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
             handleAmountPercentChange(value)
           }
         />
-        <View style={styles.contentContainer, { paddingTop: 20 }}>
+        <View style={[styles.contentContainer, { paddingTop: 20 }]}>
           {
             liquidityHash
               ? <MessageBox
@@ -263,6 +288,7 @@ const FormRemoveLiquidity = ({ t, navigation }) => {
           <Text style={{ color: '#7666E8' }}>{'Share to spend:'} {((amountPercent / 100) * userLiquidity).toFixed(2)}<Text style={{ color: '#ffff' }}>  pool shares</Text> </Text>
           <Text style={{ color: '#7666E8' }}>{'OCEAN to receive:'} {amountOcean}<Text style={{ color: '#ffff' }}></Text> </Text>
         </View>
+       
         <View style={{ paddingTop: 60 }}>
           <TouchableOpacity
             disabled={loading}

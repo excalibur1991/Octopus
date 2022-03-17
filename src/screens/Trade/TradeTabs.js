@@ -1,65 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, useWindowDimensions } from 'react-native';
+import { View, Text, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { theme } from '../../services/Common/theme';
-import { fetchOverall } from './AddLiquidity';
+import { getAllAddCalcs } from '../Pool/AddLiquidity';
 import { useStateValue } from '../../services/State/State';
 import { styles } from '../../styles/wallet';
-import FormSwap from '../Trade/FormSwap';
+import FormSwap from './FormSwap';
+import { BalanceBox } from '../../components/BalanceBox';
+import { getWalletBalances } from '../Pool/AddLiquidity';
+import { useIsFocused } from '@react-navigation/native';
 
 const renderScene = SceneMap({
   first: FormSwap,
- // second: FormRemoveLiquidity,
 });
 
 export default function TradeTabs() {
   const layout = useWindowDimensions();
-
+  const isFocused = useIsFocused();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: 'Swap Ocean and Datatoken' },
-   // { key: 'second', title: 'SwapOut' },
   ]);
 
   useEffect(() => {
-    fetchOverall(
+    getAllAddCalcs(
       dispatch,
       setUserInfo,
-      setEthBal,
-      setTokenBal,
-      setOceanBal,
       setOceanAddress,
       setDtAddress,
       setSymbolList,
-      setUserLiquidity,
-      setUserLiquidity_,
-      setTotalTokens,
       setTotalPoolTokens,
-      setWeightDt,
-      setWeightOcean,
-      setSwapFee,
-      setDtReserve,
-      setOceanReserve
-
+    
     );
-  }, []);
+  }, [isFocused]);
 
-  const [ethBal, setEthBal] = useState('');
-  const [tokenBal, setTokenBal] = useState('');
-  const [oceanBal, setOceanBal] = useState('');
+  useEffect(() => {
+    getWalletBalances(
+     dispatch,
+     setEthBal,
+     setTokenBal,
+     setOceanBal,
+     setUserLiquidity
+    )
+  }, [isFocused])
+
+
+
+  const [ethBal, setEthBal] = useState('0');
+  const [tokenBal, setTokenBal] = useState('0');
+  const [oceanBal, setOceanBal] = useState('0');
   const [userInfo, setUserInfo] = useState('');
-  const [newAccount, setNewAccount] = useState('')
-  const [ocean, setOcean] = useState('')
   const [oceanAddress, setOceanAddress] = useState('')
   const [dtAddress, setDtAddress] = useState('')
   const [symbolList, setSymbolList] = useState([])
   const [, dispatch] = useStateValue();
-  const [coinSymbol, setCoinSymbol] = useState([])
-  const [liquidityHash, setLiquidityHash] = useState('')
-  const [liquidityError, setLiquidityError] = useState('')
-  const [loading, setLoading] = useState(false);
-  const [amountMaxBuy, setAmountMaxBuy] = useState('0')
-  const [amountMaxBuyPool, setAmountMaxBuyPool] = useState('0')
   const [userLiquidity, setUserLiquidity] = useState('0')
   const [userLiquidity_, setUserLiquidity_] = useState('0')
   const [totalTokens, setTotalTokens] = useState('0')
@@ -73,23 +67,19 @@ export default function TradeTabs() {
 
   const renderTabBar = props => (
     <View>
-      <View style={styles.quicraContainer}>
-        <Text style={styles.oceanText}>{ethBal} <Text style={styles.percentText}> {'ETH'}</Text></Text>
-        <Text style={styles.oceanText}>{tokenBal} <Text style={styles.percentText}> {'PHECOR-0'}</Text></Text>
-        <View style={styles.oceanPortfolioContainer}>
-          <Text style={styles.oceanText}>{oceanBal} <Text style={styles.percentText}> {'OCEAN'}</Text></Text>
-          <View>
-            <Text style={styles.portfolioText}>24h Portfolio</Text>
-            <Text style={styles.percentText}>(+15.53%)</Text>
-          </View>
-        </View>
-      </View>
+      < BalanceBox
+        ethTitle={'ETH'}
+        ethValue={ethBal}
+        oceanTitle={'OCEAN'}
+        oceanValue={oceanBal}
+        tokenTitle={'PHECOR-0'}
+        tokenValue={tokenBal}
+      />
       <TabBar
         {...props}
         indicatorStyle={{ backgroundColor: 'white' }}
         style={{ backgroundColor: theme.APP_COLOR_2 }}
-        onTabPress={({ route }) => {
-        }} />
+      />
     </View>
   );
 
@@ -114,8 +104,8 @@ export default function TradeTabs() {
         {/* <Text style={styles.oceanText}>{Number(oceanReserve).toFixed(2)} <Text style={styles.oceanPoolText}>  OCEAN</Text></Text>
         <Text style={styles.oceanText}>{Number(dtReserve).toFixed(2)} <Text style={styles.oceanPoolText}>  PHECOR-0</Text></Text> */}
       </View>
-      
-      </>
+
+    </>
 
   );
 }

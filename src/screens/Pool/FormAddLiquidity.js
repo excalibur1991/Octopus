@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { useStateValue } from '../../services/State/State';
 import { styles } from '../../styles/wallet';
-import { getAllCalculations } from './AddLiquidity';
 import { withTranslation } from 'react-i18next';
 import { theme } from '../../services/Common/theme';
 import { WriteInput } from '../../components/CustomInput'
@@ -33,29 +32,43 @@ import ModalActivityIndicator from '../../components/ModalActivityIndicator';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import RNRestart from 'react-native-restart';
 import { refreshBalance } from '../../functions/walletactions';
+import { getWalletBalances } from './AddLiquidity';
+import { getAllAddCalcs } from './AddLiquidity';
 
 const FormAddLiquidity = ({ t, navigation }) => {
 
   useEffect(() => {
-    getAllCalculations(
+    getAllAddCalcs(
       dispatch,
       setUserInfo,
-      setEthBal,
-      setTokenBal,
-      setOceanBal,
       setOceanAddress,
       setDtAddress,
       setSymbolList,
-      setUserLiquidity
-
+      setWeightDt,
+      setWeightOcean,
+      setSwapFee,
+      setDtReserve,
+      setOceanReserve,
+      setTotalPoolTokens
 
     );
   }, []);
 
-  const [ethBal, setEthBal] = useState('');
-  const [tokenBal, setTokenBal] = useState('');
-  const [oceanBal, setOceanBal] = useState('');
-  const [userInfo, setUserInfo] = useState('');
+  useEffect(() => {
+    getWalletBalances(
+      dispatch,
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+      setUserLiquidity,
+    )
+  }, [])
+
+
+  const [ethBal, setEthBal] = useState('0');
+  const [tokenBal, setTokenBal] = useState('0');
+  const [oceanBal, setOceanBal] = useState('0');
+  const [userInfo, setUserInfo] = useState('0');
   const [oceanAddress, setOceanAddress] = useState('')
   const [dtAddress, setDtAddress] = useState('')
   const [symbolList, setSymbolList] = useState([])
@@ -65,33 +78,30 @@ const FormAddLiquidity = ({ t, navigation }) => {
   const [liquidityError, setLiquidityError] = useState('')
   const [loading, setLoading] = useState(false);
   const [amountMaxBuy, setAmountMaxBuy] = useState('0')
-  const [amountMaxBuyPool, setAmountMaxBuyPool] = useState('0')
   const [helper] = useState(() => new OceanPool())
+  const [totalPoolTokens, setTotalPoolTokens] = useState('0')
   const [userLiquidity, setUserLiquidity] = useState('0')
-  const [newPoolTokens, setNewPoolTokens] = useState('0')
-  const [newPoolShare, setNewPoolShare] = useState('0')
+  const [weightDt, setWeightDt] = useState('0')
+  const [weightOcean, setWeightOcean] = useState('0')
+  const [swapFee, setSwapFee] = useState('0')
+  const [dtReserve, setDtReserve] = useState('0')
+  const [oceanReserve, setOceanReserve] = useState('0')
 
 
-  console.log({oceanBal:oceanBal, userLiquidity:userLiquidity})
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+  // console.log({symbolList_:symbolList})
+
+  // console.log({oceanBal:oceanBal, userLiquidity:userLiquidity})
+  // console.log({ FAethBal: ethBal, FAtokenBal:tokenBal, FAoceanBal:oceanBal })
+  // console.log({ FAuserLiquidity: userLiquidity, FAtotalPoolTokens:totalPoolTokens })  
+
   useEffect(() => {
     async function getMaximum() {
-      // setSymbolList().then(res => console.log({ res: res }))
+      // console.log({oceanAddress:oceanAddress, POOL_ADDRESS:POOL_ADDRESS})
+      if (!oceanAddress || !POOL_ADDRESS) return
+
       const oceanMaxBuyAmountPool = await helper.getMaxBuyQuantity(POOL_ADDRESS, oceanAddress)
       const tokenMaxBuyAmountPool = await helper.getMaxBuyQuantity(POOL_ADDRESS, dtAddress)
 
-      /**
-    * Bug???
-    */
-      // const amountMaxBuyPool =
-      //   coinSymbol === 'OCEAN'
-      //     ?  tokenMaxBuyAmountPool
-      //     :  oceanMaxBuyAmountPool
-
-
-      /**
-       * Fix???
-       */
       const amountMaxBuyPool =
         coinSymbol === 'OCEAN'
           ? oceanMaxBuyAmountPool
@@ -120,37 +130,9 @@ const FormAddLiquidity = ({ t, navigation }) => {
     getMaximum();
   })
 
-  useEffect(() => {
-    async function calculatePoolShares() {
-      if (!values.amount) {
-        setNewPoolTokens('0')
-        setNewPoolShare('0')
-        return
-      }
-      if (Number(values.amount) > Number(amountMaxBuy)) return
-      const poolTokens = await helper.calcPoolOutGivenSingleIn(
-        POOL_ADDRESS,
-        coinSymbol === 'OCEAN' ? oceanAddress : dtAddress,
-        values.amount.toString()
-      )
-      setNewPoolTokens(poolTokens)
-      setNewPoolShare(
-        totalBalance &&
-        (
-          (Number(poolTokens) /
-            (Number(totalPoolTokens) + Number(poolTokens))) *
-          100
-        ).toFixed(2)
-      )
-    }
-    //  calculatePoolShares()
-  }, [])
+  console.log({ amountMaxBuy: `${amountMaxBuy} ${coinSymbol}` })
 
   const stakeSchema = Yup.object().shape({
-    // destination: Yup.string()
-    //    .matches(/0x[a-fA-F0-9]{40}/g, 'Enter a valid Ethereum address!')
-    //   .required('Destination is Required!'),
-
     amount: Yup.number()
       .max(Number(amountMaxBuy),
         `Maximum you can add is ${Number(amountMaxBuy).toFixed(2)} ${coinSymbol}`
@@ -175,11 +157,9 @@ const FormAddLiquidity = ({ t, navigation }) => {
   } = useFormik({
     validationSchema: stakeSchema,
     initialValues: {
-      // destination: '', 
       amount: ''
     },
     onSubmit: async (values) => {
-      // handleAddLiquidity(values)
 
     }
   });
@@ -272,17 +252,15 @@ const FormAddLiquidity = ({ t, navigation }) => {
 
           }
         >
-          {symbolList.map((item, index) => {
-            return (<Picker.Item label={item} value={item} key={index} />)
-          })
-          }
+          <Picker.Item label={symbolList.tokenSymbol} value={symbolList.tokenSymbol} />
+          <Picker.Item label={symbolList.oceanSymbol} value={symbolList.oceanSymbol} />
         </Picker>
         <View>
           {touched.amount && errors.amount &&
             <Text style={{ fontSize: 12, color: '#FF0D10', marginTop: 15 }}>{errors.amount}</Text>
           }
         </View>
-        <View style={styles.contentContainer, { paddingTop: 20 }}>
+        <View style={[styles.contentContainer, { paddingTop: 20 }]}>
           {
             liquidityHash
               ? <MessageBox

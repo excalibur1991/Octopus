@@ -9,6 +9,7 @@ import { PoolFactory } from './PoolFactory'
 import Decimal from 'decimal.js'
 import { web3 } from '../web3/utils'
 import { PRIVATE_KEY, INFURA_KEY } from '../../env'
+import { sendSignedTransaction } from '../functions/walletactions'
 
 const MaxUint256 =
   '115792089237316195423570985008687907853269984665640564039457584007913129639934'
@@ -144,6 +145,111 @@ export class Pool extends PoolFactory {
    * @param {String} amount  (always expressed as wei)
    * @param {String} force  if true, will overwrite any previous allowence. Else, will check if allowence is enough and will not send a transaction if it's not needed
    */
+  //  async approve(
+  //   account: string,
+  //   tokenAddress: string,
+  //   spender: string,
+  //   amount: string,
+  //   force = false
+  // ): Promise<TransactionReceipt> {
+  //   const minABI = [
+  //     {
+  //       constant: false,
+  //       inputs: [
+  //         {
+  //           name: '_spender',
+  //           type: 'address'
+  //         },
+  //         {
+  //           name: '_value',
+  //           type: 'uint256'
+  //         }
+  //       ],
+  //       name: 'approve',
+  //       outputs: [
+  //         {
+  //           name: '',
+  //           type: 'bool'
+  //         }
+  //       ],
+  //       payable: false,
+  //       stateMutability: 'nonpayable',
+  //       type: 'function'
+  //     }
+  //   ] as AbiItem[]
+  //   const token = new web3.eth.Contract(minABI, tokenAddress, {
+  //     from: account
+  //   })
+  //   if (!force) {
+  //     const currentAllowence = await this.allowance(tokenAddress, account, spender)
+  //     //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
+  //     if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
+  //       // we have enough
+  //       return null
+  //     }
+  //   }
+  //   let result = null
+  //   const gasLimitDefault = this.GASLIMIT_DEFAULT
+  //   let estGas
+  //   let tranx 
+  //   try {
+  //     tranx =  await token.methods.approve(spender, amount);
+
+  //     estGas = await token.methods
+  //       .approve(spender, amount)
+  //       .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+  //     //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+  //   } catch (e) {
+  //     estGas = gasLimitDefault
+  //   }
+
+  //   result = sendSignedTransaction(
+  //     PRIVATE_KEY,
+  //     web3,
+  //     account,
+  //     estGas,
+  //     tranx,
+  //     tokenAddress
+  //   )
+  //   // try {
+  //   //   //  result = await token.methods.approve(spender, amount)
+  //   //   //  .send({
+  //   //   //  from: account,
+  //   //   //  gas: estGas + 1,
+  //   //   //  gasPrice: await getFairGasPrice(web3)
+  //   //   // })
+  //   //   //check approval: ask oceanToken contract to approve...
+  //   //   let Tx = require('ethereumjs-tx').Transaction;
+  //   //   let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+  //   //   let count = await web3.eth.getTransactionCount(account);
+
+  //   //   let rawTransaction = {
+  //   //     "from": account,
+  //   //     "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+  //   //     "gasLimit": web3.utils.toHex(estGas + 1),
+  //   //     "to": tokenAddress,
+  //   //     "data": token.methods.approve(spender, amount).encodeABI(),
+  //   //     "nonce": web3.utils.toHex(count)
+  //   //   };
+
+  //   //   let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+  //   //   transaction.sign(privateKey)
+  //   //   //console.log('getting approval...')
+  //   //   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+  //   //   //console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+  //   //   //console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
+  //   // } catch (e) {
+  //   //   //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+  //   // }
+
+  //   if (result.status === true) {
+  //     console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+  //     console.log({  ApprovalReceipt: result })
+  //   }
+
+  //   return result
+  // }
+
   async approve(
     account: string,
     tokenAddress: string,
@@ -182,15 +288,10 @@ export class Pool extends PoolFactory {
     if (!force) {
       const currentAllowence = await this.allowance(tokenAddress, account, spender)
       //console.log({currentAllowance: currentAllowence, amountToAdd: amount, account: account})
-      console.log({
-        currentAllowance: currentAllowence, currAllow: new Decimal(currentAllowence),
-        amountToAdd: amount, account: account, force: force
-      })
       if (new Decimal(currentAllowence).greaterThanOrEqualTo(amount)) {
         // we have enough
         return null
       }
-      console.log('you can add...')
     }
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
@@ -199,7 +300,7 @@ export class Pool extends PoolFactory {
       estGas = await token.methods
         .approve(spender, amount)
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-      console.log({ ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
+      //console.log({ApprovalGasEstimate: estGas, fairGasPrice: await getFairGasPrice(web3) })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -227,15 +328,16 @@ export class Pool extends PoolFactory {
 
       let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
       transaction.sign(privateKey)
-      console.log('getting approval...')
+      //console.log('getting approval...')
       result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-      console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
-      console.log({ ApprovalStatus: result.status, ApprovalReceipt: result })
+      //console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+      //console.log({ApprovalStatus: result.status, ApprovalReceipt: result})
     } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+      //console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
     }
     return result
   }
+
 
   /**
    * Get user shares of pool tokens
@@ -371,7 +473,7 @@ export class Pool extends PoolFactory {
   async getPoolSharesTotalSupply(poolAddress: string): Promise<string> {
     const pool = new web3.eth.Contract(this.poolABI, poolAddress)
     let amount = null
-   // console.log('geting total supply of pool shares...')
+    // console.log('geting total supply of pool shares...')
     try {
       const result = await pool.methods.totalSupply().call()
       amount = web3.utils.fromWei(result)
@@ -615,6 +717,11 @@ export class Pool extends PoolFactory {
     let result = null
     const gasLimitDefault = this.GASLIMIT_DEFAULT
     let estGas
+
+    //Record storage inRecord = _records[address(tokenIn)];
+    //  tokenAmountIn <= bmul(inRecord.balance, MAX_IN_RATIO), //balance:196
+    //console.log({tokenAmountIn: web3.utils.toWei(tokenAmountIn),
+    //minAmountOut:web3.utils.toWei(minAmountOut), tokenIn:tokenIn,tokenOut:tokenOut})
     try {
       estGas = await pool.methods
         .swapExactAmountIn(
@@ -625,13 +732,24 @@ export class Pool extends PoolFactory {
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+      console.log('Swapping tokens in...')
+      console.log({
+        Swap_GasEstimate: estGas, account: account, tokenIn: tokenIn,
+        minAmountOut: minAmountOut, maxPrice: maxPrice
+      })
     } catch (e) {
-      //this.logger.log('Error estimate gas swapExactAmountIn')
-      //this.logger.log(e)
+      console.log('Error estimate gas swapExactAmountIn')
+      console.log(e)
       estGas = gasLimitDefault
     }
+
+
     try {
-      result = await pool.methods
+      let Tx = require('ethereumjs-tx').Transaction;
+      let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+      let count = await web3.eth.getTransactionCount(account);
+
+      let tx = await pool.methods
         .swapExactAmountIn(
           tokenIn,
           web3.utils.toWei(tokenAmountIn),
@@ -639,16 +757,34 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minAmountOut),
           maxPrice ? web3.utils.toWei(maxPrice) : MaxUint256
         )
-        .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice(web3)
-        })
-    } catch (e) {
-      //console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
+
+      let encodededABI = tx.encodeABI()
+
+      let rawTransaction = {
+        "from": account,
+        "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+        "gasLimit": web3.utils.toHex(estGas + 1),
+        "to": poolAddress,
+        "data": encodededABI,
+        "nonce": web3.utils.toHex(count)
+      };
+
+      let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+      transaction.sign(privateKey)
+      result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+      console.log('Success!!. You have successfully swapped from the....')
+      console.log({ SwapStatus: result.status, SwapReceipt: result })
+
     }
+    catch (e) {
+      console.log(`ERROR: Failed to swap exact amount in : ${e.message}`)
+    }
+
     return result
+
   }
+
+
 
   /**
    * swapExactAmountOut
@@ -812,6 +948,110 @@ export class Pool extends PoolFactory {
    * @param {String} minPoolAmountOut  will be converted to wei
    * @return {TransactionReceipt}
    */
+  //  async joinswapExternAmountIn(
+  //   account: string,
+  //   poolAddress: string,
+  //   tokenIn: string,
+  //   tokenAmountIn: string,
+  //   minPoolAmountOut: string
+  // ): Promise<TransactionReceipt> {
+  //   const pool = new web3.eth.Contract(this.poolABI, poolAddress, {
+  //     from: account
+  //   })
+  //   let result = null
+  //   const gasLimitDefault = this.GASLIMIT_DEFAULT
+  //   let estGas
+  //   let tranx
+
+  //   try {
+
+  //     tranx = await pool.methods
+  //     .joinswapExternAmountIn(
+  //       tokenIn,
+  //       web3.utils.toWei(tokenAmountIn),
+  //       web3.utils.toWei(minPoolAmountOut)
+  //     )
+
+  //     estGas = await pool.methods
+  //       .joinswapExternAmountIn(
+  //         tokenIn,
+  //         web3.utils.toWei(tokenAmountIn),
+  //         web3.utils.toWei(minPoolAmountOut)
+  //       )
+  //       .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+  //     console.log('Joining the liquidity pool..')
+  //     console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
+  //   } catch (e) {
+  //     estGas = gasLimitDefault
+  //   }
+
+  //   // let tx = pool.methods.joinswapExternAmountIn(
+  //   //   tokenIn,
+  //   //   web3.utils.toWei(tokenAmountIn),
+  //   //   web3.utils.toWei(minPoolAmountOut)
+  //   // );
+
+  //   result = sendSignedTransaction(
+  //     PRIVATE_KEY,
+  //     web3,
+  //     account,
+  //     estGas,
+  //     tranx,
+  //     poolAddress
+  //   )
+  //   // try {
+  //   /**
+  //   result = await pool.methods
+  //     .joinswapExternAmountIn(
+  //       tokenIn,
+  //       web3.utils.toWei(tokenAmountIn),
+  //       web3.utils.toWei(minPoolAmountOut)
+  //     )
+  //     .send({
+  //       from: account,
+  //       gas: estGas + 1,
+  //       gasPrice: await getFairGasPrice(web3)
+  //     })
+  //   */
+
+  //   //   let Tx = require('ethereumjs-tx').Transaction;
+  //   //   let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+  //   //   let count = await web3.eth.getTransactionCount(account);
+
+  //   //   let tx = pool.methods.joinswapExternAmountIn(
+  //   //     tokenIn,
+  //   //     web3.utils.toWei(tokenAmountIn),
+  //   //     web3.utils.toWei(minPoolAmountOut)
+  //   //   );
+  //   //   let encodededABI = tx.encodeABI()
+
+  //   //   let rawTransaction = {
+  //   //     "from": account,
+  //   //     "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+  //   //     "gasLimit": web3.utils.toHex(estGas + 1),
+  //   //     "to": poolAddress,
+  //   //     "data": encodededABI,
+  //   //     "nonce": web3.utils.toHex(count)
+  //   //   };
+
+  //   //   let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+  //   //   transaction.sign(privateKey)
+  //   //   result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+  //   //   console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+  //   //   console.log({ JoinswapStatus: result.status, JoinswapReceipt: result })
+
+  //   // } catch (e) {
+  //   //   console.log(`ERROR: Failed to pay tokens in order to \
+  //   //   join the pool: ${e.message}`)
+  //   // }
+
+  //   if (result.status === true) {
+  //     console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+  //     console.log({  AddLiqReceipt: result })
+  //   }
+  //   return result
+  // }
+
   async joinswapExternAmountIn(
     account: string,
     poolAddress: string,
@@ -833,8 +1073,8 @@ export class Pool extends PoolFactory {
           web3.utils.toWei(minPoolAmountOut)
         )
         .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-      console.log('Joining the liquidity pool..')
-      console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
+      //console.log('Joining the liquidity pool..')
+      //console.log({JoinswapGasEstimate: estGas, account:account, tokenIn:tokenIn, minPoolAmountOut: minPoolAmountOut })
     } catch (e) {
       estGas = gasLimitDefault
     }
@@ -876,15 +1116,16 @@ export class Pool extends PoolFactory {
       let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
       transaction.sign(privateKey)
       result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-      console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
-      console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
+      //console.log('Success!!. You have succeeded paying the fees and joining the liquidity pool....')
+      //console.log({JoinswapStatus: result.status, JoinswapReceipt: result})
 
     } catch (e) {
-      console.log(`ERROR: Failed to pay tokens in order to \
-      join the pool: ${e.message}`)
+      //console.log(`ERROR: Failed to pay tokens in order to \
+      //join the pool: ${e.message}`)
     }
     return result
   }
+
 
   /**
    * Specify poolAmountOut pool shares that you want to get, and a token tokenIn to pay with. This costs tokenAmountIn tokens (these went into the pool).
@@ -1042,7 +1283,7 @@ export class Pool extends PoolFactory {
          })
         */
 
-         // Repeated codes...will need to be refactored/moved to a separate file
+      // Repeated codes...will need to be refactored/moved to a separate file
 
       let Tx = require('ethereumjs-tx').Transaction;
       let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
@@ -1068,7 +1309,7 @@ export class Pool extends PoolFactory {
       transaction.sign(privateKey)
       result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
       console.log('Success!!. You have succeeded paying the fees and exiting the liquidity pool....')
-      console.log({ExitswapStatus: result.status, ExitReceipt: result})
+      console.log({ ExitswapStatus: result.status, ExitReceipt: result })
 
     } catch (e) {
       console.log('ERROR: Failed to exitswapExternAmountOut')

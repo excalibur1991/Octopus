@@ -1,3 +1,6 @@
+import { OceanPool } from '../components/OceanPool';
+import { STORAGE_KEY } from './walletsettings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const handleSendSignedTx = async (
   // amount,
@@ -62,35 +65,44 @@ export const sendSignedTransaction = async (
   PRIVATE_KEY,
   web3,
   account,
-  //getFairGasPrice = (web3) => {},
   estGas,
-  spender,
-  tokenAddress,
-  amount,
-  token
+  tranx,
+  toAddress,
 
 ) => {
 
-  let Tx = require('ethereumjs-tx').Transaction;
-  let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
-  let count = await web3.eth.getTransactionCount(account);
+  try {
 
-  let rawTransaction = {
-    "from": account,
-    "gasPrice": web3.utils.toHex(1050000034),
-    //  "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
-    "gasLimit": web3.utils.toHex(estGas + 1),
-    "to": tokenAddress,
-    "data": token.methods.approve(spender, amount).encodeABI(),
-    "nonce": web3.utils.toHex(count)
-  };
+    let Tx = require('ethereumjs-tx').Transaction;
+    let privateKey = Buffer.from(PRIVATE_KEY, 'hex');
+    let count = await web3.eth.getTransactionCount(account);
 
-  let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
-  transaction.sign(privateKey)
-  console.log('getting approval...')
-  result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
-  console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
-  console.log({ ApprovalStatus: result.status, ApprovalReceipt: result })
+    let rawTransaction = {
+      "from": account,
+      "gasPrice": web3.utils.toHex(1050000034),
+      //  "gasPrice": web3.utils.toHex(await getFairGasPrice(web3)),
+      "gasLimit": web3.utils.toHex(estGas + 1),
+      "to": toAddress,
+      // "data": token.methods.approve(spender, amount).encodeABI(),
+      "data": tranx.encodeABI(),
+      "nonce": web3.utils.toHex(count)
+    };
+
+    let transaction = new Tx(rawTransaction, { 'chain': 'rinkeby' }); //defaults to mainnet without specifying chain
+    transaction.sign(privateKey)
+    console.log('sending transaction...')
+    let result = await web3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'));
+    // console.log('Success!!. You request to join the liquidity pool has been APPROVED....')
+    // console.log({ ApprovalStatus: result.status, ApprovalReceipt: result })
+    // if (result.status === true) {
+    //   console.log({ result: result })
+    // }
+
+    return result;
+  }
+  catch (e) {
+    console.log(`ERRPR: Transaction Failed: ${e.message}`)
+  }
 
 }
 
@@ -116,4 +128,79 @@ export const getMaxPercentRemove = async (
   }
 
   return amountMaxPercent
+}
+
+export const oceanHelper = () => {
+  let ocean = new OceanPool();
+  return ocean;
+}
+
+export const retrievedCurrTokens = async (poolAddress) => {
+  if (!oceanHelper) return;
+  const currTokens = await oceanHelper().getCurrentTokens(poolAddress)
+  const tokenList = {
+    oceanAddress: currTokens[1],
+    tokenAddress: currTokens[0]
+  }
+  return tokenList;
+}
+
+export const retrievedContracts = async (web3, abi, poolAddress) => {
+  let tokens = await retrievedCurrTokens(poolAddress)
+  if (!tokens) return;
+
+  const tokenInstance = new web3.eth.Contract(abi, tokens.tokenAddress);
+  const oceanInstance = new web3.eth.Contract(abi, tokens.oceanAddress);
+  const contractList = {
+    tokenContract: tokenInstance,
+    oceanContract: oceanInstance
+  }
+
+  return contractList
+}
+
+export const retrievedCoins = async (web3, abi, poolAddress) => {
+  let contractList = await retrievedContracts(web3, abi, poolAddress)
+  if (!contractList) return;
+
+  const oceanSymbol = await contractList.oceanContract.methods.symbol().call()
+  const tokenSymbol = await contractList.tokenContract.methods.symbol().call()
+  const symbolList = {
+    oceanSymbol:oceanSymbol,
+    tokenSymbol:tokenSymbol
+  }
+
+  return symbolList;
+}
+
+export const currWalletBals = async (web3, abi, poolAddress) => {
+  const userInfo = JSON.parse(await AsyncStorage.getItem(STORAGE_KEY));
+  let contractList = await retrievedContracts(web3, abi, poolAddress)
+  if (!contractList) return;
+
+  const ethBal = await web3.eth.getBalance(userInfo.publicKey).then((bal) =>
+    Number(web3.utils.fromWei(bal, 'ether')).toFixed(2));
+
+  const tokenBal = await calculateTokenBal(contractList.tokenContract, userInfo.publicKey)
+  const tokenBalance = Number(web3.utils.fromWei(tokenBal)).toFixed(2)
+
+  const oceanBal = await calculateTokenBal(contractList.oceanContract, userInfo.publicKey)
+  const oceanBalance = Number(web3.utils.fromWei(oceanBal)).toFixed(2)
+  const balanceList = {
+    ethBal: ethBal,
+    tokenBal: tokenBalance,
+    oceanBal: oceanBalance
+  }
+
+  return balanceList;
+
+}
+
+export const calcSharesBal = async (poolAddress) => {
+  const userInfo = JSON.parse(await AsyncStorage.getItem(STORAGE_KEY));
+  const userShares = await oceanHelper().sharesBalance(
+    userInfo.publicKey, // accountId,
+    poolAddress //price.address
+  )
+  return Number(userShares).toFixed(2);
 }

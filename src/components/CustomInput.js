@@ -1,14 +1,14 @@
 import React, { forwardRef, useState, useEffect } from 'react';
-import { 
+import {
   TextInput,
   View,
   StyleSheet,
-  TouchableOpacity, 
-  Animated, 
+  TouchableOpacity,
+  Animated,
   TouchableWithoutFeedback,
   Text,
   Keyboard
- } from 'react-native';
+} from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -23,7 +23,7 @@ export const WriteInput = forwardRef(({ icon, error, touched, ...otherProps }, r
 
   return (
 
-    <View style={{...styles.readOnlyBox, borderColor:validationColor}}>
+    <View style={{ ...styles.writeInputBox, borderColor: validationColor }}>
       <View style={{ padding: 8 }}>
         <IonIcon name={icon} color={validationColor} size={16} />
       </View>
@@ -39,47 +39,45 @@ export const WriteInput = forwardRef(({ icon, error, touched, ...otherProps }, r
   );
 });
 
-
-export const MessageBox = ({ title, value,error, success}) => {
-  const msgColor = success 
-                   ? theme.COLORS.SUCCESS_COLOR 
-                   : error 
-                   ? theme.COLORS.ERROR_COLOR 
-                   : '#223e4b';
+export const MessageBox = ({ title, value, error, success }) => {
+  const msgColor = success
+    ? theme.COLORS.SUCCESS_COLOR
+    : error
+      ? theme.COLORS.ERROR_COLOR
+      : '#223e4b';
 
   return (
     <TouchableOpacity
-      style={[styles.readOnlyBox, {borderColor:theme.COLORS.SUCCESS_COLOR}]}
+      style={[styles.readOnlyBox, { borderColor: theme.COLORS.SUCCESS_COLOR }]}
     // onPressIn={updateSecureTextEntry}
     >
-       <View style={styles.titleCopyButton}>
-        <Text style={{color:theme.COLORS.SUCCESS_COLOR,}}>{title}</Text>
+      <View style={styles.titleCopyButton}>
+        <Text style={{ color: theme.COLORS.SUCCESS_COLOR, }}>{title}</Text>
         <CButton text={value} onCopied={(value) => (value)} />
       </View>
       <TextInput
-       // numberOfLines={2}
-        style={{color:theme.COLORS.WHITE}}
+        // numberOfLines={2}
+        style={{ color: theme.COLORS.WHITE }}
         value={value}
         maxLength={42}
         //showSoftInputOnFocus={false}
-        onFocus = {()=> Keyboard.dismiss()}
-       // placeholderTextColor={theme.COLORS.WHITE}
-        //secureTextEntry={true}
+        onFocus={() => Keyboard.dismiss()}
+      // placeholderTextColor={theme.COLORS.WHITE}
+      //secureTextEntry={true}
       />
     </TouchableOpacity>
   );
 };
 
-
-export const AnimatedButton = ({}) => {
+export const AnimatedButton = ({ }) => {
 
   const [animation, setAnimation] = useState(0)
   const [opacity, setOpacity] = useState(0)
 
   useEffect(() => {
-      setAnimation(new Animated.Value(0))
-      setOpacity(new Animated.Value(1))
-  },[])
+    setAnimation(new Animated.Value(0))
+    setOpacity(new Animated.Value(1))
+  }, [])
 
   const handlePress = () => {
 
@@ -128,20 +126,18 @@ export const AnimatedButton = ({}) => {
 
   return (
     <View style={styles.container}>
-    <TouchableWithoutFeedback onPress={() => handlePress()}>
-      <View style={styles.button}>
-        <View style={StyleSheet.absoluteFill}>
-          <Animated.View style={[styles.progress, progressStyle, styles.opacityBackground]} />
+      <TouchableWithoutFeedback onPress={() => handlePress()}>
+        <View style={styles.button}>
+          <View style={StyleSheet.absoluteFill}>
+            <Animated.View style={[styles.progress, progressStyle, styles.opacityBackground]} />
+          </View>
+          <Text style={styles.buttonText}>Get it!</Text>
         </View>
-        <Text style={styles.buttonText}>Get it!</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  </View>
+      </TouchableWithoutFeedback>
+    </View>
   )
 
 }
-
-
 
 export const CustomInput = (props) => {
   const {
@@ -172,6 +168,7 @@ export const CustomInput = (props) => {
     </>
   )
 }
+
 
 const styles_ = StyleSheet.create({
   textInput: {

@@ -25,7 +25,7 @@ import WalletSettings from './screens/WalletSettings';
 // import MyStats from './screens/MyStats';
 // import Bounty from './screens/Bounty';
 import PoolTabs from './screens/Pool/PoolTabs'
-import TradeTabs from './screens/Pool/TradeTabs';
+import TradeTabs from './screens/Trade/TradeTabs';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import ImageVerifyMission from './screens/ImageVerifyMission';
