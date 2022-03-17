@@ -23,29 +23,6 @@ export const getData = async relativeUrl => {
   }
 };
 
-export const getUserRewards = async (relativeUrl) => {
-  try {
-
-    await setLastActivity();
-    const refreshToken = await refreshTokenAPI(s.auth.refreshToken);
-    const url = getEndpointUrl(relativeUrl);
-    const config = {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          `Bearer ${refreshToken.access_token}`,
-      },
-    };
-    const response = await fetch(url, config);
-    const result = await response.json();
-    //console.log({accessToken:refreshToken.access_token})
-    return result;
-  } catch (err) {
-    return null;
-  }
-}
-
 export const getUserData = async (relativeUrl) => {
   try {
 
@@ -56,8 +33,7 @@ export const getUserData = async (relativeUrl) => {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          `Bearer ${refreshToken.access_token}`,
+        Authorization: `Bearer ${refreshToken.access_token}`,
       },
     };
     const response = await fetch(url, config);
@@ -66,7 +42,7 @@ export const getUserData = async (relativeUrl) => {
   } catch (err) {
     return null;
   }
-}
+};
 
 export const getFile = async (relativeUrl) => {
   try {
@@ -155,7 +131,6 @@ export const postUserData = async (
   setLastActivity();
   const authToken = await refreshTokenAPI();
   const url = getEndpointUrl(relativeUrl);
- 
   const config = {
     method: 'post',
     headers: {
@@ -167,36 +142,6 @@ export const postUserData = async (
   if (data) {
     config.body = isFormData ? data : JSON.stringify(data);
   }
-  try {
-   const response = await fetch(url, config)
-      .then(res => res.json())
-      .then(res => res)
-      .catch(error => error);
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
-
-export const postRewards = async (
-  relativeUrl,
-  data = null,
-  isFormData = false,
-) => {
-  setLastActivity();
-  const url = getEndpointUrl(relativeUrl);
-  const refreshToken = await refreshTokenAPI(s.auth.refreshToken);
-  const config = {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization:
-      `Bearer ${refreshToken.access_token}`,
-    },
-  };
-  if (data) {
-    config.body = isFormData ? data : JSON.stringify(data);
-   }
   try {
     const response = await fetch(url, config)
       .then(res => res.json())

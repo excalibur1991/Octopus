@@ -8,7 +8,6 @@ const KEYS = {
   AUTH_TOKEN: 'AUTH_TOKEN',
   WALLET_KEY: '@save_Keys',
   LANGUAGE: 'LANGUAGE',
-  DATA_USAGE_FLAG: 'DATA_USAGE_FLAG'
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -33,10 +32,7 @@ export const getUserInfo = async () => {
 
 export const setPrivacyAndTermsAccepted = async () => {
   try {
-    await AsyncStorage.setItem(
-      KEYS.ACCEPTED_PRIVACY_AND_TERMS,
-      '1'
-    );
+    await AsyncStorage.setItem(KEYS.ACCEPTED_PRIVACY_AND_TERMS, '1');
     return true;
   } catch (err) {
     return false;
@@ -57,12 +53,9 @@ export const isPrivacyAndTermsAccepted = async () => {
   }
 };
 
-export const setDataUsageFlag = async ()=> {
+export const setDataUsageFlag = async () => {
   try {
-    await AsyncStorage.setItem(
-      KEYS.DATA_USAGE_FLAG,
-      '1'
-    );
+    await AsyncStorage.setItem(KEYS.DATA_USAGE_FLAG, '1');
     return true;
   } catch (err) {
     return false;
@@ -71,9 +64,7 @@ export const setDataUsageFlag = async ()=> {
 
 export const getDataUsageFlag = async () => {
   try {
-    const response = await AsyncStorage.getItem(
-      KEYS.DATA_USAGE_FLAG,
-    );
+    const response = await AsyncStorage.getItem(KEYS.DATA_USAGE_FLAG);
     if (response && response === '1') {
       return true;
     }
@@ -82,7 +73,6 @@ export const getDataUsageFlag = async () => {
     return false;
   }
 };
-
 
 export const setLastActivity = async () => {
   try {

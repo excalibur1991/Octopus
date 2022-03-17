@@ -35,7 +35,7 @@ const MissionStatus = ({navigation, route}) => {
             ? styles.uploadImageContainer
             : isVerifyType
             ? styles.verifyImageContainer
-            : isPlayaiType 
+            : isPlayaiType
             ? styles.playaiImageContainer
             : styles.annotateImageContainer
         }>
@@ -89,11 +89,11 @@ const MissionStatus = ({navigation, route}) => {
                 ? styles.dividerCompletedPlayAI
                 : styles.dividerCompletedAnnotate
             }>
-              <Image
-                resizeMode="stretch"
-                style={styles.dividerShadow}
-                source={require('../assets/ellipse_horizontal.png')}
-              />
+            <Image
+              resizeMode="stretch"
+              style={styles.dividerShadow}
+              source={require('../assets/ellipse_horizontal.png')}
+            />
           </View>
         </>
       )}
@@ -178,7 +178,7 @@ const MissionStatus = ({navigation, route}) => {
                   } else {
                     if (isVerifyType) {
                       navigation.navigate('BeginImageVerify', {mission});
-                    } else if(isAnnotateType) {
+                    } else if (isAnnotateType) {
                       navigation.navigate('BeginImageAnnotate', {mission});
                     } else {
                       navigation.navigate('BeginImagePlayAI', {mission});
@@ -221,8 +221,7 @@ const MissionStatus = ({navigation, route}) => {
                       ? 'Verify'
                       : isAnnotateType
                       ? 'Annotate'
-                      : 'My Missions'
-                    }
+                      : 'My Missions'}
                   </Text>
                 </>
               )}

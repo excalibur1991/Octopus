@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Ripple from '../components/Ripple';
 import {styles} from '../styles/mymissions';
 import {theme} from '../services/Common/theme';
@@ -14,6 +14,9 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import {actions} from '../services/State/Reducer';
+import {useStateValue} from '../services/State/State';
+import {getMissionInfo} from '../services/API/APIManager';
 const MissionCard1 = require('../assets/image_upload_mission_test.png');
 const MissionCard2 = require('../assets/company_icon.png');
 const MissionCard3 = require('../assets/dashboard_image.png');
@@ -210,6 +213,9 @@ const MyMissions = ({navigation}) => {
     },
   ]);
 
+  const [page, setPage] = useState(0);
+  const [, dispatch] = useStateValue();
+
   const filteredMissions = missions.filter((m) =>
     tab.toLowerCase() === 'ongoing'
       ? m.status.toLowerCase() === 'inprogress'
@@ -221,6 +227,45 @@ const MyMissions = ({navigation}) => {
   const completedMissionsCount = missions.filter(
     (m) => m.status.toLowerCase() !== 'inprogress',
   ).length;
+
+  const fetchMissions = async () => {
+    try {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+
+      const response = await getMissionInfo('upload', 'ready_to_start', 1);
+      console.log(response);
+
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+    } catch (e) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchMissions();
+  }, []);
 
   return (
     <View style={styles.container}>

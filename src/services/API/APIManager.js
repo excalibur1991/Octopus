@@ -5,7 +5,7 @@ import {
   getUserData,
   postUserData,
   getUserRewards,
-  postRewards
+  postRewards,
 } from './CoreAPICalls';
 import {settings as s} from './Settings';
 
@@ -21,7 +21,7 @@ export const getAllImages = async () => {
 export const getTotalReward = async () => {
   try {
     const response = await getUserRewards(s.rewards.totalRewards);
-    return response ?? { result: 0 };
+    return response ?? {result: 0};
   } catch (err) {
     return null;
   }
@@ -30,8 +30,7 @@ export const getTotalReward = async () => {
 export const getRewardAmount = async () => {
   try {
     const response = await getUserRewards(s.rewards.rewardsAmount);
-    //return [response].filter(a=>a);
-    return response ?? { amount: 0 };
+    return response ?? {amount: 0};
   } catch (err) {
     return null;
   }
@@ -57,11 +56,7 @@ export const postClaims = async () => {
 
 export const getOverall = async (start, end) => {
   try {
-    const response = await getData(
-      s.taxonomy.overall
-        .replace('$[start_date]', start)
-        .replace('$[end_date]', end),
-    );
+    const response = await getData(s.taxonomy.overall.replace('$[start_date]', start).replace('$[end_date]', end));
     return response;
   } catch (err) {
     return null;
@@ -70,18 +65,14 @@ export const getOverall = async (start, end) => {
 
 export const getUserStats = async (start, end) => {
   try {
-    const response = await getUserData(
-      s.taxonomy.userStats
-        .replace('$[start_date]', start)
-        .replace('$[end_date]', end),
-    );
+    const response = await getUserData(s.taxonomy.userStats.replace('$[start_date]', start).replace('$[end_date]', end));
     return response;
   } catch (err) {
     return null;
   }
 };
 
-export const getImage = async (imageId) => {
+export const getImage = async imageId => {
   try {
     const response = await getFile(
       s.taxonomy.getImage.replace('$[image_id]', imageId),
@@ -92,7 +83,7 @@ export const getImage = async (imageId) => {
   }
 };
 
-export const getLabelImage = async (label) => {
+export const getLabelImage = async label => {
   try {
     const response = await getFile(
       s.taxonomy.getLabelImage.replace('$[label_id]', label),
@@ -103,7 +94,7 @@ export const getLabelImage = async (label) => {
   }
 };
 
-export const storeUserResponse = async (data) => {
+export const storeUserResponse = async data => {
   try {
     const response = await postUserData(s.taxonomy.storeUserResponse, data);
     return response;
@@ -117,10 +108,10 @@ export const userLogin = async (public_address, signature) => {
     let data = {public_address: public_address, signature: signature};
     const response = await postData(s.auth.login, data);
     return response;
-  } catch (err) {
+  } catch(err) {
     return null;
   }
-};
+}
 
 export const userRegister = async (public_address) => {
   try {
@@ -130,7 +121,7 @@ export const userRegister = async (public_address) => {
   } catch (err) {
     return null;
   }
-};
+}
 
 export const userLogout = async () => {
   try {
@@ -139,35 +130,44 @@ export const userLogout = async () => {
   } catch (err) {
     return null;
   }
-};
+}
+
+export const getNounce = async (public_address)=> {
+  try {
+    const response = await getData(s.auth.get_nounce.replace('$[public_address]', public_address));
+    return response;
+  } catch (err) {
+    return null;
+  }
+}
 
 /**
  * Verification APIs
  */
 /**
  * queryMetadata
- * @param {*} page
- * @param {*} type (optional) BoundingBox, TextTag, Anonymization
- * @param {*} tags (optional) ["birdhouse"]
- * @param {*} fields (optional) ["image_id","descriptions","tags"],
- *
- * @returns
- *
+ * @param {*} page 
+ * @param {*} status 
+ * @param {*} fields 
+ * @returns 
  */
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
-export const queryMetadata = async (data) => {
-  //const data = {page: page, status: status, fields: fields, type: type};
-  //check if tags empty, then what result?
+export const queryMetadata = async(
+  page, 
+  status="VERIFIABLE", 
+  fields=["image_id", "tag_data", "descriptions"]) => {
 
-  try {
-    const response = await postUserData(s.metadata.queryMetadata, data);
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
+    const data = {page: page, status: status, fields: fields}
 
-export const getImageById = async (imageId) => {
+    try {
+      const response = await postUserData(s.metadata.queryMetadata, data);
+      return response;
+    } catch (err) {
+      return null;
+    }
+}
+
+export const getImageById = async(imageId) => {
   try {
     const response = await getFile(
       s.metadata.getImageById.replace('$[image_id]', imageId),
@@ -176,30 +176,15 @@ export const getImageById = async (imageId) => {
   } catch (err) {
     return null;
   }
-};
-
-export const getNounce = async (public_address) => {
-  try {
-    const response = await getData(
-      s.auth.get_nounce.replace('$[public_address]', public_address),
-    );
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
+}
 
 /**
- * {annotation: {tags: [], description: ""}
- * image_id: "003c3c7c7c7c3c3c"
- * verification: {tags: {up_votes: [], down_votes: []}, descriptions: {up_votes: ["Peonies flower"], down_votes: []}}}
- */
-export const verifyImage = async (image_id, annotation, verification) => {
-  const data = {
-    image_id: image_id,
-    annotation: annotation,
-    verification: verification,
-  };
+* {annotation: {tags: [], description: ""}
+* image_id: "003c3c7c7c7c3c3c"
+* verification: {tags: {up_votes: [], down_votes: []}, descriptions: {up_votes: ["Peonies flower"], down_votes: []}}}
+*/
+export const verifyImage = async(image_id, annotation, verification) => {
+  const data = {image_id: image_id, annotation: annotation, verification: verification}
   try {
     const response = await postUserData(s.metadata.verifyImage, data);
     return response;
@@ -207,8 +192,6 @@ export const verifyImage = async (image_id, annotation, verification) => {
     return null;
   }
 };
-
-
 
 export const claimRewards = async (data) => {
   try {
@@ -223,8 +206,8 @@ export const claimRewards = async (data) => {
  * POST
  * {photos: [{photo_id: "fffff1000010787c"}]}
  */
-export const reportImages = async (photos) => {
-  const data = {photos: [...photos]};
+export const reportImages = async(photos) => {
+  const data = {photos: [...photos]}
   try {
     const response = await postUserData(s.metadata.reportImages, data);
     return response;
@@ -259,7 +242,6 @@ export const annotate = async (data) => {
   return null;
 };
 
-
 export const uploadImage = async (data) => {
   try {
     const response = await postUserData(s.metadata.uploadImage, data, true);
@@ -278,7 +260,6 @@ export const annotateImage = async (data) => {
   }
 };
 
-
 // {image_id: "1234356789"}
 export const getPlayAIAnnotation = async (data) => {
   try {
@@ -286,34 +267,34 @@ export const getPlayAIAnnotation = async (data) => {
     return response;
   } catch (err) {
     return null;
-  } 
+  }
 };
 
 export const setPlayAIAnnotation = async (data) => {
   try {
     const response = await postUserData(s.metadata.setPlayAIAnnotation, data);
     return response;
-  }catch(err) {
+  } catch (err) {
     return null;
   }
 };
 
 /**
- * 
  * @param {*} data {
  * "image_ids":["00000cf8fc7c3cd8"],
  * "annotations" :["BoundingBox", "GeoLocation"]}
- * @returns 
+ * @returns
  */
-export const queryAnnotation =async(data) => {
+export const queryAnnotation = async (data) => {
   try {
-    const response = await postUserData(s.metadata.query,data);
+    const response = await postUserData(s.metadata.query, data);
     return response;
-  }catch(err){
+  } catch (err) {
     return null;
   }
-}
-export const getUsageFlag = async()=>{
+};
+
+export const getUsageFlag = async () => {
   try {
     const response = await getUserData(s.auth.usageFlag);
     return response;
@@ -356,43 +337,11 @@ export const getNfts = async (owner) => {
   }
 };
 
-export const getNftMetadata = async (contractAddress, tokenId) => {
+export const GetWords = async(word_type)=>{
   try {
-    const config = {
-      method: 'get',
-    };
-    const response = await fetch(
-      s.alchemy.getNFTMetadata
-        .replace('$[contractAddress]', contractAddress)
-        .replace('$[tokenId]', tokenId),
-      config,
-    );
-    const result = await response.json();
-    return result;
-  } catch (err) {
-    return null;
-  }
-};
-
-export const pinFileToIPFS = async (file) => {
-  const req = new FormData();
-  req.append('file', file);
-  const config = {
-    method: 'post',
-    headers: {
-      pinata_api_key: s.pinata.key,
-      pinata_secret_api_key: s.pinata.secret,
-      'Content-Type': 'multipart/form-data',
-    },
-    body: req,
-  };
-  try {
-    const response = await fetch(s.pinata.pinFileToIPFS, config)
-      .then((res) => res.json())
-      .then((res) => res)
-      .catch((error) => error);
+    const response = await getData(s.metadata.getTags.replace('$[word_type]',word_type));
     return response;
-  } catch (err) {
+  } catch(err) {
     return null;
   }
 };
@@ -412,6 +361,27 @@ export const pinJSONToIPFS = async (data) => {
       .then((res) => res.json())
       .then((res) => res)
       .catch((error) => error);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+/**
+ *
+ * @param {*} type one of upload|annotate|verify
+ * @param {*} status one of inprogress|completed|ready_to_start
+ * @param {*} page default 1
+ * @returns
+ */
+export const getMissionInfo = async (type = '', status, page) => {
+  try {
+    const response = await getUserData(
+      s.missions.info
+        .replace('$[type]', type)
+        .replace('$[status]', status)
+        .replace('$[page_number]', page),
+    );
     return response;
   } catch (err) {
     return null;
