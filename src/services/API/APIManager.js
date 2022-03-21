@@ -56,7 +56,11 @@ export const postClaims = async () => {
 
 export const getOverall = async (start, end) => {
   try {
-    const response = await getData(s.taxonomy.overall.replace('$[start_date]', start).replace('$[end_date]', end));
+    const response = await getData(
+      s.taxonomy.overall
+        .replace('$[start_date]', start)
+        .replace('$[end_date]', end),
+    );
     return response;
   } catch (err) {
     return null;
@@ -65,14 +69,18 @@ export const getOverall = async (start, end) => {
 
 export const getUserStats = async (start, end) => {
   try {
-    const response = await getUserData(s.taxonomy.userStats.replace('$[start_date]', start).replace('$[end_date]', end));
+    const response = await getUserData(
+      s.taxonomy.userStats
+        .replace('$[start_date]', start)
+        .replace('$[end_date]', end),
+    );
     return response;
   } catch (err) {
     return null;
   }
 };
 
-export const getImage = async imageId => {
+export const getImage = async (imageId) => {
   try {
     const response = await getFile(
       s.taxonomy.getImage.replace('$[image_id]', imageId),
@@ -83,7 +91,7 @@ export const getImage = async imageId => {
   }
 };
 
-export const getLabelImage = async label => {
+export const getLabelImage = async (label) => {
   try {
     const response = await getFile(
       s.taxonomy.getLabelImage.replace('$[label_id]', label),
@@ -94,7 +102,7 @@ export const getLabelImage = async label => {
   }
 };
 
-export const storeUserResponse = async data => {
+export const storeUserResponse = async (data) => {
   try {
     const response = await postUserData(s.taxonomy.storeUserResponse, data);
     return response;
@@ -108,10 +116,10 @@ export const userLogin = async (public_address, signature) => {
     let data = {public_address: public_address, signature: signature};
     const response = await postData(s.auth.login, data);
     return response;
-  } catch(err) {
+  } catch (err) {
     return null;
   }
-}
+};
 
 export const userRegister = async (public_address) => {
   try {
@@ -121,7 +129,7 @@ export const userRegister = async (public_address) => {
   } catch (err) {
     return null;
   }
-}
+};
 
 export const userLogout = async () => {
   try {
@@ -130,44 +138,46 @@ export const userLogout = async () => {
   } catch (err) {
     return null;
   }
-}
+};
 
-export const getNounce = async (public_address)=> {
+export const getNounce = async (public_address) => {
   try {
-    const response = await getData(s.auth.get_nounce.replace('$[public_address]', public_address));
+    const response = await getData(
+      s.auth.get_nounce.replace('$[public_address]', public_address),
+    );
     return response;
   } catch (err) {
     return null;
   }
-}
+};
 
 /**
  * Verification APIs
  */
 /**
  * queryMetadata
- * @param {*} page 
- * @param {*} status 
- * @param {*} fields 
- * @returns 
+ * @param {*} page
+ * @param {*} status
+ * @param {*} fields
+ * @returns
  */
 //{"page":1,"page_size":100,"result":[{"descriptions":[],"image_id":"df970b07070d3800","tag_data":["meme bounty"]},{"descriptions":[],"image_id":"ff0f004440fffb04","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"e0f0f0e0f8fcfedf","tag_data":["nft+art bounty"]},{"descriptions":[],"image_id":"20f8f86cf8f86600","tag_data":["nft+art bounty"]},}]}
-export const queryMetadata = async(
-  page, 
-  status="VERIFIABLE", 
-  fields=["image_id", "tag_data", "descriptions"]) => {
+export const queryMetadata = async (
+  page,
+  status = 'VERIFIABLE',
+  fields = ['image_id', 'tag_data', 'descriptions'],
+) => {
+  const data = {page: page, status: status, fields: fields};
 
-    const data = {page: page, status: status, fields: fields}
+  try {
+    const response = await postUserData(s.metadata.queryMetadata, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
 
-    try {
-      const response = await postUserData(s.metadata.queryMetadata, data);
-      return response;
-    } catch (err) {
-      return null;
-    }
-}
-
-export const getImageById = async(imageId) => {
+export const getImageById = async (imageId) => {
   try {
     const response = await getFile(
       s.metadata.getImageById.replace('$[image_id]', imageId),
@@ -176,15 +186,19 @@ export const getImageById = async(imageId) => {
   } catch (err) {
     return null;
   }
-}
+};
 
 /**
-* {annotation: {tags: [], description: ""}
-* image_id: "003c3c7c7c7c3c3c"
-* verification: {tags: {up_votes: [], down_votes: []}, descriptions: {up_votes: ["Peonies flower"], down_votes: []}}}
-*/
-export const verifyImage = async(image_id, annotation, verification) => {
-  const data = {image_id: image_id, annotation: annotation, verification: verification}
+ * {annotation: {tags: [], description: ""}
+ * image_id: "003c3c7c7c7c3c3c"
+ * verification: {tags: {up_votes: [], down_votes: []}, descriptions: {up_votes: ["Peonies flower"], down_votes: []}}}
+ */
+export const verifyImage = async (image_id, annotation, verification) => {
+  const data = {
+    image_id: image_id,
+    annotation: annotation,
+    verification: verification,
+  };
   try {
     const response = await postUserData(s.metadata.verifyImage, data);
     return response;
@@ -206,21 +220,10 @@ export const claimRewards = async (data) => {
  * POST
  * {photos: [{photo_id: "fffff1000010787c"}]}
  */
-export const reportImages = async(photos) => {
-  const data = {photos: [...photos]}
+export const reportImages = async (photos) => {
+  const data = {photos: [...photos]};
   try {
     const response = await postUserData(s.metadata.reportImages, data);
-    return response;
-  } catch (err) {
-    return null;
-  }
-};
-
-export const GetWords = async (word_type) => {
-  try {
-    const response = await getData(
-      s.metadata.getTags.replace('$[word_type]', word_type),
-    );
     return response;
   } catch (err) {
     return null;
@@ -337,11 +340,13 @@ export const getNfts = async (owner) => {
   }
 };
 
-export const GetWords = async(word_type)=>{
+export const GetWords = async (word_type) => {
   try {
-    const response = await getData(s.metadata.getTags.replace('$[word_type]',word_type));
+    const response = await getData(
+      s.metadata.getTags.replace('$[word_type]', word_type),
+    );
     return response;
-  } catch(err) {
+  } catch (err) {
     return null;
   }
 };
@@ -374,13 +379,20 @@ export const pinJSONToIPFS = async (data) => {
  * @param {*} page default 1
  * @returns
  */
-export const getMissionInfo = async (type = '', status, page) => {
+export const getMissionInfo = async (type = [], status = [], page) => {
   try {
+    let typeStr = '';
+    let statusStr = '';
+    type.map((str) => {
+      typeStr = typeStr.concat('&type=', str);
+    });
+    status.map((str) => {
+      statusStr = statusStr.concat('&status=', str);
+    });
     const response = await getUserData(
       s.missions.info
-        .replace('$[type]', type)
-        .replace('$[status]', status)
-        .replace('$[page_number]', page),
+        .replace('$[page_number]', page)
+        .concat(typeStr, statusStr),
     );
     return response;
   } catch (err) {

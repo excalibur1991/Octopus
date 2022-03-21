@@ -8,6 +8,7 @@ const KEYS = {
   AUTH_TOKEN: 'AUTH_TOKEN',
   WALLET_KEY: '@save_Keys',
   LANGUAGE: 'LANGUAGE',
+  DATA_USAGE_FLAG: 'DATA_USAGE_FLAG',
 };
 
 export const setUserInfo = async (userDetails) => {

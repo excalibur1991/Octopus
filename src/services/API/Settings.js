@@ -62,6 +62,6 @@ export const settings = {
     pinJSONToIPFS: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
   },
   missions: {
-    info: '/api/v1/missions/info?type=$[type]&status=$[status]&page=$[page_number]',
+    info: '/api/v1/missions/info?page=$[page_number]',
   },
 };

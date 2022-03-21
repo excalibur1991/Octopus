@@ -1,10 +1,10 @@
 import {settings as s} from './Settings';
 import {setLastActivity} from '../DataManager';
-import { getAuthToken, setAuthToken } from '../DataManager';
+import {getAuthToken, setAuthToken} from '../DataManager';
 
-const getEndpointUrl = ep => `${s.baseUrl}${ep}`;
+const getEndpointUrl = (ep) => `${s.baseUrl}${ep}`;
 
-export const getData = async relativeUrl => {
+export const getData = async (relativeUrl) => {
   try {
     setLastActivity();
     //const authToken = await getAuthToken();
@@ -25,7 +25,6 @@ export const getData = async relativeUrl => {
 
 export const getUserData = async (relativeUrl) => {
   try {
-
     await setLastActivity();
     const refreshToken = await refreshTokenAPI(s.auth.refreshToken);
     const url = getEndpointUrl(relativeUrl);
@@ -54,8 +53,7 @@ export const getFile = async (relativeUrl) => {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          `Bearer ${refreshToken.access_token}`,
+        Authorization: `Bearer ${refreshToken.access_token}`,
       },
     };
     const response = await fetch(url, config);
@@ -84,18 +82,16 @@ export const postData = async (
   }
   try {
     const response = await fetch(url, config)
-      .then(res => res.json())
-      .then(res => res)
-      .catch(error => error);
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch((error) => error);
     return response;
   } catch (err) {
     return null;
   }
 };
 
-export const refreshTokenAPI = async(
-  relativeUrl,
-) => {
+export const refreshTokenAPI = async (relativeUrl) => {
   setLastActivity();
   const authToken = await getAuthToken();
   const url = getEndpointUrl(s.auth.refreshToken);
@@ -103,19 +99,18 @@ export const refreshTokenAPI = async(
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-       `Bearer ${authToken.refresh_token}`,
+      Authorization: `Bearer ${authToken.refresh_token}`,
     },
   };
   try {
     const response = await fetch(url, config)
-      .then(res => res.json())
-      .then(res => res)
-      .catch(error => error);
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch((error) => error);
 
     await setAuthToken({
       refresh_token: authToken.refresh_token,
-      access_token: response.access_token
+      access_token: response.access_token,
     });
     return response;
   } catch (err) {
@@ -135,8 +130,7 @@ export const postUserData = async (
     method: 'post',
     headers: {
       'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
-      Authorization:
-       `Bearer ${authToken.access_token}`,
+      Authorization: `Bearer ${authToken.access_token}`,
     },
   };
   if (data) {
@@ -144,9 +138,9 @@ export const postUserData = async (
   }
   try {
     const response = await fetch(url, config)
-      .then(res => res.json())
-      .then(res => res)
-      .catch(error => error);
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch((error) => error);
     return response;
   } catch (err) {
     return null;
@@ -167,9 +161,9 @@ export const putData = async (relativeUrl, data = null, isFormData = false) => {
   }
   try {
     const response = await fetch(url, config)
-      .then(res => res.json())
-      .then(res => res)
-      .catch(error => error);
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch((error) => error);
     return response;
   } catch (err) {
     return null;

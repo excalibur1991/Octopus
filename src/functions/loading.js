@@ -47,7 +47,6 @@ export const LoginProc = async (web3) => {
       publicKey = walletInfo.publicKey;
     }
     let registerResponse = await userRegister(publicKey);
-    console.log(publicKey, registerResponse);
     if (registerResponse && registerResponse.status == 'success') {
       //first time register
       nounce = registerResponse.nonce;
