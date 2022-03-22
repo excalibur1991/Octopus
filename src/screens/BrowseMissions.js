@@ -19,7 +19,8 @@ import {getMissionInfo} from '../services/API/APIManager';
 import {decryptData} from '@celo/utils/lib/commentEncryption';
 
 import {useQueryClient} from 'react-query';
- 
+import {useRef} from 'react';
+
 const UploadIcon = require('../assets/mission_upload.png');
 const AnnotateIcon = require('../assets/mission_annotate.png');
 const VerifyIcon = require('../assets/mission_verify.png');
@@ -154,27 +155,44 @@ const MissionCard = ({
 };
 
 const MissionListView = ({navigation, type, status}) => {
-  const queryClient = useQueryClient();
+  const [data, setData] = useState([]);
+  const [canFetchMore, setCanFetchMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const listRef = useRef(null);
 
-  const {data, fetchMore, canFetchMore, isFetchingNextPage} = useInfiniteQuery(
-    'mission',
-    //
-    async (key, page = 1) => {
-      const response = await getMissionInfo(type, status, page);
-      return {items: response, page};
-    },
-    {
-      getFetchMore: ({items, page}) => {
-        if (items.length) {
-          return page + 1; // This will be sent as the LAST parameter to your query function
-        }
-        return false;
-      },
-    },
-  );
+  const fetchMore = async (_type, _status, _page) => {
+    setTimeout(() => {
+      setIsFetchingNextPage(true);
+    }, 0);
+    const response = await getMissionInfo([_type], [_status], _page);
+
+    setTimeout(() => {
+      setIsFetchingNextPage(false);
+    }, 0);
+
+    if (response.length) {
+      if (_page === 1) {
+        setData(response);
+      } else {
+        setData([...data, ...response]);
+      }
+      setPage(page + 1);
+      setCanFetchMore(true);
+    } else {
+      if (_page === 1) {
+        setData([]);
+      }
+      setCanFetchMore(false);
+    }
+  };
 
   useEffect(() => {
-    queryClient.resetQueries('mission');
+    if (isFetchingNextPage) {
+      return;
+    }
+    fetchMore(type, status, 1);
+    // queryClient.resetQueries('mission');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
@@ -232,9 +250,8 @@ const MissionListView = ({navigation, type, status}) => {
   return (
     <FlatList
       contentContainerStyle={styles.missionCardsContainer}
-      data={
-        data && data.pages ? data.pages.map((page) => page.items).flat() : []
-      }
+      ref={listRef}
+      data={data}
       renderItem={renderData}
       onEndReached={loadMore}
       onEndReachedThreshold={0.3}
@@ -257,21 +274,21 @@ const BrowseMissions = (props) => {
           badgeCount={2}
           icon={UploadIcon}
           onSelect={() => setType('upload')}
-          isSelected={type === 'Upload'}
+          isSelected={type === 'upload'}
         />
         <TypeBox
           title="Verify"
           badgeCount={0}
           icon={VerifyIcon}
           onSelect={() => setType('verify')}
-          isSelected={type === 'Verify'}
+          isSelected={type === 'verify'}
         />
         <TypeBox
           title="Annotate"
           badgeCount={0}
           icon={AnnotateIcon}
           onSelect={() => setType('annotation')}
-          isSelected={type === 'Annotate'}
+          isSelected={type === 'annotation'}
         />
       </View>
       <ScrollView
