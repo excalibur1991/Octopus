@@ -27,16 +27,27 @@ export const getTotalReward = async () => {
   }
 };
 
-export const getRewardAmount = async () => {
+/**
+ * @param {*} entity_type  image | video
+ * @returns
+ */
+export const getRewardAmount = async (entity_type = 'image') => {
   try {
-    const response = await getUserRewards(s.rewards.rewardsAmount);
+    const response = await getUserRewards(
+      s.rewards.rewardsAmount.replace('$[entity_type]', entity_type),
+    );
     return response ?? {amount: 0};
   } catch (err) {
     return null;
   }
 };
 
-export const getRewardList = async () => {
+/**
+ * @param {*} entity_type image | video
+ * @param {*} page default 1
+ * @returns
+ */
+export const getRewardList = async (entity_type = 'image', page = 1) => {
   try {
     const response = await getUserRewards(s.rewards.rewardsList);
     return response;

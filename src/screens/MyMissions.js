@@ -61,6 +61,10 @@ const MissionCard = (item) => {
       : PlayAIImage;
   };
 
+  useEffect(() => {
+    mission.image = getImage();
+  }, [mission]);
+
   return (
     <Ripple
       style={styles.missionCard}

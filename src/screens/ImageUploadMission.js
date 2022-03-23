@@ -6,16 +6,16 @@ import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { AboutMissionModal } from '../components/AboutMissionModal';
+import {AboutMissionModal} from '../components/AboutMissionModal';
 import {actions} from '../services/State/Reducer';
 import {useStateValue} from '../services/State/State';
 
 const UploadMission = require('../assets/image_upload_mission_test.png');
 const CompanyIcon = require('../assets/company_icon.png');
 
-import { TCModal } from '../components/TCModal';
-import { MissionCounter } from '../components/MissionCounter';
-import { Reward } from '../components/Reward';
+import {TCModal} from '../components/TCModal';
+import {MissionCounter} from '../components/MissionCounter';
+import {Reward} from '../components/Reward';
 
 const RadioButton = ({checked, onCheckChange}) => {
   return (
@@ -32,7 +32,19 @@ const RadioButton = ({checked, onCheckChange}) => {
   );
 };
 
-const ImageUploadMission = ({navigation}) => {
+const ImageUploadMission = ({navigation, route}) => {
+  const {params} = route || {};
+  const {mission = {}} = params || {};
+  const {
+    type = 'upload',
+    image,
+    level = '',
+    title = '',
+    description = '',
+    progress = 0,
+    criteria = {target: 0},
+    status = 'in_progress',
+  } = mission || {};
   const [showInfo, setShowInfo] = useState(false);
   const [showTCButton, setShowTCButton] = useState(false);
   const [tcAgreed, setTCAgreed] = useState(false);

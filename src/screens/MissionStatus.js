@@ -12,19 +12,22 @@ const MissionStatus = ({navigation, route}) => {
   const {params} = route || {};
   const {mission = {}} = params || {};
   const {
-    type = 'ongoing',
+    type = 'upload',
     image,
     level = '',
-    title1 = '',
-    title2 = '',
-    progressTotal = 0,
-    progressCompleted = 0,
-    status = 'inprogress',
+    title = '',
+    description = '',
+    progress = 0,
+    criteria = {target: 0},
+    status = 'in_progress',
   } = mission || {};
+  console.log(mission);
+  const progressTotal = criteria.target;
+  const progressCompleted = progress;
 
   const isUploadType = type.toLowerCase() === 'upload';
   const isVerifyType = type.toLowerCase() === 'verify';
-  const isAnnotateType = type.toLowerCase() === 'annotate';
+  const isAnnotateType = type.toLowerCase() === 'annotation';
   const isPlayaiType = type.toLowerCase() === 'playai';
 
   return (
@@ -42,16 +45,16 @@ const MissionStatus = ({navigation, route}) => {
         <Image resizeMode="stretch" source={image} style={styles.image} />
         <View style={styles.levelContainer}>
           <View style={styles.levelChip}>
-            <Text style={styles.levelText}>{level}</Text>
+            <Text style={styles.levelText}>{`Lv.${level}`}</Text>
           </View>
         </View>
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title2}</Text>
-        <Text style={styles.subTitle}>{title1}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subTitle}>{description}</Text>
       </View>
 
-      {['inprogress', 'pending', 'readytogetreward'].includes(
+      {['in_progress', 'ready_to_start', 'completed'].includes(
         status.toLowerCase(),
       ) ? (
         <>
@@ -99,7 +102,8 @@ const MissionStatus = ({navigation, route}) => {
       )}
 
       <View style={styles.statusContainer}>
-        {status.toLowerCase() === 'inprogress' ? (
+        {status.toLowerCase() === 'in_progress' ||
+        status.toLowerCase() === 'ready_to_start' ? (
           <>
             <Text style={styles.statusTitle}>
               {progressCompleted > 0 ? 'Almost There!' : 'Keep it up!'}
@@ -121,7 +125,7 @@ const MissionStatus = ({navigation, route}) => {
           </>
         ) : (
           <>
-            {['pending', 'readytogetreward'].includes(status.toLowerCase()) && (
+            {['in_completed'].includes(status.toLowerCase()) && (
               <Text style={styles.statusTitle}>MISSION COMPLETED!</Text>
             )}
             {status === 'rewardgiven' && (
@@ -187,11 +191,12 @@ const MissionStatus = ({navigation, route}) => {
                 }
               }}
               style={
-                ['pending', 'readytogetreward'].includes(status.toLowerCase())
+                ['completed'].includes(status.toLowerCase())
                   ? styles.gradientButtonInnerDisabled
                   : styles.gradientButtonInner
               }>
-              {status.toLowerCase() !== 'inprogress' ? (
+              {status.toLowerCase() !== 'in_progress' &&
+              status.toLowerCase() !== 'ready_to_start' ? (
                 <>
                   <Image
                     resizeMode="stretch"

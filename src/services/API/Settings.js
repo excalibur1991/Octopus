@@ -34,8 +34,8 @@ export const settings = {
   },
 
   rewards: {
-    rewardsAmount: '/api/v1/rewards/?entity_type=image',
-    rewardsList: '/api/v1/rewards/list?entity_type=image&page=1',
+    rewardsAmount: '/api/v1/rewards/?entity_type=$[entity_type]',
+    rewardsList: '/api/v1/rewards/list?entity_type=$[entity_type]&page=$[page]',
     totalRewards: '/api/v1/rewards/total-rewards',
     claimRewards: '/api/v1/rewards/claim',
   },
