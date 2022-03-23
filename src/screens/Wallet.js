@@ -1,8 +1,8 @@
-import React from 'react';
-import {Text, View, ScrollView, TextInput} from 'react-native';
+import React, { useEffect, useState} from 'react';
+import { Text, View, ScrollView, TextInput } from 'react-native';
 import Button from '../components/Button';
 import CopyTextBox from '../components/CopyTextBox';
-import {theme} from '../services/Common/theme';
+import { theme } from '../services/Common/theme';
 import CButton from '../components/CButton';
 //import sendOnlyone from '../components/SendTokens'
 import ApproveLiquidity from '../components/ApproveLiquidity';
@@ -11,20 +11,35 @@ import getCurrentTokens from '../components/AddDTLiquidity';
 import Joinswap from '../components/Joinswap';
 import JoinswapExternAmountIn from '../components/JoinswapExternAmountIn';
 import * as StakesUtil from '../components/AddDTLiquidity';
-import {contracts, web3} from '../web3/utils';
-import {OceanPool} from '../components/OceanPool';
-import {styles} from '../styles/wallet';
-import {withTranslation} from 'react-i18next';
+import { contracts, web3 } from '../web3/utils';
+import { OceanPool } from '../components/OceanPool';
+import { styles } from '../styles/wallet';
+import { withTranslation } from 'react-i18next';
+import { BalanceBox } from '../components/BalanceBox';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { getWalletBalances } from './Pool/AddLiquidity';
+import { useStateValue } from '../services/State/State';
 
-const Wallet = ({t}) => {
-  const credentials = [
-    {
-      oneLine: false,
-      label: 'Memoric Phrase',
-      value:
-        'following guitar strings colors rainbow cranial nerves planets hello twitter follow kiss',
-    },
-  ];
+const Wallet = ({ t, navigation }) => {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getWalletBalances(
+      dispatch,
+      setEthBal,
+      setTokenBal,
+      setOceanBal,
+      setUserLiquidity,
+    );
+  }, [isFocused]);
+
+  const [ethBal, setEthBal] = useState('0');
+  const [tokenBal, setTokenBal] = useState('0');
+  const [oceanBal, setOceanBal] = useState('0');
+  const [userLiquidity, setUserLiquidity] = useState('0');
+  const [, dispatch] = useStateValue();
+
+  console.log({ethBal:ethBal})
 
   const UnStakeDT = async () => {
     try {
@@ -36,7 +51,7 @@ const Wallet = ({t}) => {
         '20',
         '0.5',
       );
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const StakeDT = async () => {
@@ -75,7 +90,7 @@ const Wallet = ({t}) => {
         '50',
       );
       //)
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -83,7 +98,15 @@ const Wallet = ({t}) => {
       style={styles.container}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}>
-      <View style={styles.quicraContainer}>
+      < BalanceBox
+        ethTitle={'ETH'}
+        ethValue={ethBal}
+        oceanTitle={'OCEAN'}
+        oceanValue={oceanBal}
+        tokenTitle={'PHECOR-0'}
+        tokenValue={tokenBal}
+      />
+      {/* <View style={styles.quicraContainer}>
         <Text style={styles.quicraText}>1.2 QUICRA-0</Text>
         <View style={styles.oceanPortfolioContainer}>
           <Text style={styles.oceanText}>7.2 Ocean</Text>
@@ -92,7 +115,7 @@ const Wallet = ({t}) => {
             <Text style={styles.percentText}>(+15.53%)</Text>
           </View>
         </View>
-      </View>
+      </View> */}
       <View style={styles.sendAmountInputContainer}>
         <Text style={styles.inputLabel}>{t('walletActions.sendTo')}</Text>
         <TextInput
@@ -115,13 +138,13 @@ const Wallet = ({t}) => {
       <Button
         height={55}
         title="Send"
-        onPress={() => {}}
+        onPress={() => { }}
         color={theme.APP_COLOR_2}
         textStyle={styles.buttonText}
         buttonStyle={styles.buttonStyle}
       />
       <View style={styles.mainDivider} />
-      <View style={styles.stakeUnstakeContainer}>
+      {/* <View style={styles.stakeUnstakeContainer}>
         <Text style={styles.inputLabel}>Amount</Text>
         <TextInput
           selectable={true}
@@ -130,20 +153,24 @@ const Wallet = ({t}) => {
           selectTextOnFocus={true}
           placeholderTextColor={theme.COLORS.WHITE}
         />
-      </View>
+      </View> */}
       <View style={styles.stakeUnstakeButtons}>
         <Button
           height={55}
-          title="UnStake"
-          onPress={() => UnStakeDT()}
+          // title="UnStake"
+          // onPress={() => UnStakeDT()}
+          title="Trade"
+          onPress={() => navigation.navigate('Trade')}
           color={theme.APP_COLOR_2}
-          textStyle={styles.unstakeButtonText}
+          textStyle={styles.stakeButtonText}
           buttonStyle={styles.stakeUnstakeButtonStyle}
         />
         <Button
           height={55}
-          title="Stake"
-          onPress={() => StakeDT()}
+          // title="Stake"
+          // onPress={() => StakeDT()}
+          title="Pool"
+          onPress={() => navigation.navigate('Pool')}
           color={theme.APP_COLOR_2}
           textStyle={styles.stakeButtonText}
           buttonStyle={styles.stakeUnstakeButtonStyle}

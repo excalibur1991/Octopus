@@ -18,7 +18,8 @@ import erc20 from '../abis/erc20.json';
 import i18n from '../languages/i18n';
 import { contextType } from 'react-native/Libraries/Image/ImageBackground';
 
-const STORAGE_KEY = '@save_Keys'
+// const STORAGE_KEY = '@save_Keys'
+export const STORAGE_KEY = '@save_Keys'
 const STORAGE_KEY2 = '@save_Pwd'
 const STORAGE_KEY3 = '@save_Phrase'
 

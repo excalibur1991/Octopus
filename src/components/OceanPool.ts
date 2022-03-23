@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js'
 import { SubscribablePromise, Logger, didNoZeroX, didPrefixed } from '../utils'
 import Decimal from 'decimal.js'
 import {web3} from '../web3/utils'
+import { retrievedCurrTokens } from '../functions/walletactions'
 
 declare type PoolTransactionType = 'swap' | 'join' | 'exit'
 
@@ -420,23 +421,45 @@ export class OceanPool extends Pool {
    * @param poolAddress
    * @param dtAmount
    */
+  // public async getPoolSharesRequiredToRemoveOcean(
+  //   poolAddress: string,
+  //   oceanAmount: string
+  // ): Promise<string> {
+  //   return this.calcPoolInGivenSingleOut(poolAddress, this.oceanAddress, oceanAmount)
+  // }
+
   public async getPoolSharesRequiredToRemoveOcean(
     poolAddress: string,
     oceanAmount: string
   ): Promise<string> {
-    return this.calcPoolInGivenSingleOut(poolAddress, this.oceanAddress, oceanAmount)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    if (!currToken) return
+    // console.log({ OceanAddr: currToken[1] })
+    return this.calcPoolInGivenSingleOut(poolAddress, currToken[1], oceanAmount)
+    // console.log({ OceanAddr: currToken[1] })
+    //return this.calcPoolInGivenSingleOut(poolAddress, this.oceanAddress, oceanAmount)
   }
+
 
   /**
    * Returns Ocean amnount received after spending poolShares
    * @param poolAddress
    * @param poolShares
    */
+  // public async getOceanRemovedforPoolShares(
+  //   poolAddress: string,
+  //   poolShares: string
+  // ): Promise<string> {
+  //   return this.calcSingleOutGivenPoolIn(poolAddress, this.oceanAddress, poolShares)
+  // }
+
   public async getOceanRemovedforPoolShares(
     poolAddress: string,
     poolShares: string
   ): Promise<string> {
-    return this.calcSingleOutGivenPoolIn(poolAddress, this.oceanAddress, poolShares)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    return this.calcSingleOutGivenPoolIn(poolAddress, currToken[1], poolShares)
+    //return this.calcSingleOutGivenPoolIn(poolAddress, this.oceanAddress, poolShares)
   }
 
   /**
@@ -602,6 +625,54 @@ export class OceanPool extends Pool {
    * @param {String} maxPrice  Maximum price to pay
    * @return {TransactionReceipt}
    */
+  // public async buyDTWithExactOcean(
+  //   account: string,
+  //   poolAddress: string,
+  //   minimumdtAmountWanted: string,
+  //   OceanAmount: string,
+  //   maxPrice?: string
+  // ): Promise<TransactionReceipt> {
+  //   if (this.oceanAddress == null) {
+  //     //console.log('ERROR: undefined ocean token contract address')
+  //     return null
+  //   }
+  //   const dtAddress = await this.getDTAddress(poolAddress)
+  //   if (
+  //     new Decimal(minimumdtAmountWanted).greaterThan(
+  //       await this.getDTMaxBuyQuantity(poolAddress)
+  //     )
+  //   ) {
+  //     //console.log('ERROR: Buy quantity exceeds quantity allowed')
+  //     return null
+  //   }
+  //   const calcInGivenOut = await this.getOceanNeeded(poolAddress, minimumdtAmountWanted)
+  //   if (new Decimal(calcInGivenOut).greaterThan(OceanAmount)) {
+  //     //console.log('ERROR: Not enough Ocean Tokens')
+  //     return null
+  //   }
+  //   // TODO - check balances first
+  //   const txid = await super.approve(
+  //     account,
+  //     this.oceanAddress,
+  //     poolAddress,
+  //     web3.utils.toWei(OceanAmount)
+  //   )
+  //   if (!txid) {
+  //     //console.log('ERROR: OCEAN approve failed')
+  //     return null
+  //   }
+  //   const tx = await super.swapExactAmountIn(
+  //     account,
+  //     poolAddress,
+  //     this.oceanAddress,
+  //     OceanAmount,
+  //     dtAddress,
+  //     minimumdtAmountWanted,
+  //     maxPrice
+  //   )
+  //   return tx
+  // }
+
   public async buyDTWithExactOcean(
     account: string,
     poolAddress: string,
@@ -609,28 +680,29 @@ export class OceanPool extends Pool {
     OceanAmount: string,
     maxPrice?: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: undefined ocean token contract address')
-      return null
-    }
-    const dtAddress = await this.getDTAddress(poolAddress)
+
+    const currToken = await this.getCurrentTokens(poolAddress)
     if (
       new Decimal(minimumdtAmountWanted).greaterThan(
-        await this.getDTMaxBuyQuantity(poolAddress)
+        //  await this.getDTMaxBuyQuantity(poolAddress)
+        await this.getMaxBuyQuantity(poolAddress,currToken[0])
       )
     ) {
-      //console.log('ERROR: Buy quantity exceeds quantity allowed')
+      // console.log('ERROR: Buy quantity exceeds quantity allowed')
       return null
     }
+    // console.log('BuyQuantity okay.Proceeding...')
     const calcInGivenOut = await this.getOceanNeeded(poolAddress, minimumdtAmountWanted)
     if (new Decimal(calcInGivenOut).greaterThan(OceanAmount)) {
-      //console.log('ERROR: Not enough Ocean Tokens')
+      // console.log('ERROR: Not enough Ocean Tokens')
       return null
     }
     // TODO - check balances first
+    
     const txid = await super.approve(
       account,
-      this.oceanAddress,
+      // this.oceanAddress,
+      (await retrievedCurrTokens(poolAddress)).oceanAddress,
       poolAddress,
       web3.utils.toWei(OceanAmount)
     )
@@ -641,12 +713,13 @@ export class OceanPool extends Pool {
     const tx = await super.swapExactAmountIn(
       account,
       poolAddress,
-      this.oceanAddress,
+      (await retrievedCurrTokens(poolAddress)).oceanAddress,
       OceanAmount,
-      dtAddress,
+     (await retrievedCurrTokens(poolAddress)).tokenAddress,
       minimumdtAmountWanted,
       maxPrice
     )
+ 
     return tx
   }
 
@@ -713,22 +786,27 @@ export class OceanPool extends Pool {
    * @param {String} amount datatoken amount
    * @return {TransactionReceipt}
    */
-  public async addDTLiquidity(
+   public async addDTLiquidity(
     account: string,
     poolAddress: string,
     amount: string
   ): Promise<TransactionReceipt> {
-    const dtAddress = await this.getDTAddress(poolAddress)
-    const maxAmount = await this.getMaxAddLiquidity(poolAddress, dtAddress)
-    //console.log({dtAddress: dtAddress, maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
-    //account:account})
+    // const dtAddress = await this.getDTAddress(poolAddress)
+    const currToken = await this.getCurrentTokens(poolAddress)
+    const maxAmount = await this.getMaxAddLiquidity(poolAddress, currToken[0]) // [dtAddress, oceanAddress]
+    // const maxAmount = await this.getMaxAddLiquidity(poolAddress, dtAddress)
+    // console.log({
+    //   dtAddress: currToken[0], maxAmount: maxAmount, AmountToAdd: amount, poolAddress: poolAddress,
+    //   account: account
+    // })
     if (new Decimal(amount).greaterThan(maxAmount)) {
       //console.log('ERROR: Too much reserve to add')
       return null
     }
     const txid = await super.approve(
       account,
-      dtAddress,
+      currToken[0],
+      // dtAddress,
       poolAddress,
       web3.utils.toWei(amount)
     )
@@ -740,7 +818,8 @@ export class OceanPool extends Pool {
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
-      dtAddress,
+      currToken[0],
+      // dtAddress,
       amount,
       '0'
     )
@@ -807,39 +886,45 @@ export class OceanPool extends Pool {
    * @param {String} amount Ocean Token amount in OCEAN
    * @return {TransactionReceipt}
    */
-  public async addOceanLiquidity(
+   public async addOceanLiquidity(
     account: string,
     poolAddress: string,
     amount: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: oceanAddress is not defined')
-      return null
-    }
-    const maxAmount = await this.getOceanMaxAddLiquidity(poolAddress)
+    // if (this.oceanAddress == null) {
+    //   //console.log('ERROR: oceanAddress is not defined')
+    //   return null
+    // }
+    const currToken = await this.getCurrentTokens(poolAddress)
+    const maxAmount = await this.getMaxAddLiquidity(poolAddress, currToken[1]) // [dtAddress, oceanAddress]
+    //const maxAmount = await this.getOceanMaxAddLiquidity(poolAddress)
     if (new Decimal(amount).greaterThan(maxAmount)) {
-      //console.log('ERROR: Too much reserve to add')
+      // console.log('ERROR: Too much reserve to add')
       return null
     }
+    // console.log('not too much...you can add...')
     const txid = await super.approve(
       account,
-      this.oceanAddress,
+      //this.oceanAddress,
+      currToken[1],
       poolAddress,
       web3.utils.toWei(amount)
     )
     if (!txid) {
-      //console.log('ERROR: OCEAN approve failed')
+      // console.log('ERROR: OCEAN approve failed')
       return null
     }
     const result = await super.joinswapExternAmountIn(
       account,
       poolAddress,
-      this.oceanAddress,
+      //this.oceanAddress,
+      currToken[1],
       amount,
       '0'
     )
     return result
   }
+
 
   /**
    * Remove Ocean Token amount from pool liquidity based on the minimum allowed of Ocean Tokens received
@@ -882,42 +967,56 @@ export class OceanPool extends Pool {
    * @param {String} maximumPoolShares maximum pool shares allowed to be spent
    * @return {TransactionReceipt}
    */
-  public async removeOceanLiquidity(
+   public async removeOceanLiquidity(
     account: string,
     poolAddress: string,
     amount: string,
     maximumPoolShares: string
   ): Promise<TransactionReceipt> {
-    if (this.oceanAddress == null) {
-      //console.log('ERROR: oceanAddress is not defined')
-      return null
-    }
-    const maxAmount = await this.getOceanMaxRemoveLiquidity(poolAddress)
+
+    // if (this.oceanAddress == null) {
+    //   //console.log('ERROR: oceanAddress is not defined')
+    //   return null
+    // }
+    const currToken = await this.getCurrentTokens(poolAddress)
+    // const maxAmount = await this.getOceanMaxRemoveLiquidity(poolAddress)
+    const maxAmount = await this.getMaxRemoveLiquidity(poolAddress, currToken[1]) // [dtAddress, oceanAddress]
+    // console.log({ maxAmount_you_can_remove: maxAmount })
     if (new Decimal(amount).greaterThan(maxAmount)) {
       //console.log('ERROR: Too much reserve to remove')
       return null
     }
     const usershares = await this.sharesBalance(account, poolAddress)
+    // console.log({ usershares: new Decimal(usershares), maximumPoolShares: maximumPoolShares })
     if (new Decimal(usershares).lessThan(maximumPoolShares)) {
       //console.log('ERROR: Not enough poolShares')
       return null
     }
+    // console.log('enough user shares to remove OCEAN...proceeding...')
     const sharesRequired = await this.getPoolSharesRequiredToRemoveOcean(
       poolAddress,
       amount
     )
+    // console.log('sharesRequired:', sharesRequired)
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired)) {
       //console.log('ERROR: Not enough poolShares')
       return null
     }
+    // console.log('enough user shares to remove OCEAN...proceeding...')
     // Balancer bug fix
     if (new Decimal(maximumPoolShares).lessThan(sharesRequired))
       maximumPoolShares = new Decimal(maximumPoolShares).mul(0.9999).toString()
     // Balance bug fix
+
+    // console.log({
+    //   account: account, poolAddress: poolAddress, amount: amount, maxAmount: maxAmount,
+    //   usershares: usershares,
+    //   sharesRequired: sharesRequired, maximumPoolShares: new Decimal(maximumPoolShares)
+    // })
     return super.exitswapExternAmountOut(
       account,
       poolAddress,
-      this.oceanAddress,
+      currToken[1],
       amount,
       maximumPoolShares
     )
@@ -985,14 +1084,29 @@ export class OceanPool extends Pool {
     return result
   }
 
+  // public async getOceanNeeded(poolAddress: string, dtRequired: string): Promise<string> {
+  //   const dtAddress = await this.getDTAddress(poolAddress)
+  //   if (
+  //     new Decimal(dtRequired).greaterThan(await this.getDTMaxBuyQuantity(poolAddress))
+  //   ) {
+  //     return '0'
+  //   }
+  //   return this.calcInGivenOut(poolAddress, this.oceanAddress, dtAddress, dtRequired)
+  // }
+
   public async getOceanNeeded(poolAddress: string, dtRequired: string): Promise<string> {
     const dtAddress = await this.getDTAddress(poolAddress)
+    const currToken = await this.getCurrentTokens(poolAddress)
     if (
-      new Decimal(dtRequired).greaterThan(await this.getDTMaxBuyQuantity(poolAddress))
+      new Decimal(dtRequired).greaterThan(
+        // await this.getDTMaxBuyQuantity(poolAddress)
+        await this.getMaxBuyQuantity(poolAddress,currToken[0]) //datatoken
+        )
     ) {
       return '0'
     }
-    return this.calcInGivenOut(poolAddress, this.oceanAddress, dtAddress, dtRequired)
+   // return this.calcInGivenOut(poolAddress, this.oceanAddress, dtAddress, dtRequired)
+    return this.calcInGivenOut(poolAddress, currToken[0], dtAddress, dtRequired)
   }
 
   /**

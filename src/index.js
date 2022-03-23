@@ -2,7 +2,7 @@
 import 'react-native-gesture-handler';
 import {enableScreens} from 'react-native-screens';
 enableScreens();
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -10,7 +10,6 @@ import TabComponent from './components/Tab';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import Loading from './screens/Loading';
 import LandingPage from './screens/LandingPage';
-import LandingPageWalkthrough from './screens/LandingPageWalkthrough';
 // import About from './screens/About';
 import Information from './screens/Information';
 import Stats from './screens/Stats';
@@ -23,10 +22,10 @@ import Wallet from './screens/Wallet';
 // import RomanNumberUpload from './screens/RomanNumberUpload';
 // import RomanNumberStats from './screens/RomanNumberStats';
 import WalletSettings from './screens/WalletSettings';
-import ExtConnections from './screens/ExtConnections';
-//import CeloApp from './extConnect/CeloApp'
 // import MyStats from './screens/MyStats';
 // import Bounty from './screens/Bounty';
+import PoolTabs from './screens/Pool/PoolTabs'
+import TradeTabs from './screens/Trade/TradeTabs';
 import BrowseMissions from './screens/BrowseMissions';
 import ImageUploadMission from './screens/ImageUploadMission';
 import ImageVerifyMission from './screens/ImageVerifyMission';
@@ -36,7 +35,6 @@ import MyMissions from './screens/MyMissions';
 import MissionStatus from './screens/MissionStatus';
 import BeginImageUpload from './screens/BeginImageUpload';
 import UploadImage from './screens/UploadImage';
-import UploadImageWalkthrough from './screens/UploadImageWalkthrough';
 import BeginImageVerify from './screens/BeginImageVerify';
 import VerifyImage from './screens/VerifyImage';
 import BeginImageAnnotate from './screens/BeginImageAnnotate';
@@ -50,13 +48,12 @@ import Walkthrough from './screens/Walkthrough';
 // import ImageCategorization from './screens/ImageCategorization';
 // import TOS from './screens/TOS';
 // import PrivacyInformation from './screens/PrivacyInformation';
-// import Legal from './screens/Legal'; 
+// import Legal from './screens/Legal';
 import Ripple from './components/Ripple';
 import {dark_theme, theme} from './services/Common/theme';
 import i18n from './languages/i18n';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import IonIcons from 'react-native-vector-icons/Ionicons'
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useStateValue} from './services/State/State';
 import {actions} from './services/State/Reducer';
 import {setLanguage} from './services/DataManager';
@@ -72,6 +69,7 @@ import Chinese from './assets/chinese.png';
 import Deutsch from './assets/deutsch.png';
 import Japanese from './assets/japanese.png';
 import Spanish from './assets/spanish.png';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { MissionComplete } from './screens/playAI/MissionComplete';
 import PlayAITutorial from './screens/playAI/PlayAITutorial';
 
@@ -96,25 +94,16 @@ const styles = StyleSheet.create({
     backgroundColor: theme.APP_COLOR_2,
   },
   languageButtonOuter: {
-    borderRadius: 15,
+    borderRadius: 30,
     overflow: 'hidden',
     backgroundColor: theme.APP_COLOR_2,
   },
-  languageButtonOuterOpen: {
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    overflow: 'hidden',
-    backgroundColor: theme.APP_COLOR_2,
-  },
-
   rightButton: {
     padding: 5,
     borderRadius: 30,
   },
   languageOptionsContainer: {
-    marginTop: -7,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
+    borderRadius: 15,
     backgroundColor: theme.COLORS.BLACK,
   },
   flagIcon: {
@@ -144,70 +133,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const LanguageMenu = (props) => {
-  const { 
-    selectedLanguage, 
-    languageOptions, 
-    dispatch 
-  } = props;
-  const langMenuRef = useRef();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  return (
-    <Menu
-      ref={langMenuRef}
-      onOpen={()=>{ setIsMenuOpen(true); }}
-      onClose={()=>{ setIsMenuOpen(false); }}
-      renderer={renderers.Popover}
-      rendererProps={{anchorStyle: {backgroundColor: 'transparent'}}}>
-      <MenuTrigger
-        customStyles={{triggerOuterWrapper: isMenuOpen? styles.languageButtonOuterOpen: styles.languageButtonOuter}}>
-        <View style={styles.languageBox}>
-          <Image
-            resizeMode="stretch"
-            style={styles.flagIcon}
-            source={selectedLanguage.icon}
-          />
-          <EntypoIcon
-            size={20}
-            name="chevron-down"
-            color={theme.COLORS.WHITE}
-          />
-        </View>
-      </MenuTrigger>
-      <MenuOptions optionsContainerStyle={styles.languageOptionsContainer}>
-        {languageOptions.map((item, index) => (
-          <MenuOption
-            key={index}
-            style={{
-              ...styles.languageOption,
-              borderBottomWidth:
-                index < languageOptions.length - 1 ? 0.3 : 0,
-            }}
-            onSelect={async () => {
-              await setLanguage(item.value);
-              dispatch({
-                type: actions.SET_LANGUAGE,
-                selectedLanguage: item.value,
-              });
-            }}>
-            <View style={styles.row}>
-              <Image
-                source={item.icon}
-                resizeMode="stretch"
-                style={styles.flagIcon}
-              />
-              <Text style={styles.languageOptionText}>
-                {item.value.toUpperCase()}
-              </Text>
-            </View>
-          </MenuOption>
-        ))}
-      </MenuOptions>
-    </Menu>
-  );
-}
-
 const Header = (
   {
     title = null,
@@ -226,7 +151,6 @@ const Header = (
 ) => ({
   title: title ? title : null,
   headerTitleStyle: {
-    fontSize: 18,
     color: theme.COLORS.WHITE,
     textTransform: 'uppercase',
     fontFamily: 'Moon-Bold',
@@ -258,11 +182,54 @@ const Header = (
     : null,
   headerRight: showLanguageDropdown
     ? () => (
-      <LanguageMenu 
-        selectedLanguage={selectedLanguage}
-        languageOptions={languageOptions}
-        dispatch={dispatch}
-      />
+        <Menu
+          renderer={renderers.Popover}
+          rendererProps={{anchorStyle: {backgroundColor: 'transparent'}}}>
+          <MenuTrigger
+            customStyles={{triggerOuterWrapper: styles.languageButtonOuter}}>
+            <View style={styles.languageBox}>
+              <Image
+                resizeMode="stretch"
+                style={styles.flagIcon}
+                source={selectedLanguage.icon}
+              />
+              <EntypoIcon
+                size={20}
+                name="chevron-down"
+                color={theme.COLORS.WHITE}
+              />
+            </View>
+          </MenuTrigger>
+          <MenuOptions optionsContainerStyle={styles.languageOptionsContainer}>
+            {languageOptions.map((item, index) => (
+              <MenuOption
+                key={index}
+                style={{
+                  ...styles.languageOption,
+                  borderBottomWidth:
+                    index < languageOptions.length - 1 ? 0.3 : 0,
+                }}
+                onSelect={async () => {
+                  await setLanguage(item.value);
+                  dispatch({
+                    type: actions.SET_LANGUAGE,
+                    selectedLanguage: item.value,
+                  });
+                }}>
+                <View style={styles.row}>
+                  <Image
+                    source={item.icon}
+                    resizeMode="stretch"
+                    style={styles.flagIcon}
+                  />
+                  <Text style={styles.languageOptionText}>
+                    {item.value.toUpperCase()}
+                  </Text>
+                </View>
+              </MenuOption>
+            ))}
+          </MenuOptions>
+        </Menu>
       )
     : showRightButton
     ? () => (
@@ -274,6 +241,52 @@ const Header = (
 });
 
 
+const FullScreenHeader = (
+  {
+    title = null,
+    showTitle = false,
+    showAppIcon = false,
+    isTransparent = false,
+    showRightButton = false,
+    showLanguageDropdown = false,
+    selectedLanguage = null,
+    dispatch = null,
+    languageOptions = [],
+  },
+  navigation,
+) => ({
+  title: showTitle ? title : null,
+  headerTitleAlign: 'center',
+  headerTitleStyle: {
+    color: theme.COLORS.WHITE,
+  },
+  headerBackVisible:false,
+  headerShown: true,
+  headerTransparent: true,
+  headerStyle: {
+    shadowOpacity: 1,
+    elevation: isTransparent ? 0 : 4,
+  },
+  headerLeft: showAppIcon 
+    ? () => (
+        <Ripple
+          onPress={() => navigation.navigate('LandingPage')}
+          outerStyle={{
+            borderRadius: 30,
+            marginLeft: 20,
+            backgroundColor: dark_theme.COLORS.BG_GREY
+          }}
+          innerStyle={styles.leftButtonInner}>
+            <MaterialIcon
+            name="chevron-left"
+            size={24}
+            color={theme.COLORS.BOTTOM_TAB_NOT_ICON_FOCUSED}
+          />
+        </Ripple>
+      )
+    : null,
+  });
+
 const LandingPageStack = () => {
   const languageOptions = [
     {
@@ -281,8 +294,7 @@ const LandingPageStack = () => {
       label: i18n.t('landing.english'),
       value: 'en',
     },
-    /*
-    {
+    /*{
       icon: Chinese,
       label: i18n.t('landing.chinese'),
       value: 'zh',
@@ -320,31 +332,11 @@ const LandingPageStack = () => {
               selectedLanguage: language,
               dispatch,
               languageOptions,
-              isFullScreenHeader: true,
             },
             navigation,
           );
         }}
       />
-      <Stack.Screen
-        name="LandingPageWalkthrough"
-        component={LandingPageWalkthrough}
-        options={({navigation}) => {
-          return Header(
-            {
-              title: 'Dashboard',
-              isTransparent: true,
-              showLanguageDropdown: true,
-              selectedLanguage: language,
-              dispatch,
-              languageOptions,
-              isFullScreenHeader: true,
-            },
-            navigation,
-          );
-        }}
-      />
-      
       <Stack.Screen
         name="Information"
         component={Information}
@@ -502,7 +494,6 @@ const BrowseMissionsStack = () => (
             title: 'Verifying Images',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -517,7 +508,6 @@ const BrowseMissionsStack = () => (
             title: 'Annotating Images Lv.2',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -531,8 +521,7 @@ const BrowseMissionsStack = () => (
           {
             title: 'PlayAI Upload Lv.2',
             showBackButton: true,
-            isTransparent: true,
-            isFullScreenHeader: true,
+            isTransparent: true
           },
           navigation,
         );
@@ -579,7 +568,6 @@ const MyMissionsStack = () => (
             title: 'Image Upload',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -605,7 +593,7 @@ const MyMissionsStack = () => (
       options={({navigation}) => {
         return Header(
           {
-            title: i18n.t('uploadImage.uploadImage'),
+            title: 'Image Uploads',
             isTransparent: true,
           },
           navigation,
@@ -621,7 +609,6 @@ const MyMissionsStack = () => (
             title: 'Verifying Images',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -717,7 +704,6 @@ const MyMissionsStack = () => (
             title: 'Annotating Images Lv.2',
             showBackButton: true,
             isTransparent: true,
-            isFullScreenHeader: true,
           },
           navigation,
         );
@@ -731,8 +717,7 @@ const MyMissionsStack = () => (
           {
             title: 'PlayAI Mission',
             showBackButton: true,
-            isTransparent: true,
-            isFullScreenHeader: true,
+            isTransparent: true
           },
           navigation,
         );
@@ -773,21 +758,6 @@ const MyMissionsStack = () => (
         return Header(
           {
             title: i18n.t('playAI.playAIMission'),
-            showBackButton: true,
-            isTransparent: true,
-            isFullScreenHeader: true,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="UploadImageWalkthrough"
-      component={UploadImageWalkthrough}
-      options={({navigation}) => {
-        return Header(
-          {
-            title: i18n.t('uploadImage.uploadImage'),
             showBackButton: true,
             isTransparent: true,
             isFullScreenHeader: true,
@@ -934,7 +904,7 @@ const WalletStack = () => (
             isTransparent: true,
             showRightButton: true,
             rightButtonIcon: (
-              <IonIcons
+              <IonIcon
                 size={25}
                 name="settings-outline"
                 color={theme.COLORS.WHITE}
@@ -952,39 +922,42 @@ const WalletStack = () => (
       options={({navigation}) => {
         return Header(
           {
-            title: 'Wallet Setting',
+            title: 'Wallet Settings',
             showBackButton: true,
             isTransparent: true,
-            showRightButton: true,
-            rightButtonIcon: (
-              <MaterialIcon
-                size={25}
-                name="connect-without-contact"
-                color={theme.COLORS.WHITE}
-              />
-            ),
-            rightButtonOnPress: () => navigation.navigate('ExtConnections'),
           },
           navigation,
         );
       }}
     />
-     <Stack.Screen
-      name="ExtConnections"
-      component={ExtConnections}
+    <Stack.Screen
+      name="Pool"
+      component={PoolTabs}
       options={({navigation}) => {
         return Header(
           {
-            title: 'External Connections',
+            title: 'Pool',
             showBackButton: true,
             isTransparent: true,
-            showRightButton: true,
-    
           },
           navigation,
         );
       }}
-     />
+    />
+    <Stack.Screen
+      name="Trade"
+      component={TradeTabs}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Trade',
+            showBackButton: true,
+            isTransparent: true,
+          },
+          navigation,
+        );
+      }}
+    />
   </Stack.Navigator>
 );
 

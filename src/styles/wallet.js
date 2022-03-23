@@ -117,4 +117,36 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: theme.COLORS.LIGHT_RED,
   },
+  /////////////////////////////////
+  approveSendButtonStyle: {
+    alignItems: "center",
+    backgroundColor: theme.COLORS.BLUE,
+    padding: 20,
+    borderRadius: 30,
+    width: Dimensions.get('screen').width * 0.44,
+    alignSelf: 'center',
+    //marginTop: '5%',
+    height: 55,
+  },
+  liquidityHText: {
+    textAlign: 'center',
+    fontSize: 12,
+    fontFamily: 'Moon-Light',
+    color: theme.COLORS.WHITE,
+   // paddingTop:10
+  },
+  liquidityText:{
+    fontSize: 15,
+    fontFamily: 'Moon-Bold',
+    color: theme.COLORS.WHITE,
+  },
+  oceanPoolText: {
+    fontSize: 16,
+    textAlign: 'right',
+    fontFamily: 'Moon-Light',
+    color: theme.COLORS.WHITE,
+  },
+  liquidityContainer: {
+    paddingHorizontal: 10,
+  }
 });
