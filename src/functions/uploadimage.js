@@ -8,6 +8,7 @@ export const onPickFile = async (
   fileUploadResponses = [],
   setFileUploadResponses = () => {},
   setUploadingImageIndex = () => {},
+  mission = {},
 ) => {
   try {
     const pickedFiles = await DocumentPicker.pickMultiple({
@@ -23,6 +24,7 @@ export const onPickFile = async (
         fileUploadResponses,
         setFileUploadResponses,
         setUploadingImageIndex,
+        mission,
       );
     }
   } catch (err) {}
@@ -104,6 +106,7 @@ const uploadMultipleFiles = async (
   fileUploadResponses = [],
   setFileUploadResponses = () => {},
   setUploadingImageIndex = () => {},
+  mission = {},
 ) => {
   try {
     if (pickedFiles && pickedFiles.length > 0) {
@@ -114,7 +117,7 @@ const uploadMultipleFiles = async (
             ? fileUploadResponses.length + index
             : index,
         );
-        const res = await uploadSingleFile(file);
+        const res = await uploadSingleFile(file, mission);
         allFileUploadResponses.push(res);
         setFileUploadResponses(allFileUploadResponses);
       }
@@ -123,9 +126,12 @@ const uploadMultipleFiles = async (
   } catch (err) {}
 };
 
-export const uploadSingleFile = async (file = {}) => {
+export const uploadSingleFile = async (file = {}, mission = {}) => {
   try {
     const filedata = new FormData();
+    if (mission.id) {
+      filedata.append('mission_id', mission.id);
+    }
     filedata.append('file', file);
     const result = await uploadImage(filedata);
     if (result) {
@@ -218,6 +224,7 @@ export const submitMultipleImageTags = async (
   commonTags = [],
   piiTags = [],
   bountyTags = [],
+  mission = {},
 ) => {
   try {
     setLoading(true);
@@ -234,6 +241,7 @@ export const submitMultipleImageTags = async (
             fileUploadResponse.id,
             descriptions[index],
             allTags,
+            mission,
           );
           if (!res) {
             dispatch({
@@ -287,6 +295,7 @@ export const submitSingleImageTags = async (
   imageId = '',
   description = '',
   tags = [],
+  mission = {},
 ) => {
   try {
     const req = {
@@ -294,6 +303,9 @@ export const submitSingleImageTags = async (
       description: description,
       tags: tags,
     };
+    if (mission.id) {
+      req.append('mission_id', mission.id);
+    }
     const result = await annotateImage(req);
     if (result && result.status && result.status === 'success') {
       return true;

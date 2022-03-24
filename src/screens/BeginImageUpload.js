@@ -13,15 +13,16 @@ const BeginImageUpload = ({navigation, route}) => {
   const {params} = route || {};
   const {mission = {}} = params || {};
   const {
-    type = 'ongoing',
+    type = 'upload',
     image,
     level = '',
-    title1 = '',
-    title2 = '',
-    status = 'pending',
-    progressTotal = 0,
-    progressCompleted = 0,
+    title = '',
+    description = '',
+    status = 'in_progress',
+    progress = 0,
+    criteria = {target: 0},
   } = mission || {};
+  const progressTotal = criteria.target;
 
   return (
     <View style={styles.container}>
@@ -29,18 +30,19 @@ const BeginImageUpload = ({navigation, route}) => {
         <Image resizeMode="stretch" source={image} style={styles.image} />
         <View style={styles.levelContainer}>
           <View style={styles.levelChip}>
-            <Text style={styles.levelText}>{level}</Text>
+            <Text style={styles.levelText}>{`Lv.${level}`}</Text>
           </View>
         </View>
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title2}</Text>
-        <Text style={styles.subTitle}>{title1}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subTitle}>{description}</Text>
       </View>
 
       <View style={styles.progressContainer}>
         <View style={styles.progressChip}>
-          <Text style={styles.progressText}>{`0/${progressTotal}`}</Text>
+          <Text
+            style={styles.progressText}>{`${progress}/${progressTotal}`}</Text>
         </View>
       </View>
 
@@ -62,7 +64,7 @@ const BeginImageUpload = ({navigation, route}) => {
             style={styles.radius30}>
             <Ripple
               style={styles.gradientButtonInner}
-              onPress={() => navigation.navigate('ImageUpload')}>
+              onPress={() => navigation.navigate('ImageUpload', {mission})}>
               <Text style={styles.buttonText}>Start</Text>
             </Ripple>
           </LinearGradient>

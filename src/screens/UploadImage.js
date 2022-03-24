@@ -31,7 +31,10 @@ import Ripple from '../components/Ripple';
 import LinearGradient from 'react-native-linear-gradient';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-const Upload = ({navigation}) => {
+const Upload = ({navigation, route}) => {
+  const {params} = route || {};
+  const {mission = {}} = params || {};
+  const {id=0} = mission || {};
   const [files, setFiles] = useState([]);
   const [descriptions, setDescriptions] = useState([]);
   const [tags, setTags] = useState([]);
@@ -173,6 +176,7 @@ const Upload = ({navigation}) => {
                     commonTags,
                     allPiiTags,
                     allBountyTags,
+                    mission,
                   );
                 }}
               />
@@ -319,7 +323,9 @@ const Upload = ({navigation}) => {
                             title: 'EXIT MISSION',
                             showConfirmButton: true,
                             showCancelButton: true,
-                            onConfirmPressed: () => {navigation.goBack()},
+                            onConfirmPressed: () => {
+                              navigation.goBack();
+                            },
                             onCancelPressed: () => {},
                           },
                         });
@@ -383,6 +389,7 @@ const Upload = ({navigation}) => {
                   fileUploadResponses,
                   setFileUploadResponses,
                   setUploadingImageIndex,
+                  mission,
                 )
               }
               color={theme.APP_COLOR_1}
