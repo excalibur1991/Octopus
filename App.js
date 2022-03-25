@@ -16,7 +16,12 @@ import {useStateValue} from './src/services/State/State';
 import ModalActivityIndicator from './src/components/ModalActivityIndicator';
 import AppAlert from './src/components/AppAlert';
 import {theme} from './src/services/Common/theme';
-import {getLanguage, getUserInfo, getDataUsageFlag, isPrivacyAndTermsAccepted} from './src/services/DataManager';
+import {
+  getLanguage,
+  getUserInfo,
+  getDataUsageFlag,
+  isPrivacyAndTermsAccepted,
+} from './src/services/DataManager';
 import {store} from './src/store/store.js';
 import {getWeb3_} from './src/web3/getWeb3';
 import {Provider} from 'react-redux';
